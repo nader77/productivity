@@ -1,0 +1,16 @@
+ID,Title,Account,Type (fix vs T&M),Budget unit(hours/days/month/global),Budget/Cost,Currency,scope,Scope unit (hours/days/month)
+ethosia,Ethosia,ethosia,fix,global,155000,ILS,607,hours
+shenkar,Shenkar,shenkar,fix,global,75000,ILS,207,hours
+pipeline,Pipeline,eu_ade,fix,global,50000,EURO,90,days
+c4d,C4D,eu_ade,T&M,days,760,EURO,90,days
+circuit,Circuit,circuit_live_auction,,,,,12,month
+hiro dashboard,Hiro Dashboard,hiro,T&M,hours,250,ILS,10,average hours/month
+cms syndication,CMS Syndication,hiro,T&M,hours,250,ILS,20,average hours/month
+ibli,IBLI,ilri,fix,global,100,USD,400,hours
+praise.com,praise.com,cbn,T&M,hours,120,USD,544,hours
+bible widget,Bible widget,cbn,fix,global,120,USD,188,hours
+negawatt,Negawatt,negawatt,,,,,12,month
+cri,CRI,cri,fix,global,60000,ILS,200,hours
+taglit fellow,Taglit Fellow,taglit,T&M,hours,120,USD,700,hours
+hujiosheb,HUJI OS - hebrew,huji,fix,global,80000,ILS,418,hours
+hujiosresearch,OS - Research,huji,fix,global,30000,ILS,80,hours
