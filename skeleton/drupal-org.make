@@ -17,6 +17,9 @@ projects[context][version] = "3.2"
 projects[ctools][subdir] = "contrib"
 projects[ctools][version] = "1.4"
 
+projects[currency][subdir] = "contrib"
+projects[currency][version] = "2.4"
+
 projects[date][subdir] = "contrib"
 projects[date][version] = "2.7"
 
@@ -35,8 +38,14 @@ projects[features][version] = "2.0"
 projects[github_connect][subdir] = "contrib"
 projects[github_connect][version] = "1.x-dev"
 
+projects[interval][subdir] = "contrib"
+projects[interval][version] = "1.0"
+
 projects[module_filter][subdir] = "contrib"
 projects[module_filter][version] = "2.0-alpha2"
+
+projects[money][subdir] = "contrib"
+projects[money][version] = "1.x-dev"
 
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.2"

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Productivity project feature.
+ */
+
+include_once 'productivity_project.features.inc';
