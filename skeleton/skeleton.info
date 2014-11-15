@@ -37,7 +37,7 @@ dependencies[] = entity_token
 dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = migrate
-dependencies[] = migrate_extra
+dependencies[] = migrate_extras
 dependencies[] = module_filter
 dependencies[] = pathauto
 dependencies[] = reldate
@@ -50,6 +50,6 @@ dependencies[] = views_bulk_operations
 
 
 ; skeleton modules ------------------------------------------------------------
-; Add here skeleton modules that should be anebled when installing the
+; Add here skeleton modules that should be enabled when installing the
 ; skeleton profile.
-dependencies[] = skeleton_demo
+dependencies[] = skeleton_migrate
