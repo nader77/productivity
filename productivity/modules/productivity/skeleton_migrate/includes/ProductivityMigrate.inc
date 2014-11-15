@@ -5,9 +5,9 @@
  */
 
 /**
- * Class SkeletonDemoCreateEntity
+ * Class ProductivityDemoCreateEntity
  */
-abstract class SkeletonMigrate extends Migration {
+abstract class ProductivityMigrate extends Migration {
   /**
    * Supported entity types
    *
@@ -30,7 +30,7 @@ abstract class SkeletonMigrate extends Migration {
     // Make sure we can use it for node and term only.
     if (!$this->isEntityTypeSupported($this->entityType)) {
       throw new Exception(format_string(
-        'SkeletonMigrate does not support @type',
+        'ProductivityMigrate does not support @type',
         array('@type' => $this->entityType))
       );
     }
@@ -77,7 +77,7 @@ abstract class SkeletonMigrate extends Migration {
     );
 
     // Create a MigrateSource object.
-    $csv_path = drupal_get_path('module', 'skeleton_migrate') . '/csv';
+    $csv_path = drupal_get_path('module', 'productivity_migrate') . '/csv';
     $this->source = new MigrateSourceCSV(
       $csv_path . '/' . $this->entityType . '/' . $this->bundle . '.csv',
       $this->csvColumns,

@@ -1,0 +1,12 @@
+name = Productivity_Title demo module
+description = "Demonstrates the functionality of the Productivity_Title profile"
+package = Productivity - Demo
+core = 7.x
+version = "7.x-1.x-dev"
+core = "7.x"
+
+; Test files
+files[] = productivity_migrate.test
+files[] = includes/ProductivityMigrate.inc
+files[] = includes/ProductivityMigrateProject.inc
+files[] = includes/ProductivityMigrateAccount.inc
