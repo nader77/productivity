@@ -7,7 +7,7 @@
 /**
  * Class SkeletonDemoCreateEntity
  */
-abstract class SkeletonDemoCreateEntity extends Migration {
+abstract class SkeletonMigrate extends Migration {
   /**
    * Supported entity types
    *
@@ -30,7 +30,7 @@ abstract class SkeletonDemoCreateEntity extends Migration {
     // Make sure we can use it for node and term only.
     if (!$this->isEntityTypeSupported($this->entityType)) {
       throw new Exception(format_string(
-        'SkeletonDemoCreateEntity does not support @type',
+        'SkeletonMigrate does not support @type',
         array('@type' => $this->entityType))
       );
     }
@@ -44,7 +44,6 @@ abstract class SkeletonDemoCreateEntity extends Migration {
     switch ($this->entityType) {
       case 'node':
         $this->addFieldMapping('title', 'title');
-        $this->addFieldMapping('created', 'created');
         $class_name = 'MigrateDestinationNode';
         break;
 
@@ -105,13 +104,6 @@ abstract class SkeletonDemoCreateEntity extends Migration {
     if (!$row->uid) {
       $row->uid = 1;
     }
-
-    if ($this->entityType == 'node') {
-      // Create a random timestamp from the last year.
-      $year_ago = time() - 3600 * 24 * 365;
-      $row->created = rand($year_ago, time());
-    }
-
     return TRUE;
   }
 
