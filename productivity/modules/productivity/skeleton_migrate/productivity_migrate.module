@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Module to demonstrate the Skeleton_Title profile.
+ * Module to demonstrate the Productivity_Title profile.
  */
 
 
@@ -17,17 +17,17 @@ define('SKELETON_DEMO_MIGRATION_GROUP', 'skeleton:demo');
  * @return string
  *   Returns hard coded string "Hello world!".
  */
-function skeleton_migrate_hello_world() {
+function productivity_migrate_hello_world() {
   return 'Hello world!';
 }
 
 /**
  * Implements hook_migrate_api().
  */
-function skeleton_migrate_migrate_api() {
+function productivity_migrate_migrate_api() {
   $classes = array(
-    'SkeletonMigrateProject',
-    'SkeletonMigrateAccount',
+    'ProductivityMigrateProject',
+    'ProductivityMigrateAccount',
   );
 
   $migrations = array();

@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * Migrate class to create Skeleton content.
+ * Migrate class to create Productivity content.
  */
 
 /**
- * Class SkeletonDemoCreateSkeletonContent
+ * Class ProductivityDemoCreateProductivityContent
  */
-class SkeletonMigrateProject extends SkeletonMigrate {
+class ProductivityMigrateProject extends ProductivityMigrate {
   public $entityType = 'node';
   public $bundle = 'project';
 
@@ -38,7 +38,7 @@ class SkeletonMigrateProject extends SkeletonMigrate {
     parent::__construct();
 
     $this->dependencies = array(
-      'SkeletonMigrateAccount',
+      'ProductivityMigrateAccount',
     );
 
     $field_names = array(
@@ -56,7 +56,7 @@ class SkeletonMigrateProject extends SkeletonMigrate {
 
     $this
       ->addFieldMapping('field_account', 'account')
-      ->sourceMigration('SkeletonMigrateAccount');
+      ->sourceMigration('ProductivityMigrateAccount');
 
 //    $this->addFieldMapping('field_rate:amount', 'rate');
 //    $this->addFieldMapping('field_rate:currency', 'rate_currency');

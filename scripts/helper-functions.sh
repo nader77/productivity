@@ -226,10 +226,10 @@ function enable_development_modules {
 # Do dummy content migration.
 ##
 function import_demo_content {
-  if [ -d $ROOT/$PROFILE_NAME/modules/$PROFILE_NAME/skeleton_migrate/csv/node ]; then
+  if [ -d $ROOT/$PROFILE_NAME/modules/$PROFILE_NAME/productivity_migrate/csv/node ]; then
     echo -e  "Node folder already exist, remove folder first to decrypt gzip."
   else
-    if [ -f $ROOT/$PROFILE_NAME/modules/$PROFILE_NAME/skeleton_migrate/csv/decrypt.sh ]; then
+    if [ -f $ROOT/$PROFILE_NAME/modules/$PROFILE_NAME/productivity_migrate/csv/decrypt.sh ]; then
       echo -e "Decrypting node CSVs"
       cd $ROOT/$PROFILE_NAME/modules/$PROFILE_NAME/$PROFILE_NAME"_migrate"/csv
       bash decrypt.sh
