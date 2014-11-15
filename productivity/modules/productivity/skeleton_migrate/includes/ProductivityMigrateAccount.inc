@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * Migrate class to create Skeleton content.
+ * Migrate class to create Productivity content.
  */
 
 /**
- * Class SkeletonDemoCreateSkeletonContent
+ * Class ProductivityDemoCreateProductivityContent
  */
-class SkeletonMigrateAccount extends SkeletonMigrate {
+class ProductivityMigrateAccount extends ProductivityMigrate {
   public $entityType = 'node';
   public $bundle = 'account';
 
