@@ -2,63 +2,63 @@
 /**
  * @file
  * Install, update and uninstall functions for the
- * Skeleton_Title installation profile.
+ * Productivity installation profile.
  */
 
 /**
  * Implements hook_install().
  */
-function skeleton_install() {
+function productivity_install() {
   // Fixes problems when the CSV files used for importing have been created
   // on a Mac, by forcing PHP to detect the appropriate line endings.
   ini_set('auto_detect_line_endings', TRUE);
 
   // TEXT FORMATS
-  $filtered_html_format = _skeleton_install_get_filtered_html_format();
+  $filtered_html_format = _productivity_install_get_filtered_html_format();
   filter_format_save($filtered_html_format);
-  $full_html_format = _skeleton_install_get_full_html_format();
+  $full_html_format = _productivity_install_get_full_html_format();
   filter_format_save($full_html_format);
 
 
   // ROLES & PERMISSIONS
-  _skeleton_install_save_default_permissions($filtered_html_format);
+  _productivity_install_save_default_permissions($filtered_html_format);
 
   // MENU
-  _skeleton_install_save_default_menu();
+  _productivity_install_save_default_menu();
   menu_rebuild();
 
   // THEMES
   $theme_default = variable_get('theme_default', 'bartik');
 
   $theme_admin = 'seven';
-  _skeleton_install_save_theme($theme_admin, 1);
+  _productivity_install_save_theme($theme_admin, 1);
   variable_set('admin_theme', $theme_admin);
   variable_set('node_admin_theme', TRUE);
 
   // TODO: Replace this with the site specific theme name when not Bartik!
-  $theme_skeleton = 'bootstrap';
-  if ($theme_skeleton !== $theme_default) {
-    _skeleton_install_save_theme($theme_skeleton, 1);
-    variable_set('theme_default', $theme_skeleton);
+  $theme_productivity = 'bootstrap';
+  if ($theme_productivity !== $theme_default) {
+    _productivity_install_save_theme($theme_productivity, 1);
+    variable_set('theme_default', $theme_productivity);
     // Disable Bartik
-    _skeleton_install_save_theme($theme_default, 0);
+    _productivity_install_save_theme($theme_default, 0);
   }
 
   // BLOCKS
-  $admin_blocks = _skeleton_install_get_admin_theme_blocks($theme_admin);
-  _skeleton_install_save_theme_blocks($admin_blocks);
+  $admin_blocks = _productivity_install_get_admin_theme_blocks($theme_admin);
+  _productivity_install_save_theme_blocks($admin_blocks);
 
-  $skeleton_blocks = _skeleton_install_get_skeleton_theme_blocks($theme_skeleton);
-  _skeleton_install_save_theme_blocks($skeleton_blocks);
+  $productivity_blocks = _productivity_install_get_productivity_theme_blocks($theme_productivity);
+  _productivity_install_save_theme_blocks($productivity_blocks);
 
-  _skeleton_install_set_default_date_formats();
+  _productivity_install_set_default_date_formats();
 
 
   // DATE & DATE FORMAT
   date_default_timezone_set('Europe/Brussels');
   variable_set('date_default_timezone', 'Europe/Brussels');
   variable_set('date_first_day', 1);
-  _skeleton_install_set_default_date_formats();
+  _productivity_install_set_default_date_formats();
 }
 
 
@@ -75,7 +75,7 @@ function skeleton_install() {
  *
  * @return stdCLass
  */
-function _skeleton_install_get_filtered_html_format() {
+function _productivity_install_get_filtered_html_format() {
   $filtered_html_format = array(
     'format' => 'filtered_html',
     'name' => 'Filtered HTML',
@@ -115,7 +115,7 @@ function _skeleton_install_get_filtered_html_format() {
  *
  * @return stdCLass
  */
-function _skeleton_install_get_full_html_format() {
+function _productivity_install_get_full_html_format() {
   $full_html_format = array(
     'format' => 'full_html',
     'name' => 'Full HTML',
@@ -156,7 +156,7 @@ function _skeleton_install_get_full_html_format() {
  *
  * @return void
  */
-function _skeleton_install_save_default_permissions($filtered_html_format) {
+function _productivity_install_save_default_permissions($filtered_html_format) {
   // Only admins can create new members.
   variable_set('user_register', USER_REGISTER_ADMINISTRATOS_ONLY);
 
@@ -212,7 +212,7 @@ function _skeleton_install_save_default_permissions($filtered_html_format) {
  *
  * @return void
  */
-function _skeleton_install_save_default_menu() {
+function _productivity_install_save_default_menu() {
   // Create a Home link in the main menu.
   $item = array(
     'link_title' => st('Home'),
@@ -239,7 +239,7 @@ function _skeleton_install_save_default_menu() {
  *
  * @return void
  */
-function _skeleton_install_save_theme($name, $status) {
+function _productivity_install_save_theme($name, $status) {
   db_update('system')
     ->fields(array('status' => (int)$status))
     ->condition('type', 'theme')
@@ -260,7 +260,7 @@ function _skeleton_install_save_theme($name, $status) {
  *
  * @return void
  */
-function _skeleton_install_save_theme_blocks($blocks) {
+function _productivity_install_save_theme_blocks($blocks) {
   $query = db_insert('block')->fields(array(
       'module',
       'delta',
@@ -286,7 +286,7 @@ function _skeleton_install_save_theme_blocks($blocks) {
  *
  * @return array
  */
-function _skeleton_install_get_default_theme_blocks($theme) {
+function _productivity_install_get_default_theme_blocks($theme) {
   $blocks = array(
     array(
       'module' => 'system',
@@ -361,7 +361,7 @@ function _skeleton_install_get_default_theme_blocks($theme) {
  *
  * @return array
  */
-function _skeleton_install_get_admin_theme_blocks($theme) {
+function _productivity_install_get_admin_theme_blocks($theme) {
   $blocks = array(
     // Only if the dashboard module is in use...
     /*array(
@@ -432,14 +432,14 @@ function _skeleton_install_get_admin_theme_blocks($theme) {
 }
 
 /**
- * Get the skeleton theme blocks
+ * Get the productivity theme blocks
  *
  * @param string $theme
  *   The name of the theme.
  *
  * @return array
  */
-function _skeleton_install_get_skeleton_theme_blocks($theme) {
+function _productivity_install_get_productivity_theme_blocks($theme) {
   $blocks = array(
     array(
       'module' => 'system',
@@ -473,7 +473,7 @@ function _skeleton_install_get_skeleton_theme_blocks($theme) {
  *
  * @return array
  */
-function _skeleton_install_set_default_date_formats() {
+function _productivity_install_set_default_date_formats() {
   $formats = array(
     // Default.
     'long'         => 'l, j F, Y - H:i',

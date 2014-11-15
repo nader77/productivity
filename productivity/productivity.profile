@@ -1,7 +1,7 @@
 <?php
 /**
  * @file
- * Skeleton_Title profile.
+ * Productivity profile.
  */
 
 /**
@@ -9,7 +9,7 @@
  *
  * Allows the profile to alter the site configuration form.
  */
-function skeleton_form_install_configure_form_alter(&$form, $form_state) {
+function productivity_form_install_configure_form_alter(&$form, $form_state) {
   // Pre-populate the site name with the server name.
   $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
 
@@ -24,21 +24,21 @@ function skeleton_form_install_configure_form_alter(&$form, $form_state) {
 /**
  * Implements hook_install_tasks().
  */
-function skeleton_install_tasks() {
+function productivity_install_tasks() {
   $tasks = array();
 
-  $tasks['skeleton_setup_blocks'] = array(
+  $tasks['productivity_setup_blocks'] = array(
     'display_name' => st('Setup Blocks'),
     'display' => FALSE,
   );
 
   // Run this as the last task!
-  $tasks['skeleton_setup_rebuild_permissions'] = array(
+  $tasks['productivity_setup_rebuild_permissions'] = array(
     'display_name' => st('Rebuild permissions'),
     'display' => FALSE,
   );
 
-  $tasks['skeleton_setup_set_variables'] = array(
+  $tasks['productivity_setup_set_variables'] = array(
     'display_name' => st('Set Variables'),
     'display' => FALSE,
   );
@@ -50,7 +50,7 @@ function skeleton_install_tasks() {
 /**
  * Task callback; Setup blocks.
  */
-function skeleton_setup_blocks() {
+function productivity_setup_blocks() {
   $default_theme = variable_get('theme_default', 'bartik');
 
   $blocks = array(
@@ -89,7 +89,7 @@ function skeleton_setup_blocks() {
  * We do this here so no manual rebuild is necessary when we finished the
  * installation.
  */
-function skeleton_setup_rebuild_permissions() {
+function productivity_setup_rebuild_permissions() {
   node_access_rebuild();
 }
 
@@ -97,7 +97,7 @@ function skeleton_setup_rebuild_permissions() {
 /**
  * Task callback; Set variables.
  */
-function skeleton_setup_set_variables() {
+function productivity_setup_set_variables() {
   // Customer specific info.
   //  variable_set('circuit_customer_name', 'demo_site');
   //  variable_set('circuit_customer_theme', 'bootstrap_kedem');
