@@ -1,0 +1,16 @@
+ID,Title,Date start,Date end,Account,Type (fix vs T&M),Rate unit(hours/days/month/global),Rate,Rate Currency,scope,Scope unit (hours/days/month),status
+ethosia,Ethosia,1/5/2014,15/12/2014,ethosia,fix,global,155000,ILS,607,hours,active
+shenkar,Shenkar,1/3/2014,15/12/2014,shenkar,fix,global,75000,ILS,207,hours,active
+pipeline,Pipeline,1/7/2014,1/2/2014,eu_ade,fix,global,50000,EURO,90,days,active
+c4d,C4D,1/8/2014,1/2/2014,eu_ade,T&M,days,760,EURO,90,days,active
+circuit,Circuit,1/1/2014,,circuit_live_auction,,,,,12,month,active
+"hiro dashboard","Hiro Dashboard",1/1/2013,,hiro,T&M,hours,250,ILS,10,"average hours/month",active
+"cms syndication","CMS Syndication",1/1/2014,,hiro,T&M,hours,250,ILS,20,"average hours/month",active
+ibli,IBLI,1/1/2014,,ilri,fix,global,100,USD,400,hours,active
+praise.com,praise.com,,,cbn,T&M,hours,120,USD,544,hours,active
+bible widget,Bible widget,,,cbn,fix,global,120,USD,188,hours,active
+negawatt,Negawatt,,,negawatt,,,,,12,month,active
+cri,CRI,,,cri,fix,global,60000,ILS,200,hours,active
+taglit fellow,Taglit Fellow,,,taglit,T&M,hours,120,USD,700,hours,active
+hujiosheb,HUJI OS - hebrew,,,huji,fix,global,80000,ILS,418,hours,active
+hujiosresearch,"OS - Research",,,huji,fix,global,30000,ILS,80,hours,done
