@@ -7,9 +7,9 @@
 /**
  * Class SkeletonDemoCreateSkeletonContent
  */
-class SkeletonDemoCreateContent extends SkeletonDemoCreateEntity {
+class SkeletonMigrateAccount extends SkeletonMigrate {
   public $entityType = 'node';
-  public $bundle = 'skeleton_content';
+  public $bundle = 'account';
 
   /**
    * CSV Column mapping.
@@ -19,7 +19,6 @@ class SkeletonDemoCreateContent extends SkeletonDemoCreateEntity {
   public $csvColumns = array(
     array('id', 'ID'),
     array('title', 'Title'),
-    array('body', 'Body'),
   );
 
   /**
@@ -28,6 +27,6 @@ class SkeletonDemoCreateContent extends SkeletonDemoCreateEntity {
   public function __construct() {
     parent::__construct();
 
-    $this->addFieldMapping('body', 'body');
   }
+
 }

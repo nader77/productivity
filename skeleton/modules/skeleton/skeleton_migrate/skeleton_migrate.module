@@ -26,7 +26,8 @@ function skeleton_migrate_hello_world() {
  */
 function skeleton_migrate_migrate_api() {
   $classes = array(
-    'SkeletonDemoCreateContent',
+    'SkeletonMigrateProject',
+    'SkeletonMigrateAccount',
   );
 
   $migrations = array();

@@ -7,5 +7,6 @@ core = "7.x"
 
 ; Test files
 files[] = skeleton_migrate.test
-files[] = includes/CreateEntity.inc
-files[] = includes/CreateContent.inc
+files[] = includes/SkeletonMigrate.inc
+files[] = includes/SkeletonMigrateProject.inc
+files[] = includes/SkeletonMigrateAccount.inc
