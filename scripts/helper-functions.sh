@@ -226,6 +226,10 @@ function enable_development_modules {
 # Do dummy content migration.
 ##
 function import_demo_content {
+  echo -e "Decrypting CSVs"
+  cd $ROOT/$PROFILE_NAME/modules/$PROFILE_NAME/$PROFILE_NAME"_migrate"/csv
+  bash decrypt.sh
+
   echo -e "${LBLUE}> Importing demo data${RESTORE}"
   cd $ROOT/www
 
