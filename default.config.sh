@@ -10,9 +10,9 @@
 
 
 # The profile used to install the platform.
-PROFILE_NAME="skeleton"
+PROFILE_NAME="productivity"
 # The human name of the install profile
-PROFILE_TITLE="Skeleton_Title"
+PROFILE_TITLE="Productivity"
 
 
 # Modify the URL below to match your local domain the site will be accessible on.

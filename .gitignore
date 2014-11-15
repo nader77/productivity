@@ -46,17 +46,17 @@ Thumbs.db
 
 # Drupal profile #
 ##################
-skeleton/modules/contrib
-skeleton/modules/development
-skeleton/1
-skeleton/themes/contrib
-skeleton/libraries
+productivity/modules/contrib
+productivity/modules/development
+productivity/1
+productivity/themes/contrib
+productivity/libraries
 
 # Behat
-skeleton/behat/vendor/
+productivity/behat/vendor/
 behat.local.yml
-skeleton/behat/bin
-skeleton/behat/composer.phar
+productivity/behat/bin
+productivity/behat/composer.phar
 
 # Temporay "build" files
 www

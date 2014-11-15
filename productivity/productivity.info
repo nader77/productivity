@@ -1,5 +1,5 @@
-name = Skeleton_Title
-description = Skeleton_Title platform installation profile
+name = Productivity
+description = Productivity platform installation profile
 version = 1.x-dev
 core = 7.x
 
@@ -48,9 +48,9 @@ dependencies[] = views_bulk_operations
 
 
 
-; skeleton modules ------------------------------------------------------------
-; Add here skeleton modules that should be enabled when installing the
-; skeleton profile.
-dependencies[] = skeleton_migrate
+; productivity modules ------------------------------------------------------------
+; Add here productivity modules that should be enabled when installing the
+; productivity profile.
+dependencies[] = productivity_migrate
 dependencies[] = productivity_account
 dependencies[] = productivity_project
