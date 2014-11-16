@@ -54,3 +54,6 @@ dependencies[] = views_bulk_operations
 dependencies[] = productivity_migrate
 dependencies[] = productivity_account
 dependencies[] = productivity_project
+dependencies[] = productivity_salary
+dependencies[] = productivity_time_tracking
+dependencies[] = productivity_user
