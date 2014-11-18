@@ -41,6 +41,9 @@ projects[github_connect][version] = "1.x-dev"
 projects[interval][subdir] = "contrib"
 projects[interval][version] = "1.0"
 
+projects[inline_entity_form][subdir] = "contrib"
+projects[inline_entity_form][version] = "1.5"
+
 projects[module_filter][subdir] = "contrib"
 projects[module_filter][version] = "2.0-alpha2"
 
