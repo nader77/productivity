@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * productivity_time_traking.strongarm.inc
+ * productivity_time_tracking.strongarm.inc
  */
 
 /**
  * Implements hook_strongarm().
  */
-function productivity_time_traking_strongarm() {
+function productivity_time_tracking_strongarm() {
   $export = array();
 
   $strongarm = new stdClass();
@@ -68,10 +68,10 @@ function productivity_time_traking_strongarm() {
     'extra_fields' => array(
       'form' => array(
         'title' => array(
-          'weight' => '-5',
+          'weight' => '0',
         ),
         'path' => array(
-          'weight' => '30',
+          'weight' => '1',
         ),
       ),
       'display' => array(),

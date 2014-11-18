@@ -1,14 +1,55 @@
 <?php
 /**
  * @file
- * productivity_time_traking.features.field_instance.inc
+ * productivity_time_tracking.features.field_instance.inc
  */
 
 /**
  * Implements hook_field_default_field_instances().
  */
-function productivity_time_traking_field_default_field_instances() {
+function productivity_time_tracking_field_default_field_instances() {
   $field_instances = array();
+
+  // Exported field_instance: 'node-time_tracking-field_day_type'
+  $field_instances['node-time_tracking-field_day_type'] = array(
+    'bundle' => 'time_tracking',
+    'default_value' => array(
+      0 => array(
+        'value' => 'regular',
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_day_type',
+    'label' => 'Day type',
+    'required' => 1,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 2,
+    ),
+  );
 
   // Exported field_instance: 'node-time_tracking-field_description'
   $field_instances['node-time_tracking-field_description'] = array(
@@ -46,7 +87,7 @@ function productivity_time_traking_field_default_field_instances() {
         'rows' => 1,
       ),
       'type' => 'text_textarea',
-      'weight' => 36,
+      'weight' => 7,
     ),
   );
 
@@ -85,7 +126,7 @@ function productivity_time_traking_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 33,
+      'weight' => 4,
     ),
   );
 
@@ -124,7 +165,7 @@ function productivity_time_traking_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 34,
+      'weight' => 5,
     ),
   );
 
@@ -177,7 +218,7 @@ function productivity_time_traking_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 32,
+      'weight' => 3,
     ),
   );
 
@@ -230,12 +271,13 @@ function productivity_time_traking_field_default_field_instances() {
       'module' => 'interval',
       'settings' => array(),
       'type' => 'interval_default',
-      'weight' => 35,
+      'weight' => 6,
     ),
   );
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Day type');
   t('Description');
   t('Employee');
   t('Project');

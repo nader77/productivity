@@ -18,6 +18,7 @@ function productivity_migrate_migrate_api() {
     'ProductivityMigrateProject',
     'ProductivityMigrateAccount',
     'ProductivityMigrateUser',
+    'ProductivityMigrateTracker',
   );
 
   $migrations = array();

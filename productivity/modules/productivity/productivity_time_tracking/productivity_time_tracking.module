@@ -1,0 +1,23 @@
+<?php
+/**
+ * @file
+ * Code for the Productivity time tracking feature.
+ */
+
+include_once 'productivity_time_tracking.features.inc';
+
+
+/**
+ * Implements hook_node_presave().
+ */
+function productivity_time_tracking_node_presave($node) {
+  if ($node->type == 'time_tracking') {
+    $wrapper = entity_metadata_wrapper('node', $node);
+    $title =
+      date('d M Y', $wrapper->field_work_date->value()) . ' - ' .
+      ($wrapper->__isset('field_employee') ? ($wrapper->field_employee->label() . '-') : '') .
+      ($wrapper->__isset('field_project') ? ($wrapper->field_project->label() . '-') : '') .
+      $wrapper->field_day_type->value();
+    $wrapper->title->set($title);
+  }
+}
