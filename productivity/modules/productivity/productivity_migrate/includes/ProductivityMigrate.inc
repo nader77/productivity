@@ -101,7 +101,7 @@ abstract class ProductivityMigrate extends Migration {
   public function prepareRow($row) {
     // The migrate content isn't belong to any one, the default will be the
     // admin user.
-    if (!$row->uid) {
+    if (!isset($row->uid)) {
       $row->uid = 1;
     }
     return TRUE;

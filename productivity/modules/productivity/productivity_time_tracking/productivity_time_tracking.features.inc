@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * productivity_time_traking.features.inc
+ * productivity_time_tracking.features.inc
  */
 
 /**
  * Implements hook_ctools_plugin_api().
  */
-function productivity_time_traking_ctools_plugin_api($module = NULL, $api = NULL) {
+function productivity_time_tracking_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -16,7 +16,7 @@ function productivity_time_traking_ctools_plugin_api($module = NULL, $api = NULL
 /**
  * Implements hook_node_info().
  */
-function productivity_time_traking_node_info() {
+function productivity_time_tracking_node_info() {
   $items = array(
     'time_tracking' => array(
       'name' => t('Time tracking'),

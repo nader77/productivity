@@ -8,6 +8,7 @@ core = "7.x"
 ; Test files
 files[] = productivity_migrate.test
 files[] = includes/ProductivityMigrate.inc
-files[] = includes/ProductivityMigrateProject.inc
 files[] = includes/ProductivityMigrateAccount.inc
+files[] = includes/ProductivityMigrateProject.inc
+files[] = includes/ProductivityMigrateTracker.inc
 files[] = includes/ProductivityMigrateUser.inc
