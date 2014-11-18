@@ -17,6 +17,7 @@ function productivity_migrate_migrate_api() {
   $classes = array(
     'ProductivityMigrateProject',
     'ProductivityMigrateAccount',
+    'ProductivityMigrateUser',
   );
 
   $migrations = array();

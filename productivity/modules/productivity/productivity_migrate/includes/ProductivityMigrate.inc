@@ -24,7 +24,7 @@ abstract class ProductivityMigrate extends Migration {
    */
   public function __construct() {
     parent::__construct(
-      MigrateGroup::getInstance(SKELETON_DEMO_MIGRATION_GROUP)
+      MigrateGroup::getInstance(PRODUCTIVITY_MIGRATION_GROUP)
     );
 
     // Make sure we can use it for node and term only.
