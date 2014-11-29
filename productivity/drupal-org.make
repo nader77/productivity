@@ -35,6 +35,9 @@ projects[entityreference][version] = "1.1"
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.0"
 
+projects[file_entity][subdir] = "contrib"
+projects[file_entity][version] = "2.0-beta1"
+
 projects[github_connect][subdir] = "contrib"
 projects[github_connect][version] = "1.x-dev"
 
@@ -43,6 +46,21 @@ projects[interval][version] = "1.0"
 
 projects[inline_entity_form][subdir] = "contrib"
 projects[inline_entity_form][version] = "1.5"
+
+projects[mailsystem][subdir] = "contrib"
+projects[mailsystem][version] = 2.34
+
+projects[message][subdir] = "contrib"
+projects[message][version] = "1.9"
+
+projects[message_notify][subdir] = "contrib"
+projects[message_notify][version] = "2.5"
+
+projects[message_subscribe][subdir] = "contrib"
+projects[message_subscribe][version] = "1.0-rc2"
+
+projects[mimemail][subdir] = "contrib"
+projects[mimemail][version] = "1.0-beta3"
 
 projects[module_filter][subdir] = "contrib"
 projects[module_filter][version] = "2.0-alpha2"
@@ -85,6 +103,10 @@ libraries[ckeditor][download][type]= "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.4/ckeditor_4.3.4_full.zip"
 libraries[ckeditor][directory_name] = "ckeditor"
 libraries[ckeditor][destination] = "libraries"
+
+libraries[dompdf][type] = "libraries"
+libraries[dompdf][download][type] = "get"
+libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/releases/download/v0.6.1/dompdf-0.6.1.zip"
 
 ; Themes
 projects[bootstrap][subdir] = "contrib"
