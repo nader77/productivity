@@ -12,13 +12,6 @@
 function productivity_form_install_configure_form_alter(&$form, $form_state) {
   // Pre-populate the site name with the server name.
   $form['site_information']['site_name']['#default_value'] = $_SERVER['SERVER_NAME'];
-
-  // Disable the update module by default.
-  // It slows down accessing the administration back-end.
-  $form['update_notifications']['update_status_module']['#default_value'] = array(
-    0 => 0,
-    1 => 2,
-  );
 }
 
 /**
@@ -98,16 +91,8 @@ function productivity_setup_rebuild_permissions() {
  * Task callback; Set variables.
  */
 function productivity_setup_set_variables() {
-  // Customer specific info.
-  //  variable_set('circuit_customer_name', 'demo_site');
-  //  variable_set('circuit_customer_theme', 'bootstrap_kedem');
-
-  $theme = variable_get('circuit_customer_theme', 'bootstrap_subtheme');
   $variables = array(
     'jquery_update_jquery_version' => 1.8,
-    // Connect to facebook app.
-    'github_connect_client_id' => '6e2d1a14e1490746e5c2',
-    'github_connect_client_secret' => 'b5da4ca47f9a1e699e16aac046b9bb8777cf15d4',
   );
 
   foreach ($variables as $key => $value) {

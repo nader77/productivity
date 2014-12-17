@@ -6,7 +6,6 @@ core = 7.x
 
 ; Core ------------------------------------------------------------------------
 dependencies[] = block
-;dependencies[] = color
 dependencies[] = comment
 dependencies[] = contextual
 dependencies[] = help
@@ -19,41 +18,33 @@ dependencies[] = path
 dependencies[] = taxonomy
 dependencies[] = dblog
 dependencies[] = search
-dependencies[] = shortcut
 dependencies[] = file
-dependencies[] = rdf
 
 ; Contrib modules -------------------------------------------------------------
 dependencies[] = admin_menu_toolbar
 dependencies[] = admin_views
-dependencies[] = context
 dependencies[] = ctools
 dependencies[] = date
 dependencies[] = date_popup
-dependencies[] = diff
 dependencies[] = entity
 dependencies[] = entity_token
 dependencies[] = entityreference
 dependencies[] = features
-dependencies[] = migrate
-dependencies[] = migrate_extras
+dependencies[] = flag
 dependencies[] = module_filter
 dependencies[] = pathauto
-dependencies[] = reldate
+dependencies[] = restful
+dependencies[] = restful_token_auth
 dependencies[] = strongarm
-dependencies[] = transliteration
 dependencies[] = token
 dependencies[] = views
 dependencies[] = views_bulk_operations
 
-
-
 ; productivity modules ------------------------------------------------------------
-; Add here productivity modules that should be enabled when installing the
-; productivity profile.
 dependencies[] = productivity_migrate
 dependencies[] = productivity_account
 dependencies[] = productivity_project
 dependencies[] = productivity_salary
 dependencies[] = productivity_time_tracking
 dependencies[] = productivity_user
+dependencies[] = productivity_restful
