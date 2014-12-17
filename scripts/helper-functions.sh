@@ -216,7 +216,7 @@ function create_sites_default_files_directory {
 function enable_development_modules {
   echo -e "${LBLUE}> Enabling the development modules${RESTORE}"
   cd $ROOT/www
-  drush en -y devel views_ui field_ui context_ui
+  drush en -y devel views_ui field_ui
   cd $ROOT
   echo
 }
@@ -241,21 +241,8 @@ function import_demo_content {
   echo -e "${LBLUE}> Importing demo data${RESTORE}"
   cd $ROOT/www
 
-  # Check if migrate module is available
-  MIGRATE_UI=$(drush pm-list --pipe --type=module | grep "^migrate_ui$")
-  MIGRATE_EXTRAS=$(drush pm-list --pipe --type=module | grep "^migrate_extras$")
-  if [ $MIGRATE_UI ] && [ $MIGRATE_EXTRAS ]; then
-    drush en -y migrate migrate_ui migrate_extras
-    drush mi --update --all
-  else
-    echo -e  "${BGYELLOW}                                                                 ${RESTORE}"
-    echo -e "${BGLYELLOW}  Migrate and or Migrate Extras module(s) are not available!     ${RESTORE}"
-    echo -e  "${BGYELLOW}  You need to include:                                           ${RESTORE}"
-    echo -e  "${BGYELLOW}    - migrate                                                    ${RESTORE}"
-    echo -e  "${BGYELLOW}    - migrate_extras                                             ${RESTORE}"
-    echo -e  "${BGYELLOW}  modules in the drupal-org.make file                            ${RESTORE}"
-    echo -e  "${BGYELLOW}                                                                 ${RESTORE}"
-  fi
+  drush en -y migrate migrate_ui migrate_extras
+  drush mi --update --all
 
   cd $ROOT
   echo
