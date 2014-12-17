@@ -28,9 +28,14 @@ projects[diff][version] = "3.2"
 
 projects[entity][subdir] = "contrib"
 projects[entity][version] = "1.5"
+projects[entity][patch][] = "https://www.drupal.org/files/issues/2264079-entity-wrapper-access-single-entity-reference-2.patch"
+projects[entity][patch][] = "https://www.drupal.org/files/issues/2086225-entity-access-check-node-create-3.patch"
 
 projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.1"
+
+projects[flag][subdir] = "contrib"
+projects[flag][version] = "3.5"
 
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.0"
@@ -38,14 +43,8 @@ projects[features][version] = "2.0"
 projects[file_entity][subdir] = "contrib"
 projects[file_entity][version] = "2.0-beta1"
 
-projects[github_connect][subdir] = "contrib"
-projects[github_connect][version] = "1.x-dev"
-
 projects[interval][subdir] = "contrib"
 projects[interval][version] = "1.0"
-
-projects[inline_entity_form][subdir] = "contrib"
-projects[inline_entity_form][version] = "1.5"
 
 projects[mailsystem][subdir] = "contrib"
 projects[mailsystem][version] = 2.34
@@ -71,17 +70,15 @@ projects[money][version] = "1.x-dev"
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.2"
 
-projects[reldate][subdir] = "contrib"
-projects[reldate][version] = "1.x-dev"
+projects[restful][subdir] = "contrib"
+projects[restful][download][type] = "file"
+projects[restful][download][url] = "https://github.com/RESTful-Drupal/restful/archive/7.x-1.x.zip"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
 
 projects[token][subdir] = "contrib"
 projects[token][version] = "1.5"
-
-projects[transliteration][subdir] = contrib
-projects[transliteration][version] = "3.2"
 
 projects[views][subdir] = "contrib"
 projects[views][version] = "3.7"
@@ -99,11 +96,6 @@ projects[migrate_extras][subdir] = "development"
 
 
 ; Libraries
-libraries[ckeditor][download][type]= "get"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.4/ckeditor_4.3.4_full.zip"
-libraries[ckeditor][directory_name] = "ckeditor"
-libraries[ckeditor][destination] = "libraries"
-
 libraries[dompdf][type] = "libraries"
 libraries[dompdf][download][type] = "get"
 libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/releases/download/v0.6.1/dompdf-0.6.1.zip"

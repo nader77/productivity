@@ -1,8 +1,6 @@
-[![Build Status](https://travis-ci.org/Gizra/productivity.io.svg)](https://travis-ci.org/Gizra/productivity.io)
+[![Build Status](https://magnum.travis-ci.com/Gizra/productivity.svg?token=p2M1EeCrd3dY32WxWj3X&branch=master)](https://magnum.travis-ci.com/Gizra/productivity)
 
-# Drupal 7 - Install Profile Productivity
-
-This is a starting base to create Drupal 7 websites using an install profile.
+# Productivity.io
 
 
 ## Installation

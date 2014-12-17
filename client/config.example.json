@@ -1,0 +1,8 @@
+{
+  "development": {
+    "backend": "http://localhost/productivity/www"
+  },
+  "production": {
+    "backend": "https://server.com"
+  }
+}
