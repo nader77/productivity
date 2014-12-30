@@ -16,6 +16,7 @@ angular
 
     'config',
     'LocalStorageModule',
+    'ui.bootstrap',
     'ui.router'
   ])
   .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
