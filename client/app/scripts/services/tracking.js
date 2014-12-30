@@ -138,7 +138,7 @@ angular.module('clientApp')
       }, 60000);
 
       // Broadcast a change event.
-      $rootScope.$broadcast('prod.tracking.changed');
+      $rootScope.$broadcast(broadcastUpdateEventName);
     }
     $rootScope.$on('clearCache', function() {
       cache = {};
