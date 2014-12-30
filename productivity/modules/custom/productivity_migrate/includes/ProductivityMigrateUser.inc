@@ -68,8 +68,5 @@ class ProductivityMigrateUser extends Migration {
     $this->addFieldMapping('field_date:timezone')
       ->defaultValue('Asia/Jerusalem');
 
-
-
   }
-
 }

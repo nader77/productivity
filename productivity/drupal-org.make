@@ -33,6 +33,7 @@ projects[entity][patch][] = "https://www.drupal.org/files/issues/2086225-entity-
 
 projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.1"
+projects[entityreference][patch][] = "https://www.drupal.org/files/issues/migrate_multiple_entity_reference-2394725-4.patch"
 
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "3.5"
@@ -67,12 +68,17 @@ projects[module_filter][version] = "2.0-alpha2"
 projects[money][subdir] = "contrib"
 projects[money][version] = "1.x-dev"
 
+projects[panels][subdir] = "contrib"
+projects[panels][version] = "3.4"
+
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.2"
 
 projects[restful][subdir] = "contrib"
-projects[restful][download][type] = "file"
-projects[restful][download][url] = "https://github.com/RESTful-Drupal/restful/archive/7.x-1.x.zip"
+projects[restful][download][type] = "git"
+projects[restful][download][url] = "https://github.com/RESTful-Drupal/restful.git"
+projects[restful][download][branch] = "7.x-1.x"
+projects[restful][subdir] = "contrib"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
@@ -87,13 +93,21 @@ projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.2"
 
 
-; Development modules
-; Modules
+; Development
 projects[devel][subdir] = "development"
-projects[coder][subdir] = "development"
-projects[migrate][subdir] = "development"
-projects[migrate_extras][subdir] = "development"
+projects[devel][version] = "1.5"
 
+projects[coder][subdir] = "development"
+projects[coder][version] = "2.3"
+
+projects[migrate][subdir] = "development"
+projects[migrate][version] = "2.6"
+
+projects[migrate_extras][subdir] = "development"
+projects[migrate_extras][version] = "2.5"
+
+projects[migrate][subdir] = "development"
+projects[migrate][version] = 2.5
 
 ; Libraries
 libraries[dompdf][type] = "libraries"
@@ -102,4 +116,4 @@ libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/releases/do
 
 ; Themes
 projects[bootstrap][subdir] = "contrib"
-projects[bootstrap][version] = "3.0"
+projects[bootstrap][version] = "3.x-dev"

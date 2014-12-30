@@ -18,10 +18,10 @@ function productivity_project_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'entityreference',
         'settings' => array(
-          'link' => FALSE,
+          'link' => 1,
         ),
         'type' => 'entityreference_label',
         'weight' => 1,
@@ -56,7 +56,7 @@ function productivity_project_field_default_field_instances() {
     'description' => 'Start and end date of project, in case of retainer or hourly without end date, just add a start date.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'date',
         'settings' => array(
           'format_type' => 'long',
@@ -110,7 +110,7 @@ function productivity_project_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'money',
         'settings' => array(),
         'type' => 'money_default',
@@ -449,7 +449,7 @@ month - monthly retainer.
 global - fix amount.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
@@ -486,10 +486,10 @@ global - fix amount.',
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'interval',
         'settings' => array(),
-        'type' => 'interval_default',
+        'type' => 'interval_php',
         'weight' => 5,
       ),
       'teaser' => array(
@@ -538,7 +538,7 @@ global - fix amount.',
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
@@ -575,7 +575,7 @@ global - fix amount.',
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'inline',
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',

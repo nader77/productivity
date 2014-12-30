@@ -32,6 +32,8 @@ function productivity_time_tracking_field_default_field_bases() {
         'sick' => 'sick',
         'holiday' => 'holiday',
         'funday' => 'funday',
+        'miluim' => 'miluim',
+        'convention' => 'convention',
       ),
       'allowed_values_function' => '',
     ),
