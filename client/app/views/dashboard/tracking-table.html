@@ -15,18 +15,9 @@
             <th scope="row"> {{ name }}</th>
             <td class="track-item" ng-repeat="tracks in value.td">
               <span ng-repeat="track in tracks">
-                <button
-                  class="btn btn-default">
+                <a ng-href="{{ track.link }}" target="_blank" popover-trigger="mouseenter" popover="{{ track.projectName }}" class="btn btn-default">
                   {{ track.interval }}
-                </button>
-                <div class="popover" style="display: none">
-                  {{ track.projectName }} -
-                  <a
-                    ng-attr-title="{{track.projectName}}"
-                    class="fa fa-pencil-square-o"
-                    ng-href="{{ track.link }}">
-                    </a>
-                </div>
+                </a>
               </span>
             </td>
           </tr>
