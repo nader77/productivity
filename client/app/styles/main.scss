@@ -4,3 +4,78 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 @import 'spinner.scss';
 
+
+body{
+  font-family: Arial,
+  sans-serif;
+  font-size:10px;
+}
+
+.tracking-table-page {
+
+}
+.tracking-page {
+
+  .axis {
+
+    path, line {
+      fill: none;
+      stroke: #b6b6b6;
+      shape-rendering: crispEdges;
+    }
+  }
+
+  .tick text {
+    fill: #999;
+  }
+
+  g.journal {
+
+    circle {
+      fill: rgb(230, 15, 13);
+
+      &.regular {
+        fill: rgb(230, 185, 213);
+      }
+
+      &.sick {
+        fill: rgb(40, 185, 13);
+      }
+
+      &.vacation {
+        fill: rgb(100, 00, 13);
+      }
+
+      &.holiday {
+        fill: rgb(00, 85, 13);
+      }
+
+      &.funday {
+        fill: rgb(200, 185, 13);
+      }
+
+      &.miluim {
+        fill: rgb(100, 85, 13);
+      }
+
+      &.convention {
+        fill: rgb(100, 85, 130);
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  text.label {
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  text.value {
+    font-size: 12px;
+    font-weight: bold;
+  }
+}

@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Productivity mailgun feature.
+ */
+
+include_once 'productivity_mailgun.features.inc';

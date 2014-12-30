@@ -184,10 +184,6 @@ function install_drupal_profile {
     --uri=$BASE_DOMAIN_URL
   echo
 
-  echo -e "${LBLUE}> Disable the update module as it slows down admin access${RESTORE}"
-  drush -y dis update
-  echo
-
   cd $ROOT
 }
 
@@ -226,23 +222,25 @@ function enable_development_modules {
 # Do dummy content migration.
 ##
 function import_demo_content {
-  if [ -d $ROOT/$PROFILE_NAME/modules/$PROFILE_NAME/productivity_migrate/csv ]; then
-    echo -e  "CSV folder already exist, remove folder first to decrypt gzip."
-  else
-    if [ -f $ROOT/$PROFILE_NAME/modules/$PROFILE_NAME/productivity_migrate/csv/decrypt.sh ]; then
-      echo -e "Decrypting CSVs"
-      cd $ROOT/$PROFILE_NAME/modules/$PROFILE_NAME/productivity_migrate
-      bash decrypt.sh
-    else
-      echo -e "Cannot Decrypt, create the file decrypt.sh first."
-    fi
-  fi
-
   echo -e "${LBLUE}> Importing demo data${RESTORE}"
   cd $ROOT/www
 
-  drush en -y migrate migrate_ui migrate_extras
-  drush mi --update --all
+  # Check if migrate module is available
+  MIGRATE_UI=$(drush pm-list --pipe --type=module | grep "^migrate_ui$")
+  MIGRATE_EXTRAS=$(drush pm-list --pipe --type=module | grep "^migrate_extras$")
+  if [ $MIGRATE_UI ] && [ $MIGRATE_EXTRAS ]; then
+    drush en -y productivity_migrate
+    drush en -y migrate migrate_ui migrate_extras
+    drush mi --all --user=1
+  else
+    echo -e  "${BGYELLOW}                                                                 ${RESTORE}"
+    echo -e "${BGLYELLOW}  Migrate and or Migrate Extras module(s) are not available!     ${RESTORE}"
+    echo -e  "${BGYELLOW}  You need to include:                                           ${RESTORE}"
+    echo -e  "${BGYELLOW}    - migrate                                                    ${RESTORE}"
+    echo -e  "${BGYELLOW}    - migrate_extras                                             ${RESTORE}"
+    echo -e  "${BGYELLOW}  modules in the drupal-org.make file                            ${RESTORE}"
+    echo -e  "${BGYELLOW}                                                                 ${RESTORE}"
+  fi
 
   cd $ROOT
   echo

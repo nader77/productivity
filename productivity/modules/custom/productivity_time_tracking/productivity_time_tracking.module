@@ -6,7 +6,31 @@
 
 include_once 'productivity_time_tracking.features.inc';
 
+function productivity_time_tracking_total_hours($project_nid, $date_range = array(), $employees = array()) {
+  $query = new EntityFieldQuery();
 
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'time_tracking')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_day_type', 'value', 'regular')
+    ->fieldCondition('field_project', 'target_id', $project_nid);
+
+  $result = $query->execute();
+
+  $total = array(
+    'day' => 0,
+    'hour' => 0,
+  );
+  if (!isset($result['node'])) {
+    return $total;
+  }
+
+  foreach ($result['node'] as $res) {
+    $wrapper = entity_metadata_wrapper('node', $res->nid);
+    $total[$wrapper->field_work_length->period->value()] += (int) $wrapper->field_work_length->interval->value();
+  }
+  return $total;
+}
 /**
  * Implements hook_node_presave().
  *
@@ -43,41 +67,16 @@ function productivity_time_tracking_menu() {
  * Upload file.
  */
 function productivity_time_tracking_mail_create() {
-  watchdog('productivity_time_tracking', '$_POST: <pre>'. print_r($_POST, TRUE) .'</pre>');
-  watchdog('productivity_time_tracking', '$_FILES: <pre>'. print_r($_FILES, TRUE) .'</pre>');
-  watchdog('productivity_time_tracking', '$_POST[From]: <pre>'. check_plain($_POST['From']) .'</pre>');
-  watchdog('productivity_time_tracking', '$_POST[To]: <pre>'. check_plain($_POST['To']) .'</pre>');
-  watchdog('productivity_time_tracking', '$_POST[Subject]: <pre>'. check_plain($_POST['Subject']) .'</pre>');
   if (empty($_POST['X-Mailgun-Incoming']) || $_POST['X-Mailgun-Incoming'] != 'Yes') {
     watchdog('productivity_time_tracking', 'Return #46, $_POST[X-Mailgun-Incoming]: <pre>'. $_POST['X-Mailgun-Incoming'] .'</pre>');
     return;
   }
-  if (empty($_FILES)) {
-    watchdog('productivity_time_tracking', 'Return #52, empty $_FILES');
-    // No files uploaded.
-    return;
-  }
-  if (!$account = user_load_by_mail($_POST['From'])) {
-    // Get the account from the email in the form "John doe <john@example.com>".
-    $pattern = '/<(.*)>/i';
-    $matches = array();
-    preg_match($pattern, $_POST['From'], $matches);
-    if (!$matches) {
-      watchdog('productivity_time_tracking', 'Return #63, no matches');
-      // Can't process the email address.
-      return;
-    }
-    if (!$account = user_load_by_mail($matches[1])) {
-      watchdog('productivity_time_tracking', 'Return #68, User not loaded');
-      return;
-    }
-  }
-  // Find project the document should be created, by the "To" value, which is in
-  // the form of "pipelines+1234@example.com)
-  $uuid = str_replace('pipelines+', '', $_POST['To']);
-  $uuid = str_replace('@' . variable_get('productivity_time_tracking_mail_upload_address', 'gizra-labs.com'), '', $uuid);
-  // The uuid might be wrapped with '<>'.
-  $uuid = trim($uuid, '<>');
-
+  $message = message_create('mailgun_incoming_mail', array(
+    'arguments' => array(
+      '@text' => print_r($_POST, TRUE)
+    )
+  ));
+  $wrapper = entity_metadata_wrapper('message', $message);
+  $wrapper->save();
   // TODO: Save tracking entity.
 }

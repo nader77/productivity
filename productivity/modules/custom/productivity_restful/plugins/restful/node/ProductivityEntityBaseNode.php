@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains GbEntityBaseNode.
+ * Contains \ProductivityEntityBaseNode.
  */
 
 abstract class ProductivityEntityBaseNode extends \RestfulEntityBaseNode {
@@ -15,31 +15,23 @@ abstract class ProductivityEntityBaseNode extends \RestfulEntityBaseNode {
 
     unset($public_fields['self']);
 
-    $public_fields['created'] = array(
-      'property' => 'created',
-    );
-
-    $public_fields['updated'] = array(
-      'property' => 'changed',
-    );
-
-    if (field_info_instance($this->getEntityType(), OG_AUDIENCE_FIELD, $this->getBundle())) {
-      $public_fields['company'] = array(
-        'property' => OG_AUDIENCE_FIELD,
-        'resource' => array(
-          'company' => array(
-            'name' => 'companies',
-            'full_view' => FALSE,
-          )
-        ),
-      );
-    }
+//    if (field_info_instance($this->getEntityType(), OG_AUDIENCE_FIELD, $this->getBundle())) {
+//      $public_fields['tracking'] = array(
+//        'property' => OG_AUDIENCE_FIELD,
+//        'resource' => array(
+//          'time_tracking' => array(
+//            'name' => 'tracking',
+//            'full_view' => FALSE,
+//          )
+//        ),
+//      );
+//    }
 
     return $public_fields;
   }
 
   /**
-   * Process callback, Remove Drupal specific items from the image array.
+   * Process callback, Remove Drupal specific events from the image array.
    *
    * @param array $value
    *   The image array.
