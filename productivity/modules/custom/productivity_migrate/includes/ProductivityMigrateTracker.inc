@@ -60,4 +60,21 @@ class ProductivityMigrateTracker extends ProductivityMigrate {
     $this->addFieldMapping('field_work_length', 'work_length');
     $this->addFieldMapping('field_work_length:period', 'length_unit');
   }
+
+  function prepare($entity, $row) {
+    $wrapper = entity_metadata_wrapper('node', $entity);
+    if (!$wrapper->field_work_length->value() || $wrapper->field_work_length->interval->value() == "") {
+      // Prevent error on save when field is empty.
+      $entity->field_work_length['und'][0]['interval'] = '0';
+      $entity->field_work_length['und'][0]['period'] = 'hour';
+    }
+    if (!$wrapper->field_employee->value()) {
+      // Prevent error on save when field is empty.
+      unset($entity->field_employee);
+    }
+    if (!$wrapper->field_project->value()) {
+      // Prevent error on save when field is empty.
+      unset($entity->field_project);
+    }
+  }
 }

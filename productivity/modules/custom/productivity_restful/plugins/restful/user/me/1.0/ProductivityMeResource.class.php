@@ -26,10 +26,10 @@ class ProductivityMeResource extends \RestfulEntityBaseUser {
 
 
     if (field_info_field('og_user_node')) {
-      $public_fields['companies'] = array(
+      $public_fields['tracking'] = array(
         'property' => 'og_user_node',
         'resource' => array(
-          'company' => 'companies',
+          'tracking' => 'tracking',
         ),
       );
     }
@@ -44,6 +44,6 @@ class ProductivityMeResource extends \RestfulEntityBaseUser {
    */
   public function viewEntity($entity_id) {
     $account = $this->getAccount();
-    return parent::viewEntity($account->uid);
+    return array(parent::viewEntity($account->uid));
   }
 }

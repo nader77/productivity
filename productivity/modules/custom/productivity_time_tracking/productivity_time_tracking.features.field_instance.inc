@@ -117,7 +117,7 @@ function productivity_time_tracking_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_employee',
     'label' => 'Employee',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -156,7 +156,7 @@ function productivity_time_tracking_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_project',
     'label' => 'Project',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -251,7 +251,7 @@ function productivity_time_tracking_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_work_length',
     'label' => 'Work length',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'allowed_periods' => array(
         'day' => 'day',

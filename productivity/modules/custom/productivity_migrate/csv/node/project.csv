@@ -1,0 +1,31 @@
+ID,Title,Date start,Date end,Account,Type (fix vs T&M),Rate type(hours/days/month/global),Rate,Rate Currency,Scope,Scope unit (hours/days/month),Status
+ethosia,Ethosia,01.05.2014,1.12.2014,ethosia,fix,global,155000.00,ILS,607,hour,active
+shenkar,Shenkar,01.03.2014,1.12.2014,shenkar,fix,global,75000.00,ILS,207,hour,active
+p4d,Pipeline,01.07.2014,10.02.2014,eu_ade,fix,global,50000,EUR,90,day,active
+c4dp1,"C4D Package 1",01.08.2014,01.02.2014,eu_ade,T&M,days,760,EUR,90,day,active
+circuit,Circuit,01.01.2014,,circuit_live_auction,fix,,0,ILS,12,month,active
+hirodashboard,"Hiro Dashboard",01.01.2013,,hiro,T&M,hours,250,ILS,10,hour,active
+cmssyndication,"CMS Syndication",01.01.2014,,hiro,T&M,hours,250,ILS,20,hour,active
+ibli,IBLI,01.01.2014,,ilri,fix,global,100,USD,400,hour,active
+praise.com,praise.com,,,cbn,T&M,hours,120,USD,544,hour,active
+bible,"Bible widget",,,cbn,fix,global,120,USD,188,hour,active
+negawatt,Negawatt,,,negawatt,fix,,0,ILS,12,month,active
+cri,CRI,,,cri,fix,global,60000,ILS,200,hour,active
+taglitfellow,"Taglit Fellow",,,taglit,T&M,hours,120,USD,700,hour,active
+hujiosheb,"HUJI OS - hebrew",,,huji,fix,global,80000,ILS,418,hour,active
+hujiosresearch,"OS - Research",,,huji,fix,global,30000,ILS,80,hour,done
+hujiosregistration,"Huji - registration",,,huji,fix,global,30000,ILS,80,hour,done
+uppercut,Uppercut,,,esheep,T&M,hours,250,ILS,80,hour,done
+split,Split,,,esheep,T&M,hours,250,ILS,80,hour,done
+pilates,Pilates,,,esheep,T&M,hours,250,ILS,80,hour,done
+stamp,Stamp Circuit,,,amrit,T&M,hours,250,ILS,80,hour,done
+wix,WIX,01.12.2014,,wix,fix,global,12000,ILS,80,hour,active
+casper,Casper College,01.11.2014,,casper,fix,global,5000,USD,40,hour,active
+cdl,CDL,01.1.2014,,nl,fix,global,75000,ILS,40,hour,active
+medicart,Medicart,01.1.2014,,medicart,fix,global,28000,ILS,40,hour,active
+solaredge,Solaredge,01.1.2014,,solaredge,fix,global,52000,ILS,40,hour,active
+vidtur,Vidtur,01.1.2014,,vidtur,T&M,hours,250,ILS,80,hour,done
+gc,GC,01.1.2014,,vidtur,T&M,hours,250,ILS,80,hour,done
+melingo,Melingo,01.1.2014,,melingo,T&M,hours,250,ILS,80,hour,done
+mothernist,mothernist,01.1.2014,,mothernist,T&M,hours,75,USD,80,hour,done
+gizra.com,gizra.com,01.1.2014,,gizra,T&M,hours,250,ILS,80,hour,done

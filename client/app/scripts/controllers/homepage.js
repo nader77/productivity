@@ -8,10 +8,12 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('HomepageCtrl', function ($scope, $state, companies, Auth) {
+  .controller('HomepageCtrl', function ($scope, $state, tracking, Auth) {
     if (Auth.isAuthenticated()) {
-      var defaultCompanyId = companies[0].id;
-      $state.go('dashboard.byCompany.items', {companyId: defaultCompanyId});
+      $state.go('tracking-table', {
+        "year": 2014,
+        "month": 11
+      });
     }
     else {
       // Redirect to login.
