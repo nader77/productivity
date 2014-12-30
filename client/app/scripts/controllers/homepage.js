@@ -8,11 +8,11 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('HomepageCtrl', function ($scope, $state, tracking, Auth) {
-    if (Auth.isAuthenticated()) {
-      $state.go('tracking-table', {
-        "year": 2014,
-        "month": 11
+  .controller('HomepageCtrl', function ($scope, $state, account, $log) {
+    if (account) {
+      $state.go('dashboard.tracking-table', {
+        year: 2014,
+        month: 11
       });
     }
     else {
