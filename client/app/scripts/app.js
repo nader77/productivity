@@ -66,9 +66,6 @@ angular
         resolve: {
           account: function(Account) {
             return Account.get();
-          },
-          tracking: function($stateParams, Tracking) {
-            return Tracking.get($stateParams.year, $stateParams.month);
           }
         }
       })
@@ -76,7 +73,7 @@ angular
         url: '/tracking/{year:int}/{month:int}',
         templateUrl: 'views/dashboard/tracking.html',
         controller: 'TrackingCtrl',
-        onEnter: page403,
+        onEnter: page403
       })
       .state('dashboard.tracking-table', {
         url: '/tracking-table/{year:int}/{month:int}',
