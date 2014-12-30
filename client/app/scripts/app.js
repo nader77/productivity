@@ -16,6 +16,7 @@ angular
 
     'config',
     'LocalStorageModule',
+    'ui.bootstrap',
     'ui.router'
   ])
   .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
@@ -43,11 +44,11 @@ angular
     // Now set up the states.
     $stateProvider
       .state('homepage', {
-        url: '',
+        url: '/',
         controller: 'HomepageCtrl',
         resolve: {
-          tracking: function(Tracking) {
-            return Tracking.get();
+          account: function(Account) {
+            return Account.get();
           }
         }
       })
@@ -56,18 +57,28 @@ angular
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
       })
-      .state('tracking', {
-        url: '/tracking/{year:int}/{month:int}',
-        templateUrl: 'views/dashboard/tracking.html',
-        controller: 'TrackingCtrl',
+      .state('dashboard', {
+        abstract: true,
+        url: '',
+        templateUrl: 'views/dashboard/main.html',
+        controller: 'DashboardCtrl',
         onEnter: page403,
         resolve: {
+          account: function(Account) {
+            return Account.get();
+          },
           tracking: function($stateParams, Tracking) {
             return Tracking.get($stateParams.year, $stateParams.month);
           }
         }
       })
-      .state('tracking-table', {
+      .state('dashboard.tracking', {
+        url: '/tracking/{year:int}/{month:int}',
+        templateUrl: 'views/dashboard/tracking.html',
+        controller: 'TrackingCtrl',
+        onEnter: page403,
+      })
+      .state('dashboard.tracking-table', {
         url: '/tracking-table/{year:int}/{month:int}',
         templateUrl: 'views/dashboard/tracking-table.html',
         controller: 'TrackingTableCtrl',
@@ -86,6 +97,17 @@ angular
         resolve: {
           tracking: function($stateParams, Tracking) {
             return Tracking.get($stateParams.year, $stateParams.month);
+          }
+        }
+      })
+      .state('dashboard.account', {
+        url: '/my-account',
+        templateUrl: 'views/dashboard/account/account.html',
+        controller: 'AccountCtrl',
+        onEnter: page403,
+        resolve: {
+          account: function(Account) {
+            return Account.get();
           }
         }
       })
