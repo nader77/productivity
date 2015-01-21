@@ -6,14 +6,82 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 
 
 body{
-  font-family: Arial,
-  sans-serif;
-  font-size:10px;
+  font-family: Arial, sans-serif;
 }
 
+// http://paletton.com/#uid=c0u3i0X000kllll8nAaeRrxrPf9BW8X
+$color1: #AA6C39;
+$color1_light: #DBA476;
+$color2: #AA8439;
+$color2_light: #AA8439;
+$color3_dark: #470000;
+$color3: #AA3939;
+$color3_light: #DB7676;
+$color3_lighter: #FFBCBC;
+$color4: #226666;
+$color4_light : #478484;
 .tracking-table-page {
 
+  .track-item-table {
+    font-size: 16px;
+
+    th{
+      padding: 8px 0 0 8px;
+      width: 28px;
+    }
+  }
+
+  .track-item {
+
+    td {
+      padding: 10px 0 0 0;
+      width: 28px;
+    }
+
+    a {
+      padding: 10px;
+      color: $color3_dark;
+    }
+
+    .empty {
+      background-color: white;
+    }
+
+    .regular {
+      background-color: $color4_light;
+
+      a {
+        color: $color4;
+      }
+    }
+
+    .sick {
+      background-color: $color3;
+    }
+
+    .vacation {
+      background-color: $color1;
+    }
+
+    .holiday {
+      background-color: $color1_light;
+    }
+
+    .funday, .special {
+      background-color: $color2_light;
+    }
+
+    .miluim {
+      background-color: $color3_light;
+    }
+
+    .convention {
+      background-color: $color4_light;
+    }
+  }
 }
+
+
 .tracking-page {
 
   .axis {

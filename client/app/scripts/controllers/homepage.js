@@ -10,9 +10,17 @@
 angular.module('clientApp')
   .controller('HomepageCtrl', function ($scope, $state, account, $log) {
     if (account) {
-      $state.go('dashboard.tracking-table', {
-        year: 2014,
-        month: 11
+      var today = new Date();
+      var dd = today.getDate();
+      var mm = today.getMonth()+1; //January is 0!
+      var yyyy = today.getFullYear();
+
+      $state.go('dashboard.tracking-form', {
+        username: account.label,
+        year: yyyy,
+        month: mm,
+        day: dd,
+        id: 'new'
       });
     }
     else {

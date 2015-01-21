@@ -162,21 +162,11 @@ function _productivity_install_save_default_permissions($filtered_html_format) {
 
   // Enable default permissions for system roles.
   $filtered_html_permission = filter_permission_name($filtered_html_format);
-  user_role_grant_permissions(
-    DRUPAL_ANONYMOUS_RID,
-    array(
-      'access content',
-      'access comments',
-      $filtered_html_permission
-    )
-  );
+
   user_role_grant_permissions(
     DRUPAL_AUTHENTICATED_RID,
     array(
       'access content',
-      'access comments',
-      'post comments',
-      'skip comment approval',
       $filtered_html_permission
     )
   );

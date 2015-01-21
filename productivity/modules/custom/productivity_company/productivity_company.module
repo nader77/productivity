@@ -1,9 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Productivity Company feature.
- */
-
-include_once 'productivity_company.features.inc';
-
-

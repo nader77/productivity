@@ -8,21 +8,21 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('Tracking', function ($q, $http, $timeout, Config, $rootScope, localStorageService) {
+  .service('Projects', function ($q, $http, $timeout, Config, $rootScope, localStorageService) {
 
     // A private cache key.
     var cache = {};
 
     // Update event broadcast name.
-    var broadcastUpdateEventName = 'ProductivityTrackingChange';
+    var broadcastUpdateEventName = 'ProductivityProjectsChange';
 
     /**
      * Return the promise with the events list, from cache or the server.
      *
      * @returns {*}
      */
-    this.get = function(year, month, employee) {
-      return $q.when(cache.data || getDataFromBackend(year, month, employee));
+    this.get = function() {
+      return $q.when(cache.data || getDataFromBackend());
     };
 
     /**
@@ -33,35 +33,13 @@ angular.module('clientApp')
      */
     this.save = function(data) {
       var deferred = $q.defer();
-      var url = Config.backend + '/api/tracking';
-      var method = 'POST';
-
-      // Update existing.
-      if (data.id) {
-        method = 'PATCH';
-        url += '/' + data.id;
-      }
-      // Debug mode.
-      if (Config.debug) {
-        url += '?XDEBUG_SESSION_START=11049';
-      }
+      var url = Config.backend + '/api/projects';
 
       $http({
-        method: method,
+        method: 'POST',
         url: url,
         data: data
-      }).
-        success(function(data, status, headers, config) {
-          // this callback will be called asynchronously
-          // when the response is available.
-          data.error = false;
-          deferred.resolve(data);
-      }).
-        error(function(data, status, headers, config) {
-          // called asynchronously if an error occurs
-          // or server returns response with an error status.
-          data.error = true;
-          deferred.resolve(data);
+      }).success(function(response) {
       });
 
       return deferred.promise;
@@ -73,21 +51,16 @@ angular.module('clientApp')
      *
      * @returns {$q.promise}
      */
-    var getDataFromBackend = function(year, month, employee) {
+    var getDataFromBackend = function() {
       var deferred = $q.defer();
 
-      var url = Config.backend + '/api/tracking?year=' + year + '&month=' + month;
-
-      if (employee != undefined) {
-        url += '&employee=' + employee;
-      }
-      
+      var url = Config.backend + '/api/projects';
       $http({
         method: 'GET',
         url: url
       }).success(function(response) {
         // Create header days.
-        //setCache(response.data);
+        setCache(response.data);
         deferred.resolve(response.data);
       });
 

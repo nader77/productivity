@@ -21,6 +21,7 @@ class ProductivityMigrateUser extends Migration {
     array('status', 'status'),//(employed/fired/resigned/future)
     array('date_start', 'date_start'),
     array('date_end', 'date_end'),
+    array('password', 'password'),
   );
 
   /**
@@ -58,6 +59,7 @@ class ProductivityMigrateUser extends Migration {
     $field_names = array(
       'name',
       'mail',
+      'password'
     );
 
     $this->addSimpleMappings($field_names);
@@ -67,6 +69,13 @@ class ProductivityMigrateUser extends Migration {
     $this->addFieldMapping('field_date:to', 'date_end');
     $this->addFieldMapping('field_date:timezone')
       ->defaultValue('Asia/Jerusalem');
+
+  }
+
+  function prepare($entity, $row) {
+    if (!empty($row->password)) {
+      $entity->status = TRUE;
+    }
 
   }
 }
