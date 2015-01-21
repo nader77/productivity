@@ -36,9 +36,28 @@ function productivity_install_tasks() {
     'display' => FALSE,
   );
 
+  $tasks['productivity_set_permissions'] = array(
+    'display_name' => st('Set Permissions'),
+    'display' => FALSE,
+  );
 
   return $tasks;
 }
+
+/**
+ * Task callback; Setting permissions.
+ */
+function productivity_set_permissions() {
+
+  // Enable default permissions for system roles.
+  $permissions = array(
+    'create time_tracking content',
+    'edit any time_tracking content',
+  );
+
+  user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, $permissions);
+}
+
 
 /**
  * Task callback; Setup blocks.

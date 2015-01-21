@@ -2,6 +2,5 @@ name = Productivity RESTFul
 core = 7.x
 package = Productivity
 dependencies[] = restful
-dependencies[] = entity_validator
 
 files[] = plugins/restful/node/ProductivityEntityBaseNode.php

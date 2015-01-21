@@ -1,5 +1,41 @@
 <?php
+
+include_once 'productivity_user.features.inc';
+
 /**
  * @file
  * Drupal needs this blank file.
  */
+/**
+ * Implements hook_init().
+ */
+function productivity_user_init() {
+  if (!productivity_user_is_live()) {
+    global $conf;
+    // Set test mail.
+    if (!empty($conf['mail_system'])) {
+      foreach ($conf['mail_system'] as $system => $class) {
+        $conf['mail_system'][$system] = 'CatchTestMailSystem';
+      }
+    }
+  }
+  // Set loggly variables.
+  else {
+    $conf['loggly_http_url'] =  'https://logs-01.loggly.com/inputs/704620e7-c3d4-4d84-a0c1-926e5147592c/tag/http/';
+    $conf['loggly_http_uuid'] =  'productivity-pantheon-live';
+  }
+}
+
+
+/**
+ * Check if we are in live env.
+ */
+/**
+ *  Implements hook_action_info().
+ */
+function productivity_user_is_live() {
+  if (!(defined('PANTHEON_ENVIRONMENT') && PANTHEON_ENVIRONMENT == 'live')) {
+    return FALSE;
+  }
+  return TRUE;
+}

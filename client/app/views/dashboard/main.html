@@ -22,7 +22,17 @@
             <li><a href ng-click="logout()">Logout</a></li>
           </ul>
         </li>
+      </ul>
 
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Tracking <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+            <li><a ui-sref="dashboard.tracking-form({username: employee, year: year, month: month, day: day, id: 'new'})">Personal Tracking</a></li>
+            <li class="divider"></li>
+            <li><a ui-sref="dashboard.tracking-table({year: year, month: month})">Tracking Table</a></li>
+          </ul>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container -->

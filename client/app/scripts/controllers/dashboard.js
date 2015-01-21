@@ -8,7 +8,14 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('DashboardCtrl', function ($scope, Auth, $state, $log) {
+  .controller('DashboardCtrl', function ($scope, Auth, $state, account, $log) {
+
+    var today = new Date();
+    $scope.day = today.getDate();
+    //January is 0!
+    $scope.month = today.getMonth()+1;
+    $scope.year = today.getFullYear();
+    $scope.employee = account.label;
 
     /**
      * Logout current user.

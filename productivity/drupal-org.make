@@ -46,6 +46,7 @@ projects[file_entity][version] = "2.0-beta1"
 
 projects[interval][subdir] = "contrib"
 projects[interval][version] = "1.0"
+projects[interval][patch][] = "https://www.drupal.org/files/issues/2409877-metadata-set-support-1.patch"
 
 projects[loggly_http][download][type] = "file"
 projects[loggly_http][download][url] = "https://github.com/Gizra/loggly_http/archive/7.x-1.x.zip"

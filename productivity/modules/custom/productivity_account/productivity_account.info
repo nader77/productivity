@@ -1,6 +1,6 @@
 name = productivity account
 core = 7.x
-package = productivity.io
+package = productivity
 dependencies[] = ctools
 dependencies[] = features
 dependencies[] = strongarm
@@ -19,4 +19,4 @@ features[variable][] = menu_parent_account
 features[variable][] = node_options_account
 features[variable][] = node_preview_account
 features[variable][] = node_submitted_account
-mtime = 1419373696
+mtime = 1419962358

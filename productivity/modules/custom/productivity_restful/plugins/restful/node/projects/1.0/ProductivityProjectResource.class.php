@@ -14,9 +14,10 @@ class ProductivityProjectResource extends \ProductivityEntityBaseNode {
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
-    $public_fields['name'] = array(
-      'property' => 'title',
+    $public_fields['id'] = array(
+      'property' => 'nid',
     );
+
     return $public_fields;
   }
 }
