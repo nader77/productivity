@@ -19,11 +19,6 @@ function productivity_user_init() {
       }
     }
   }
-  // Set loggly variables.
-  else {
-    $conf['loggly_http_url'] =  'https://logs-01.loggly.com/inputs/704620e7-c3d4-4d84-a0c1-926e5147592c/tag/http/';
-    $conf['loggly_http_uuid'] =  'productivity-pantheon-live';
-  }
 }
 
 
