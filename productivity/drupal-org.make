@@ -47,6 +47,11 @@ projects[file_entity][version] = "2.0-beta1"
 projects[interval][subdir] = "contrib"
 projects[interval][version] = "1.0"
 
+projects[loggly_http][download][type] = "file"
+projects[loggly_http][download][url] = "https://github.com/Gizra/loggly_http/archive/7.x-1.x.zip"
+projects[loggly_http][subdir] = "contrib"
+projects[loggly_http][type] = "module"
+
 projects[mailsystem][subdir] = "contrib"
 projects[mailsystem][version] = 2.34
 
