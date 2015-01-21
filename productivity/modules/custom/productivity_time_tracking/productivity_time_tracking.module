@@ -6,6 +6,29 @@
 
 include_once 'productivity_time_tracking.features.inc';
 
+
+/**
+ * Get general days in a given month.
+ */
+function productivity_time_tracking_get_global_days($month, $year) {
+  // Call the restfull service.
+  $handler = restful_get_restful_handler('tracking');
+  $request = array();
+  $request['year'] = $year;
+  $request['month'] = $month;
+  $request['global'] = TRUE;
+  $result = $handler->get('', $request);
+  return $result;
+}
+
+/**
+ * Total hours done in a project.
+ *
+ * @param $project_nid
+ * @param array $date_range
+ * @param array $employees
+ * @return array
+ */
 function productivity_time_tracking_total_hours($project_nid, $date_range = array(), $employees = array()) {
   $query = new EntityFieldQuery();
 
@@ -31,6 +54,7 @@ function productivity_time_tracking_total_hours($project_nid, $date_range = arra
   }
   return $total;
 }
+
 /**
  * Implements hook_node_presave().
  *
@@ -50,6 +74,8 @@ function productivity_time_tracking_node_presave($node) {
 
 /**
  * Implements hook_menu().
+ *
+ * Callback for mailgun.
  */
 function productivity_time_tracking_menu() {
   $items = array();
@@ -63,6 +89,7 @@ function productivity_time_tracking_menu() {
   );
   return $items;
 }
+
 /**
  * Upload file.
  */

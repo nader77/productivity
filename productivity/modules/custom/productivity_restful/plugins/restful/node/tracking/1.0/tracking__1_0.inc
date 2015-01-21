@@ -9,4 +9,5 @@ $plugin = array(
   'description' => t('Export the "time tracking" content type.'),
   'class' => 'ProductivityTrackingResource',
   'authentication_types' => TRUE,
+  'formatter' => 'tracking_calendar',
 );

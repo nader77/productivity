@@ -91,6 +91,7 @@ foreach($files as $file) {
           'unit' => $project['unit'],
           'work description' => '',
           'type' => 'regular',
+          '' => '',
         );
       }
     }

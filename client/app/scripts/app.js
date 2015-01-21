@@ -69,6 +69,20 @@ angular
           }
         }
       })
+      .state('dashboard.tracking-form', {
+        url: '/tracking/{username:string}/{year:int}/{month:int}/{day:string}/{id:string}',
+        templateUrl: 'views/dashboard/tracking-form.html',
+        controller: 'TrackingFormCtrl',
+        onEnter: page403,
+        resolve: {
+          projects: function($stateParams, Projects) {
+            return Projects.get();
+          },
+          tracking: function($stateParams, Tracking) {
+            return Tracking.get($stateParams.year, $stateParams.month, $stateParams.username);
+          }
+        }
+      })
       .state('dashboard.tracking', {
         url: '/tracking/{year:int}/{month:int}',
         templateUrl: 'views/dashboard/tracking.html',
@@ -82,7 +96,7 @@ angular
         onEnter: page403,
         resolve: {
           tracking: function($stateParams, Tracking) {
-            return Tracking.get($stateParams.year, $stateParams.month);
+              return Tracking.get($stateParams.year, $stateParams.month);
           }
         }
       })
