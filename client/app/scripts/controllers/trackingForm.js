@@ -40,6 +40,7 @@ angular.module('clientApp')
     if ($stateParams.id == 'new' || $stateParams.id == 'undefined') {
       $scope.title = 'What have you done on the '  + $stateParams.day + '/' + $stateParams.month + '/' +  $stateParams.year + ' ?';
       $scope.data = {};
+      $scope.data.period = 'hour';
       $scope.data.type = 'regular';
       $scope.data.employee = $stateParams.username;
     }
