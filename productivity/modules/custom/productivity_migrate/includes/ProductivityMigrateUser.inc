@@ -21,7 +21,7 @@ class ProductivityMigrateUser extends Migration {
     array('status', 'status'),//(employed/fired/resigned/future)
     array('date_start', 'date_start'),
     array('date_end', 'date_end'),
-    array('password', 'password'),
+    array('pass', 'pass'),
   );
 
   /**
@@ -59,7 +59,7 @@ class ProductivityMigrateUser extends Migration {
     $field_names = array(
       'name',
       'mail',
-      'password'
+      'pass'
     );
 
     $this->addSimpleMappings($field_names);
