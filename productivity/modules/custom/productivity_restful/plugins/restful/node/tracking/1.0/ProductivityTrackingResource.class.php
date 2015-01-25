@@ -45,7 +45,6 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
 
     $public_fields['length'] = array(
       'property' => 'field_track_hours',
-      'sub_property' => 'interval',
       'init_field' => TRUE,
     );
 
