@@ -73,24 +73,9 @@
 
                 <!-- Text input-->
                 <div class="form-group">
-                  <label class="col-md-4 control-label" for="timelength">Length</label>
+                  <label class="col-md-4 control-label" for="timelength">Hours</label>
                   <div class="col-md-4">
                     <input id="timelength" ng-model="data.length" name="length" type="text" placeholder="example 8" class="form-control input-md">
-                  </div>
-                </div>
-
-                <!-- Select Day/Hours -->
-                <div class="form-group">
-                  <label class="col-md-4 control-label" for="radios">Type</label>
-                  <div class="col-md-4">
-                    <label class="radio-inline" for="radios-0">
-                      <input type="radio" name="radios" id="radios-0"  ng-model="data.period" value="hour" checked="checked">
-                      Hours
-                    </label>
-                    <label class="radio-inline" for="radios-1">
-                      <input type="radio" name="radios" ng-model="data.period" id="radios-1" value="day">
-                      Days
-                    </label>
                   </div>
                 </div>
 
@@ -126,7 +111,6 @@
         Project ID: {{ data.projectID }}
         Track ID: {{ data.id }}
         Length: {{ data.length }}
-        Type: {{ data.type }}
         Day: {{ data.day }}
         Date: {{ data.date }}
       </pre>
