@@ -1,28 +1,25 @@
 name = Productivity user
 core = 7.x
-package = productivity.io
+package = productivity
+dependencies[] = ctools
 dependencies[] = date
+dependencies[] = entity
 dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = list
+dependencies[] = mailsystem
+dependencies[] = message
 dependencies[] = options
 dependencies[] = productivity_project
-dependencies[] = ctools
-dependencies[] = entity
-dependencies[] = message
 dependencies[] = strongarm
-dependencies[] = mailsystem
+features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[field_base][] = field_employment_status
 features[field_base][] = field_salaries
 features[field_instance][] = user-user-field_date
 features[field_instance][] = user-user-field_employment_status
 features[field_instance][] = user-user-field_salaries
-features[ctools][] = strongarm:strongarm:1
 features[message_type][] = catch_test_mail
 features[variable][] = field_bundle_settings_message__catch_test_mail
 files[] = includes/catchTest.mail.inc
-mtime = 1419962358
-
-
-
+mtime = 1422193566
