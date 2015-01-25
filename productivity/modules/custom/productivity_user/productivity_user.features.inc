@@ -7,8 +7,7 @@
 /**
  * Implements hook_ctools_plugin_api().
  */
-function productivity_user_ctools_plugin_api() {
-  list($module, $api) = func_get_args();
+function productivity_user_ctools_plugin_api($module = NULL, $api = NULL) {
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -31,20 +30,14 @@ function productivity_user_default_message_type() {
     },
     "language" : "en",
     "arguments" : null,
-    "message_text" : { "en" : [
+    "message_text" : { "und" : [
         {
-          "value" : "\\u003Cp\\u003E@title\\u003C\\/p\\u003E\\r\\n",
+          "value" : "Title - @title\\r\\nContent\\r\\n@content",
           "format" : "filtered_html",
-          "safe_value" : "\\u003Cp\\u003E@title\\u003C\\/p\\u003E\\n"
-        },
-        {
-          "value" : "\\u003Cp\\u003EID: @id\\u003C\\/p\\u003E\\r\\n\\r\\n\\u003Cp\\u003ETo: @to\\u003C\\/p\\u003E\\r\\n\\r\\n\\u003Cp\\u003EFrom: @from\\u003C\\/p\\u003E\\r\\n\\r\\n\\u003Cp\\u003E@content\\u003C\\/p\\u003E\\r\\n",
-          "format" : "filtered_html",
-          "safe_value" : "\\u003Cp\\u003EID: @id\\u003C\\/p\\u003E\\n\\u003Cp\\u003ETo: @to\\u003C\\/p\\u003E\\n\\u003Cp\\u003EFrom: @from\\u003C\\/p\\u003E\\n\\u003Cp\\u003E@content\\u003C\\/p\\u003E\\n"
+          "safe_value" : "\\u003Cp\\u003ETitle - @title\\u003Cbr \\/\\u003E\\nContent\\u003Cbr \\/\\u003E\\n@content\\u003C\\/p\\u003E\\n"
         }
       ]
-    },
-    "rdf_mapping" : []
+    }
   }');
   return $items;
 }

@@ -21,7 +21,7 @@ class ProductivityMigrateTracker extends ProductivityMigrate {
     array('field_work_date', 'date'),
     array('employee', 'employee'),
     array('project', 'project'),
-    array('work_length', 'work length'),
+    array('field_track_hours', 'work length'),
     array('length_unit', 'length unit'),//(hours/days)
     array('field_description', 'work description'),
     array('field_day_type', 'type'),
@@ -41,6 +41,7 @@ class ProductivityMigrateTracker extends ProductivityMigrate {
     $field_names = array(
       'field_description',
       'field_day_type',
+      'field_track_hours',
     );
     $this->addSimpleMappings($field_names);
 
@@ -57,8 +58,6 @@ class ProductivityMigrateTracker extends ProductivityMigrate {
       ->addFieldMapping('field_project', 'project')
       ->sourceMigration('ProductivityMigrateProject');
 
-    $this->addFieldMapping('field_work_length', 'work_length');
-    $this->addFieldMapping('field_work_length:period', 'length_unit');
   }
 
   function prepareRow($row) {
@@ -70,14 +69,12 @@ class ProductivityMigrateTracker extends ProductivityMigrate {
 
   function prepare($entity, $row) {
     $wrapper = entity_metadata_wrapper('node', $entity);
-    if (!$wrapper->field_work_length->value() || $wrapper->field_work_length->interval->value() == "") {
-      // Prevent error on save when field is empty.
-      $wrapper->field_work_length->interval->set(0);
-      $wrapper->field_work_length->period->set('hour');
+    if ($row->length_unit == 'days' || $row->length_unit == 'day') {
+      // Multiply by 8 if days.
+      $row->field_track_hours *= 8;
     }
-    if ($wrapper->field_work_length->value() && $wrapper->field_work_length->interval->value() == '1') {
-      // Prevent error on save when field is empty.
-      $wrapper->field_work_length->period->set('day');
+    if ($row->length_unit == "" &&  $row->field_track_hours == '1') {
+      $row->field_track_hours = 8;
     }
     if (!$wrapper->field_employee->value()) {
       // Prevent error on save when field is empty.

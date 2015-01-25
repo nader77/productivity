@@ -126,7 +126,7 @@ function productivity_time_tracking_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 4,
+      'weight' => 6,
     ),
   );
 
@@ -166,6 +166,52 @@ function productivity_time_tracking_field_default_field_instances() {
       'settings' => array(),
       'type' => 'options_select',
       'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance: 'node-time_tracking-field_track_hours'
+  $field_instances['node-time_tracking-field_track_hours'] = array(
+    'bundle' => 'time_tracking',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 7,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_track_hours',
+    'label' => 'Hours',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 4,
     ),
   );
 
@@ -222,67 +268,14 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-time_tracking-field_work_length'
-  $field_instances['node-time_tracking-field_work_length'] = array(
-    'bundle' => 'time_tracking',
-    'default_value' => array(
-      0 => array(
-        'interval' => 8,
-        'period' => 'hour',
-      ),
-    ),
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'interval',
-        'settings' => array(),
-        'type' => 'interval_default',
-        'weight' => 4,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_work_length',
-    'label' => 'Work length',
-    'required' => 0,
-    'settings' => array(
-      'allowed_periods' => array(
-        'day' => 'day',
-        'fortnight' => 0,
-        'hour' => 'hour',
-        'minute' => 0,
-        'month' => 0,
-        'quarter' => 0,
-        'second' => 0,
-        'week' => 0,
-        'year' => 0,
-      ),
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'interval',
-      'settings' => array(),
-      'type' => 'interval_default',
-      'weight' => 6,
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Day type');
   t('Description');
   t('Employee');
+  t('Hours');
   t('Project');
   t('Work date');
-  t('Work length');
 
   return $field_instances;
 }
