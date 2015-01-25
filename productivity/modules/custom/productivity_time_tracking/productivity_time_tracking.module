@@ -53,7 +53,7 @@ function productivity_time_tracking_total_hours($project_nid, $date_range = arra
     $total['hour'] += $wrapper->field_track_hours->value();
   }
   // TODO: make a better conversion for days, using count query.
-  $total['days'] = $total['hour'] / 8;
+  $total['day'] = $total['hour'] / 8;
   return $total;
 }
 
