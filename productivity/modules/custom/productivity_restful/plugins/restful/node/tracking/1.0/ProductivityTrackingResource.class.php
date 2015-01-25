@@ -44,14 +44,9 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     );
 
     $public_fields['length'] = array(
-      'property' => 'field_work_length',
+      'property' => 'field_track_hours',
       'sub_property' => 'interval',
       'init_field' => TRUE,
-    );
-
-    $public_fields['period'] = array(
-      'property' => 'field_work_length',
-      'sub_property' => 'period',
     );
 
     $public_fields['type'] = array(
@@ -201,10 +196,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     if ($request['type'] == 'regular') {
       $wrapper->field_project->set($request['projectID']);
       $wrapper->field_description->set($request['description']);
-      $wrapper->field_work_length->set(array(
-        'period' => $request['period'],
-        'interval' => $request['length'],
-      ));
+      $wrapper->field_track_hours->set($request['length']);
     }
 
     // Allow changing the entity just before it's saved. For example, setting
