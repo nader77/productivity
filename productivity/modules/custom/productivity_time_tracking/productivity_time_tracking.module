@@ -109,3 +109,32 @@ function productivity_time_tracking_mail_create() {
   $wrapper->save();
   // TODO: Save tracking entity.
 }
+
+/**
+ * Send message to user if he doesn't have tracking for yesterday.
+ *
+ * This function should be runned every day.
+ */
+function productivity_time_tracking_send_reminder() {
+  // Get the current date.
+  $today = date('Y-m-d', time());
+  $yesterday = date('Y-m-d', strtotime("-1 days"));
+
+  $yesterday_starts = date('Y-m-d 00:00:00', strtotime($yesterday));
+  $yesterday_ends = date('Y-m-d 23:59:59', strtotime($yesterday));
+
+
+  $timestamp_starts = strtotime($yesterday_starts);
+  $timestamp_ends = strtotime($yesterday_ends);
+
+  // Get emails of users that doesn't have items in tracking during the time
+  // from $timestamp_starts to $timestamp_ends
+
+  $query = new EntityFieldQuery();
+
+  $query->entityCondition('entity_type', 'user')
+    ->propertyCondition('status', 1)
+    ->fieldCondition('roles', 'value', DRUPAL_AUTHENTICATED_RID);
+
+  $result = $query->execute();
+}
