@@ -133,8 +133,11 @@ function productivity_time_tracking_send_reminder() {
   $query = new EntityFieldQuery();
 
   $query->entityCondition('entity_type', 'user')
-    ->propertyCondition('status', 1)
-    ->fieldCondition('roles', 'value', DRUPAL_AUTHENTICATED_RID);
+    ->propertyCondition('status', 1);
+//    ->fieldCondition('field_job_type', 'value', 'developer');
 
   $result = $query->execute();
+
+  $users = !empty($result['user']) ? $result['user'] : NULL;
+  dpm($users);
 }
