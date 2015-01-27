@@ -133,8 +133,9 @@ function productivity_time_tracking_send_reminder() {
   $query = new EntityFieldQuery();
 
   $query->entityCondition('entity_type', 'user')
-    ->propertyCondition('status', 1);
-//    ->fieldCondition('field_job_type', 'value', 'developer');
+    ->propertyCondition('status', 1)
+    ->fieldCondition('field_job_type', 'value', 'developer')
+    ->fieldCondition('field_employment_status', 'value', 'employed');
 
   $result = $query->execute();
 
