@@ -130,15 +130,39 @@ function productivity_time_tracking_send_reminder() {
   // Get emails of users that doesn't have items in tracking during the time
   // from $timestamp_starts to $timestamp_ends
 
+  // Get all active developers, that should have tracking.
   $query = new EntityFieldQuery();
-
   $query->entityCondition('entity_type', 'user')
     ->propertyCondition('status', 1)
     ->fieldCondition('field_job_type', 'value', 'developer')
     ->fieldCondition('field_employment_status', 'value', 'employed');
-
   $result = $query->execute();
 
-  $users = !empty($result['user']) ? $result['user'] : NULL;
+  $users = !empty($result['user']) ? user_load_multiple(array_keys($result['user'])) : NULL;
   dpm($users);
+
+  foreach ($users as $user) {
+    $query = new EntityFieldQuery();
+
+    $query->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'time_tracking')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->propertyCondition('uid', $user->uid)
+      ->fieldCondition('field_work_date', 'value', $timestamp_starts, '>=')
+      ->fieldCondition('field_work_date', 'value', $timestamp_ends, '<=');
+
+    $result = $query->execute();
+    dpm($result);
+    if (!$result) {
+      // Send email to the current user.
+      continue;
+    }
+    $nodes = node_load_multiple(array_keys($result['node']));
+    foreach ($nodes as $node) {
+      $current = entity_metadata_wrapper('node', $node)->field_work_date->value();
+      dpm($current, '1');
+      dpm($timestamp_starts, '2');
+      dpm($timestamp_ends, '3');
+    }
+  }
 }
