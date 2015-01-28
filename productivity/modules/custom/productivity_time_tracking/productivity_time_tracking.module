@@ -116,16 +116,9 @@ function productivity_time_tracking_mail_create() {
  * This function should be runned every day.
  */
 function productivity_time_tracking_send_reminder() {
-  // Get the current date.
-  $today = date('Y-m-d', time());
-  $yesterday = date('Y-m-d', strtotime("-1 days"));
-
-  $yesterday_starts = date('Y-m-d 00:00:00', strtotime($yesterday));
-  $yesterday_ends = date('Y-m-d 23:59:59', strtotime($yesterday));
-
-
-  $timestamp_starts = strtotime($yesterday_starts);
-  $timestamp_ends = strtotime($yesterday_ends);
+  // Get the yesterday date for Brussels timezone.
+  $yesterday_starts = strval(strtotime(date('Y-m-d 00:00:00', strtotime("-1 days"))) - 3601);
+  $yesterday_ends =strval(strtotime(date('Y-m-d 00:00:00')) - 3600);
 
   // Get emails of users that doesn't have items in tracking during the time
   // from $timestamp_starts to $timestamp_ends
@@ -139,7 +132,6 @@ function productivity_time_tracking_send_reminder() {
   $result = $query->execute();
 
   $users = !empty($result['user']) ? user_load_multiple(array_keys($result['user'])) : NULL;
-  dpm($users);
 
   foreach ($users as $user) {
     $query = new EntityFieldQuery();
@@ -148,8 +140,8 @@ function productivity_time_tracking_send_reminder() {
       ->entityCondition('bundle', 'time_tracking')
       ->propertyCondition('status', NODE_PUBLISHED)
       ->propertyCondition('uid', $user->uid)
-      ->fieldCondition('field_work_date', 'value', $timestamp_starts, '>=')
-      ->fieldCondition('field_work_date', 'value', $timestamp_ends, '<=');
+      ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>')
+      ->fieldCondition('field_work_date', 'value', $yesterday_ends, '<');
 
     $result = $query->execute();
     dpm($result);
@@ -160,9 +152,10 @@ function productivity_time_tracking_send_reminder() {
     $nodes = node_load_multiple(array_keys($result['node']));
     foreach ($nodes as $node) {
       $current = entity_metadata_wrapper('node', $node)->field_work_date->value();
+      dpm($current > $yesterday_starts && $current < $yesterday_ends);
       dpm($current, '1');
-      dpm($timestamp_starts, '2');
-      dpm($timestamp_ends, '3');
+      dpm($yesterday_starts, '2');
+      dpm($yesterday_ends, '3');
     }
   }
 }
