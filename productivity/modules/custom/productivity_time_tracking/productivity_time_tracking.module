@@ -117,8 +117,14 @@ function productivity_time_tracking_mail_create() {
  */
 function productivity_time_tracking_send_reminder() {
   // Get the yesterday date for Brussels timezone.
-  $yesterday_starts = strval(strtotime(date('Y-m-d 00:00:00', strtotime("-1 days"))) - 3601);
-  $yesterday_ends =strval(strtotime(date('Y-m-d 00:00:00')) - 3600);
+  $yesterday_starts = strval(strtotime(date('Y-m-d 00:00:00', strtotime('-1 days'))) - 3600);
+  $yesterday_ends =strval(strtotime(date('Y-m-d 23:59:59', strtotime('-1 days'))) - 3600);
+
+  $dw = date( "N", strtotime('-1 days'));
+  if ($dw == 5 || $dw == 6) {
+    // Yesterday was Friday or Saturday, so there shouldn't be any records.
+    return;
+  }
 
   // Get emails of users that doesn't have items in tracking during the time
   // from $timestamp_starts to $timestamp_ends
@@ -137,25 +143,33 @@ function productivity_time_tracking_send_reminder() {
     $query = new EntityFieldQuery();
 
     $query->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', 'time_tracking')
+      ->entityCondition('type', 'time_tracking')
       ->propertyCondition('status', NODE_PUBLISHED)
-      ->propertyCondition('uid', $user->uid)
-      ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>')
-      ->fieldCondition('field_work_date', 'value', $yesterday_ends, '<');
+      ->propertyCondition('uid', $user->uid);
+//      ->fieldOrderBy('field_work_date', 'value', 'DESC');
+//      For come reason can't set the timestamp condition.
+//      ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>')
+//      ->fieldCondition('field_work_date', 'value', $yesterday_ends, '<')
+
 
     $result = $query->execute();
-    dpm($result);
-    if (!$result) {
-      // Send email to the current user.
-      continue;
+    $no_records = TRUE;
+    if ($result) {
+      $nodes = node_load_multiple(array_keys($result['node']));
+      foreach ($nodes as $node) {
+        // Get timestamp for the current node.
+        $current = entity_metadata_wrapper('node', $node)->field_work_date->value();
+        if (!($current < $yesterday_starts) && !($current < $yesterday_ends)) {
+          // This record is for yesterday.
+          $no_records = FALSE;
+          break;
+        }
+      }
     }
-    $nodes = node_load_multiple(array_keys($result['node']));
-    foreach ($nodes as $node) {
-      $current = entity_metadata_wrapper('node', $node)->field_work_date->value();
-      dpm($current > $yesterday_starts && $current < $yesterday_ends);
-      dpm($current, '1');
-      dpm($yesterday_starts, '2');
-      dpm($yesterday_ends, '3');
+
+    if ($no_records) {
+      // Check if Yesterday wasn't a
+      // Send mail to yhe current user ($user->uid)
     }
   }
 }
