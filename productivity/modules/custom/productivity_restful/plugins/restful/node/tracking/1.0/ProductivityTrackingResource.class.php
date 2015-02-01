@@ -45,7 +45,6 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
 
     $public_fields['length'] = array(
       'property' => 'field_track_hours',
-      'init_field' => TRUE,
     );
 
     $public_fields['type'] = array(
@@ -193,6 +192,10 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     $wrapper->field_employee->set(user_load_by_name($request['employee']));
 
     if ($request['type'] == 'regular') {
+      if (empty($request['length'])) {
+        throw new \RestfulBadRequestException('Invalid length given.');
+      }
+
       $wrapper->field_project->set($request['projectID']);
       $wrapper->field_description->set($request['description']);
       $wrapper->field_track_hours->set($request['length']);
