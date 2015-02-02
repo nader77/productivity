@@ -98,7 +98,24 @@ angular.module('clientApp')
             reload: true
           });
       });
-    }
+    };
+
+    $scope.owner = function(data) {
+      return data.id && $stateParams.username == data.employee;
+    };
+
+    $scope.remove = function(data) {
+      if ($stateParams.username != data.employee) {
+        return false;
+      }
+      data.status = 0;
+
+      console.log(data);
+
+      Tracking.save(data).then(function(newData) {
+        console.log(newData);
+      });
+    };
   });
 
 
