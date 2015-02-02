@@ -62,6 +62,10 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       ),
     );
 
+    $public_fields['status'] = array(
+      'property' => 'status',
+    );
+
     return $public_fields;
   }
 
