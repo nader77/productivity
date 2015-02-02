@@ -138,7 +138,7 @@ function productivity_time_tracking_send_reminder() {
   $result = $query->execute();
 
   $users = !empty($result['user']) ? user_load_multiple(array_keys($result['user'])) : NULL;
-
+  $subscribers = array();
   foreach ($users as $user) {
     $query = new EntityFieldQuery();
 
@@ -146,6 +146,7 @@ function productivity_time_tracking_send_reminder() {
       ->entityCondition('type', 'time_tracking')
       ->propertyCondition('status', NODE_PUBLISHED)
       ->propertyCondition('uid', $user->uid);
+    // Can't fine the filed column 'field_data_field_work_date0.type'.
 //      ->fieldOrderBy('field_work_date', 'value', 'DESC');
 //      For come reason can't set the timestamp condition.
 //      ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>')
@@ -159,17 +160,26 @@ function productivity_time_tracking_send_reminder() {
       foreach ($nodes as $node) {
         // Get timestamp for the current node.
         $current = entity_metadata_wrapper('node', $node)->field_work_date->value();
-        if (!($current < $yesterday_starts) && !($current < $yesterday_ends)) {
+        if (!($current < $yesterday_starts) && !($current > $yesterday_ends)) {
           // This record is for yesterday.
-          $no_records = FALSE;
+//          $no_records = FALSE;
+          $no_records = TRUE;
           break;
         }
       }
     }
 
     if ($no_records) {
-      // Check if Yesterday wasn't a
-      // Send mail to yhe current user ($user->uid)
+      $values = array(
+        'body' => 'Please, fill work tracking for yesterday. http://productivity.gizra.com',
+        'subject' => 'Productivity',
+        'uid' => $user->uid
+      );
+      $message = message_create('catch_test_mail', $values);
+
+      dpm($message);
+      // Send mail to users
+      message_notify_send_message($message);
     }
   }
 }
