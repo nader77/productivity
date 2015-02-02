@@ -138,7 +138,6 @@ function productivity_time_tracking_send_reminder() {
   $result = $query->execute();
 
   $users = !empty($result['user']) ? user_load_multiple(array_keys($result['user'])) : NULL;
-  $subscribers = array();
   foreach ($users as $user) {
     $query = new EntityFieldQuery();
 
@@ -162,8 +161,7 @@ function productivity_time_tracking_send_reminder() {
         $current = entity_metadata_wrapper('node', $node)->field_work_date->value();
         if (!($current < $yesterday_starts) && !($current > $yesterday_ends)) {
           // This record is for yesterday.
-//          $no_records = FALSE;
-          $no_records = TRUE;
+          $no_records = FALSE;
           break;
         }
       }
@@ -177,7 +175,6 @@ function productivity_time_tracking_send_reminder() {
       );
       $message = message_create('catch_test_mail', $values);
 
-      dpm($message);
       // Send mail to users
       message_notify_send_message($message);
     }
