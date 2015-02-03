@@ -203,6 +203,10 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       $wrapper->field_project->set($request['projectID']);
       $wrapper->field_description->set($request['description']);
       $wrapper->field_track_hours->set($request['length']);
+
+      if (isset($request['status'])) {
+        $wrapper->status->set($request['status']);
+      }
     }
 
     // Allow changing the entity just before it's saved. For example, setting
