@@ -79,6 +79,22 @@ angular.module('clientApp')
         $scope.messageClass = 'alert-success';
         $scope.message = 'Saved successfully.';
 
+        // Unpublished item, need to reload.
+        if (newData.status == '403') {
+          // Redirect to item to update.
+          $state.go('dashboard.tracking-form', {
+              username: $stateParams.username,
+              year: $stateParams.year,
+              month: $stateParams.month,
+              day: $stateParams.day,
+              id: 'new'
+            },
+            {
+              reload: true
+            });
+          return;
+        }
+
         var trackingItem = newData.data[0];
         // Push new value.
         if (trackingItem.new) {
@@ -100,21 +116,27 @@ angular.module('clientApp')
       });
     };
 
+    /**
+     * @TODO: Add docs.
+     * @param data
+     * @returns {*|boolean}
+     */
     $scope.owner = function(data) {
       return data.id && $stateParams.username == data.employee;
     };
 
+    /**
+     * @TODO: Add docs.
+     * @param data
+     * @returns {boolean}
+     */
     $scope.remove = function(data) {
       if ($stateParams.username != data.employee) {
         return false;
       }
       data.status = 0;
 
-      console.log(data);
-
-      Tracking.save(data).then(function(newData) {
-        console.log(newData);
-      });
+      $scope.save(data);
     };
   });
 
