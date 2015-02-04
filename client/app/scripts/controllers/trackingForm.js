@@ -79,8 +79,9 @@ angular.module('clientApp')
         $scope.messageClass = 'alert-success';
         $scope.message = 'Saved successfully.';
 
-        // Unpublished item, need to reload.
-        if (newData.status == '403') {
+        // The tracking entity was un-published successfully,
+        // need to reload.
+        if (newData.status == 403) {
           // Redirect to item to update.
           $state.go('dashboard.tracking-form', {
               username: $stateParams.username,
@@ -117,8 +118,11 @@ angular.module('clientApp')
     };
 
     /**
-     * @TODO: Add docs.
+     * Determine if the current user is the owner of the entity (Time tracking).
+     *
      * @param data
+     *  The data of the entity.
+     *
      * @returns {*|boolean}
      */
     $scope.owner = function(data) {
@@ -126,9 +130,11 @@ angular.module('clientApp')
     };
 
     /**
-     * @TODO: Add docs.
+     * Remove entity (Time tracking) from the work log by un-publishing it.
+     * Sets status to 0 and call the save function.
+     *
      * @param data
-     * @returns {boolean}
+     *  The data of the entity.
      */
     $scope.remove = function(data) {
       if ($stateParams.username != data.employee) {
