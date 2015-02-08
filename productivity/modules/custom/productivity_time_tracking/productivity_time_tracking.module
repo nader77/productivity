@@ -117,8 +117,8 @@ function productivity_time_tracking_mail_create() {
  */
 function productivity_time_tracking_send_reminder() {
   // Get the yesterday date for Brussels timezone.
-  $yesterday_starts = strval(strtotime(date('Y-m-d 00:00:00', strtotime('-1 days'))) - 3600);
-  $yesterday_ends =strval(strtotime(date('Y-m-d 23:59:59', strtotime('-1 days'))) - 3600);
+  $yesterday_starts = date('Y-m-d 00:00:00', strtotime('-1 days') - 3600);
+  $yesterday_ends = date('Y-m-d 23:59:59', strtotime('-1 days') - 3600);
 
   $dw = date( "N", strtotime('-1 days'));
   if ($dw == 5 || $dw == 6) {
@@ -142,29 +142,16 @@ function productivity_time_tracking_send_reminder() {
     $query = new EntityFieldQuery();
 
     $query->entityCondition('entity_type', 'node')
-      ->entityCondition('type', 'time_tracking')
+      ->entityCondition('bundle', 'time_tracking')
       ->propertyCondition('status', NODE_PUBLISHED)
-      ->propertyCondition('uid', $user->uid);
-    // Can't fine the filed column 'field_data_field_work_date0.type'.
-//      ->fieldOrderBy('field_work_date', 'value', 'DESC');
-//      For come reason can't set the timestamp condition.
-//      ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>')
-//      ->fieldCondition('field_work_date', 'value', $yesterday_ends, '<')
-
+      ->propertyCondition('uid', $user->uid)
+      ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>=')
+      ->fieldCondition('field_work_date', 'value', $yesterday_ends, '<=');
 
     $result = $query->execute();
     $no_records = TRUE;
     if ($result) {
-      $nodes = node_load_multiple(array_keys($result['node']));
-      foreach ($nodes as $node) {
-        // Get timestamp for the current node.
-        $current = entity_metadata_wrapper('node', $node)->field_work_date->value();
-        if (!($current < $yesterday_starts) && !($current > $yesterday_ends)) {
-          // This record is for yesterday.
-          $no_records = FALSE;
-          break;
-        }
-      }
+      $no_records = FALSE;
     }
 
     if ($no_records) {
