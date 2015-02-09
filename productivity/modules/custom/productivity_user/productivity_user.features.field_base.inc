@@ -56,6 +56,7 @@ function productivity_user_field_default_field_bases() {
     'settings' => array(
       'allowed_values' => array(
         'developer' => 'Developer',
+        'qa' => 'QA',
       ),
       'allowed_values_function' => '',
     ),
