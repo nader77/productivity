@@ -23,10 +23,7 @@ function productivity_user_init() {
 
 
 /**
- * Check if we are in live env.
- */
-/**
- *  Implements hook_action_info().
+ * Check if we are in live environment.
  */
 function productivity_user_is_live() {
   if (!(defined('PANTHEON_ENVIRONMENT') && PANTHEON_ENVIRONMENT == 'live')) {
