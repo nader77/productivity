@@ -35,9 +35,14 @@ function productivity_install_tasks() {
     'display' => FALSE,
   );
 
+  $tasks['productivity_set_content_access'] = array(
+    'display_name' => st('Set Content Access'),
+    'display' => FALSE,
+  );
+
   // Run this as the last task!
   $tasks['productivity_setup_rebuild_permissions'] = array(
-    'display_name' => st('Rebuild permissions'),
+    'display_name' => st('Rebuild Permissions'),
     'display' => FALSE,
   );
 
@@ -55,6 +60,35 @@ function productivity_set_permissions() {
   );
 
   user_role_grant_permissions(DRUPAL_AUTHENTICATED_RID, $permissions);
+}
+
+
+/**
+ * Task callback; Set content permissions.
+ */
+function productivity_set_content_access() {
+  $permissions = array(
+    'account' => array(
+      'view_own' => array(),
+      'view' => array(),
+    ),
+    'project' => array(
+      'view_own' => array(),
+      'view' => array(DRUPAL_AUTHENTICATED_RID),
+    ),
+    'salary' => array(
+      'view_own' => array(),
+      'view' => array(),
+    ),
+    'time_tracking' => array(
+      'view_own' => array(DRUPAL_AUTHENTICATED_RID),
+      'view' => array(DRUPAL_AUTHENTICATED_RID),
+    ),
+  );
+
+  foreach ($permissions as $type_name => $settings) {
+    content_access_set_settings($settings, $type_name);
+  }
 }
 
 
