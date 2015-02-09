@@ -24,6 +24,7 @@ dependencies[] = file
 dependencies[] = admin_menu_toolbar
 dependencies[] = admin_views
 dependencies[] = ctools
+dependencies[] = content_access
 dependencies[] = date
 dependencies[] = date_popup
 dependencies[] = entity
