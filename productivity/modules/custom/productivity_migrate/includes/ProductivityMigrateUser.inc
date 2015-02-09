@@ -22,6 +22,7 @@ class ProductivityMigrateUser extends Migration {
     array('date_start', 'date_start'),
     array('date_end', 'date_end'),
     array('pass', 'pass'),
+    array('job_type', 'job_type'),
   );
 
   /**
@@ -59,11 +60,12 @@ class ProductivityMigrateUser extends Migration {
     $field_names = array(
       'name',
       'mail',
-      'pass'
+//      'pass'
     );
 
     $this->addSimpleMappings($field_names);
     $this->addFieldMapping('field_employment_status', 'status');
+    $this->addFieldMapping('field_job_type', 'job_type');
 
     $this->addFieldMapping('field_date', 'date_start');
     $this->addFieldMapping('field_date:to', 'date_end');
