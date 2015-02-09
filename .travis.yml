@@ -15,11 +15,6 @@ before_install:
   # Install Sass and Compass for Grunt to work.
   - gem install compass
 
-  # Configure imgur bash script to upload images on failure.
-  - npm install -g jshon
-  - chmod +x imgur
-  - chmod +x install
-
 install:
   # install drush
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
