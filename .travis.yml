@@ -52,7 +52,7 @@ script:
   - drush @site runserver 127.0.0.1:8080 &
 
   # Wait for Grunt to finish loading.
-  - until $(curl --output /dev/null --silent --head --fail http://localhost:9001); do sleep 1; echo '.'; done
+  - until $(curl --output /dev/null --silent --head --fail http://localhost:9000); do sleep 1; echo '.'; done
 
   # Run phantomJs.
   - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
