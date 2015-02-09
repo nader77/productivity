@@ -25,12 +25,6 @@ function productivity_install_tasks() {
     'display' => FALSE,
   );
 
-  // Run this as the last task!
-  $tasks['productivity_setup_rebuild_permissions'] = array(
-    'display_name' => st('Rebuild permissions'),
-    'display' => FALSE,
-  );
-
   $tasks['productivity_setup_set_variables'] = array(
     'display_name' => st('Set Variables'),
     'display' => FALSE,
@@ -41,6 +35,12 @@ function productivity_install_tasks() {
     'display' => FALSE,
   );
 
+  // Run this as the last task!
+  $tasks['productivity_setup_rebuild_permissions'] = array(
+    'display_name' => st('Rebuild permissions'),
+    'display' => FALSE,
+  );
+
   return $tasks;
 }
 
@@ -48,7 +48,6 @@ function productivity_install_tasks() {
  * Task callback; Setting permissions.
  */
 function productivity_set_permissions() {
-
   // Enable default permissions for system roles.
   $permissions = array(
     'create time_tracking content',
