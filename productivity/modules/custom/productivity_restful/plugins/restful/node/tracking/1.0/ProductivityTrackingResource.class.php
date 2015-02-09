@@ -141,12 +141,10 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
 
   /**
    * Overrides RestfulEntityBase::getQueryForList().
-   *
-   * Expose only published nodes.
    */
-  public function getQueryForList() {
+  public function getEntityFieldQuery() {
     $request = $this->getRequest();
-    $query = parent::getQueryForList();
+    $query = parent::getEntityFieldQuery();
 
     if (empty($request['month']) && !intval($request['month'])) {
       throw new \RestfulBadRequestException('Invalid month given.');
