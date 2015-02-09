@@ -48,6 +48,9 @@ script:
   # start a web server on port 8080, run in the background; wait for initialization
   - drush @site runserver 127.0.0.1:8080 &
 
+  # Wait for Grunt to finish loading.
+  # - until $(curl --output /dev/null --silent --head --fail http://localhost:9000); do sleep 1; echo '.'; done
+
   # Run phantomJs.
   - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
 
@@ -55,5 +58,6 @@ script:
   - cd behat
   - ./bin/behat --tags=~@wip
 
-  # Print log ~/phantomjs.log
+  # Print logs
+  - cat ~/grunt.log
   - cat ~/phantomjs.log
