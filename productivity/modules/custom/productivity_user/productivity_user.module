@@ -34,3 +34,40 @@ function productivity_user_is_live() {
   }
   return TRUE;
 }
+
+/**
+ * Get all active user for give year and month.
+ */
+function productivity_user_get_active_uids($month, $year) {
+  $start_timestamp =  $year . '-' . $month. '-01'. ' 00:00:00';
+  $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
+
+  // We need to add a second quer since value2 of date has a default of value(1).
+  $query_not_active = new EntityFieldQuery();
+  $query_not_active->entityCondition('entity_type', 'user')
+    ->fieldCondition('field_job_type', 'value', array('developer', 'qa'), 'IN')
+    ->fieldCondition('field_employment_status', 'value', 'employed', '!=')
+    ->fieldCondition('field_date', 'value2', $end_timestamp, '<=');
+  $result_inactives = $query_not_active->execute();
+  $uids = FALSE;
+  if (isset($result_inactives['user'])) {
+    $uids = array_keys($result_inactives['user']);
+  }
+
+  $query_start = new EntityFieldQuery();
+  $query_start->entityCondition('entity_type', 'user')
+    ->fieldCondition('field_job_type', 'value', array('developer', 'qa'), 'IN')
+    ->fieldCondition('field_date', 'value', $start_timestamp, '<=');
+
+  if ($uids) {
+    $query_start->propertyCondition('uid', $uids, 'NOT IN');
+  }
+  $result_start = $query_start->execute();
+
+
+  if (isset($result_start['user'])) {
+    return array_keys($result_start['user']);
+  }
+
+  return array();
+}
