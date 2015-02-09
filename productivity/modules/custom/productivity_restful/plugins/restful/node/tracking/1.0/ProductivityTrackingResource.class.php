@@ -98,13 +98,13 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
    * @return EntityFieldQuery
    */
   protected function getUserQuery() {
+    $request = $this->getRequest();
     $query = new EntityFieldQuery();
-    $query->entityCondition('entity_type', 'user')
-    // Don't get admin user.
-      ->propertyCondition('uid', array(0, 1), 'NOT IN');
+    $uids = productivity_user_get_active_uids($request['month'], $request['year']);
 
-    // TODO: We need to add a condition to get only active user for the month
-    // request. ie. The time the employee was working at the company.
+    $query->entityCondition('entity_type', 'user')
+      // Load active users for the date that have developer or QA job type.
+      ->propertyCondition('uid', $uids, 'IN');
     return $query;
   }
 
@@ -148,6 +148,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     $request = $this->getRequest();
     $query = parent::getQueryForList();
 
+
     if (empty($request['month']) && !intval($request['month'])) {
       throw new \RestfulBadRequestException('Invalid month given.');
     }
@@ -163,6 +164,12 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       $query->fieldCondition('field_day_type', 'value', $global_day, 'NOT IN');
     }
 
+    $start_timestamp =  $request['year'] . '-' . $request['month'] . '-01'. ' 00:00:00';
+    $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
+    $query->fieldCondition('field_work_date', 'value', $start_timestamp, '>=');
+    $query->fieldCondition('field_work_date', 'value', $end_timestamp, '<');
+
+
     if (!empty($request['employee'])) {
       $user_by_name = user_load_by_name($request['employee']);
       if (!$user_by_name) {
@@ -170,11 +177,6 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       }
       $query->fieldCondition('field_employee', 'target_id', $user_by_name->uid);
     }
-
-    $start_timestamp =  $request['year'] . '-' . $request['month'] . '-01'. ' 00:00:00';
-    $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
-    $query->fieldCondition('field_work_date', 'value', $start_timestamp, '>=');
-    $query->fieldCondition('field_work_date', 'value', $end_timestamp, '<');
 
     return $query;
   }
