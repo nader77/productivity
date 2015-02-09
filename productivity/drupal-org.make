@@ -11,8 +11,8 @@ projects[admin_views][version] = "1.2"
 projects[ckeditor][subdir] = "contrib"
 projects[ckeditor][version] = "1.x-dev"
 
-projects[context][subdir] = "contrib"
-projects[context][version] = "3.2"
+projects[content_access][subdir] = "contrib"
+projects[content_access][version] = "1.2-beta2"
 
 projects[ctools][subdir] = "contrib"
 projects[ctools][version] = "1.4"
