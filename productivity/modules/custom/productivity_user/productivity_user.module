@@ -40,14 +40,13 @@ function productivity_user_is_live() {
  */
 function productivity_user_get_active_uids($month, $year) {
   $start_timestamp =  $year . '-' . $month. '-01'. ' 00:00:00';
-  $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
 
   // We need to add a second quer since value2 of date has a default of value(1).
   $query_not_active = new EntityFieldQuery();
   $query_not_active->entityCondition('entity_type', 'user')
     ->fieldCondition('field_job_type', 'value', array('developer', 'qa'), 'IN')
     ->fieldCondition('field_employment_status', 'value', 'employed', '!=')
-    ->fieldCondition('field_date', 'value2', $end_timestamp, '<=');
+    ->fieldCondition('field_date', 'value2', $start_timestamp, '<=');
   $result_inactives = $query_not_active->execute();
   $uids = FALSE;
   if (isset($result_inactives['user'])) {
