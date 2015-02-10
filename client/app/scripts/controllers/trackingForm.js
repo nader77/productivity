@@ -81,7 +81,7 @@ angular.module('clientApp')
 
         // The tracking entity was un-published successfully,
         // need to reload.
-        if (newData.status == 403) {
+        if (newData.data[0].status == 0) {
           // Redirect to item to update.
           $state.go('dashboard.tracking-form', {
               username: $stateParams.username,
