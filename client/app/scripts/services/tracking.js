@@ -43,7 +43,7 @@ angular.module('clientApp')
       }
       // Debug mode.
       if (Config.debug) {
-        url += '?XDEBUG_SESSION_START=11049';
+        url += '?XDEBUG_SESSION_START=13261';
       }
 
       $http({
@@ -81,7 +81,12 @@ angular.module('clientApp')
       if (employee != undefined) {
         url += '&employee=' + employee;
       }
-      
+
+      // Debug mode.
+      if (Config.debug) {
+        url += '&XDEBUG_SESSION_START=13261';
+      }
+
       $http({
         method: 'GET',
         url: url
