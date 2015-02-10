@@ -102,9 +102,11 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     $query = new EntityFieldQuery();
     $uids = productivity_user_get_active_uids($request['month'], $request['year']);
 
-    $query->entityCondition('entity_type', 'user')
+    $query->entityCondition('entity_type', 'user');
+    if ($uids) {
       // Load active users for the date that have developer or QA job type.
-      ->propertyCondition('uid', $uids, 'IN');
+      $query->propertyCondition('uid', $uids, 'IN');
+    }
     return $query;
   }
 
@@ -194,7 +196,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     if ($request['type'] == 'regular') {
       if (empty($request['length'])) {
         throw new \RestfulBadRequestException('Invalid length given.');
-      }
+        }
 
       $wrapper->field_project->set($request['projectID']);
       $wrapper->field_description->set($request['description']);
