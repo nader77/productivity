@@ -196,7 +196,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     if ($request['type'] == 'regular') {
       if (empty($request['length'])) {
         throw new \RestfulBadRequestException('Invalid length given.');
-        }
+      }
 
       $wrapper->field_project->set($request['projectID']);
       $wrapper->field_description->set($request['description']);
