@@ -1,7 +1,7 @@
 language: php
 
 php:
-  - 5.3
+  - 5.5
 
 mysql:
   database: drupal
@@ -9,17 +9,13 @@ mysql:
   encoding: utf8
 
 before_install:
-  - sudo apt-get update > /dev/null
-  - composer self-update
-
   # Install grunt.
-  - npm install -g grunt-cli
-  - npm install -g bower
+  - npm install -g grunt-cli bower
+
+  # Install Sass and Compass for Grunt to work.
+  - gem install compass
 
 install:
-  # install php packages required for running a web server from drush on php 5.3
-  - sudo apt-get install -y --force-yes php5-cgi php5-mysql
-
   # install drush
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - composer global require drush/drush:6.*
@@ -54,12 +50,9 @@ script:
 
   # start a web server on port 8080, run in the background; wait for initialization
   - drush @site runserver 127.0.0.1:8080 &
-  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
-  # Run selenium.
-  - wget http://selenium-release.storage.googleapis.com/2.40/selenium-server-standalone-2.40.0.jar
-  - java -jar selenium-server-standalone-2.40.0.jar -p 4444 &
-  - sleep 5
+  # Wait for Grunt to finish loading.
+  - until $(curl --output /dev/null --silent --head --fail http://localhost:9000); do sleep 1; echo '.'; done
 
   # Run phantomJs.
   - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
@@ -68,5 +61,6 @@ script:
   - cd behat
   - ./bin/behat --tags=~@wip
 
-  # Print log ~/phantomjs.log
+  # Print logs
+  - cat ~/grunt.log
   - cat ~/phantomjs.log
