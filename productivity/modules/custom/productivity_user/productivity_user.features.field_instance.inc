@@ -88,6 +88,37 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-field_job_type'
+  $field_instances['user-user-field_job_type'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_job_type',
+    'label' => 'Job type',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 11,
+    ),
+  );
+
   // Exported field_instance: 'user-user-field_salaries'
   $field_instances['user-user-field_salaries'] = array(
     'bundle' => 'user',
@@ -126,6 +157,7 @@ function productivity_user_field_default_field_instances() {
   t('Date');
   t('Date of start and end of employment.');
   t('Employment status');
+  t('Job type');
   t('Salaries');
 
   return $field_instances;
