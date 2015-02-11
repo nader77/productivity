@@ -24,6 +24,7 @@ dependencies[] = file
 dependencies[] = admin_menu_toolbar
 dependencies[] = admin_views
 dependencies[] = ctools
+dependencies[] = content_access
 dependencies[] = date
 dependencies[] = date_popup
 dependencies[] = entity
@@ -49,8 +50,8 @@ dependencies[] = views_bulk_operations
 ; productivity modules ------------------------------------------------------------
 ; Add here productivity modules that should be enabled when installing the
 ; productivity profile.
-dependencies[] = productivity_migrate
 dependencies[] = productivity_account
+dependencies[] = productivity_github
 dependencies[] = productivity_migrate
 dependencies[] = productivity_mailgun
 dependencies[] = productivity_project
