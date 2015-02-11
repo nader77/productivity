@@ -113,57 +113,93 @@ function productivity_time_tracking_mail_create() {
 /**
  * Send message to user if he doesn't have tracking for yesterday.
  *
- * This function should be runned every day.
+ * @param $account
+ * User object.
  */
-function productivity_time_tracking_send_reminder() {
+function productivity_time_tracking_send_reminder($account) {
   // Get the yesterday date for Brussels timezone.
   $yesterday_starts = date('Y-m-d 00:00:00', strtotime('-1 days') - 3600);
   $yesterday_ends = date('Y-m-d 23:59:59', strtotime('-1 days') - 3600);
 
-  $dw = date( "N", strtotime('-1 days'));
-  if ($dw == 5 || $dw == 6) {
-    // Yesterday was Friday or Saturday, so there shouldn't be any records.
-    return;
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'time_tracking')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->propertyCondition('uid', $account->uid)
+    ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>=')
+    ->fieldCondition('field_work_date', 'value', $yesterday_ends, '<=')
+    ->execute();
+  $no_records = TRUE;
+  if ($result) {
+    $no_records = FALSE;
   }
 
-  // Get emails of users that doesn't have items in tracking during the time
-  // from $timestamp_starts to $timestamp_ends
+  if ($no_records) {
+    $values = array(
+      'body' => 'Please, fill work tracking for yesterday. http://productivity.gizra.com',
+      'subject' => 'Productivity',
+      'uid' => $account->uid
+    );
+    $message = message_create('catch_test_mail', $values);
+
+    $wrapper = entity_metadata_wrapper('user', $account);
+
+//    $wrapper->field_last_notification->set(date('Y-m-d', time() + 3600));
+    $wrapper->field_last_notification->set(time());
+    $wrapper->save();
+    // Send mail to users
+    message_notify_send_message($message);
+  }
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * Should send reminder to existing developers, that did not filled time tracking
+ * yesterday.
+ */
+function productivity_time_tracking_cron() {
+
+  $now = date('H', time() + 3600);
+  if (intval($now) < 9 || intval($now) > 11) {
+    // Send notifications only between 9 and 11 in the morning.
+    dpm('now is ' . date('H:i:s', time() + 3600));
+    // return;
+  }
+
+  $weekend = variable_get('productivity_weekend', '5,6');
+  $days = explode(',', $weekend);
+  $dw = date( "N", strtotime('-1 days'));
+  // Yesterday was weekend, so there shouldn't be any records.
+  foreach($days as $day) {
+    if ($dw == $day) {
+      return;
+    }
+  }
+
+  // Select users that don't have time tracking records during the whole
+  // previous day.
 
   // Get all active developers, that should have tracking.
   $query = new EntityFieldQuery();
-  $query->entityCondition('entity_type', 'user')
+  $result = $query
+    ->entityCondition('entity_type', 'user')
     ->propertyCondition('status', 1)
     ->fieldCondition('field_job_type', 'value', 'developer')
-    ->fieldCondition('field_employment_status', 'value', 'employed');
-  $result = $query->execute();
+    ->fieldCondition('field_employment_status', 'value', 'employed')
+    ->execute();
 
-  $users = !empty($result['user']) ? user_load_multiple(array_keys($result['user'])) : NULL;
-  foreach ($users as $user) {
-    $query = new EntityFieldQuery();
+  $accounts = !empty($result['user']) ? user_load_multiple(array_keys($result['user'])) : NULL;
+  foreach ($accounts as $account) {
+    // Check if this user has already got notification today.
+    $wrapper = entity_metadata_wrapper('user', $account);
 
-    $query->entityCondition('entity_type', 'node')
-      ->entityCondition('bundle', 'time_tracking')
-      ->propertyCondition('status', NODE_PUBLISHED)
-      ->propertyCondition('uid', $user->uid)
-      ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>=')
-      ->fieldCondition('field_work_date', 'value', $yesterday_ends, '<=');
 
-    $result = $query->execute();
-    $no_records = TRUE;
-    if ($result) {
-      $no_records = FALSE;
-    }
-
-    if ($no_records) {
-      $values = array(
-        'body' => 'Please, fill work tracking for yesterday. http://productivity.gizra.com',
-        'subject' => 'Productivity',
-        'uid' => $user->uid
-      );
-      $message = message_create('catch_test_mail', $values);
-
-      // Send mail to users
-      message_notify_send_message($message);
+    dpm($wrapper->field_last_notification->value());
+    dpm(time());
+    if (empty($wrapper->field_last_notification) || $wrapper->field_last_notification->value() < strtotime('-1 days')) {
+      productivity_time_tracking_send_reminder($account);
     }
   }
 }
