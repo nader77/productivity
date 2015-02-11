@@ -106,9 +106,11 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     $query = new EntityFieldQuery();
     $uids = productivity_user_get_active_uids($request['month'], $request['year']);
 
-    $query->entityCondition('entity_type', 'user')
+    $query->entityCondition('entity_type', 'user');
+    if ($uids) {
       // Load active users for the date that have developer or QA job type.
-      ->propertyCondition('uid', $uids, 'IN');
+      $query->propertyCondition('uid', $uids, 'IN');
+    }
     return $query;
   }
 
@@ -145,12 +147,10 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
 
   /**
    * Overrides RestfulEntityBase::getQueryForList().
-   *
-   * Expose only published nodes.
    */
-  public function getQueryForList() {
+  public function getEntityFieldQuery() {
     $request = $this->getRequest();
-    $query = parent::getQueryForList();
+    $query = parent::getEntityFieldQuery();
 
 
     if (empty($request['month']) && !intval($request['month'])) {

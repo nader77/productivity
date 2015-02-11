@@ -88,6 +88,40 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-field_github_username'
+  $field_instances['user-user-field_github_username'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_github_username',
+    'label' => 'Github username',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 11,
+    ),
+  );
+
   // Exported field_instance: 'user-user-field_job_type'
   $field_instances['user-user-field_job_type'] = array(
     'bundle' => 'user',
@@ -157,6 +191,7 @@ function productivity_user_field_default_field_instances() {
   t('Date');
   t('Date of start and end of employment.');
   t('Employment status');
+  t('Github username');
   t('Job type');
   t('Salaries');
 

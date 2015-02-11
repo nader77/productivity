@@ -1,0 +1,94 @@
+<?php
+/**
+ * @file
+ * Code for the Productivity Github feature.
+ */
+
+include_once 'productivity_github.features.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function productivity_github_menu() {
+  $items['payload'] = array(
+    'page callback' => 'productivity_github_payload',
+    'access callback' => TRUE,
+  );
+
+  return $items;
+}
+
+/**
+ * Create a pull request node when a pull request is opened.
+ */
+function productivity_github_payload() {
+  if (empty($_POST['payload'])) {
+    return;
+  }
+
+  $payload = json_decode($_POST['payload']);
+  if ($payload->action != 'opened' || empty($payload->pull_request)) {
+    return;
+  }
+
+  $node = new stdClass();
+  $node->title = check_plain($payload->pull_request->title);
+  $node->type = 'github_issue';
+  node_object_prepare($node);
+  $node->language = LANGUAGE_NONE;
+  $node->status = NODE_PUBLISHED;
+  $node->uid = productivity_github_get_uid_by_github_username(check_plain($payload->pull_request->user->login));
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $wrapper->field_employee->set($node->uid);
+  $wrapper->field_project->set(productivity_github_get_project_by_repository(check_plain($payload->pull_request->head->repo->name)));
+  $wrapper->body->value->set($payload->pull_request->body);
+  $wrapper->field_issue_id->set((int)$payload->pull_request->number);
+  $wrapper->field_work_date->set(strtotime($payload->pull_request->updated_at));
+  $wrapper->save();
+}
+
+/**
+ * @param string $github_username
+ *   A github username.
+ *
+ * @return int
+ *   Account ID.
+ */
+function productivity_github_get_uid_by_github_username($github_username) {
+  $query = new EntityFieldQuery();
+  $result = $query->entityCondition('entity_type', 'user')
+    ->fieldCondition('field_github_username', 'value', $github_username)
+    ->range(0, 1)
+    ->execute();
+
+  if (empty($result['user'])) {
+    watchdog('productivity', t('No user with github username: @username', array('@username' => $github_username)));
+    return 0;
+  }
+
+  return key($result['user']);
+}
+
+/**
+ * @param $repository_name
+ *  A github repository name.
+ *
+ * @return int
+ *   Project node ID.
+ */
+function productivity_github_get_project_by_repository($repository_name) {
+  $query = new EntityFieldQuery();
+  $result = $query->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'project')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_github_repository_name', 'value', $repository_name)
+    ->range(0, 1)
+    ->execute();
+
+  if (empty($result['node'])) {
+    watchdog('productivity', t('No project with github repository: @repository', array('@repository' => $repository_name)));
+    return 0;
+  }
+
+  return key($result['node']);
+}
