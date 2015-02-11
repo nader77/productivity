@@ -79,6 +79,23 @@ angular.module('clientApp')
         $scope.messageClass = 'alert-success';
         $scope.message = 'Saved successfully.';
 
+        // The tracking entity was un-published successfully,
+        // need to reload.
+        if (newData.data[0].status == 0) {
+          // Redirect to item to update.
+          $state.go('dashboard.tracking-form', {
+              username: $stateParams.username,
+              year: $stateParams.year,
+              month: $stateParams.month,
+              day: $stateParams.day,
+              id: 'new'
+            },
+            {
+              reload: true
+            });
+          return;
+        }
+
         var trackingItem = newData.data[0];
         // Push new value.
         if (trackingItem.new) {
@@ -98,7 +115,35 @@ angular.module('clientApp')
             reload: true
           });
       });
-    }
+    };
+
+    /**
+     * Determine if the current user is the owner of the entity (Time tracking).
+     *
+     * @param data
+     *  The data of the entity.
+     *
+     * @returns {*|boolean}
+     */
+    $scope.owner = function(data) {
+      return data.id && $stateParams.username == data.employee;
+    };
+
+    /**
+     * Remove entity (Time tracking) from the work log by un-publishing it.
+     * Sets status to 0 and call the save function.
+     *
+     * @param data
+     *  The data of the entity.
+     */
+    $scope.remove = function(data) {
+      if ($stateParams.username != data.employee) {
+        return false;
+      }
+      data.status = 0;
+
+      $scope.save(data);
+    };
   });
 
 
