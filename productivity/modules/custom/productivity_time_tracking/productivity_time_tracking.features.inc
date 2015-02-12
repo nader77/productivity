@@ -14,6 +14,35 @@ function productivity_time_tracking_ctools_plugin_api($module = NULL, $api = NUL
 }
 
 /**
+ * Implements hook_default_message_type().
+ */
+function productivity_time_tracking_default_message_type() {
+  $items = array();
+  $items['mail_reminder'] = entity_import('message_type', '{
+    "name" : "mail_reminder",
+    "description" : "Mail reminder",
+    "argument_keys" : [],
+    "argument" : [],
+    "category" : "message_type",
+    "data" : {
+      "token options" : { "clear" : 0 },
+      "purge" : { "override" : 0, "enabled" : 0, "quota" : "", "days" : "" }
+    },
+    "language" : "",
+    "arguments" : null,
+    "message_text" : { "und" : [
+        {
+          "value" : "Hi [message:user:name]!\\r\\n\\r\\nPlease track your work  \\u003Ca href=\\u0022http:\\/\\/productivity.gizra.com\\u0022\\u003E here \\u003C\\/a\\u003E.\\r\\n",
+          "format" : "full_html",
+          "safe_value" : "\\u003Cp\\u003EHi [message:user:name]!\\u003C\\/p\\u003E\\n\\u003Cp\\u003EPlease track your work  \\u003Ca href=\\u0022http:\\/\\/productivity.gizra.com\\u0022\\u003E here \\u003C\\/a\\u003E.\\u003C\\/p\\u003E\\n"
+        }
+      ]
+    }
+  }');
+  return $items;
+}
+
+/**
  * Implements hook_node_info().
  */
 function productivity_time_tracking_node_info() {
