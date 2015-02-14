@@ -153,39 +153,6 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'user-user-field_salaries'
-  $field_instances['user-user-field_salaries'] = array(
-    'bundle' => 'user',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 2,
-      ),
-    ),
-    'entity_type' => 'user',
-    'field_name' => 'field_salaries',
-    'label' => 'Salaries',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => 0,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 10,
-    ),
-  );
-
   // Translatables
   // Included for use with string extractors like potx.
   t('Date');
@@ -193,7 +160,6 @@ function productivity_user_field_default_field_instances() {
   t('Employment status');
   t('Github username');
   t('Job type');
-  t('Salaries');
 
   return $field_instances;
 }
