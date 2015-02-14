@@ -18,9 +18,58 @@ function productivity_time_tracking_get_global_days($month, $year) {
   $request['month'] = $month;
   $request['global'] = TRUE;
   $result = $handler->get('', $request);
+
+  // Normalize global days.
+  $assoc_globals = array();
+  foreach ($result as $gday) {
+    $assoc_globals[$gday['day']] = array(
+      'id' => 'new',
+      'length' => 'G',
+      'projectName' => $gday['description'],
+    );
+  }
+  return $assoc_globals;
+}
+
+/**
+ * Save tracking using service.
+ */
+function productivity_time_tracking_save($timestamp, $employee, $project_nid) {
+  // Call the restfull service.
+  $handler = restful_get_restful_handler('tracking');
+  $request = array();
+  $request['date'] = $timestamp;
+  $request['employee'] = $employee;
+  $request['projectID'] = $project_nid;
+  $request['type'] = 'regular';
+  $request['length'] = 8.0;
+  $request['period'] = 'hour';
+
+  $result = $handler->post('', $request);
+
   return $result;
 }
 
+/**
+ * Total hours done in a project.
+ *
+ * @param $project_nid
+ * @param array $date_range
+ * @param array $employees
+ * @return array
+ */
+function productivity_time_tracking_get_employee_tracking_count($strtime, $employee) {
+  $query = new EntityFieldQuery();
+  $account = user_load_by_name($employee);
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'time_tracking')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_work_date', 'value', $strtime)
+    ->fieldCondition('field_employee', 'target_id', $account->uid)
+    ->count();
+
+  return $query->execute();
+}
 /**
  * Total hours done in a project.
  *
