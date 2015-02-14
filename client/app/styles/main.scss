@@ -22,6 +22,22 @@ $color4: #226666;
 $color4_light : #478484;
 .tracking-table-page {
 
+  h2 {
+
+    a {
+
+      &:hover {
+      text-decoration: none;
+      }
+
+      &:active {
+        color: red;
+      }
+    }
+
+  }
+
+
   .track-item-table {
     font-size: 16px;
 
@@ -145,5 +161,17 @@ $color4_light : #478484;
   text.value {
     font-size: 12px;
     font-weight: bold;
+  }
+}
+
+
+.tracking-form-page {
+
+  .month-nav {
+    font-size: 30px;
+
+    a:hover {
+      text-decoration: none;
+    }
   }
 }

@@ -20,6 +20,21 @@ angular.module('clientApp')
     $scope.year = $stateParams.year;
     $scope.month = $stateParams.month;
 
+    $scope.nextMonth = $scope.month + 1;
+    $scope.nextYear =  $scope.year;
+    $scope.prevMonth = $scope.month - 1;
+    $scope.prevYear =  $scope.year;
+
+    if ($scope.month == 12) {
+      $scope.nextMonth = 1;
+      $scope.nextYear =  $scope.year + 1;
+    }
+    if ($scope.month == 1) {
+      $scope.prevMonth = 12;
+      $scope.prevYear =  $scope.year - 1;
+    }
+
+
     $scope.days = days;
 
     if (Config.debug) {
