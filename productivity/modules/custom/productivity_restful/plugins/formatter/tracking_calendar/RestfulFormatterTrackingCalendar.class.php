@@ -86,18 +86,7 @@ class RestfulFormatterTrackingCalendar extends \RestfulFormatterBase implements 
     $month = $request['month'];
     $year = $request['year'];
     $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));
-    $global_day = productivity_time_tracking_get_global_days($month, $year);
-
-    // Normalize global days.
-    $assoc_globals = array();
-    foreach ($global_day as $gday) {
-      $assoc_globals[$gday['day']] = array(
-        'id' => 'new',
-        'length' => 'G',
-        'projectName' => $gday['description'],
-      );
-    }
-
+    $assoc_globals = productivity_time_tracking_get_global_days($month, $year);
 
     // Build skeleton of array, on item per day.
     $new_data = array();
