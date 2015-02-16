@@ -57,7 +57,8 @@ angular.module('clientApp')
       var url = Config.backend + '/api/projects';
       $http({
         method: 'GET',
-        url: url
+        url: url,
+        params: {sort: 'title'}
       }).success(function(response) {
         // Create header days.
         setCache(response.data);
