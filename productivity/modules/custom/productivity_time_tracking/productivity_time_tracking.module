@@ -111,15 +111,15 @@ function productivity_time_tracking_mail_create() {
 }
 
 /**
- * Send message to user if he doesn't have tracking for yesterday.
+ * Send message to user if he/she doesn't have tracking for yesterday.
  *
  * @param $account
- * User object.
+ *  User object.
  */
 function productivity_time_tracking_send_reminder($account) {
-  // Get the yesterday date for Brussels timezone.
-  $yesterday_starts = date('Y-m-d 00:00:00', strtotime('-1 days') - 3600);
-  $yesterday_ends = date('Y-m-d 23:59:59', strtotime('-1 days') - 3600);
+  // Get the yesterday date.
+  $yesterday_starts = date('Y-m-d 00:00:00', strtotime('-1 days'));
+  $yesterday_ends = date('Y-m-d 23:59:59', strtotime('-1 days'));
 
   $query = new EntityFieldQuery();
   $result = $query
@@ -132,7 +132,7 @@ function productivity_time_tracking_send_reminder($account) {
     ->execute();
   $no_records = TRUE;
   if ($result) {
-    $no_records = FALSE;
+    return;
   }
 
   if ($no_records) {
@@ -144,7 +144,7 @@ function productivity_time_tracking_send_reminder($account) {
 
     $wrapper = entity_metadata_wrapper('user', $account);
 
-    $wrapper->field_last_notification->set(time() + 3600);
+    $wrapper->field_last_notification->set(time());
     $wrapper->save();
     // Send mail to users
     message_notify_send_message($message);
@@ -154,20 +154,21 @@ function productivity_time_tracking_send_reminder($account) {
 /**
  * Implements hook_cron().
  *
- * Should send reminder to existing developers, that did not filled time tracking
- * yesterday.
+ * Send reminder to existing developers,
+ * That did not filled time tracking yesterday.
  */
 function productivity_time_tracking_cron() {
 
-  $now = date('H', time() + 3600);
-  if (intval($now) < 9 || intval($now) > 11) {
-    // Send notifications only between 9 and 11 in the morning.
-     return;
+  $now = date('H', time());
+  $timetosend = explode('-', variable_get('time_to_send_reminder', '9-13'));
+  if (intval($now) < $timetosend[0] || intval($now) > $timetosend[1]) {
+    // Send notifications in defined time period.
+    return;
   }
 
   $weekend = variable_get('productivity_weekend', '5,6');
   $days = explode(',', $weekend);
-  $dw = date( "N", strtotime('-1 days'));
+  $dw = date('N', strtotime('-1 days'));
   // Yesterday was weekend, so there shouldn't be any records.
   foreach($days as $day) {
     if ($dw == $day) {
@@ -187,14 +188,19 @@ function productivity_time_tracking_cron() {
     ->fieldCondition('field_employment_status', 'value', 'employed')
     ->execute();
 
-  $accounts = !empty($result['user']) ? user_load_multiple(array_keys($result['user'])) : NULL;
+  if (empty($result['user'])) {
+    // There are no active employed developers.
+    return;
+  }
+
+  $accounts = user_load_multiple(array_keys($result['user']));
   foreach ($accounts as $account) {
     // Check if this user has already got notification today.
     $wrapper = entity_metadata_wrapper('user', $account);
-
-    if (empty($wrapper->field_last_notification) || $wrapper->field_last_notification->value() < strtotime(date('Y-m-d 00:00:00', time() + 3600))) {
-      // Today notifications haven't been sent yet.
-      productivity_time_tracking_send_reminder($account);
+    if ($wrapper->field_last_notification->value() >= strtotime(date('Y-m-d 00:00:00', time()))) {
+      // Notification has been already sent today.
+      continue;
     }
+    productivity_time_tracking_send_reminder($account);
   }
 }
