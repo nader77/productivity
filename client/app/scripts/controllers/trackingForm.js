@@ -21,10 +21,29 @@ angular.module('clientApp')
     for (var i = 1; i <= endDay; i++) {
       $scope.days.push(i);
     }
+    var monthNames = [ "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December" ];
+
 
     $scope.month = $stateParams.month;
+    $scope.monthString = monthNames[$scope.month-1];
     $scope.year = $stateParams.year;
     $scope.day = $stateParams.day;
+    $scope.employee = $stateParams.username;
+
+    $scope.nextMonth = $scope.month + 1;
+    $scope.nextYear =  $scope.year;
+    $scope.prevMonth = $scope.month - 1;
+    $scope.prevYear =  $scope.year;
+
+    if ($scope.month == 12) {
+      $scope.nextMonth = 1;
+      $scope.nextYear =  $scope.year + 1;
+    }
+    if ($scope.month == 1) {
+      $scope.prevMonth = 12;
+      $scope.prevYear =  $scope.year - 1;
+    }
 
     // Disable submit button.
     $scope.creating = false;

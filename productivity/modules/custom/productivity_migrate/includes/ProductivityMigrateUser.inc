@@ -60,7 +60,7 @@ class ProductivityMigrateUser extends Migration {
     $field_names = array(
       'name',
       'mail',
-//      'pass'
+      'pass'
     );
 
     $this->addSimpleMappings($field_names);
