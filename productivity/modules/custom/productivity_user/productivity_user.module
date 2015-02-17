@@ -50,6 +50,7 @@ function productivity_user_get_active_uids($month, $year) {
     $uids = array_keys($result_inactives['user']);
   }
 
+  // Run a second query to overcome the date field endtime.
   $query_start = new EntityFieldQuery();
   $query_start->entityCondition('entity_type', 'user')
     ->fieldCondition('field_job_type', 'value', array('developer', 'qa'), 'IN')

@@ -17,28 +17,22 @@ class ProductivityTrackingProjectResource extends \ProductivityEntityBaseNode {
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
 
-    $public_fields['projectName'] = array(
-      'property' => 'field_project',
-      'sub_property' => 'title',
-    );
-
     $public_fields['projectID'] = array(
-      'property' => 'field_project',
-      'sub_property' => 'nid',
+      'property' => 'nid',
     );
 
-    $public_fields['lengthHours'] = array(
-      'property' => 'field_track_hours',
-      'process_callbacks' => array(
-        array($this, 'imageProcess'),
-      ),
-    );
-
-    $public_fields['lengthDays'] = array(
-      'property' => 'field_track_hours',
+    $public_fields['totalTracking'] = array(
+      'callback' => 'static::totalTracking',
     );
 
     return $public_fields;
+  }
+
+  /**
+   * Static callback, total time.
+   */
+  public static function totalTracking($wrapper) {
+    return 100;
   }
 
   /**
@@ -55,6 +49,10 @@ class ProductivityTrackingProjectResource extends \ProductivityEntityBaseNode {
     if (empty($request['year']) && !intval($request['year'])) {
       throw new \RestfulBadRequestException('Invalid year given.');
     }
+    $start_time =  $request['year'] . '-' . $request['month'] . '-01'. ' 00:00:00';
+    $end_time = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_time)));
+
+    $query->fieldCondition('field_date', 'value2', $start_time, '<=');
 
     return $query;
   }

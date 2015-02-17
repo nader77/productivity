@@ -78,7 +78,7 @@ function productivity_time_tracking_get_employee_tracking_count($strtime, $emplo
  * @param array $employees
  * @return array
  */
-function productivity_time_tracking_total_hours($project_nid, $date_range = array(), $employees = array()) {
+function productivity_time_tracking_total_hours($project_nid, $date = array(), $employees = array()) {
   $query = new EntityFieldQuery();
 
   $query->entityCondition('entity_type', 'node')
@@ -86,6 +86,13 @@ function productivity_time_tracking_total_hours($project_nid, $date_range = arra
     ->propertyCondition('status', NODE_PUBLISHED)
     ->fieldCondition('field_day_type', 'value', 'regular')
     ->fieldCondition('field_project', 'target_id', $project_nid);
+
+  if (!empty($date)) {
+    $start_timestamp =  $date['year'] . '-' . $date['month'] . '-01'. ' 00:00:00';
+    $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
+    $query->fieldCondition('field_work_date', 'value', $start_timestamp, '>=');
+    $query->fieldCondition('field_work_date', 'value', $end_timestamp, '<');
+  }
 
   $result = $query->execute();
 
