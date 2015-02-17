@@ -32,7 +32,7 @@ class ProductivityTrackingProjectResource extends \ProductivityEntityBaseNode {
    * Static callback, total time.
    */
   public static function totalTracking($wrapper) {
-    return 100;
+    return productivity_time_tracking_total_hours($wrapper->getIdentifier());
   }
 
   /**
