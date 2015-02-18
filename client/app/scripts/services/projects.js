@@ -48,7 +48,7 @@ angular.module('clientApp')
 
     /**
      * Return projects array from the server.
-     * Filtered by active projects,
+     * Filtered by active projects (year, month),
      * Sorted by project's title.
      *
      * @returns {$q.promise}
@@ -57,18 +57,8 @@ angular.module('clientApp')
       var deferred = $q.defer();
       var params = {
         sort: 'label',
-        filter: {
-          'date': {
-            'value': {
-              'value': '11',//$filter('date')(year + month, 'yyyy-MM-dd HH:mm:ss'),
-              'operator': '<'
-            },
-            'value2': {
-              'value': '11',//$filter('date')(year + month, 'yyyy-MM-dd HH:mm:ss'),
-              'operator': '>'
-            }
-          }
-        }
+        year: year,
+        month: month
       };
 
       var url = Config.backend + '/api/projects';
