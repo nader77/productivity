@@ -34,3 +34,20 @@ function productivity_restful_entity_property_info_alter(&$info) {
   }
 }
 
+/**
+ * Implementation of hook_query_TAG_alter().
+ *
+ * @TODO: Add docs.
+ */
+function productivity_restful_query_empty_end_date_alter(SelectQuery &$query) {
+  $conditions = &$query->conditions();
+  dpm($query);
+
+  $value = $conditions[1]['value'];
+  $or = db_or()
+    ->condition('field_date_value2',  $value, '>=')
+    ->where('field_date_value2 = field_date_value');
+  $query->condition($or);
+
+  unset($conditions[1]);
+}
