@@ -18,6 +18,10 @@ class ProductivityProjectResource extends \ProductivityEntityBaseNode {
       'property' => 'nid',
     );
 
+    $public_fields['date'] = array(
+      'property' => 'field_date',
+    );
+
     return $public_fields;
   }
 
@@ -32,8 +36,12 @@ class ProductivityProjectResource extends \ProductivityEntityBaseNode {
     $request = $this->getRequest();
 
     if (!empty($request['year']) && !empty($request['month'])) {
-      $timestamp =  $request['year'] . '-' . $request['month'] . '-01'. ' 00:00:00';
-      $query->fieldCondition('field_date', 'value2', $timestamp, '>=');
+      $start_timestamp =  $request['year'] . '-' . $request['month'] . '-01'. ' 00:00:00';
+      $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
+      $query
+        ->fieldCondition('field_date', 'value', $end_timestamp, '<=')
+        ->fieldCondition('field_date', 'value2', $start_timestamp, '>=')
+        ->addTag('empty_end_date');
     }
 
     return $query;
