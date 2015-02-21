@@ -43,7 +43,7 @@ angular.module('clientApp')
       }
       // Debug mode.
       if (Config.debug) {
-        url += '?XDEBUG_SESSION_START=13261';
+        url += '?XDEBUG_SESSION_START=13261 ';
       }
 
       $http({

@@ -97,6 +97,9 @@ angular
         resolve: {
           tracking: function($stateParams, Tracking) {
               return Tracking.get($stateParams.year, $stateParams.month);
+          },
+          trackingProject: function($stateParams, TrackingProject) {
+              return TrackingProject.get($stateParams.year, $stateParams.month);
           }
         }
       })
