@@ -22,7 +22,7 @@ class ProductivityTrackingProjectResource extends \ProductivityEntityBaseNode {
     );
 
     $public_fields['totalTracking'] = array(
-      'callback' => 'static::totalTracking',
+      'callback' => array($this, 'totalTracking')
     );
 
     return $public_fields;
@@ -31,8 +31,9 @@ class ProductivityTrackingProjectResource extends \ProductivityEntityBaseNode {
   /**
    * Static callback, total time.
    */
-  public static function totalTracking($wrapper) {
-    return productivity_time_tracking_total_hours($wrapper->getIdentifier());
+  function totalTracking($wrapper) {
+    $request = $this->getRequest();
+    return productivity_time_tracking_total_hours($wrapper->getIdentifier(), $request);
   }
 
   /**

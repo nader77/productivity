@@ -88,10 +88,10 @@ function productivity_time_tracking_total_hours($project_nid, $date = array(), $
     ->fieldCondition('field_project', 'target_id', $project_nid);
 
   if (!empty($date)) {
-    $start_timestamp =  $date['year'] . '-' . $date['month'] . '-01'. ' 00:00:00';
-    $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
-    $query->fieldCondition('field_work_date', 'value', $start_timestamp, '>=');
-    $query->fieldCondition('field_work_date', 'value', $end_timestamp, '<');
+    $start_date =  $date['year'] . '-' . $date['month'] . '-01'. ' 00:00:00';
+    $end_date = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_date)));
+    $query->fieldCondition('field_work_date', 'value', $start_date, '>=');
+    $query->fieldCondition('field_work_date', 'value', $end_date, '<');
   }
 
   $result = $query->execute();
