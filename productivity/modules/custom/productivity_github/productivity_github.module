@@ -70,7 +70,7 @@ function productivity_github_get_uid_by_github_username($github_username) {
  *   Project node ID.
  */
 function productivity_github_get_project_by_repository($repository_name) {
-  if ($nid = _productivity_github_get_entity_id_by_field_value('field_data_field_github_repository_name', 'project', $repository_name)) {
+  if ($nid = _productivity_github_get_entity_id_by_field_value('field_github_repository_name', 'project', $repository_name)) {
     return $nid;
   }
 
@@ -92,10 +92,10 @@ function productivity_github_get_project_by_repository($repository_name) {
  */
 function _productivity_github_get_entity_id_by_field_value($field, $bundle, $value) {
   // Using db_select to allow this query for anonymous.
-  $result = db_select($field, 'f')
+  $result = db_select('field_data_' . $field, 'f')
     ->fields('f', array('entity_id'))
     ->condition('bundle', $bundle)
-    ->condition('field_github_repository_name_value', $value)
+    ->condition($field . '_value', $value)
     ->range(0, 1)
     ->execute()
     ->fetchAssoc();
