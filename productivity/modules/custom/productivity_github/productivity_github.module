@@ -27,7 +27,7 @@ function productivity_github_payload() {
   }
 
   $payload = json_decode($_POST['payload']);
-  if ($payload->action != 'opened' || empty($payload->pull_request)) {
+  if (empty($payload->action) ||  $payload->action != 'opened' || empty($payload->pull_request)) {
     return;
   }
 
@@ -55,18 +55,11 @@ function productivity_github_payload() {
  *   Account ID.
  */
 function productivity_github_get_uid_by_github_username($github_username) {
-  $query = new EntityFieldQuery();
-  $result = $query->entityCondition('entity_type', 'user')
-    ->fieldCondition('field_github_username', 'value', $github_username)
-    ->range(0, 1)
-    ->execute();
-
-  if (empty($result['user'])) {
-    watchdog('productivity', t('No user with github username: @username', array('@username' => $github_username)));
-    return 0;
+  if ($uid = _productivity_github_get_entity_id_by_field_value('field_github_username', 'user', $github_username)) {
+    return $uid;
   }
 
-  return key($result['user']);
+  watchdog('productivity', t('No user with github username: @username', array('@username' => $github_username)));
 }
 
 /**
@@ -77,18 +70,37 @@ function productivity_github_get_uid_by_github_username($github_username) {
  *   Project node ID.
  */
 function productivity_github_get_project_by_repository($repository_name) {
-  $query = new EntityFieldQuery();
-  $result = $query->entityCondition('entity_type', 'node')
-    ->propertyCondition('type', 'project')
-    ->propertyCondition('status', NODE_PUBLISHED)
-    ->fieldCondition('field_github_repository_name', 'value', $repository_name)
-    ->range(0, 1)
-    ->execute();
-
-  if (empty($result['node'])) {
-    watchdog('productivity', t('No project with github repository: @repository', array('@repository' => $repository_name)));
-    return 0;
+  if ($nid = _productivity_github_get_entity_id_by_field_value('field_github_repository_name', 'project', $repository_name)) {
+    return $nid;
   }
 
-  return key($result['node']);
+  watchdog('productivity', t('No project with github repository: @repository', array('@repository' => $repository_name)));
+}
+
+/**
+ * Fetch an entity ID by a unique field value.
+ *
+ * @param $field
+ *   Field name.
+ * @param $bundle
+ *   Entity bundle.
+ * @param $value
+ *   Field value.
+ *
+ * @return int
+ *   Entity ID.
+ */
+function _productivity_github_get_entity_id_by_field_value($field, $bundle, $value) {
+  // Using db_select to allow this query for anonymous.
+  $result = db_select('field_data_' . $field, 'f')
+    ->fields('f', array('entity_id'))
+    ->condition('bundle', $bundle)
+    ->condition($field . '_value', $value)
+    ->range(0, 1)
+    ->execute()
+    ->fetchAssoc();
+
+  if (!empty($result['entity_id'])) {
+    return $result['entity_id'];
+  }
 }
