@@ -76,7 +76,7 @@ angular
         onEnter: page403,
         resolve: {
           projects: function($stateParams, Projects) {
-            return Projects.get();
+            return Projects.get($stateParams.year, $stateParams.month);
           },
           tracking: function($stateParams, Tracking) {
             return Tracking.get($stateParams.year, $stateParams.month, $stateParams.username);
