@@ -17,12 +17,12 @@ angular.module('clientApp')
     var broadcastUpdateEventName = 'ProductivityProjectsChange';
 
     /**
-     * Return the promise with the events list, from cache or the server.
+     * Return the promise with the projects list (filtered by active project in the current month), from cache or the server.
      *
      * @returns {*}
      */
-    this.get = function() {
-      return $q.when(cache.data || getDataFromBackend());
+    this.get = function(year, month) {
+      return $q.when(cache.data || getDataFromBackend(year, month));
     };
 
     /**
@@ -47,18 +47,25 @@ angular.module('clientApp')
 
 
     /**
-     * Return events array from the server.
+     * Return projects array from the server.
+     * Filtered by active projects (year, month),
+     * Sorted by project's title.
      *
      * @returns {$q.promise}
      */
-    var getDataFromBackend = function() {
+    var getDataFromBackend = function(year, month) {
       var deferred = $q.defer();
+      var params = {
+        sort: 'label',
+        year: year,
+        month: month
+      };
 
       var url = Config.backend + '/api/projects';
       $http({
         method: 'GET',
         url: url,
-        params: {sort: 'title'}
+        params: params
       }).success(function(response) {
         // Create header days.
         setCache(response.data);
