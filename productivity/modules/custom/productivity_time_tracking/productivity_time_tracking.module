@@ -170,3 +170,98 @@ function productivity_time_tracking_mail_create() {
   $wrapper->save();
   // TODO: Save tracking entity.
 }
+
+/**
+ * Send message to user if he/she doesn't have tracking for yesterday.
+ *
+ * @param $account
+ *  User object.
+ */
+function productivity_time_tracking_send_reminder($account) {
+  // Get the yesterday date.
+  $yesterday_starts = date('Y-m-d 00:00:00', strtotime('-1 days'));
+  $yesterday_ends = date('Y-m-d 23:59:59', strtotime('-1 days'));
+
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'time_tracking')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->propertyCondition('uid', $account->uid)
+    ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>=')
+    ->fieldCondition('field_work_date', 'value', $yesterday_ends, '<=')
+    ->execute();
+  $no_records = TRUE;
+  if ($result) {
+    return;
+  }
+
+  if ($no_records) {
+    $values = array(
+      'subject' => 'Productivity',
+      'uid' => $account->uid
+    );
+    $message = message_create('mail_reminder', $values);
+
+    $wrapper = entity_metadata_wrapper('user', $account);
+
+    $wrapper->field_last_notification->set(time());
+    $wrapper->save();
+    // Send mail to users
+    message_notify_send_message($message);
+  }
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * Send reminder to existing developers,
+ * That did not filled time tracking yesterday.
+ */
+function productivity_time_tracking_cron() {
+
+  $now = date('H', time());
+  $timetosend = explode('-', variable_get('time_to_send_reminder', '9-13'));
+  if (intval($now) < $timetosend[0] || intval($now) > $timetosend[1]) {
+    // Send notifications in defined time period.
+    return;
+  }
+
+  $weekend = variable_get('productivity_weekend', '5,6');
+  $days = explode(',', $weekend);
+  $dw = date('N', strtotime('-1 days'));
+  // Yesterday was weekend, so there shouldn't be any records.
+  foreach($days as $day) {
+    if ($dw == $day) {
+      return;
+    }
+  }
+
+  // Select users that don't have time tracking records during the whole
+  // previous day.
+
+  // Get all active developers, that should have tracking.
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'user')
+    ->propertyCondition('status', 1)
+    ->fieldCondition('field_job_type', 'value', 'developer')
+    ->fieldCondition('field_employment_status', 'value', 'employed')
+    ->execute();
+
+  if (empty($result['user'])) {
+    // There are no active employed developers.
+    return;
+  }
+
+  $accounts = user_load_multiple(array_keys($result['user']));
+  foreach ($accounts as $account) {
+    // Check if this user has already got notification today.
+    $wrapper = entity_metadata_wrapper('user', $account);
+    if ($wrapper->field_last_notification->value() >= strtotime(date('Y-m-d 00:00:00', time()))) {
+      // Notification has been already sent today.
+      continue;
+    }
+    productivity_time_tracking_send_reminder($account);
+  }
+}
