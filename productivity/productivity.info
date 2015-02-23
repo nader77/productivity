@@ -33,6 +33,7 @@ dependencies[] = entityreference
 dependencies[] = features
 dependencies[] = migrate
 dependencies[] = message
+dependencies[] = message_notify
 dependencies[] = migrate_extras
 dependencies[] = flag
 dependencies[] = logs_http
