@@ -41,10 +41,15 @@
           </tr>
         </tbody>
       </table>
-       <div ui-view></div>
+    </div>
+    <div class="row">
+      <div ng-repeat="project in trackingProject">
+        {{ project.label }} Total Hours {{ project.totalTracking.hour }}
+      </div>
     </div>
   </div>
 </div>
+<div ui-view></div>
 <script>
   // Fix header for table.
   $('table').stickyTableHeaders();
