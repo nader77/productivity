@@ -33,7 +33,8 @@ class ProductivityTrackingProjectResource extends \ProductivityEntityBaseNode {
    */
   function totalTracking($wrapper) {
     $request = $this->getRequest();
-    return productivity_time_tracking_total_hours($wrapper->getIdentifier(), $request);
+
+    return productivity_time_tracking_total_hours($wrapper->getIdentifier(), $request, $this->getAccount());
   }
 
   /**

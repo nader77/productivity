@@ -15,6 +15,7 @@ angular.module('clientApp')
     for (var i = 1; i <= endDay; i++) {
       days.push(i);
     }
+    $scope.trackingProject = trackingProject;
     $scope.employeeRows = tracking;
 
     $scope.year = $stateParams.year;

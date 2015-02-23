@@ -78,13 +78,18 @@ function productivity_time_tracking_get_employee_tracking_count($strtime, $emplo
  * @param array $employees
  * @return array
  */
-function productivity_time_tracking_total_hours($project_nid, $date = array(), $employees = array()) {
+function productivity_time_tracking_total_hours($project_nid, $date = array(),  $account = FALSE, $employees = array()) {
+  if (!$account) {
+    global $user;
+    $account = $user;
+  }
   $query = new EntityFieldQuery();
 
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'time_tracking')
     ->propertyCondition('status', NODE_PUBLISHED)
     ->fieldCondition('field_day_type', 'value', 'regular')
+    ->addMetaData('account', $account)
     ->fieldCondition('field_project', 'target_id', $project_nid);
 
   if (!empty($date)) {
