@@ -8,13 +8,14 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('TrackingTableCtrl', function ($scope, tracking, $stateParams, $log, Config) {
-
+  .controller('TrackingTableCtrl', function ($scope, tracking, trackingProject, $stateParams, $log, Config) {
+    console.log(trackingProject);
     var endDay = new Date($stateParams.year, $stateParams.month, 0).getDate();
     var days = [];
     for (var i = 1; i <= endDay; i++) {
       days.push(i);
     }
+    $scope.trackingProject = trackingProject;
     $scope.employeeRows = tracking;
 
     $scope.year = $stateParams.year;
