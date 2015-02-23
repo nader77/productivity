@@ -37,11 +37,11 @@ function productivity_restful_entity_property_info_alter(&$info) {
 /**
  * Implementation of hook_query_TAG_alter().
  *
- * @TODO: Add docs.
+ * Create an "OR" condition in which we filter entities which has end-date bigger than the desired value
+ * or the end-date value equals the start-date value, which means it's empty.
  */
 function productivity_restful_query_empty_end_date_alter(SelectQuery &$query) {
   $conditions = &$query->conditions();
-  dpm($query);
 
   $value = $conditions[1]['value'];
   $or = db_or()

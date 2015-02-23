@@ -18,10 +18,6 @@ class ProductivityProjectResource extends \ProductivityEntityBaseNode {
       'property' => 'nid',
     );
 
-    $public_fields['date'] = array(
-      'property' => 'field_date',
-    );
-
     return $public_fields;
   }
 
