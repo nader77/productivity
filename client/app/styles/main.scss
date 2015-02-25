@@ -76,7 +76,7 @@ $color4_light : #478484;
     }
 
     .vacation {
-      background-color: $color1;
+      background-color: $color3_light;
     }
 
     .holiday {
@@ -88,11 +88,15 @@ $color4_light : #478484;
     }
 
     .miluim {
-      background-color: $color3_light;
+      background-color: $color2_light;
     }
 
     .convention {
-      background-color: $color4_light;
+      background-color: $color4;
+    }
+
+    .weekend {
+      background-color: $color1_light;
     }
   }
 }
