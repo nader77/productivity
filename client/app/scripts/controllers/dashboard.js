@@ -17,6 +17,26 @@ angular.module('clientApp')
     $scope.year = today.getFullYear();
     $scope.employee = account.label;
 
+    $scope.spinner = 0;
+
+    $scope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams) {
+      if (toState.resolve) {
+        $scope.toggleSpinner();
+      }
+    });
+    $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
+      if (toState.resolve) {
+        $scope.toggleSpinner();
+      }
+    });
+
+    /**
+     *
+     */
+    $scope.toggleSpinner = function() {
+
+    };
+
     /**
      * Logout current user.
      *
