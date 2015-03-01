@@ -54,7 +54,9 @@ class ProductivityTrackingProjectResource extends \ProductivityEntityBaseNode {
     $start_time =  $request['year'] . '-' . $request['month'] . '-01'. ' 00:00:00';
     $end_time = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_time)));
 
-    $query->fieldCondition('field_date', 'value2', $start_time, '<=');
+    $query->fieldCondition('field_date', 'value', $end_time, '<=')
+      ->fieldCondition('field_date', 'value2', $start_time, '>=')
+      ->addTag('empty_end_date');
 
     return $query;
   }
