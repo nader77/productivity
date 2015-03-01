@@ -37,33 +37,20 @@ function productivity_user_is_live() {
  */
 function productivity_user_get_active_uids($month, $year) {
   $start_timestamp =  $year . '-' . $month. '-01'. ' 00:00:00';
+  $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
 
-  // We need to add a second quer since value2 of date has a default of value(1).
-  $query_not_active = new EntityFieldQuery();
-  $query_not_active->entityCondition('entity_type', 'user')
-    ->fieldCondition('field_job_type', 'value', array('developer', 'qa'), 'IN')
-    ->fieldCondition('field_employment_status', 'value', 'employed', '!=')
-    ->fieldCondition('field_date', 'value2', $start_timestamp, '<=');
-  $result_inactives = $query_not_active->execute();
-  $uids = FALSE;
-  if (isset($result_inactives['user'])) {
-    $uids = array_keys($result_inactives['user']);
-  }
+  // We need to add a second query since value2 of date has a default of value(1).
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'user')
+    ->fieldCondition('field_date', 'value', $end_timestamp, '<=')
+    ->fieldCondition('field_date', 'value2', $start_timestamp, '>=')
+    // When using this tag, date query must be in this order.
+    ->addTag('empty_end_date')
+    ->fieldCondition('field_job_type', 'value', array('developer', 'qa'), 'IN');
 
-  // Run a second query to overcome the date field endtime.
-  $query_start = new EntityFieldQuery();
-  $query_start->entityCondition('entity_type', 'user')
-    ->fieldCondition('field_job_type', 'value', array('developer', 'qa'), 'IN')
-    ->fieldCondition('field_date', 'value', $start_timestamp, '<=');
-
-  if ($uids) {
-    $query_start->propertyCondition('uid', $uids, 'NOT IN');
-  }
-  $result_start = $query_start->execute();
-
-
-  if (isset($result_start['user'])) {
-    return array_keys($result_start['user']);
+  $result = $query->execute();
+  if (isset($result['user'])) {
+    return array_keys($result['user']);
   }
 
   return array();
