@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the productivity_admin feature.
+ */
+
+include_once 'productivity_admin.features.inc';
