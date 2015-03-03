@@ -96,7 +96,7 @@ projects[views][subdir] = "contrib"
 projects[views][version] = "3.7"
 
 projects[views_data_export][subdir] = "contrib"
-projects[views_data_export][version] = "1.0"
+projects[views_data_export][version] = "3.x-dev"
 
 projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.2"
