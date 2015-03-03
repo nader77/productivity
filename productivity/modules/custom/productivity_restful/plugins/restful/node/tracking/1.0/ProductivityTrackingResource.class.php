@@ -173,7 +173,6 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     $query->fieldCondition('field_work_date', 'value', $start_timestamp, '>=');
     $query->fieldCondition('field_work_date', 'value', $end_timestamp, '<');
 
-
     if (!empty($request['employee'])) {
       $user_by_name = user_load_by_name($request['employee']);
       if (!$user_by_name) {
@@ -203,7 +202,9 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       }
 
       $wrapper->field_project->set($request['projectID']);
-      $wrapper->field_description->set($request['description']);
+      if (isset($request['description'])) {
+        $wrapper->field_description->set($request['description']);
+      }
       $wrapper->field_track_hours->set($request['length']);
 
     }
