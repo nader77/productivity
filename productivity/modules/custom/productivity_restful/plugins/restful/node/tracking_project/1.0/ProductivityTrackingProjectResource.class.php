@@ -56,6 +56,7 @@ class ProductivityTrackingProjectResource extends \ProductivityEntityBaseNode {
 
     $query->fieldCondition('field_date', 'value', $end_time, '<=')
       ->fieldCondition('field_date', 'value2', $start_time, '>=')
+      ->propertyOrderBy('title')
       ->addTag('empty_end_date');
 
     return $query;

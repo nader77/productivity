@@ -9,7 +9,6 @@
  */
 angular.module('clientApp')
   .controller('TrackingTableCtrl', function ($scope, tracking, trackingProject, $stateParams, $log, Config) {
-    console.log(trackingProject);
     var endDay = new Date($stateParams.year, $stateParams.month, 0).getDate();
     var days = [];
     for (var i = 1; i <= endDay; i++) {
@@ -17,7 +16,6 @@ angular.module('clientApp')
     }
     $scope.trackingProject = trackingProject;
     $scope.employeeRows = tracking;
-
     $scope.year = $stateParams.year;
     $scope.month = $stateParams.month;
 
