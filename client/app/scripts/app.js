@@ -13,13 +13,13 @@ angular
     'ngAnimate',
     'ngCookies',
     'ngSanitize',
-
     'config',
     'LocalStorageModule',
     'ui.bootstrap',
-    'ui.router'
+    'ui.router',
+    'angular-loading-bar'
   ])
-  .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
+  .config(function($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
 
     /**
      * Redirect a user to a 403 error page.
@@ -161,6 +161,10 @@ angular
         }
       };
     });
+
+    // Configuration of the loading bar.
+    cfpLoadingBarProvider.includeSpinner = true;
+    cfpLoadingBarProvider.latencyThreshold = 0;
   })
   .run(function ($rootScope, $state, $stateParams, $log, Config) {
     // It's very handy to add references to $state and $stateParams to the
@@ -170,11 +174,9 @@ angular
     // to active whenever 'contacts.list' or one of its decendents is active.
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
-    $rootScope.spinner = 0;
 
     if (!!Config.debugUiRouter) {
       $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams) {
-        $rootScope.spinner = 1;
         $log.log('$stateChangeStart to ' + toState.to + '- fired when the transition begins. toState,toParams : \n', toState, toParams);
       });
 
@@ -188,7 +190,6 @@ angular
       });
 
       $rootScope.$on('$viewContentLoaded',function(event) {
-        $rootScope.spinner = 0;
         $log.log('$viewContentLoaded - fired after dom rendered',event);
       });
 

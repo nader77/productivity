@@ -1,14 +1,4 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-// bower:scss
-@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
-@import "compass/css3/opacity";
-
-@import 'spinner.scss';
-
-
-body{
-  font-family: Arial, sans-serif;
-}
 
 // http://paletton.com/#uid=c0u3i0X000kllll8nAaeRrxrPf9BW8X
 $color1: #AA6C39;
@@ -21,6 +11,15 @@ $color3_light: #DB7676;
 $color3_lighter: #FFBCBC;
 $color4: #226666;
 $color4_light : #478484;
+
+// bower:scss
+@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import 'loadingbar.scss';
+
+body{
+  font-family: Arial, sans-serif;
+}
+
 .tracking-table-page {
 
   h2 {
