@@ -35,6 +35,9 @@ projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.1"
 projects[entityreference][patch][] = "https://www.drupal.org/files/issues/migrate_multiple_entity_reference-2394725-4.patch"
 
+projects[entityreference_filter][subdir] = "contrib"
+projects[entityreference_filter][version] = "1.4"
+
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "3.5"
 
@@ -92,9 +95,14 @@ projects[token][version] = "1.5"
 projects[views][subdir] = "contrib"
 projects[views][version] = "3.7"
 
+projects[views_data_export][subdir] = "contrib"
+projects[views_data_export][version] = "3.x-dev"
+
 projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.2"
 
+projects[views_calc][subdir] = "contrib"
+projects[views_calc][version] = "1.1"
 
 ; Development
 projects[devel][subdir] = "development"
