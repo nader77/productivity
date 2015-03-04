@@ -88,10 +88,11 @@ class RestfulFormatterTrackingCalendar extends \RestfulFormatterBase implements 
     $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));
     $assoc_globals = productivity_time_tracking_get_global_days($month, $year);
 
-    // Build skeleton of array, on item per day.
+    // Build skeleton of array, one item per day.
     $new_data = array();
     foreach ($users as $employee) {
       $new_data[$employee]  = array();
+      $new_data[$employee]['sum']  = array();
       // Go over days of the month.
       for ($i = 1; $i <= $last_day_this_month; $i++) {
         // Add leading zeros.
@@ -135,9 +136,13 @@ class RestfulFormatterTrackingCalendar extends \RestfulFormatterBase implements 
       $new_data[$day['employee']][$key][] = $day;
     }
 
-    // Fill empty days with create new stub template.
+    // Fill empty days with create new stub template, and sum employee data.
+
     foreach ($new_data as $employee => &$row) {
       foreach ($row as $key => &$empty_day) {
+        if ($key == 'sum') {
+          continue;
+        }
         if (empty($empty_day)) {
           $empty_day[] = array(
             // Set id to new to get the proper link on angular.
@@ -148,6 +153,17 @@ class RestfulFormatterTrackingCalendar extends \RestfulFormatterBase implements 
             'projectName' => 'Empty!',
             'employee' => $employee,
           );
+        }
+        // Sums per employee and project.
+        else {
+          foreach ($empty_day as $track) {
+            if ($track['type'] == 'regular') {
+              if (empty($new_data[$employee]['sum'][$track['projectName']])) {
+                $new_data[$employee]['sum'][$track['projectName']] = 0;
+              }
+              $new_data[$employee]['sum'][$track['projectName']] += $track['length'];
+            }
+          }
         }
       }
     }
