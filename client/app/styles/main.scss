@@ -42,9 +42,16 @@ $color5: #4784B1;
   .track-item-table {
     font-size: 16px;
 
-    th{
+    li a {
+      height: 36px;
+    }
+
+    td {
+      white-space: nowrap;
+    }
+
+    th {
       padding: 8px 0 0 8px;
-      width: 28px;
     }
   }
 
