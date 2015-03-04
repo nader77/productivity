@@ -19,7 +19,8 @@ $color3: #AA3939;
 $color3_light: #DB7676;
 $color3_lighter: #FFBCBC;
 $color4: #226666;
-$color4_light : #478484;
+$color4_light: #478484;
+$color5: #4784B1;
 .tracking-table-page {
 
   h2 {
@@ -97,6 +98,10 @@ $color4_light : #478484;
 
     .weekend {
       background-color: $color1_light;
+    }
+
+    .summary {
+      background-color: $color5;
     }
   }
 }
