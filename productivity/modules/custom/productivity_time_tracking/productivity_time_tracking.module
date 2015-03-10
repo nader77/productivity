@@ -122,6 +122,7 @@ function productivity_time_tracking_total_hours($project_nid, $date = array(),  
  * Implements hook_node_presave().
  *
  * Set the node title automatically.
+ * Update parent project's days/hours accordingly.
  */
 function productivity_time_tracking_node_presave($node) {
   if ($node->type == 'time_tracking') {
@@ -132,6 +133,20 @@ function productivity_time_tracking_node_presave($node) {
       ($wrapper->__isset('field_project') ? ($wrapper->field_project->label() . '-') : '') .
       $wrapper->field_day_type->value();
     $wrapper->title->set($title);
+
+    // Add days/hours to parent project's total.
+    if ($wrapper->field_day_type->value() == 'regular') {
+      $project_wrapper = $wrapper->field_project;
+      $hours = $project_wrapper->field_hours->value() ? $project_wrapper->field_hours->value() : 0;
+      if (!$node->is_new) {
+        $hours -= $node->original->field_track_hours[LANGUAGE_NONE][0]['value'];
+      }
+      $hours += $wrapper->field_track_hours->value();
+
+      $project_wrapper->field_hours->set($hours);
+      $project_wrapper->field_days->set($hours / 8);
+      $project_wrapper->save();
+    }
   }
 }
 
