@@ -102,6 +102,52 @@ function productivity_project_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-project-field_days'
+  $field_instances['node-project-field_days'] = array(
+    'bundle' => 'project',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 11,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_days',
+    'label' => 'Total days',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 11,
+    ),
+  );
+
   // Exported field_instance: 'node-project-field_github_repository_name'
   $field_instances['node-project-field_github_repository_name'] = array(
     'bundle' => 'project',
@@ -139,6 +185,52 @@ function productivity_project_field_default_field_instances() {
       ),
       'type' => 'text_textfield',
       'weight' => 9,
+    ),
+  );
+
+  // Exported field_instance: 'node-project-field_hours'
+  $field_instances['node-project-field_hours'] = array(
+    'bundle' => 'project',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'inline',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 10,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_hours',
+    'label' => 'Total hours',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => '',
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 10,
     ),
   );
 
@@ -659,6 +751,8 @@ global - fix amount.');
   t('Scope');
   t('Start and end date of project, in case of retainer or hourly without end date, just add a start date.');
   t('Status');
+  t('Total days');
+  t('Total hours');
   t('Type');
 
   return $field_instances;
