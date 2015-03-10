@@ -84,7 +84,4 @@
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <?php print render($content['links']); ?>
   <?php print render($content);?>
-  <div>Total hours: <?php print $tracking['hour'];?></div>
-  <div>Total days: <?php print $tracking['day'];?></div>
-
 </div>
