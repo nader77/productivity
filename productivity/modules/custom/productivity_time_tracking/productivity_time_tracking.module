@@ -70,12 +70,49 @@ function productivity_time_tracking_get_employee_tracking_count($strtime, $emplo
 
   return $query->execute();
 }
+
+/**
+ * @TODO: Add docs.
+ * @param $project_nid
+ * @return float|mixed
+ */
+function productivity_time_tracking_total_days($project_nid) {
+  $query = new EntityFieldQuery();
+  $days = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'time_tracking')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_track_hours', 'value', 7, '>=')
+    ->fieldCondition('field_project', 'target_id', $project_nid)
+    ->count()
+    ->execute();
+
+  $query = db_select('field_data_field_track_hours','h');
+  $query
+    ->leftJoin('field_data_field_project', 'p', 'h.entity_id = p.entity_id');
+  $query
+    ->condition("field_track_hours_value", 7, '<=')
+    ->condition('field_project_target_id', $project_nid, '=');
+
+
+  $query->addExpression('SUM(field_track_hours_value)', 'sum_of_hours');
+
+  $remaining_hours = $query->execute()->fetchAll();
+
+  if (!empty($remaining_hours)) {
+    $days = ($remaining_hours[0]->sum_of_hours / 8) + $days;
+  }
+
+  return $days;
+}
+
 /**
  * Total hours done in a project.
  *
  * @param $project_nid
- * @param array $date_range
+ * @param array $date
+ * @param bool $account
  * @param array $employees
+ *
  * @return array
  */
 function productivity_time_tracking_total_hours($project_nid, $date = array(),  $account = FALSE, $employees = array()) {
@@ -144,7 +181,7 @@ function productivity_time_tracking_node_presave($node) {
       $hours += $wrapper->field_track_hours->value();
 
       $project_wrapper->field_hours->set($hours);
-      $project_wrapper->field_days->set($hours / 8);
+      $project_wrapper->field_days->set(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
       $project_wrapper->save();
     }
   }
