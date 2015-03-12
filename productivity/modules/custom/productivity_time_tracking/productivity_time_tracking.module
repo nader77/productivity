@@ -96,7 +96,7 @@ function productivity_time_tracking_get_employee_tracking_count($strtime, $emplo
  * @return float|mixed
  *    The number of days in the project.
  */
-function productivity_time_tracking_total_days($project_nid, $date = array()) {
+function productivity_time_tracking_total_days($project_nid) {
   // If the variable "hours_count_as_day" is not set, The default day is 8 Hours.
   $hours_as_day = variable_get('hours_count_as_day') ? variable_get('hours_count_as_day') : 8;
   $query = new EntityFieldQuery();
@@ -107,27 +107,12 @@ function productivity_time_tracking_total_days($project_nid, $date = array()) {
     ->fieldCondition('field_project', 'target_id', $project_nid)
     ->count();
 
-  if (!empty($date)) {
-    $start_date =  $date['year'] . '-' . $date['month'] . '-01'. ' 00:00:00';
-    $end_date = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_date)));
-    $query->fieldCondition('field_work_date', 'value', $start_date, '>=');
-    $query->fieldCondition('field_work_date', 'value', $end_date, '<');
-  }
-
   $days = $query->execute();
 
   // Calculate the remaining hours in the project.
   $fragments_query = db_select('field_data_field_track_hours','h');
   $fragments_query
     ->leftJoin('field_data_field_project', 'p', 'h.entity_id = p.entity_id');
-  // If Date range is given, calculate within that period.
-  if (!empty($date)) {
-    $fragments_query
-      ->leftJoin('field_data_field_work_date', 'd', 'h.entity_id = d.entity_id');
-    $fragments_query
-      ->condition("field_work_date_value", $start_date, '>=')
-      ->condition("field_work_date_value", $end_date, '<');
-  }
 
   $fragments_query
     ->condition("field_track_hours_value", $hours_as_day, '<')
