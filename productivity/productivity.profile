@@ -145,6 +145,7 @@ function productivity_setup_rebuild_permissions() {
 function productivity_setup_set_variables() {
   $variables = array(
     'jquery_update_jquery_version' => 1.8,
+    'hours_count_as_day' => 7,
   );
 
   foreach ($variables as $key => $value) {
