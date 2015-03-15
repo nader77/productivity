@@ -110,7 +110,9 @@ function productivity_time_tracking_total_days($project_nid, $date = array(),  $
     ->fieldCondition('field_track_hours', 'value', $hours_as_day, '>=')
     ->fieldCondition('field_project', 'target_id', $project_nid)
     ->addMetaData('account', $account)
-    // Bypass 'EntityFieldQuery' permissions.
+    // Bypass 'EntityFieldQuery' permissions,
+    // Because when requesting from the frontend (RESTful) the user to the node_presave function is anonymous.
+    // @TODO: Find a better way to get the user's info from RESTful.
     ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
     ->count();
 
