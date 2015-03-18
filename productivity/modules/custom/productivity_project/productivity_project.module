@@ -5,3 +5,44 @@
  */
 
 include_once 'productivity_project.features.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function productivity_project_menu() {
+  $items['recalculate-project-time/%'] = array(
+    'page callback' => 'productivity_project_recalculate_hours',
+    'page arguments' => array(1),
+    'access arguments' => array('administer nodes'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback; Recalculates the total hours and days of a project from the beginning of time.
+ */
+function productivity_project_recalculate_hours($nid) {
+  $wrapper  = entity_metadata_wrapper('node', $nid);
+
+  if ($wrapper->getBundle() != 'project') {
+    drupal_goto('node/' . $nid);
+    return FALSE;
+  }
+  $total = productivity_time_tracking_total_hours($nid);
+  $wrapper->field_hours->set($total['hour']);
+  $wrapper->field_days->set($total['day']);
+  $wrapper->save();
+  drupal_goto('node/' . $nid);
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Disables the hours and days fields in Project's node edit form.
+ */
+function productivity_project_form_project_node_form_alter(&$form, &$form_state, $form_id) {
+  $form['field_hours']['#disabled'] = TRUE;
+  $form['field_days']['#disabled'] = TRUE;
+}

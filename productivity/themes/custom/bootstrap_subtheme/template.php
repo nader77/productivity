@@ -17,10 +17,6 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
   }
 }
 
-function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
-  $variables['tracking'] = productivity_time_tracking_total_hours($variables['nid']);
-}
-
 /**
  * HTML preprocess.
  */
