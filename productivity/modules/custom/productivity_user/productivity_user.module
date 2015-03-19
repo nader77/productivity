@@ -6,17 +6,16 @@ include_once 'productivity_user.features.inc';
  * @file
  * Drupal needs this blank file.
  */
+
 /**
  * Implements hook_init().
  */
 function productivity_user_init() {
   if (!productivity_user_is_live()) {
     global $conf;
-    // Set test mail.
-    if (!empty($conf['mail_system'])) {
-      foreach ($conf['mail_system'] as $system => $class) {
-        $conf['mail_system'][$system] = 'CatchTestMailSystem';
-      }
+    foreach (mailsystem_get() as $system => $class) {
+      // All systems should be overriden.
+      $conf['mail_system'][$system] = 'CatchTestMailSystem';
     }
   }
 }
