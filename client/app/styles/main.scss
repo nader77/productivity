@@ -12,6 +12,7 @@ $color3_lighter: #FFBCBC;
 $color4: #226666;
 $color4_light: #478484;
 $color5: #4784B1;
+$color6: #a784B1;
 
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
@@ -82,10 +83,12 @@ body{
 
     .sick {
       background-color: $color3;
+      margin-left: 5px;
     }
 
     .vacation {
       background-color: $color3_light;
+      margin-left: 5px;
     }
 
     .holiday {
@@ -98,6 +101,7 @@ body{
 
     .miluim {
       background-color: $color2_light;
+      margin-left: 5px;
     }
 
     .convention {
@@ -110,6 +114,10 @@ body{
 
     .summary {
       background-color: $color5;
+    }
+
+    .global {
+      background-color: $color6;
     }
   }
 }
