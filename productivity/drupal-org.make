@@ -51,7 +51,7 @@ projects[interval][subdir] = "contrib"
 projects[interval][version] = "1.0"
 
 projects[logs_http][subdir] = "contrib"
-projects[logs_http][version] = "1.x-dev"
+projects[logs_http][version] = "1.1"
 
 projects[mailsystem][subdir] = "contrib"
 projects[mailsystem][version] = 2.34

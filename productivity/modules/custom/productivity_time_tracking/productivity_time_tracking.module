@@ -25,6 +25,8 @@ function productivity_time_tracking_get_global_days($month, $year) {
     $assoc_globals[$gday['day']] = array(
       'id' => 'new',
       'length' => 'G',
+      'type' => 'global',
+      'day' => (string) $gday['day'],
       'projectName' => $gday['description'],
     );
   }
