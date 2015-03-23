@@ -1023,6 +1023,26 @@ function productivity_admin_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
+  /* Field: Content: Total hours */
+  $handler->display->display_options['fields']['field_hours']['id'] = 'field_hours';
+  $handler->display->display_options['fields']['field_hours']['table'] = 'field_data_field_hours';
+  $handler->display->display_options['fields']['field_hours']['field'] = 'field_hours';
+  $handler->display->display_options['fields']['field_hours']['settings'] = array(
+    'thousand_separator' => ',',
+    'decimal_separator' => '.',
+    'scale' => '2',
+    'prefix_suffix' => 1,
+  );
+  /* Field: Content: Total days */
+  $handler->display->display_options['fields']['field_days']['id'] = 'field_days';
+  $handler->display->display_options['fields']['field_days']['table'] = 'field_data_field_days';
+  $handler->display->display_options['fields']['field_days']['field'] = 'field_days';
+  $handler->display->display_options['fields']['field_days']['settings'] = array(
+    'thousand_separator' => ',',
+    'decimal_separator' => '.',
+    'scale' => '2',
+    'prefix_suffix' => 1,
+  );
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
@@ -1439,11 +1459,10 @@ function productivity_admin_views_default_views() {
     'scale' => '2',
     'prefix_suffix' => 1,
   );
-  /* Field: Content: Work length */
+  /* Field: Broken/missing handler */
   $handler->display->display_options['fields']['field_work_length']['id'] = 'field_work_length';
   $handler->display->display_options['fields']['field_work_length']['table'] = 'field_data_field_work_length';
   $handler->display->display_options['fields']['field_work_length']['field'] = 'field_work_length';
-  $handler->display->display_options['fields']['field_work_length']['click_sort_column'] = 'interval';
   /* Filter criterion: Content: Title */
   $handler->display->display_options['filters']['title']['id'] = 'title';
   $handler->display->display_options['filters']['title']['table'] = 'node';

@@ -6,6 +6,18 @@
 
 include_once 'productivity_time_tracking.features.inc';
 
+/**
+ * hook_form_FORM_ID_alter().
+ *
+ * Add custom field to the system information admin form.
+ */
+function productivity_time_tracking_form_system_site_information_settings_alter(&$form, &$form_state, $form_id) {
+  $form['hours_count_as_day'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Hours to count as one day'),
+    '#default_value' => variable_get('hours_count_as_day'),
+  );
+}
 
 /**
  * Get general days in a given month.
@@ -72,15 +84,88 @@ function productivity_time_tracking_get_employee_tracking_count($strtime, $emplo
 
   return $query->execute();
 }
+
+/**
+ * Calculate the number of days on a certain project.
+ *
+ * Counts number of entries which has a certain number of hours (hours_count_as_day)
+ * as days and sums up the remaining hours and divides them on "hours_count_as_day"
+ * to calculate the number of the remaining days.
+ *
+ * @param $project_nid
+ *    The node ID of the project.
+ * @param $date
+ *    The range to add up the days.
+ * @param $account
+ *    The account of the user.
+ *
+ * @return float|mixed
+ *    The number of days in the project.
+ */
+function productivity_time_tracking_total_days($project_nid, $date = array(),  $account = FALSE) {
+  // If the variable "hours_count_as_day" is not set, The default day is 8 Hours.
+  $hours_as_day = variable_get('hours_count_as_day') ? variable_get('hours_count_as_day') : 8;
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'time_tracking')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_track_hours', 'value', $hours_as_day, '>=')
+    ->fieldCondition('field_project', 'target_id', $project_nid)
+    ->addMetaData('account', $account)
+    // Bypass 'EntityFieldQuery' permissions,
+    // Because when requesting from the frontend (RESTful) the user to the node_presave function is anonymous.
+    // @TODO: Find a better way to get the user's info from RESTful.
+    ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
+    ->count();
+
+  if (!empty($date)) {
+    $start_date =  $date['year'] . '-' . $date['month'] . '-01'. ' 00:00:00';
+    $end_date = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_date)));
+    $query->fieldCondition('field_work_date', 'value', $start_date, '>=');
+    $query->fieldCondition('field_work_date', 'value', $end_date, '<');
+  }
+
+  $days = $query->execute();
+
+  // Calculate the remaining hours in the project.
+  $fragments_query = db_select('field_data_field_track_hours','h');
+  $fragments_query
+    ->leftJoin('field_data_field_project', 'p', 'h.entity_id = p.entity_id');
+  // If Date range is given, calculate within that period.
+  if (!empty($date)) {
+    $fragments_query
+      ->leftJoin('field_data_field_work_date', 'd', 'h.entity_id = d.entity_id');
+    $fragments_query
+      ->condition("field_work_date_value", $start_date, '>=')
+      ->condition("field_work_date_value", $end_date, '<');
+  }
+
+  $fragments_query
+    ->condition("field_track_hours_value", $hours_as_day, '<')
+    ->condition('field_project_target_id', $project_nid, '=');
+
+
+  $fragments_query->addExpression('SUM(field_track_hours_value)', 'sum_of_hours');
+
+  $remaining_hours = $fragments_query->execute()->fetchAll();
+
+  if (!empty($remaining_hours)) {
+    $days = ($remaining_hours[0]->sum_of_hours / $hours_as_day) + $days;
+  }
+
+  return $days;
+}
+
 /**
  * Total hours done in a project.
  *
  * @param $project_nid
- * @param array $date_range
- * @param array $employees
+ * @param array $date
+ * @param bool $account
+ *
  * @return array
  */
-function productivity_time_tracking_total_hours($project_nid, $date = array(),  $account = FALSE, $employees = array()) {
+function productivity_time_tracking_total_hours($project_nid, $date = array(),  $account = FALSE) {
   if (!$account) {
     global $user;
     $account = $user;
@@ -115,8 +200,7 @@ function productivity_time_tracking_total_hours($project_nid, $date = array(),  
     $wrapper = entity_metadata_wrapper('node', $res->nid);
     $total['hour'] += $wrapper->field_track_hours->value();
   }
-  // TODO: make a better conversion for days, using count query.
-  $total['day'] = $total['hour'] / 8;
+  $total['day'] = productivity_time_tracking_total_days($project_nid, $date, $account);
   return $total;
 }
 
@@ -124,6 +208,7 @@ function productivity_time_tracking_total_hours($project_nid, $date = array(),  
  * Implements hook_node_presave().
  *
  * Set the node title automatically.
+ * Update parent project's days/hours accordingly.
  */
 function productivity_time_tracking_node_presave($node) {
   if ($node->type == 'time_tracking') {
@@ -134,6 +219,20 @@ function productivity_time_tracking_node_presave($node) {
       ($wrapper->__isset('field_project') ? ($wrapper->field_project->label() . '-') : '') .
       $wrapper->field_day_type->value();
     $wrapper->title->set($title);
+
+    // Add days/hours to parent project's total.
+    if ($wrapper->field_day_type->value() == 'regular') {
+      $project_wrapper = $wrapper->field_project;
+      $hours = $project_wrapper->field_hours->value() ? $project_wrapper->field_hours->value() : 0;
+      if (!$node->is_new) {
+        $hours -= $node->original->field_track_hours[LANGUAGE_NONE][0]['value'];
+      }
+      $hours += $wrapper->field_track_hours->value();
+
+      $project_wrapper->field_hours->set($hours);
+      $project_wrapper->field_days->set(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
+      $project_wrapper->save();
+    }
   }
 }
 
