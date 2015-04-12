@@ -86,7 +86,7 @@
                 <div class="form-group">
                   <label class="col-md-4 control-label" for="timelength">Hours</label>
                   <div class="col-md-4">
-                    <input id="timelength" ng-model="data.length" name="length" type="text" placeholder="example 8" class="form-control input-md">
+                    <input id="timelength" ng-model="data.length" name="length" type="text" ng-required="true" placeholder="example 8" class="form-control input-md">
                   </div>
                 </div>
 
@@ -94,7 +94,7 @@
                 <div class="form-group">
                   <label class="col-md-4 control-label" for="description">Description</label>
                   <div class="col-md-4">
-                    <textarea id="description"  class="form-control" ng-model="data.description" name="description"></textarea>
+                    <textarea id="description" class="form-control" ng-model="data.description" ng-required="true" name="description"></textarea>
                   </div>
                 </div>
               </div>
