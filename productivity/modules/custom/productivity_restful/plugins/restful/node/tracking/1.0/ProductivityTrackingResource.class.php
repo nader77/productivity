@@ -191,6 +191,9 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
    */
   protected function setPropertyValues(EntityMetadataWrapper $wrapper, $null_missing_fields = FALSE) {
     $request = $this->getRequest();
+    if (!isset($request['description']) || empty($request['description'])) {
+      throw new \RestfulBadRequestException('Description is required.');
+    }
 
     $wrapper->field_work_date->set($request['date']);
     $wrapper->field_day_type->set($request['type']);
@@ -202,9 +205,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       }
 
       $wrapper->field_project->set($request['projectID']);
-      if (isset($request['description'])) {
-        $wrapper->field_description->set($request['description']);
-      }
+      $wrapper->field_description->set($request['description']);
       $wrapper->field_track_hours->set($request['length']);
 
     }
