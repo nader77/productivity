@@ -366,3 +366,27 @@ function productivity_time_tracking_cron() {
     productivity_time_tracking_send_reminder($account);
   }
 }
+
+/**
+ * Implements hook_token_info().
+ */
+function productivity_time_tracking_token_info() {
+  $info['tokens']['date']['yesterday'] = array(
+    'name' => t('Yesterday date'),
+    'description' => t('Returns the yesterday date in format "YYYY/M/D"'),
+  );
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function productivity_time_tracking_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+
+    if (isset($tokens['yesterday']) && isset($data['date'])) {
+      $replacements[$tokens['yesterday']] = date('Y/m/d', $data['date'] - 86400);
+    }
+
+  return $replacements;
+}
