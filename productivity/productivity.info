@@ -40,6 +40,7 @@ dependencies[] = logs_http
 dependencies[] = module_filter
 dependencies[] = page_manager
 dependencies[] = panels
+dependencies[] = views_content
 dependencies[] = pathauto
 dependencies[] = restful
 dependencies[] = restful_token_auth

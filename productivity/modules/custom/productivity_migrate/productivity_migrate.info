@@ -12,3 +12,4 @@ files[] = includes/ProductivityMigrateAccount.inc
 files[] = includes/ProductivityMigrateProject.inc
 files[] = includes/ProductivityMigrateTracker.inc
 files[] = includes/ProductivityMigrateUser.inc
+files[] = includes/ProductivityMigratePayment.inc
