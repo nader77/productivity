@@ -2,10 +2,10 @@
 
 // Plugin definition
 $plugin = array(
-  'title' => t('Dashboard'),
+  'title' => t('Project'),
   'category' => t('Productivity'),
-  'icon' => 'dashboard.png',
-  'theme' => 'dashboard',
+  'icon' => 'project.png',
+  'theme' => 'project',
   'regions' => array(
     'top' => t('Top'),
     'left' => t('Left'),
