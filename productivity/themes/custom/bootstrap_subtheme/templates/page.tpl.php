@@ -169,7 +169,7 @@
           <div id="col-left-inner" class="col-left-nano-content">
             <div id="user-left-box" class="clearfix hidden-sm hidden-xs">
               <div class="user-box">
-                <span class="name">Welcome<br><?php print $user->name; ?></span>
+                <span class="name">Welcome<br><?php if($user->uid) { print $user->name; } ?></span>
               </div>
             </div>
             <!-- Menu -->

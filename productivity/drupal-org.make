@@ -50,6 +50,9 @@ projects[file_entity][version] = "2.0-beta1"
 projects[interval][subdir] = "contrib"
 projects[interval][version] = "1.0"
 
+projects[jquery_update][subdir] = "contrib"
+projects[jquery_update][version] = "2.5"
+
 projects[logs_http][subdir] = "contrib"
 projects[logs_http][version] = "1.1"
 
