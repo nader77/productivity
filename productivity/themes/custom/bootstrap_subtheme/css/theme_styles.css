@@ -13,7 +13,7 @@ html, body {
 /* line 9, ../../styles/theme/imports/_layouts.scss */
 body {
   color: #344644;
-  background: url("../../images/whitey.jpg") repeat scroll 0 0 #fff;
+  background: url("../images/whitey.jpg") repeat scroll 0 0 #fff;
   background-size: 220px 220px;
 }
 
@@ -3087,7 +3087,7 @@ label {
 
 /* line 176, ../../styles/theme/imports/_login_stuff.scss */
 .login-full-wrapper {
-  background: url(../../images/login-img.jpg) no-repeat center center;
+  background: url(../images/login-img.jpg) no-repeat center center;
   background-size: cover;
   width: 100%;
   height: 100%;

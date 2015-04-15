@@ -73,96 +73,192 @@
  * @ingroup themeable
  */
 ?>
-<header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
-  <div class="container">
-    <div class="navbar-header">
-      <?php if ($logo): ?>
+
+
+<div id="dashboard" class="theme-whbl">
+
+  <header class="navbar" id="header-navbar">
+    <div class="container">
       <a class="logo navbar-btn pull-left" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
         <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
       </a>
-      <?php endif; ?>
 
-      <?php if (!empty($site_name)): ?>
-      <a class="name navbar-brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><?php print $site_name; ?></a>
-      <?php endif; ?>
+      <div class="clearfix">
+        <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="fa fa-bars"></span>
+        </button>
 
-      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
+        <div class="nav-no-collapse" id="header-nav">
+            <?php if (!empty($primary_nav)): ?>
+              <?php print render($primary_nav); ?>
+            <?php endif; ?>
+            <?php if (!empty($secondary_nav)): ?>
+              <?php print render($secondary_nav); ?>
+            <?php endif; ?>
+            <?php if (!empty($page['navigation'])): ?>
+              <?php print render($page['navigation']); ?>
+            <?php endif; ?>
+<!--          <ul class="nav navbar-nav pull-left">-->
+<!--            <li class="dropdown" ng-show="companies.length > 1">-->
+<!--              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ company.label }} <span class="caret"></span></a>-->
+<!--              <ul class="dropdown-menu" role="menu">-->
+<!--                <li ng-repeat="company in companies">-->
+<!--                  <a ui-sref="dashboard.campaigns.summary.by-day({ companyId: company.id, campaignId: campaignId })">{{ company.label }}</a>-->
+<!--                </li>-->
+<!--              </ul>-->
+<!--            </li>-->
+<!---->
+<!--            <li class="dropdown hidden-xs" ng-show="isManager && notifications.length">-->
+<!--              <a class="btn dropdown-toggle" data-toggle="dropdown">-->
+<!--                <i class="fa fa-warning"></i>-->
+<!--                <span class="count">2</span>-->
+<!--              </a>-->
+<!--              <ul class="dropdown-menu notifications-list">-->
+<!--                <li class="pointer">-->
+<!--                  <div class="pointer-inner">-->
+<!--                    <div class="arrow"></div>-->
+<!--                  </div>-->
+<!--                </li>-->
+<!--                <li class="item-header">2 new notifications</li>-->
+<!--                <li class="item">-->
+<!--                  <a>-->
+<!--                    <i class="fa fa-edit"></i>-->
+<!--                    <span class="content">Campaign change</span>-->
+<!--                    <span class="time"><i class="fa fa-clock-o"></i>12 min.</span>-->
+<!--                  </a>-->
+<!--                </li>-->
+<!--                <li class="item">-->
+<!--                  <a>-->
+<!--                    <i class="fa fa-edit"></i>-->
+<!--                    <span class="content">Campaign change</span>-->
+<!--                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>-->
+<!--                  </a>-->
+<!--                </li>-->
+<!--                <li class="item-footer">-->
+<!--                  <a ui-sref="dashboard.notifications">-->
+<!--                    View all notifications-->
+<!--                  </a>-->
+<!--                </li>-->
+<!--              </ul>-->
+<!--            </li>-->
+<!---->
+<!--            <li class="dropdown profile-dropdown">-->
+<!--              <a ui-sref="dashboard.account" title="My account">-->
+<!--                <img ng-src="{{ account.picture }}" alt=""><span class="hidden-xs">{{ account.label }}</span>-->
+<!--              </a>-->
+<!--            </li>-->
+<!---->
+<!--            <li>-->
+<!--              <a href ng-click="logout()">-->
+<!--                <i class="fa fa-power-off"></i>-->
+<!--              </a>-->
+<!--            </li>-->
+<!--          </ul>-->
 
-    <?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
-      <div class="navbar-collapse collapse">
-        <nav role="navigation">
-          <?php if (!empty($primary_nav)): ?>
-            <?php print render($primary_nav); ?>
-          <?php endif; ?>
-          <?php if (!empty($secondary_nav)): ?>
-            <?php print render($secondary_nav); ?>
-          <?php endif; ?>
-          <?php if (!empty($page['navigation'])): ?>
-            <?php print render($page['navigation']); ?>
-          <?php endif; ?>
-        </nav>
+        </div>
       </div>
-    <?php endif; ?>
-  </div>
-</header>
+    </div>
+  </header>
 
-<div class="main-container container">
+  <div id="page-wrapper" class="container fixed-footer" ng-class="{ 'nav-small': compactSidebar }">
 
-  <header role="banner" id="page-header">
-    <?php if (!empty($site_slogan)): ?>
-      <p class="lead"><?php print $site_slogan; ?></p>
-    <?php endif; ?>
+    <div class="row">
+      <div id="nav-col">
+        <section id="col-left" class="col-left-nano">
+          <div id="col-left-inner" class="col-left-nano-content">
+            <div id="user-left-box" class="clearfix hidden-sm hidden-xs">
+              <div class="user-box">
+                <span class="name">Welcome<br><?php print $user->name; ?></span>
+              </div>
+            </div>
+            <!-- Menu -->
+            <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
+              <ul class="nav nav-pills nav-stacked">
 
-    <?php print render($page['header']); ?>
-  </header> <!-- /#page-header -->
+                <li class="active">
+                  <a class="dropdown-toggle" data-target=".submenu.reports" data-toggle="collapse">
+                    <i class="fa fa-bar-chart-o"></i>
+                    <span>Reports</span>
+                    <i class="fa fa-chevron-circle-right drop-icon"></i>
+                  </a>
+                  <ul class="submenu reports collapse">
+                    <li>
+                      <a href="/admin/content/project-monthly-report">Monthly report</a>
+                    </li>
+                    <li>
+                      <a ui-sref="dashboard.campaigns.content({ companyId: company.id, campaignId: campaignId })" ui-sref-active="active">Top Campaign Content</a>
+                    </li>
+                    <li>
+                      <a ui-sref="dashboard.campaigns.management({ companyId: company.id })" ui-sref-active="active">Campaign Management</a>
+                    </li>
+                  </ul>
+                </li>
 
-  <div class="row">
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
 
-    <?php if (!empty($page['sidebar_first'])): ?>
-      <aside class="col-sm-3" role="complementary">
-        <?php print render($page['sidebar_first']); ?>
-      </aside>  <!-- /#sidebar-first -->
-    <?php endif; ?>
+      <div id="content-wrapper">
 
-    <section<?php print $content_column_class; ?>>
-      <?php if (!empty($page['highlighted'])): ?>
-        <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
-      <?php endif; ?>
-      <?php if (!empty($breadcrumb)): print $breadcrumb; endif;?>
-      <a id="main-content"></a>
-      <?php print render($title_prefix); ?>
-      <?php if (!empty($title)): ?>
-        <h1 class="page-header"><?php print $title; ?></h1>
-      <?php endif; ?>
-      <?php print render($title_suffix); ?>
-      <?php print $messages; ?>
-      <?php if (!empty($tabs)): ?>
-        <?php print render($tabs); ?>
-      <?php endif; ?>
-      <?php if (!empty($page['help'])): ?>
-        <?php print render($page['help']); ?>
-      <?php endif; ?>
-      <?php if (!empty($action_links)): ?>
-        <ul class="action-links"><?php print render($action_links); ?></ul>
-      <?php endif; ?>
-      <?php print render($page['content']); ?>
-    </section>
+        <div class="main-container container">
 
-    <?php if (!empty($page['sidebar_second'])): ?>
-      <aside class="col-sm-3" role="complementary">
-        <?php print render($page['sidebar_second']); ?>
-      </aside>  <!-- /#sidebar-second -->
-    <?php endif; ?>
+          <header role="banner" id="page-header">
+            <?php if (!empty($site_slogan)): ?>
+              <p class="lead"><?php print $site_slogan; ?></p>
+            <?php endif; ?>
 
+            <?php print render($page['header']); ?>
+          </header> <!-- /#page-header -->
+
+          <div class="row">
+
+            <?php if (!empty($page['sidebar_first'])): ?>
+              <aside class="col-sm-3" role="complementary">
+                <?php print render($page['sidebar_first']); ?>
+              </aside>  <!-- /#sidebar-first -->
+            <?php endif; ?>
+
+            <section<?php print $content_column_class; ?>>
+              <?php if (!empty($page['highlighted'])): ?>
+                <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
+              <?php endif; ?>
+              <?php if (!empty($breadcrumb)): print $breadcrumb; endif;?>
+              <a id="main-content"></a>
+              <?php print render($title_prefix); ?>
+              <?php if (!empty($title)): ?>
+                <h1 class="page-header"><?php print $title; ?></h1>
+              <?php endif; ?>
+              <?php print render($title_suffix); ?>
+              <?php print $messages; ?>
+              <?php if (!empty($tabs)): ?>
+                <?php print render($tabs); ?>
+              <?php endif; ?>
+              <?php if (!empty($page['help'])): ?>
+                <?php print render($page['help']); ?>
+              <?php endif; ?>
+              <?php if (!empty($action_links)): ?>
+                <ul class="action-links"><?php print render($action_links); ?></ul>
+              <?php endif; ?>
+              <?php print render($page['content']); ?>
+            </section>
+
+            <?php if (!empty($page['sidebar_second'])): ?>
+              <aside class="col-sm-3" role="complementary">
+                <?php print render($page['sidebar_second']); ?>
+              </aside>  <!-- /#sidebar-second -->
+            <?php endif; ?>
+
+          </div>
+        </div>
+
+        <footer id="footer-bar" class="row">
+          <p id="footer-copyright" class="col-xs-12">© 2015 <a href="#">Gizra Productivity</a>.</p>
+          <?php print render($page['footer']); ?>
+        </footer>
+      </div>
+    </div>
   </div>
 </div>
-<footer class="footer container">
-  <?php print render($page['footer']); ?>
-</footer>
