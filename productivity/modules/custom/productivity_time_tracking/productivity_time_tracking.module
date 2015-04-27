@@ -58,6 +58,7 @@ function productivity_time_tracking_save($timestamp, $employee, $project_nid) {
   $request['type'] = 'regular';
   $request['length'] = 8.0;
   $request['period'] = 'hour';
+  $request['description'] = 'Automated with bulk';
 
   $result = $handler->post('', $request);
 
