@@ -390,3 +390,40 @@ function productivity_time_tracking_tokens($type, $tokens, array $data = array()
 
   return $replacements;
 }
+
+
+/**
+ * Bulk update time tracking.
+ */
+/**
+ * Implements hook_element_info().
+ */
+function productivity_time_tracking_bulk_update($month, $year, $employee, $project_nid) {
+  $globals = productivity_time_tracking_get_global_days($month, $year);
+  $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));
+  dpm(print_r($globals));
+  // Save all days that are empty.
+  for ($i = 1; $i <= $last_day_this_month; $i++) {
+
+    $timestamp = strtotime($i . '.' . $month . '.' . $year);
+    $week_day = date( "w", $timestamp);
+    // Bypass Friday or Saturday.
+    if (in_array($week_day, array(5, 6))) {
+      dpm('Bypass WE:' . $i);
+      continue;
+    }
+    // Bypass Globals.
+    if (isset($globals[str_pad($i, 2, '0', STR_PAD_LEFT)])) {
+      dpm('Bypass Global:' . $i);
+      continue;
+    }
+    $strtime =  "$year-$month-$i 00:00:00";
+    if (!productivity_time_tracking_get_employee_tracking_count($strtime, $employee)) {
+      productivity_time_tracking_save($timestamp, $employee, $project_nid);
+      dpm('Saved day for ' . $i);
+    }
+    else {
+      dpm('Bypass saving for ' . $i);
+    }
+  }
+}
