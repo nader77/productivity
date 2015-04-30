@@ -7,11 +7,12 @@
 include_once 'productivity_time_tracking.features.inc';
 
 /**
- * hook_form_FORM_ID_alter().
+ * Implements hook_form_FORM_ID_alter().
  *
- * Add custom field to the system information admin form.
+ * Add a custom field ("Hours to count as one day") to the admin form "site information".
+ * URL: admin/config/system/site-information.
  */
-function productivity_time_tracking_form_system_site_information_settings_alter(&$form, &$form_state, $form_id) {
+function productivity_time_tracking_form_system_site_information_settings_alter(&$form, &$form_state) {
   $form['hours_count_as_day'] = array(
     '#type' => 'textfield',
     '#title' => t('Hours to count as one day'),
