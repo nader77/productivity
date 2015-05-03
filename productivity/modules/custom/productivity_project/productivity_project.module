@@ -30,12 +30,11 @@ function productivity_project_menu() {
  *
  */
 function productivity_project_recalculate_access($node) {
-  $wrapper  = entity_metadata_wrapper('node', $node);
   if (!user_access('administer nodes')) {
     return FALSE;
   }
 
-  if ($wrapper->getBundle() != 'project') {
+  if ($node->type != 'project') {
     return FALSE;
   }
   return TRUE;
@@ -43,6 +42,9 @@ function productivity_project_recalculate_access($node) {
 
 /**
  * Page callback; Recalculates the total hours and days of a project from the beginning of time.
+ *
+ * @param $node
+ *  The "project" entity that needs hours recalculation.
  */
 function productivity_project_recalculate_hours($node) {
   $wrapper  = entity_metadata_wrapper('node', $node);
@@ -51,7 +53,7 @@ function productivity_project_recalculate_hours($node) {
   $wrapper->field_hours->set($total['hour']);
   $wrapper->field_days->set($total['day']);
   $wrapper->save();
-  drupal_goto('node/' . $wrapper->getIdentifier());
+  drupal_goto('node/' . $node->nid);
 }
 
 /**
