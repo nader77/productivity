@@ -114,10 +114,6 @@ function productivity_time_tracking_total_days($project_nid, $date = array(),  $
     ->fieldCondition('field_track_hours', 'value', $hours_as_day, '>=')
     ->fieldCondition('field_project', 'target_id', $project_nid)
     ->addMetaData('account', $account)
-    // Bypass 'EntityFieldQuery' permissions,
-    // Because when requesting from the frontend (RESTful) the user to the node_presave function is anonymous.
-    // @TODO: Find a better way to get the user's info from RESTful.
-    ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT')
     ->count();
 
   if (!empty($date)) {
@@ -131,14 +127,11 @@ function productivity_time_tracking_total_days($project_nid, $date = array(),  $
   // Calculate the remaining hours in the project.
   // Using 'db_select' because we need the SUM.
   $fragments_query = db_select('field_data_field_track_hours', 'h');
-  $fragments_query
-    ->leftJoin('field_data_field_project', 'p', 'h.entity_id = p.entity_id');
+  $fragments_query->leftJoin('field_data_field_project', 'p', 'h.entity_id = p.entity_id');
   // If Date range is given, calculate within that period.
   if (!empty($date)) {
-    $fragments_query
-      ->leftJoin('field_data_field_work_date', 'd', 'h.entity_id = d.entity_id');
-    $fragments_query
-      ->condition("field_work_date_value", array($start_date,$end_date), 'BETWEEN');
+    $fragments_query->leftJoin('field_data_field_work_date', 'd', 'h.entity_id = d.entity_id');
+    $fragments_query->condition("field_work_date_value", array($start_date,$end_date), 'BETWEEN');
   }
 
   $fragments_query
