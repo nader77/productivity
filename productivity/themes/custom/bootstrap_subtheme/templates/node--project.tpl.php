@@ -84,7 +84,7 @@
 <div id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <?php print render($content['links']); ?>
   <?php print render($content);?>
-  <?php if (node_access('update', $node)) : ?>
-    <a href="<?php print url('recalculate-project-time/' . $node->nid) ?>"><?php print t('Recalculate project\'s hours & days.') ?></a>
+  <?php if (isset($recalculate_hours_days_link)) : ?>
+    <?php print $recalculate_hours_days_link; ?>
   <?php endif; ?>
 </div>
