@@ -67,6 +67,26 @@ angular.module('clientApp')
       return deferred.promise;
     };
 
+    /**
+     * Fetch user's github PRs on a specific project on a certain day.
+     *
+     * @returns {$q.promise}
+     */
+    this.getGithubPRs = function(projectId, employee, day, month, year) {
+      var deferred = $q.defer();
+
+      var url = Config.backend + '/api/github-prs?project_id=' + projectId + '&employee=' + employee + '&year=' + year + '&month=' + month + '&day=' + day;
+
+      $http({
+        method: 'GET',
+        url: url
+      }).success(function(response) {
+        deferred.resolve(response.data);
+      });
+
+      return deferred.promise;
+    };
+
 
     /**
      * Return events array from the server.
