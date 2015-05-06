@@ -73,18 +73,17 @@ angular.module('clientApp')
      * @returns {$q.promise}
      */
     this.getGithubPRs = function(projectId, employee, day, month, year) {
-      var deferred = $q.defer();
-
-      var url = Config.backend + '/api/github-prs?project_id=' + projectId + '&employee=' + employee + '&year=' + year + '&month=' + month + '&day=' + day;
-
-      $http({
+      return $http({
         method: 'GET',
-        url: url
-      }).success(function(response) {
-        deferred.resolve(response.data);
+        url: Config.backend + '/api/github-prs',
+        params: {
+          project_id: projectId,
+          employee: employee,
+          year: year,
+          month: month,
+          day: day
+        }
       });
-
-      return deferred.promise;
     };
 
 
