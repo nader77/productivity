@@ -77,7 +77,7 @@ angular.module('clientApp')
         method: 'GET',
         url: Config.backend + '/api/github-prs',
         params: {
-          project_id: projectId,
+          'filter[project]': projectId,
           employee: employee,
           year: year,
           month: month,
