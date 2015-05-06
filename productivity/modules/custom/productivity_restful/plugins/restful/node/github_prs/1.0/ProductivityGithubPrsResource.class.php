@@ -15,6 +15,11 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
 
     $public_fields['issue'] = array('property' => 'field_issue_id');
 
+    $public_fields['project'] = array(
+      'property' => 'field_project',
+      'sub_property' => 'nid',
+    );
+
     return $public_fields;
   }
 
@@ -25,7 +30,7 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
   public function getQueryForList() {
     $request = $this->getRequest();
     // Validate parameters.
-    foreach (array('day', 'month', 'year', 'project_id') as $required_field) {
+    foreach (array('day', 'month', 'year') as $required_field) {
       if (empty($request[$required_field])) {
         throw new \RestfulBadRequestException(format_string('Missing required parameter @field.', array('@field' => $required_field)));
       }
@@ -41,9 +46,6 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
 
     // Filter day.
     $this->setWorkDateTimeSpan($query, '+1 day');
-
-    // Filter project.
-    $query->fieldCondition('field_project', 'target_id', $request['project_id']);
 
     // Filter employee.
     if (!$account = user_load_by_name($request['employee'])) {
