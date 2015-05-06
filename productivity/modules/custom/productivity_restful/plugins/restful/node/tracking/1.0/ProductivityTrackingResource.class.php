@@ -12,7 +12,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
 
 
   /**
-   * Overrides \RestfulEntityBaseNode::publicFieldsInfo().
+   * Overrides \ProductivityEntityBaseNode::publicFieldsInfo().
    */
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();

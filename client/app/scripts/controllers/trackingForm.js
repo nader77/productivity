@@ -166,14 +166,14 @@ angular.module('clientApp')
 
     /**
      * Create a default description when a project is selected;
-     * Fetch Github PRs of the same day and list them in the description.
+     * Fetch Github PRs from the current day and list them in the description.
      */
     $scope.updateDescription = function() {
       Tracking.getGithubPRs($scope.data.projectID, $scope.employee, $scope.day, $scope.month, $scope.year)
-        .then(function(githubPrs) {
+        .success(function(data) {
           $scope.data.description = '';
-          angular.forEach(githubPrs, function(pr) {
-            $scope.data.description += '#' + pr.issueId + ': ' + pr.label + '\n';
+          angular.forEach(data.data, function(pr) {
+            $scope.data.description += '#' + pr.issue + ': ' + pr.label + '\n';
           });
         });
     }
