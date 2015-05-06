@@ -99,17 +99,17 @@ function productivity_setup_blocks() {
   $default_theme = variable_get('theme_default', 'bartik');
 
   $blocks = array(
-    array(
-      'module' => 'system',
-      'delta' => 'user-menu',
-      'theme' => $default_theme,
-      'status' => 1,
-      'weight' => 0,
-      'region' => 'header',
-      'pages' => '',
-      'title' => '<none>',
-      'cache' => DRUPAL_NO_CACHE,
-    ),
+//    array(
+//      'module' => 'system',
+//      'delta' => 'user-menu',
+//      'theme' => $default_theme,
+//      'status' => 1,
+//      'weight' => 0,
+//      'region' => 'header',
+//      'pages' => '',
+//      'title' => '<none>',
+//      'cache' => DRUPAL_NO_CACHE,
+//    ),
   );
 
   drupal_static_reset();

@@ -35,12 +35,14 @@ stylesheets[all][] = css/theme_styles.css
 ; ;----------------------------------
 ; ; METHOD 1: Bootstrap Source Files
 ; ;----------------------------------
-; 
+;
 ; ;;;;;;;;;;;;;;;;;;;;;
 ; ;; Scripts
 ; ;;;;;;;;;;;;;;;;;;;;;
-; 
-; scripts[] = 'bootstrap/js/affix.js'
+;
+stylesheets[all][] = bootstrap/bootstrap.min.css
+scripts[] = 'bootstrap/bootstrap.min.js'
+
 ; scripts[] = 'bootstrap/js/alert.js'
 ; scripts[] = 'bootstrap/js/button.js'
 ; scripts[] = 'bootstrap/js/carousel.js'

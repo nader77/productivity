@@ -1,4 +1,3 @@
-<?php dpm(get_defined_vars());?>
 <div class="row">
   <div class="col-lg-3 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
