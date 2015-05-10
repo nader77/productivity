@@ -87,7 +87,7 @@ function productivity_payment_views_default_views() {
   $handler->display->display_options['fields']['field_amount']['table'] = 'field_data_field_amount';
   $handler->display->display_options['fields']['field_amount']['field'] = 'field_amount';
   $handler->display->display_options['fields']['field_amount']['click_sort_column'] = 'amount';
-  /* Field: Content: Date (expected) */
+  /* Field: Content: Date expected */
   $handler->display->display_options['fields']['field_date_expected']['id'] = 'field_date_expected';
   $handler->display->display_options['fields']['field_date_expected']['table'] = 'field_data_field_date_expected';
   $handler->display->display_options['fields']['field_date_expected']['field'] = 'field_date_expected';
@@ -98,7 +98,7 @@ function productivity_payment_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: Content: Date (Actual) */
+  /* Field: Content: Date actual */
   $handler->display->display_options['fields']['field_date_actual']['id'] = 'field_date_actual';
   $handler->display->display_options['fields']['field_date_actual']['table'] = 'field_data_field_date_actual';
   $handler->display->display_options['fields']['field_date_actual']['field'] = 'field_date_actual';
