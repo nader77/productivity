@@ -34,7 +34,7 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
       if (empty($request[$required_field])) {
         throw new \RestfulBadRequestException(format_string('Missing required parameter @field.', array('@field' => $required_field)));
       }
-      if (intval($request[$required_field]) != $request[$required_field]) {
+      if (!intval($request[$required_field])) {
         throw new \RestfulBadRequestException(format_string('Wrong value for @field, expected integer.', array('@field' => $required_field)));
       }
 
