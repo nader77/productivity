@@ -1,5 +1,5 @@
 angular.module('config', [])
 
-.constant('Config', {backend:'https://example.com',debugUiRouter:false})
+.constant('Config', {backend:'http://live-productivity.pantheon.io',debugUiRouter:false})
 
 ;
