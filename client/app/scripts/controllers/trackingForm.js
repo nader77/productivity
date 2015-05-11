@@ -91,7 +91,7 @@ angular.module('clientApp')
 
         if (newData.error) {
           $scope.messageClass = 'alert-danger';
-          $scope.message = 'Error Saving.';
+          $scope.message = newData.title;
           return;
         }
         // Success.
