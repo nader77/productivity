@@ -17,7 +17,12 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
 
     $public_fields['project'] = array(
       'property' => 'field_project',
-      'sub_property' => 'nid',
+      'resource' => array(
+        'project' => array(
+          'name' => 'projects',
+          'full_view' => FALSE,
+        ),
+      ),
     );
 
     return $public_fields;
