@@ -25,7 +25,8 @@ regions[page_bottom]    = 'Page bottom'
 ;;;;;;;;;;;;;;;;;;;;;
 
 stylesheets[all][] = css/style.css
-stylesheets[all][] = css/theme_styles.css
+stylesheets[all][] = css/theme/theme_styles.css
+stylesheets[all][] = css/theme/calendar.css
 
 
 ; For information on choosing the desired method, please read the Drupal

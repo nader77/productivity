@@ -164,42 +164,40 @@
   <div id="page-wrapper" class="container fixed-footer" ng-class="{ 'nav-small': compactSidebar }">
 
     <div class="row">
-      <div id="nav-col">
-        <section id="col-left" class="col-left-nano">
-          <div id="col-left-inner" class="col-left-nano-content">
-            <div id="user-left-box" class="clearfix hidden-sm hidden-xs">
-              <div class="user-box">
-                <span class="name">Welcome<br><?php if($user->uid) { print $user->name; } ?></span>
-              </div>
-            </div>
-            <!-- Menu -->
-            <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
-              <ul class="nav nav-pills nav-stacked">
-
-                <li class="active">
-                  <a class="dropdown-toggle" data-target=".submenu.reports" data-toggle="collapse">
-                    <i class="fa fa-bar-chart-o"></i>
-                    <span>Reports</span>
-                    <i class="fa fa-chevron-circle-right drop-icon"></i>
-                  </a>
-                  <ul class="submenu reports collapse">
-                    <li>
-                      <a href="/admin/content/project-monthly-report">Monthly report</a>
-                    </li>
-                    <li>
-                      <a ui-sref="dashboard.campaigns.content({ companyId: company.id, campaignId: campaignId })" ui-sref-active="active">Top Campaign Content</a>
-                    </li>
-                    <li>
-                      <a ui-sref="dashboard.campaigns.management({ companyId: company.id })" ui-sref-active="active">Campaign Management</a>
-                    </li>
-                  </ul>
-                </li>
-
-              </ul>
-            </div>
-          </div>
-        </section>
-      </div>
+<!--      <div id="nav-col">-->
+<!--        <section id="col-left" class="col-left-nano">-->
+<!--          <div id="col-left-inner" class="col-left-nano-content">-->
+<!--            <div id="user-left-box" class="clearfix hidden-sm hidden-xs">-->
+<!--              <div class="user-box">-->
+<!--                <span class="name">Welcome<br>--><?php //if($user->uid) { print $user->name; } ?><!--</span>-->
+<!--              </div>-->
+<!--            </div>-->
+           <!-- Menu -->
+<!--            <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">-->
+<!--              <ul class="nav nav-pills nav-stacked">-->
+<!--                <li class="active">-->
+<!--                  <a class="dropdown-toggle" data-target=".submenu.reports" data-toggle="collapse">-->
+<!--                    <i class="fa fa-bar-chart-o"></i>-->
+<!--                    <span>Reports</span>-->
+<!--                    <i class="fa fa-chevron-circle-right drop-icon"></i>-->
+<!--                  </a>-->
+<!--                  <ul class="submenu reports collapse">-->
+<!--                    <li>-->
+<!--                      <a href="/admin/content/project-monthly-report">Monthly report</a>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                      <a ui-sref="dashboard.campaigns.content({ companyId: company.id, campaignId: campaignId })" ui-sref-active="active">Top Campaign Content</a>-->
+<!--                    </li>-->
+<!--                    <li>-->
+<!--                      <a ui-sref="dashboard.campaigns.management({ companyId: company.id })" ui-sref-active="active">Campaign Management</a>-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                </li>-->
+<!--              </ul>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </section>-->
+<!--      </div>-->
 
       <div id="content-wrapper">
 

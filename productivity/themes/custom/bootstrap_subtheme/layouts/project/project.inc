@@ -7,8 +7,7 @@ $plugin = array(
   'icon' => 'project.png',
   'theme' => 'project',
   'regions' => array(
-    'hours' => t('Hours'),
-    'days' => t('Days'),
-    'rate' => t('Rate'),
+    'rendered_node' => t('Rendered node'),
+    'payments' => t('Payments'),
   ),
 );
