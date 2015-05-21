@@ -6,6 +6,7 @@
   },
   "production": {
     "backend": "https://example.com",
-    "debugUiRouter": false
+    "debugUiRouter": false,
+    "calendar": false
   }
 }
