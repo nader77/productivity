@@ -15,6 +15,7 @@ angular.module('clientApp')
     $scope.selectedTrack = null;
     $scope.year = $stateParams.year;
     $scope.month = $stateParams.month;
+    $scope.eventSources = [];
 
     var width = 1024;
     var startDay = 1;

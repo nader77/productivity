@@ -1,7 +1,8 @@
 {
   "development": {
     "backend": "http://localhost/productivity/www",
-    "debugUiRouter": true
+    "debugUiRouter": true,
+    "calendar": false
   },
   "production": {
     "backend": "https://example.com",

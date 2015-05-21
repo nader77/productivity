@@ -191,9 +191,65 @@ body{
 
 
 .tracking-form-page {
+  
+  .calendar-btn {
+    float: right;
+  }
+
+  #calendar {
+
+    .fc-event {
+      border: 0 none;
+      padding: 1px;
+
+      &.empty-event {
+        background-color: white;
+        color: black;
+      }
+
+      &.regular-event {
+        background-color: $color4_light;
+        color: white;
+      }
+
+      &.sick-event {
+        background-color: $color3;
+      }
+
+      &.vacation-event {
+        background-color: $color3_light;
+      }
+
+      &.holiday-event {
+        background-color: $color1_light;
+      }
+
+      &.funday-event,
+      &.special-event {
+        background-color: $color2_light;
+      }
+
+      &.miluim-event {
+        background-color: $color2_light;
+      }
+
+      &.convention-event {
+        background-color: $color4;
+      }
+
+      &.weekend-event {
+        background-color: $color1_light;
+      }
+
+      &.global-event {
+        background-color: $color6;
+      }
+    }
+  }
 
   .month-nav {
     font-size: 30px;
+    padding-left: 60px;
 
     a:hover {
       text-decoration: none;
