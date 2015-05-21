@@ -1,6 +1,6 @@
 <!doctype html> <html class="no-js"> <head> <meta charset="utf-8"> <title></title> <meta name="description" content=""> <meta name="viewport" content="width=device-width"> <!-- Place favicon.ico and apple-touch-icon.png in the root directory --> <link rel="stylesheet" href="styles/vendor.css"> <link rel="stylesheet" href="styles/main.css"> <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">  <body ng-app="clientApp"> <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]--> <loading-bar-text></loading-bar-text> <div ui-view></div> <div class="container"> <pre>
+    <![endif]--> <loading-bar-text></loading-bar-text> <div ui-view></div> <div class="container" ng-if="debug"> <pre>
         <!-- Here's some values to keep an eye on in the sample in order to understand $state and $stateParams -->
         $state = {{$state.current.name}}
         $stateParams = {{$stateParams}}
