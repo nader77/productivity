@@ -9,6 +9,7 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+    <link rel="stylesheet" href="bower_components/fullcalendar/fullcalendar.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -25,7 +26,7 @@
     <loading-bar-text></loading-bar-text>
     <div ui-view></div>
 
-    <div class="container">
+    <div class="container" ng-if="debug">
       <pre>
         <!-- Here's some values to keep an eye on in the sample in order to understand $state and $stateParams -->
         $state = {{$state.current.name}}
@@ -58,6 +59,9 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/StickyTableHeaders/js/jquery.stickytableheaders.js"></script>
     <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="bower_components/jquery-ui/ui/jquery-ui.js"></script>
+    <script src="bower_components/fullcalendar/fullcalendar.js"></script>
+    <script src="bower_components/angular-ui-calendar/src/calendar.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 

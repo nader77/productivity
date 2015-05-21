@@ -17,7 +17,8 @@ angular
     'LocalStorageModule',
     'ui.bootstrap',
     'ui.router',
-    'angular-loading-bar'
+    'angular-loading-bar',
+    'ui.calendar'
   ])
   .config(function($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
 
@@ -174,6 +175,7 @@ angular
     // to active whenever 'contacts.list' or one of its decendents is active.
     $rootScope.$state = $state;
     $rootScope.$stateParams = $stateParams;
+    $rootScope.debug = Config.debugUiRouter;
 
     if (!!Config.debugUiRouter) {
       $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams) {
