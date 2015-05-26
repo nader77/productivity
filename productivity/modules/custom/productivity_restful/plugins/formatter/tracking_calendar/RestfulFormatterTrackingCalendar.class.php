@@ -150,7 +150,7 @@ class RestfulFormatterTrackingCalendar extends \RestfulFormatterBase implements 
             'type' => 'empty',
             'day' => (string) $key,
             'length' => 'E',
-            'projectName' => 'Empty!',
+            'projectName' => 'Log work',
             'employee' => $employee,
           );
         }
