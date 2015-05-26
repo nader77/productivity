@@ -46,7 +46,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     if ($check_success) {
       // Wait for the dashboard's menu to load.
-      $this->iWaitForCssElement('#dashboard-menu', 'appear');
+      $this->iWaitForCssElement('.navbar-brand', 'appear');
     }
   }
 
@@ -55,6 +55,15 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iLoginWithBadCredentials() {
     return $this->loginUser('wrong-foo', 'wrong-bar', FALSE);
+  }
+
+  /**
+   * @When /^I open the calendar$/
+   */
+  public function iOpenTheCalendar() {
+    $element = $this->getSession()->getPage();
+    $element->pressButton('Show Calendar');
+    $this->iShouldWaitForTheTextTo('Log work', 'appear');
   }
 
   /**
@@ -169,5 +178,12 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
           throw $e;
         }
       });
+  }
+
+  /**
+   * @Given /^I wait$/
+   */
+  public function iWait() {
+    sleep(10);
   }
 }

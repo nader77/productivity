@@ -191,7 +191,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
    */
   protected function setPropertyValues(EntityMetadataWrapper $wrapper, $null_missing_fields = FALSE) {
     $request = $this->getRequest();
-    if (!isset($request['description']) || empty($request['description'])) {
+    if (($request['type'] == 'regular') && (!isset($request['description']) || empty($request['description']))) {
       throw new \RestfulBadRequestException('Description is required.');
     }
 
