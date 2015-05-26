@@ -15,6 +15,23 @@ angular.module('clientApp')
       console.log(tracking);
     }
 
+    $scope.calendar = Config.calendar;
+    $scope.calendarState = $scope.calendar ? 'Hide' : 'Show';
+
+    /**
+     * Toggles calendar.
+     *
+     * Shows/Hides the calender triggered by clicking on the "Show calendar" button,
+     * changes the text in the button as well.
+     * The calendar get it's state from the config,
+     * this way we can maintain it's state through out the routing.
+     */
+    $scope.toggleCalendar = function() {
+      Config.calendar = !Config.calendar;
+      $scope.calendar = Config.calendar;
+      $scope.calendarState = $scope.calendar ? 'Hide' : 'Show';
+    };
+
     // Prepare header for table.
     var endDay = new Date($stateParams.year, $stateParams.month, 0).getDate();
     $scope.days = [];
@@ -73,12 +90,109 @@ angular.module('clientApp')
       });
     }
 
+    /* Configuration of the ui-calendar. */
+    $scope.uiConfig = {
+      calendar:{
+        height: 400,
+        editable: false,
+        day: $scope.day,
+        month: $scope.month - 1,
+        year: $scope.year,
+        header:{
+          left: '',
+          center: '',
+          right: ''
+        }
+      }
+    };
+
+    /* Extract all tracking items to events for the ui-calendar */
+    $scope.calendarEventTypes = {
+      regular : {
+        className: 'regular-event',
+        events: []
+      },
+      weekend : {
+        className: 'weekend-event',
+        events: []
+      },
+      miluim : {
+        className: 'miluim-event',
+        events: []
+      },
+      vacation : {
+        className: 'vacation-event',
+        events: []
+      },
+      sick : {
+        className: 'sick-event',
+        events: []
+      },
+      empty : {
+        className: 'empty-event',
+        events: []
+      },
+      convention : {
+        className: 'convention-event',
+        events: []
+      },
+      funday : {
+        className: 'funday-event',
+        events: []
+      },
+      special : {
+        className: 'special-event',
+        events: []
+      },
+      global : {
+        className: 'global-event',
+        events: []
+      }
+    };
+
+    angular.forEach(tracking, function(events) {
+      angular.forEach(events, function(event) {
+        // Check if object to avoid considering "sum" array as an event.
+        if(angular.isObject(event)) {
+          if (event.type == 'regular') {
+            var hours = parseFloat(event.length);
+            var suffix = hours > 1 ? ' Hours' : ' Hour';
+            $scope.calendarEventTypes.regular.events.push({
+              title: event.projectName + ' - ' + hours + suffix,
+              start: new Date(event.date*1000),
+              description: hours,
+              allDay: true,
+              type: event.type,
+              url: '#/tracking/' + $scope.employee + '/' + $scope.year + '/' + $scope.month + '/' + event.day + '/' + event.id
+            });
+          }
+          else {
+            $scope.calendarEventTypes[event.type].events.push({
+              title: event.type == 'global' ? 'Global day' : event.projectName,
+              start: new Date($scope.year, $scope.month - 1, event.day),
+              allDay: true,
+              type: event.type,
+              url: event.type == 'empty' ? '#/tracking/' + $scope.employee + '/' + $scope.year + '/' + $scope.month + '/' + event.day + '/new' : ''
+            });
+          }
+        }
+      });
+    });
+    // Add all the events types to Calendar's events source.
+    $scope.eventSources = [];
+    angular.forEach($scope.calendarEventTypes, function(calendarEvent) {
+      this.push(calendarEvent);
+    }, $scope.eventSources);
+
+    /* End of ui-calendar settings */
+
     $scope.save = function(data) {
       // Indicate we are in the middle of creation.
       $scope.creating = true;
 
-      // Convert date to timestamp.
-      var date = $stateParams.year + '-' + $stateParams.month + '-' +  $stateParams.day;
+      // Convert date to timestamp,
+      // Need to add the hour to make a more accurate events.
+      var date = $stateParams.year + '.' + $stateParams.month + '.' +  $stateParams.day + ' 12:00:00';
       data.date = new Date(date).getTime() / 1000;
 
       if (Config.debug) {
@@ -91,7 +205,7 @@ angular.module('clientApp')
 
         if (newData.error) {
           $scope.messageClass = 'alert-danger';
-          $scope.message = 'Error Saving.';
+          $scope.message = newData.title;
           return;
         }
         // Success.
@@ -145,7 +259,7 @@ angular.module('clientApp')
      * @returns {*|boolean}
      */
     $scope.owner = function(data) {
-      return data.id && $stateParams.username == data.employee;
+      return data && data.hasOwnProperty('id') && $stateParams.username == data.employee;
     };
 
     /**
