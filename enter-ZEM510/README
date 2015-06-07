@@ -1,0 +1,21 @@
+### Device information
+
+IP: 10.0.0.201
+Port: 4370 using for transfer data
+Telnet: 23 
+
+### Brutoforce
+
+I tried bruteforce login and password for telnet auth but got fail because device self locking after some attempts. I used `ncrack` and password database.
+
+### Abstract logic of work
+
+1. Connect to device.
+2. Send auth command.
+3. Send command to start receive data.
+4. Receive a data.
+5. Close connection.
+
+### Catched data
+
+In wireshark_data folder you can found two dumps of Wireshark with data while communication with the device from different dates. 
