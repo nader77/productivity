@@ -234,6 +234,56 @@ function productivity_project_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-project-field_percentage_notification'
+  $field_instances['node-project-field_percentage_notification'] = array(
+    'bundle' => 'project',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 12,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_percentage_notification',
+    'label' => 'Percentage notification',
+    'required' => 0,
+    'settings' => array(
+      'max' => 100,
+      'min' => 0,
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 12,
+    ),
+  );
+
   // Exported field_instance: 'node-project-field_rate'
   $field_instances['node-project-field_rate'] = array(
     'bundle' => 'project',
@@ -741,6 +791,7 @@ global - fix amount.',
   t('Account');
   t('Date');
   t('Github repository name');
+  t('Percentage notification');
   t('Rate');
   t('Rate type');
   t('Refer to the unit of the budget amount.

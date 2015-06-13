@@ -13,10 +13,15 @@ include_once 'productivity_time_tracking.features.inc';
  * URL: admin/config/system/site-information.
  */
 function productivity_time_tracking_form_system_site_information_settings_alter(&$form, &$form_state) {
-  $form['hours_count_as_day'] = array(
+  $form['productivity_time_tracking_hours_count_as_day'] = array(
     '#type' => 'textfield',
     '#title' => t('Hours to count as one day'),
-    '#default_value' => variable_get('hours_count_as_day'),
+    '#default_value' => variable_get('productivity_time_tracking_hours_count_as_day'),
+  );
+  $form['productivity_time_tracking_managers_email'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Managers email'),
+    '#default_value' => variable_get('productivity_time_tracking_managers_email'),
   );
 }
 
@@ -90,7 +95,7 @@ function productivity_time_tracking_get_employee_tracking_count($strtime, $emplo
 /**
  * Calculate the number of days on a certain project.
  *
- * Counts number of entries which has a certain number of hours (hours_count_as_day)
+ * Counts number of entries which has a certain number of hours (productivity_time_tracking_hours_count_as_day)
  * as days and sums up the remaining hours and divides them on "hours_count_as_day"
  * to calculate the number of the remaining days.
  *
@@ -106,7 +111,7 @@ function productivity_time_tracking_get_employee_tracking_count($strtime, $emplo
  */
 function productivity_time_tracking_total_days($project_nid, $date = array(),  $account = NULL) {
   // If the variable "hours_count_as_day" is not set, The default day is 8 Hours.
-  $hours_as_day = variable_get('hours_count_as_day') ? variable_get('hours_count_as_day') : 8;
+  $hours_as_day = variable_get('productivity_time_tracking_hours_count_as_day', 8);
   $query = new EntityFieldQuery();
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'time_tracking')
@@ -212,19 +217,24 @@ function productivity_time_tracking_node_presave($node) {
       ($wrapper->__isset('field_employee') ? ($wrapper->field_employee->label() . '-') : '') .
       ($wrapper->__isset('field_project') ? ($wrapper->field_project->label() . '-') : '') .
       $wrapper->field_day_type->value();
+
     $wrapper->title->set($title);
 
     // Add days/hours to parent project's total.
     if ($wrapper->field_day_type->value() == 'regular') {
       $hours = 0;
+
       $project_wrapper = $wrapper->field_project;
+
       if ($project_wrapper->value() && isset($project_wrapper->field_hours)) {
         $hours = $project_wrapper->field_hours->value();
       }
+
       if (empty($node->is_new)) {
         $original_wrapper = entity_metadata_wrapper('node', $node->original);
         $hours -= $original_wrapper->field_track_hours->value();
       }
+
       $hours += $wrapper->field_track_hours->value();
 
       if ($project_wrapper->value()) {
@@ -232,6 +242,9 @@ function productivity_time_tracking_node_presave($node) {
         $project_wrapper->field_hours->set($hours);
         $project_wrapper->field_days->set($days_count);
         $project_wrapper->save();
+        // Notification for major milestone meeting.
+        // TODO: improve by sending an invite to calendar meeting.
+        productivity_project_logged_hours_notify($project_wrapper->value());
       }
     }
   }

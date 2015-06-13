@@ -65,3 +65,107 @@ function productivity_project_form_project_node_form_alter(&$form, &$form_state)
   $form['field_hours']['#disabled'] = TRUE;
   $form['field_days']['#disabled'] = TRUE;
 }
+
+/**
+ * Notify site managers about logged hours percentage in a project.
+ *
+ * The notifications percentage thresholds: 25%, 50%, 75%, 95%, 100%.
+ * Calculates the percentage from the scope,
+ * Checks if the project has reached a new threshold,
+ * Sends a message with project details and hours percentage logged.
+ *
+ * @param object $node
+ *  The project node.
+ *
+ * @return boolean
+ *  Returns FALSE only if the scope is not relevant.
+ *
+ */
+function productivity_project_logged_hours_notify($node) {
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $scope = $wrapper->field_scope->value();
+  // Bypass if the scope period is in months or years.
+  if ($scope['period'] == 'month' || $scope['period'] == 'year') {
+    return FALSE;
+  }
+
+  // Notification thresholds.
+  $thresholds = array(
+    '100',
+    '95',
+    '75',
+    '50',
+    '25',
+  );
+
+  $total_hours = $wrapper->field_hours->value();
+  $total_days = $wrapper->field_days->value();
+  $percentage_notified = $wrapper->field_percentage_notification->value();
+
+  // Calculate the project's percentage of logged hours.
+  $percentage = productivity_project_calculate_percentage($scope, $total_hours);
+
+  // Send only if the project reached a new threshold and
+  // the managers were never notified about it.
+  foreach ($thresholds as $key => $threshold) {
+    if ($percentage < $threshold || $percentage_notified >= $threshold) {
+      // Didn't reach a threshold OR This threshold has been already notified.
+      continue;
+    }
+    if ($percentage < $percentage_notified) {
+      // The current percentage has been already notified.
+      continue;
+    }
+    // Add a message to the log messages.
+    watchdog('productivity_project', 'The project @project has reached a new threshold: @threshold%',
+      array(
+        '@project' => $wrapper->label(),
+        '@threshold' => $threshold,
+        )
+    );
+    $arguments = array(
+      '@project_name' => $wrapper->label(),
+      '@logged_percentage' => $percentage,
+      '@project_scope' => $scope['interval'] . ' ' . $scope['period'],
+      '@project_total_hours' => $total_hours,
+      '@project_total_days' => $total_days,
+    );
+
+    // Send mail to managers
+    $values = array(
+      'uid' => 1,
+      'arguments' => $arguments,
+    );
+    $message = message_create('logged_project_hours', $values);
+    // Send the message to custom email.
+    $options = array(
+      'mail' =>  variable_get('productivity_time_tracking_managers_email', 'info@gizra.com'),
+    );
+    message_notify_send_message($message, $options);
+
+    // Save the percentage so it won't send the same
+    // message again at this threshold.
+    $wrapper->field_percentage_notification->set($percentage);
+    $wrapper->save();
+    // Stop this loop when one notifications has been sent.
+    break;
+  }
+}
+
+/**
+ * Helper function; Calculates the percentage of logged hours on a given project.
+ *
+ * @param array $scope
+ *  The project's scope with a period.
+ * @param int $hours
+ *  The total hours logged in a given project.
+ *
+ * @return int
+ *  The calculated percentage of logged hours.
+ */
+function productivity_project_calculate_percentage($scope, $hours) {
+  // Calculate the scope as hours.
+  $hours_as_day = variable_get('productivity_time_tracking_hours_count_as_day', 8);
+  $scope_in_hours = $scope['period'] == 'hour' ? $scope['interval'] : $scope['interval'] * $hours_as_day;
+  return number_format(($hours / $scope_in_hours) * 100, 2);
+}
