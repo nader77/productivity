@@ -10,10 +10,11 @@ include_once 'productivity_project.features.inc';
  * Implements hook_menu().
  */
 function productivity_project_menu() {
-  $items['recalculate-project-time/%'] = array(
+  $items['recalculate-project-time/%node'] = array(
     'page callback' => 'productivity_project_recalculate_hours',
     'page arguments' => array(1),
-    'access arguments' => array('administer nodes'),
+    'access callback' => 'productivity_project_recalculate_access',
+    'access arguments' => array(1),
     'type' => MENU_CALLBACK,
   );
 
@@ -21,20 +22,38 @@ function productivity_project_menu() {
 }
 
 /**
- * Page callback; Recalculates the total hours and days of a project from the beginning of time.
+ * Access callback; Check permissions for user and the bundle of the entity.
+ *
+ * @param object $node
+ *  The entity.
+ * @return bool
+ *
  */
-function productivity_project_recalculate_hours($nid) {
-  $wrapper  = entity_metadata_wrapper('node', $nid);
-
-  if ($wrapper->getBundle() != 'project') {
-    drupal_goto('node/' . $nid);
+function productivity_project_recalculate_access($node) {
+  if (!user_access('administer nodes')) {
     return FALSE;
   }
-  $total = productivity_time_tracking_total_hours($nid);
+
+  if ($node->type != 'project') {
+    return FALSE;
+  }
+  return TRUE;
+}
+
+/**
+ * Page callback; Recalculates the total hours and days of a project from the beginning of time.
+ *
+ * @param $node
+ *  The "project" entity that needs hours recalculation.
+ */
+function productivity_project_recalculate_hours($node) {
+  $wrapper  = entity_metadata_wrapper('node', $node);
+
+  $total = productivity_time_tracking_total_hours($wrapper->getIdentifier());
   $wrapper->field_hours->set($total['hour']);
   $wrapper->field_days->set($total['day']);
   $wrapper->save();
-  drupal_goto('node/' . $nid);
+  drupal_goto('node/' . $node->nid);
 }
 
 /**
@@ -42,7 +61,7 @@ function productivity_project_recalculate_hours($nid) {
  *
  * Disables the hours and days fields in Project's node edit form.
  */
-function productivity_project_form_project_node_form_alter(&$form, &$form_state, $form_id) {
+function productivity_project_form_project_node_form_alter(&$form, &$form_state) {
   $form['field_hours']['#disabled'] = TRUE;
   $form['field_days']['#disabled'] = TRUE;
 }
