@@ -15,6 +15,9 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
   if (function_exists($preprocess_function)) {
     $preprocess_function($variables);
   }
+  if ($node->type == 'project' && node_access('update', $node)) {
+    $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), url('recalculate-project-time/' . $node->nid, array('absolute' => TRUE)));
+  }
 }
 
 /**

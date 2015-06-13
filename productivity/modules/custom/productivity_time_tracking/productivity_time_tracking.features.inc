@@ -32,6 +32,11 @@ function productivity_time_tracking_default_message_type() {
     "arguments" : null,
     "message_text" : { "und" : [
         {
+          "value" : "Track work reminder.",
+          "format" : "full_html",
+          "safe_value" : "\\u003Cp\\u003ETrack work reminder.\\u003C\\/p\\u003E\\n"
+        },
+        {
           "value" : "Hi [message:user:name]!\\r\\n\\r\\nPlease track your work  \\u003Ca href=\\u0022http:\\/\\/productivity.gizra.com\\/#\\/tracking\\/[message:user:name]\\/[current-date:yesterday]\\/new\\u0022\\u003E here \\u003C\\/a\\u003E.",
           "format" : "full_html",
           "safe_value" : "\\u003Cp\\u003EHi [message:user:name]!\\u003C\\/p\\u003E\\n\\u003Cp\\u003EPlease track your work  \\u003Ca href=\\u0022http:\\/\\/productivity.gizra.com\\/#\\/tracking\\/[message:user:name]\\/[current-date:yesterday]\\/new\\u0022\\u003E here \\u003C\\/a\\u003E.\\u003C\\/p\\u003E\\n"
