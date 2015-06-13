@@ -277,6 +277,20 @@ angular.module('clientApp')
 
       $scope.save(data);
     };
+
+    /**
+     * Create a default description when a project is selected;
+     * Fetch Github PRs from the current day and list them in the description.
+     */
+    $scope.updateDescription = function() {
+      Tracking.getGithubPRs($scope.data.projectID, $scope.employee, $scope.day, $scope.month, $scope.year)
+        .success(function(data) {
+          $scope.data.description = '';
+          angular.forEach(data.data, function(pr) {
+            $scope.data.description += '#' + pr.issue + ': ' + pr.label + '\n';
+          });
+        });
+    }
   });
 
 

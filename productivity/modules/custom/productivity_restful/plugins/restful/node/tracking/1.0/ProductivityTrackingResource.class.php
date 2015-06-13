@@ -12,7 +12,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
 
 
   /**
-   * Overrides \RestfulEntityBaseNode::publicFieldsInfo().
+   * Overrides \ProductivityEntityBaseNode::publicFieldsInfo().
    */
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
@@ -168,10 +168,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       $query->fieldCondition('field_day_type', 'value', $global_day, 'NOT IN');
     }
 
-    $start_timestamp =  $request['year'] . '-' . $request['month'] . '-01'. ' 00:00:00';
-    $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
-    $query->fieldCondition('field_work_date', 'value', $start_timestamp, '>=');
-    $query->fieldCondition('field_work_date', 'value', $end_timestamp, '<');
+    $this->setWorkDateTimeSpan($query, '+1 month');
 
     if (!empty($request['employee'])) {
       $user_by_name = user_load_by_name($request['employee']);
