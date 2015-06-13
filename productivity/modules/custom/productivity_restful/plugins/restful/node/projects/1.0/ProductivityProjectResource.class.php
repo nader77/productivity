@@ -32,11 +32,10 @@ class ProductivityProjectResource extends \ProductivityEntityBaseNode {
     $request = $this->getRequest();
 
     if (!empty($request['year']) && !empty($request['month'])) {
-      $start_timestamp =  $request['year'] . '-' . $request['month'] . '-01'. ' 00:00:00';
-      $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
+      list($start_time, $end_time) = $this->getTimeSpan('+1 month');
       $query
-        ->fieldCondition('field_date', 'value', $end_timestamp, '<=')
-        ->fieldCondition('field_date', 'value2', $start_timestamp, '>=')
+        ->fieldCondition('field_date', 'value', $end_time, '<=')
+        ->fieldCondition('field_date', 'value2', $start_time, '>=')
         ->addTag('empty_end_date');
     }
 
