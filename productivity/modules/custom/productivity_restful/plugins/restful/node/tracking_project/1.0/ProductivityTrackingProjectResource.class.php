@@ -51,8 +51,7 @@ class ProductivityTrackingProjectResource extends \ProductivityEntityBaseNode {
     if (empty($request['year']) && !intval($request['year'])) {
       throw new \RestfulBadRequestException('Invalid year given.');
     }
-    $start_time =  $request['year'] . '-' . $request['month'] . '-01'. ' 00:00:00';
-    $end_time = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_time)));
+    list($start_time, $end_time) = $this->getTimeSpan('+1 month');
 
     $query->fieldCondition('field_date', 'value', $end_time, '<=')
       ->fieldCondition('field_date', 'value2', $start_time, '>=')
