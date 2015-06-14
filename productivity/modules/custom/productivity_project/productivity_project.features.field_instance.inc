@@ -153,7 +153,12 @@ function productivity_project_field_default_field_instances() {
     'bundle' => 'project',
     'default_value' => NULL,
     'deleted' => 0,
-    'description' => '',
+    'description' => '3 name type are supported in the following order of importance:
+1. Account name (ie. Gizra).
+2. Project name (ie. generator-hedley).
+3. Project name + Account (ie. Gizra/generator-hedley).
+
+If your not sure use the third one.',
     'display' => array(
       'default' => array(
         'label' => 'above',
@@ -788,6 +793,12 @@ global - fix amount.',
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('3 name type are supported in the following order of importance:
+1. Account name (ie. Gizra).
+2. Project name (ie. generator-hedley).
+3. Project name + Account (ie. Gizra/generator-hedley).
+
+If your not sure use the third one.');
   t('Account');
   t('Date');
   t('Github repository name');
