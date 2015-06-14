@@ -71,13 +71,13 @@ function productivity_github_get_uid_by_github_username($github_username) {
  */
 function productivity_github_get_project_by_repository($repository_info) {
   // Look for one of the 3 supported in the following name:
+  // $repository_info->owner->login - Account name (ie. Gizra)
   // $repository_info->name - Project name (ie. generator-hedley)
   // $repository_info->full_name - Project name + Account (ie. Gizra/generator-hedley)
-  // $repository_info->owner->login - Account name (ie. Gizra)
 
   $values = array(
-    $repository_info->name,
     $repository_info->owner->login,
+    $repository_info->name,
     $repository_info->full_name,
   );
 
