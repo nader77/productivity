@@ -48,7 +48,7 @@ function productivity_github_payload() {
   $wrapper->body->value->set($payload->pull_request->body);
   $wrapper->field_issue_id->set((int)$payload->pull_request->number);
   $wrapper->field_work_date->set(strtotime($payload->pull_request->updated_at));
-  $wrapper->field_github_project_id‎->set($payload->pull_request->head->repo->full_name);
+  $wrapper->field_github_project_id->set($payload->pull_request->head->repo->full_name);
   $wrapper->save();
 }
 
