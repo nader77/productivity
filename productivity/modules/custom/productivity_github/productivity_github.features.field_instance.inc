@@ -51,7 +51,7 @@ function productivity_github_field_default_field_instances() {
         'summary_rows' => 5,
       ),
       'type' => 'text_textarea_with_summary',
-      'weight' => 31,
+      'weight' => 2,
     ),
   );
 
@@ -90,7 +90,47 @@ function productivity_github_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 36,
+      'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance: 'node-github_issue-field_github_project_id'
+  $field_instances['node-github_issue-field_github_project_id'] = array(
+    'bundle' => 'github_issue',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'The Github project name, ie. Gizra/generator-hedley',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 6,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_github_project_id',
+    'label' => 'Github Project ID',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 3,
     ),
   );
 
@@ -136,7 +176,7 @@ function productivity_github_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 32,
+      'weight' => 4,
     ),
   );
 
@@ -173,7 +213,7 @@ function productivity_github_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 39,
+      'weight' => 8,
     ),
   );
 
@@ -212,7 +252,7 @@ function productivity_github_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 38,
+      'weight' => 7,
     ),
   );
 
@@ -265,7 +305,7 @@ function productivity_github_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 34,
+      'weight' => 5,
     ),
   );
 
@@ -273,10 +313,12 @@ function productivity_github_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Description');
   t('Employee');
+  t('Github Project ID');
   t('Github issue number');
   t('Issue ID');
   t('Project');
   t('Pull request status');
+  t('The Github project name, ie. Gizra/generator-hedley');
   t('Work date');
 
   return $field_instances;
