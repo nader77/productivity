@@ -31,6 +31,10 @@ function productivity_github_payload() {
     return;
   }
 
+  if (variable_get('productivity_debug_payload', FALSE)) {
+    watchdog('productivity', print_r($payload, TRUE));
+  }
+
   $node = new stdClass();
   $node->title = check_plain($payload->pull_request->title);
   $node->type = 'github_issue';
@@ -40,7 +44,7 @@ function productivity_github_payload() {
   $node->uid = productivity_github_get_uid_by_github_username(check_plain($payload->pull_request->user->login));
   $wrapper = entity_metadata_wrapper('node', $node);
   $wrapper->field_employee->set($node->uid);
-  $wrapper->field_project->set(productivity_github_get_project_by_repository(check_plain($payload->pull_request->head->repo)));
+  $wrapper->field_project->set(productivity_github_get_project_by_repository($payload->pull_request->head->repo));
   $wrapper->body->value->set($payload->pull_request->body);
   $wrapper->field_issue_id->set((int)$payload->pull_request->number);
   $wrapper->field_work_date->set(strtotime($payload->pull_request->updated_at));
@@ -63,8 +67,8 @@ function productivity_github_get_uid_by_github_username($github_username) {
 }
 
 /**
- * @param $repository_name
- *  A github repository name.
+ * @param $repository_info
+ *  A github repository names.
  *
  * @return int
  *   Project node ID.
@@ -82,12 +86,12 @@ function productivity_github_get_project_by_repository($repository_info) {
   );
 
   foreach ($values as $value) {
-    if ($nid = _productivity_github_get_entity_id_by_field_value('field_github_repository_name', 'project', $value)) {
+    if ($nid = _productivity_github_get_entity_id_by_field_value('field_github_repository_name', 'project', check_plain($value))) {
       return $nid;
     }
   }
   // Print error if no repo was found.
-  watchdog('productivity', t('No project with github repository: @repository', array('@repository' => $repository_info)));
+  watchdog('productivity', t('No project with github repository: @repository', array('@repository' => print_r($repository_info, TRUE))));
 }
 
 /**
