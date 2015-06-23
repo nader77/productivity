@@ -136,7 +136,7 @@ function productivity_time_tracking_total_days($project_nid, $date = array(),  $
   // If Date range is given, calculate within that period.
   if (!empty($date)) {
     $fragments_query->leftJoin('field_data_field_work_date', 'd', 'h.entity_id = d.entity_id');
-    $fragments_query->condition("field_work_date_value", array($start_date, $end_date), 'BETWEEN');
+    $fragments_query->condition("field_work_date_value", array($start_date,$end_date), 'BETWEEN');
   }
 
   $fragments_query
@@ -302,7 +302,6 @@ function productivity_time_tracking_send_reminder($account) {
     ->condition("field_work_date_value", array($yesterday_starts, $yesterday_ends), 'BETWEEN')
     ->execute()
     ->fetchAll();
-  
 
   // Make sure logged work is published.
   $logged_work = FALSE;
@@ -414,6 +413,9 @@ function productivity_time_tracking_tokens($type, $tokens, array $data = array()
 
 /**
  * Bulk update time tracking.
+ */
+/**
+ * Implements hook_element_info().
  */
 function productivity_time_tracking_bulk_update($month, $year, $employee, $project_nid) {
   $globals = productivity_time_tracking_get_global_days($month, $year);
