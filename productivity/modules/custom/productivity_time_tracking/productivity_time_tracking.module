@@ -136,7 +136,7 @@ function productivity_time_tracking_total_days($project_nid, $date = array(),  $
   // If Date range is given, calculate within that period.
   if (!empty($date)) {
     $fragments_query->leftJoin('field_data_field_work_date', 'd', 'h.entity_id = d.entity_id');
-    $fragments_query->condition("field_work_date_value", array($start_date, $end_date), 'BETWEEN');
+    $fragments_query->condition("field_work_date_value", array($start_date,$end_date), 'BETWEEN');
   }
 
   $fragments_query
@@ -297,40 +297,34 @@ function productivity_time_tracking_send_reminder($account) {
   $yesterday_starts = date('Y-m-d 00:00:00', strtotime('-1 days'));
   $yesterday_ends = date('Y-m-d 23:59:59', strtotime('-1 days'));
 
-  $results = db_select('field_data_field_work_date', 'd')
-    ->fields('d', array('entity_id'))
-    ->condition("field_work_date_value", array($yesterday_starts, $yesterday_ends), 'BETWEEN')
-    ->execute()
-    ->fetchAll();
-
-  // Make sure logged work is published.
-  $logged_work = FALSE;
-  if (!empty($results)) {
-    foreach ($results as $result) {
-      $wrapper = entity_metadata_wrapper('node', $result->entity_id);
-      if ($wrapper->status->value() == NODE_PUBLISHED) {
-        $logged_work = TRUE;
-      }
-    }
-  }
-
-  // Don't send notification if developer logged work yesterday.
-  if ($logged_work) {
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'time_tracking')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->propertyCondition('uid', $account->uid)
+    ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>=')
+    ->fieldCondition('field_work_date', 'value', $yesterday_ends, '<=')
+    ->execute();
+  $no_records = TRUE;
+  if ($result) {
     return;
   }
 
-  $values = array(
-    'subject' => 'Productivity',
-    'uid' => $account->uid
-  );
-  $message = message_create('mail_reminder', $values);
+  if ($no_records) {
+    $values = array(
+      'subject' => 'Productivity',
+      'uid' => $account->uid
+    );
+    $message = message_create('mail_reminder', $values);
 
-  $wrapper = entity_metadata_wrapper('user', $account);
+    $wrapper = entity_metadata_wrapper('user', $account);
 
-  $wrapper->field_last_notification->set(time());
-  $wrapper->save();
-  // Send mail to users
-  message_notify_send_message($message);
+    $wrapper->field_last_notification->set(time());
+    $wrapper->save();
+    // Send mail to users
+    message_notify_send_message($message);
+  }
 }
 
 /**
@@ -413,6 +407,9 @@ function productivity_time_tracking_tokens($type, $tokens, array $data = array()
 
 /**
  * Bulk update time tracking.
+ */
+/**
+ * Implements hook_element_info().
  */
 function productivity_time_tracking_bulk_update($month, $year, $employee, $project_nid) {
   $globals = productivity_time_tracking_get_global_days($month, $year);
