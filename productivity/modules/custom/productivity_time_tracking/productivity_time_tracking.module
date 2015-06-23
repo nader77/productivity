@@ -124,7 +124,7 @@ function productivity_time_tracking_total_days($project_nid, $date = array(),  $
   if (!empty($date)) {
     $start_date =  $date['year'] . '-' . $date['month'] . '-01'. ' 00:00:00';
     $end_date = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_date)));
-    $query->fieldCondition('field_work_date', 'value', array($start_date,$end_date), 'BETWEEN');
+    $query->fieldCondition('field_work_date', 'value', array($start_date, $end_date), 'BETWEEN');
   }
 
   $days_count = $query->execute();
@@ -136,7 +136,7 @@ function productivity_time_tracking_total_days($project_nid, $date = array(),  $
   // If Date range is given, calculate within that period.
   if (!empty($date)) {
     $fragments_query->leftJoin('field_data_field_work_date', 'd', 'h.entity_id = d.entity_id');
-    $fragments_query->condition("field_work_date_value", array($start_date,$end_date), 'BETWEEN');
+    $fragments_query->condition("field_work_date_value", array($start_date, $end_date), 'BETWEEN');
   }
 
   $fragments_query
