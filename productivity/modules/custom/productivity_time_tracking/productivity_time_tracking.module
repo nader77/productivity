@@ -302,6 +302,7 @@ function productivity_time_tracking_send_reminder($account) {
     ->condition("field_work_date_value", array($yesterday_starts, $yesterday_ends), 'BETWEEN')
     ->execute()
     ->fetchAll();
+  
 
   // Make sure logged work is published.
   $logged_work = FALSE;
