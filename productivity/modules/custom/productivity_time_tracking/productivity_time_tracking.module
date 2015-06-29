@@ -297,25 +297,17 @@ function productivity_time_tracking_send_reminder($account) {
   $yesterday_starts = date('Y-m-d 00:00:00', strtotime('-1 days'));
   $yesterday_ends = date('Y-m-d 23:59:59', strtotime('-1 days'));
 
-  $results = db_select('field_data_field_work_date', 'd')
-    ->fields('d', array('entity_id'))
+  $query = db_select('field_data_field_work_date', 'd');
+  $query->leftJoin('node', 'n', 'd.entity_id = n.nid');
+
+  $results = $query->fields('d', array('entity_id'))
     ->condition("field_work_date_value", array($yesterday_starts, $yesterday_ends), 'BETWEEN')
+    ->condition("status", NODE_PUBLISHED)
     ->execute()
     ->fetchAll();
 
-  // Make sure logged work is published.
-  $logged_work = FALSE;
+  // Don't send a message when we have logged work from yesterday.
   if (!empty($results)) {
-    foreach ($results as $result) {
-      $wrapper = entity_metadata_wrapper('node', $result->entity_id);
-      if ($wrapper->status->value() == NODE_PUBLISHED) {
-        $logged_work = TRUE;
-      }
-    }
-  }
-
-  // Don't send notification if developer logged work yesterday.
-  if ($logged_work) {
     return;
   }
 
