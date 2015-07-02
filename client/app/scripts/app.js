@@ -20,7 +20,7 @@ angular
     'angular-loading-bar',
     'ui.calendar'
   ])
-  .config(function($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider, localStorageServiceProvider) {
+  .config(function($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
 
     /**
      * Redirect a user to a 403 error page.
@@ -41,11 +41,6 @@ angular
         });
       }
     };
-
-    // Settings of the local storage service.
-    localStorageServiceProvider
-      .setPrefix('clientApp')
-      .setStorageType('sessionStorage');
 
     // Now set up the states.
     $stateProvider
