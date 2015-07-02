@@ -302,6 +302,7 @@ function productivity_time_tracking_send_reminder($account) {
 
   $results = $query->fields('d', array('entity_id'))
     ->condition("field_work_date_value", array($yesterday_starts, $yesterday_ends), 'BETWEEN')
+    ->condition("type", "time_tracking")
     ->condition("status", NODE_PUBLISHED)
     ->execute()
     ->fetchAll();
