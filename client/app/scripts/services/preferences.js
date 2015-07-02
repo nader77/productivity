@@ -22,10 +22,10 @@ angular.module('clientApp')
      *
      * Called upon changing the calendar state.
      *
-     * @param calendar
+     * @param calendarState
      *  The current state of the calendar.
      */
-    this.setCalendarPreference = function(calendar) {
-      localStorageService.set('calendar', calendar);
+    this.setCalendarPreference = function(calendarState) {
+      localStorageService.set('calendar', calendarState);
     };
   });
