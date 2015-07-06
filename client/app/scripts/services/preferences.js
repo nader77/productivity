@@ -12,6 +12,9 @@ angular.module('clientApp')
 
     /**
      * Get user's calendar preference (opened or closed).
+     *
+     * @returns string
+     *  The state of the calendar.
      */
     this.getCalendarPreference = function() {
       return localStorageService.get('calendar');
