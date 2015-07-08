@@ -124,7 +124,7 @@ function productivity_time_tracking_total_days($project_nid, $date = array(),  $
   if (!empty($date)) {
     $start_date =  $date['year'] . '-' . $date['month'] . '-01'. ' 00:00:00';
     $end_date = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_date)));
-    $query->fieldCondition('field_work_date', 'value', array($start_date,$end_date), 'BETWEEN');
+    $query->fieldCondition('field_work_date', 'value', array($start_date, $end_date), 'BETWEEN');
   }
 
   $days_count = $query->execute();
@@ -136,7 +136,7 @@ function productivity_time_tracking_total_days($project_nid, $date = array(),  $
   // If Date range is given, calculate within that period.
   if (!empty($date)) {
     $fragments_query->leftJoin('field_data_field_work_date', 'd', 'h.entity_id = d.entity_id');
-    $fragments_query->condition("field_work_date_value", array($start_date,$end_date), 'BETWEEN');
+    $fragments_query->condition("field_work_date_value", array($start_date, $end_date), 'BETWEEN');
   }
 
   $fragments_query
@@ -297,34 +297,34 @@ function productivity_time_tracking_send_reminder($account) {
   $yesterday_starts = date('Y-m-d 00:00:00', strtotime('-1 days'));
   $yesterday_ends = date('Y-m-d 23:59:59', strtotime('-1 days'));
 
-  $query = new EntityFieldQuery();
-  $result = $query
-    ->entityCondition('entity_type', 'node')
-    ->entityCondition('bundle', 'time_tracking')
-    ->propertyCondition('status', NODE_PUBLISHED)
-    ->propertyCondition('uid', $account->uid)
-    ->fieldCondition('field_work_date', 'value', $yesterday_starts, '>=')
-    ->fieldCondition('field_work_date', 'value', $yesterday_ends, '<=')
-    ->execute();
-  $no_records = TRUE;
-  if ($result) {
+  $query = db_select('field_data_field_work_date', 'd');
+  $query->leftJoin('node', 'n', 'd.entity_id = n.nid');
+
+  $results = $query->fields('d', array('entity_id'))
+    ->condition("field_work_date_value", array($yesterday_starts, $yesterday_ends), 'BETWEEN')
+    ->condition("type", "time_tracking")
+    ->condition("status", NODE_PUBLISHED)
+    ->condition("uid", $account->uid)
+    ->execute()
+    ->fetchAll();
+
+  // Don't send a message when we have logged work from yesterday.
+  if (!empty($results)) {
     return;
   }
 
-  if ($no_records) {
-    $values = array(
-      'subject' => 'Productivity',
-      'uid' => $account->uid
-    );
-    $message = message_create('mail_reminder', $values);
+  $values = array(
+    'subject' => 'Productivity',
+    'uid' => $account->uid
+  );
+  $message = message_create('mail_reminder', $values);
 
-    $wrapper = entity_metadata_wrapper('user', $account);
+  $wrapper = entity_metadata_wrapper('user', $account);
 
-    $wrapper->field_last_notification->set(time());
-    $wrapper->save();
-    // Send mail to users
-    message_notify_send_message($message);
-  }
+  $wrapper->field_last_notification->set(time());
+  $wrapper->save();
+  // Send mail to users
+  message_notify_send_message($message);
 }
 
 /**
