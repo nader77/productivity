@@ -26,6 +26,8 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
 function bootstrap_subtheme_preprocess_html(&$variables) {
   // Add ng-app="plApp" attribute to the body tag.
   $variables['attributes_array']['ng-app'] = 'productivityApp';
+  $variables['body_attributes_array']['class'][] = 'theme-whbl';
+  $variables['body_attributes_array']['class'][] = 'pace-done';
 }
 
 /**

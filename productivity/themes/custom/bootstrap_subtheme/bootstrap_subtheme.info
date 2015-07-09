@@ -24,6 +24,7 @@ regions[page_bottom]    = 'Page bottom'
 ;; Stylesheets
 ;;;;;;;;;;;;;;;;;;;;;
 
+stylesheets[all][] = bootstrap/bootstrap.min.css
 stylesheets[all][] = css/style.css
 stylesheets[all][] = css/theme/theme_styles.css
 stylesheets[all][] = css/theme/calendar.css
@@ -41,7 +42,6 @@ stylesheets[all][] = css/theme/calendar.css
 ; ;; Scripts
 ; ;;;;;;;;;;;;;;;;;;;;;
 ;
-stylesheets[all][] = bootstrap/bootstrap.min.css
 scripts[] = 'bootstrap/bootstrap.min.js'
 
 ; scripts[] = 'bootstrap/js/alert.js'

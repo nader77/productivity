@@ -55,6 +55,8 @@ function productivity_payment_default_page_manager_handlers() {
       'hours' => NULL,
       'days' => NULL,
       'rate' => NULL,
+      'rendered_node' => NULL,
+      'payments' => NULL,
     ),
   );
   $display->cache = array();
@@ -63,26 +65,16 @@ function productivity_payment_default_page_manager_handlers() {
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass();
-    $pane->pid = 'new-c2aca1ca-ca0f-43b8-95e1-54375ee545bd';
-    $pane->panel = 'hours';
-    $pane->type = 'entity_field';
-    $pane->subtype = 'node:field_hours';
+    $pane->pid = 'new-f1f0319a-950f-4c9f-9cc9-8ac5f14f7fe2';
+    $pane->panel = 'rendered_node';
+    $pane->type = 'entity_view';
+    $pane->subtype = 'node';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
-      'label' => 'hidden',
-      'formatter' => 'number_decimal',
-      'delta_limit' => 0,
-      'delta_offset' => '0',
-      'delta_reversed' => FALSE,
-      'formatter_settings' => array(
-        'thousand_separator' => ' ',
-        'decimal_separator' => '.',
-        'scale' => '2',
-        'prefix_suffix' => 1,
-      ),
+      'view_mode' => 'full',
       'context' => 'argument_entity_id:node_1',
-      'override_title' => 1,
+      'override_title' => 0,
       'override_title_text' => '',
     );
     $pane->cache = array();
@@ -93,9 +85,9 @@ function productivity_payment_default_page_manager_handlers() {
     $pane->extras = array();
     $pane->position = 0;
     $pane->locks = array();
-    $pane->uuid = 'c2aca1ca-ca0f-43b8-95e1-54375ee545bd';
-    $display->content['new-c2aca1ca-ca0f-43b8-95e1-54375ee545bd'] = $pane;
-    $display->panels['hours'][0] = 'new-c2aca1ca-ca0f-43b8-95e1-54375ee545bd';
+    $pane->uuid = 'f1f0319a-950f-4c9f-9cc9-8ac5f14f7fe2';
+    $display->content['new-f1f0319a-950f-4c9f-9cc9-8ac5f14f7fe2'] = $pane;
+    $display->panels['rendered_node'][0] = 'new-f1f0319a-950f-4c9f-9cc9-8ac5f14f7fe2';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;

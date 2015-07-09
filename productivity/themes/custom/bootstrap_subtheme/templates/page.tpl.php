@@ -75,8 +75,7 @@
 ?>
 
 
-<div id="dashboard" class="theme-whbl">
-
+<div id="theme-wrapper">
   <header class="navbar" id="header-navbar">
     <div class="container">
       <a class="logo navbar-btn pull-left" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
@@ -99,62 +98,62 @@
             <?php if (!empty($page['navigation'])): ?>
               <?php print render($page['navigation']); ?>
             <?php endif; ?>
-<!--          <ul class="nav navbar-nav pull-left">-->
-<!--            <li class="dropdown" ng-show="companies.length > 1">-->
-<!--              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ company.label }} <span class="caret"></span></a>-->
-<!--              <ul class="dropdown-menu" role="menu">-->
-<!--                <li ng-repeat="company in companies">-->
-<!--                  <a ui-sref="dashboard.campaigns.summary.by-day({ companyId: company.id, campaignId: campaignId })">{{ company.label }}</a>-->
-<!--                </li>-->
-<!--              </ul>-->
-<!--            </li>-->
-<!---->
-<!--            <li class="dropdown hidden-xs" ng-show="isManager && notifications.length">-->
-<!--              <a class="btn dropdown-toggle" data-toggle="dropdown">-->
-<!--                <i class="fa fa-warning"></i>-->
-<!--                <span class="count">2</span>-->
-<!--              </a>-->
-<!--              <ul class="dropdown-menu notifications-list">-->
-<!--                <li class="pointer">-->
-<!--                  <div class="pointer-inner">-->
-<!--                    <div class="arrow"></div>-->
-<!--                  </div>-->
-<!--                </li>-->
-<!--                <li class="item-header">2 new notifications</li>-->
-<!--                <li class="item">-->
-<!--                  <a>-->
-<!--                    <i class="fa fa-edit"></i>-->
-<!--                    <span class="content">Campaign change</span>-->
-<!--                    <span class="time"><i class="fa fa-clock-o"></i>12 min.</span>-->
-<!--                  </a>-->
-<!--                </li>-->
-<!--                <li class="item">-->
-<!--                  <a>-->
-<!--                    <i class="fa fa-edit"></i>-->
-<!--                    <span class="content">Campaign change</span>-->
-<!--                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>-->
-<!--                  </a>-->
-<!--                </li>-->
-<!--                <li class="item-footer">-->
-<!--                  <a ui-sref="dashboard.notifications">-->
-<!--                    View all notifications-->
-<!--                  </a>-->
-<!--                </li>-->
-<!--              </ul>-->
-<!--            </li>-->
-<!---->
-<!--            <li class="dropdown profile-dropdown">-->
-<!--              <a ui-sref="dashboard.account" title="My account">-->
-<!--                <img ng-src="{{ account.picture }}" alt=""><span class="hidden-xs">{{ account.label }}</span>-->
-<!--              </a>-->
-<!--            </li>-->
-<!---->
-<!--            <li>-->
-<!--              <a href ng-click="logout()">-->
-<!--                <i class="fa fa-power-off"></i>-->
-<!--              </a>-->
-<!--            </li>-->
-<!--          </ul>-->
+          <ul class="nav navbar-nav pull-left">
+            <li class="dropdown" ng-show="companies.length > 1">
+              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ company.label }} <span class="caret"></span></a>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="company in companies">
+                  <a ui-sref="dashboard.campaigns.summary.by-day({ companyId: company.id, campaignId: campaignId })">{{ company.label }}</a>
+                </li>
+              </ul>
+            </li>
+
+            <li class="dropdown hidden-xs" ng-show="isManager && notifications.length">
+              <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-warning"></i>
+                <span class="count">2</span>
+              </a>
+              <ul class="dropdown-menu notifications-list">
+                <li class="pointer">
+                  <div class="pointer-inner">
+                    <div class="arrow"></div>
+                  </div>
+                </li>
+                <li class="item-header">2 new notifications</li>
+                <li class="item">
+                  <a>
+                    <i class="fa fa-edit"></i>
+                    <span class="content">Campaign change</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>12 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a>
+                    <i class="fa fa-edit"></i>
+                    <span class="content">Campaign change</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item-footer">
+                  <a ui-sref="dashboard.notifications">
+                    View all notifications
+                  </a>
+                </li>
+              </ul>
+            </li>
+
+            <li class="dropdown profile-dropdown">
+              <a ui-sref="dashboard.account" title="My account">
+                <img ng-src="{{ account.picture }}" alt=""><span class="hidden-xs">{{ account.label }}</span>
+              </a>
+            </li>
+
+            <li>
+              <a href ng-click="logout()">
+                <i class="fa fa-power-off"></i>
+              </a>
+            </li>
+          </ul>
 
         </div>
       </div>
@@ -164,44 +163,44 @@
   <div id="page-wrapper" class="container fixed-footer" ng-class="{ 'nav-small': compactSidebar }">
 
     <div class="row">
-<!--      <div id="nav-col">-->
-<!--        <section id="col-left" class="col-left-nano">-->
-<!--          <div id="col-left-inner" class="col-left-nano-content">-->
-<!--            <div id="user-left-box" class="clearfix hidden-sm hidden-xs">-->
-<!--              <div class="user-box">-->
-<!--                <span class="name">Welcome<br>--><?php //if($user->uid) { print $user->name; } ?><!--</span>-->
-<!--              </div>-->
-<!--            </div>-->
-           <!-- Menu -->
-<!--            <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">-->
-<!--              <ul class="nav nav-pills nav-stacked">-->
-<!--                <li class="active">-->
-<!--                  <a class="dropdown-toggle" data-target=".submenu.reports" data-toggle="collapse">-->
-<!--                    <i class="fa fa-bar-chart-o"></i>-->
-<!--                    <span>Reports</span>-->
-<!--                    <i class="fa fa-chevron-circle-right drop-icon"></i>-->
-<!--                  </a>-->
-<!--                  <ul class="submenu reports collapse">-->
-<!--                    <li>-->
-<!--                      <a href="/admin/content/project-monthly-report">Monthly report</a>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                      <a ui-sref="dashboard.campaigns.content({ companyId: company.id, campaignId: campaignId })" ui-sref-active="active">Top Campaign Content</a>-->
-<!--                    </li>-->
-<!--                    <li>-->
-<!--                      <a ui-sref="dashboard.campaigns.management({ companyId: company.id })" ui-sref-active="active">Campaign Management</a>-->
-<!--                    </li>-->
-<!--                  </ul>-->
-<!--                </li>-->
-<!--              </ul>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </section>-->
-<!--      </div>-->
+      <div id="nav-col">
+        <section id="col-left" class="col-left-nano">
+          <div id="col-left-inner" class="col-left-nano-content">
+            <div id="user-left-box" class="clearfix hidden-sm hidden-xs">
+              <div class="user-box">
+                <span class="name">Welcome<br><?php if($user->uid) { print $user->name; } ?></span>
+              </div>
+            </div>
+            Menu
+            <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
+              <ul class="nav nav-pills nav-stacked">
+                <li class="active">
+                  <a class="dropdown-toggle" data-target=".submenu.reports" data-toggle="collapse">
+                    <i class="fa fa-bar-chart-o"></i>
+                    <span>Reports</span>
+                    <i class="fa fa-chevron-circle-right drop-icon"></i>
+                  </a>
+                  <ul class="submenu reports collapse">
+                    <li>
+                      <a href="/admin/content/project-monthly-report">Monthly report</a>
+                    </li>
+                    <li>
+                      <a ui-sref="dashboard.campaigns.content({ companyId: company.id, campaignId: campaignId })" ui-sref-active="active">Top Campaign Content</a>
+                    </li>
+                    <li>
+                      <a ui-sref="dashboard.campaigns.management({ companyId: company.id })" ui-sref-active="active">Campaign Management</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <div id="content-wrapper">
 
-        <div class="main-container container">
+        <div class="main-container">
 
           <header role="banner" id="page-header">
             <?php if (!empty($site_slogan)): ?>

@@ -10,7 +10,7 @@ html, body {
 
 body {
   color: #344644;
-  background: url("../../images/whitey.jpg") repeat scroll 0 0 #fff;
+  background: url("../../images/whitey.jpg") repeat scroll 0 0 white;
   background-size: 220px 220px;
 }
 
@@ -258,6 +258,7 @@ a:hover, a:focus {
   position: relative;
   min-height: 1200px;
   padding: 15px 15px 35px 15px;
+  margin-left: 220px;
 }
 @media (max-width: 991px) {
   #content-wrapper {
@@ -2388,7 +2389,7 @@ label {
 
 .select2-dropdown-open.select2-drop-above .select2-choice,
 .select2-dropdown-open.select2-drop-above .select2-choices {
-  border-color: transparent rgba(52, 151, 219, 0.6) rgba(52, 151, 219, 0.6) !important;
+  border-color: rgba(0, 0, 0, 0) rgba(52, 151, 219, 0.6) rgba(52, 151, 219, 0.6) !important;
   border-radius: 0 0 3px 3px;
   background-clip: padding-box;
   /* stops bg color from leaking outside the border: */
@@ -2916,7 +2917,7 @@ label {
   border: 1px dashed #bbb;
   min-height: 100px;
   background-color: #e5e5e5;
-  background-image: linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff), linear-gradient(45deg, #fff 25%, transparent 25%, transparent 75%, #fff 75%, #fff);
+  background-image: linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff), linear-gradient(45deg, #ffffff 25%, transparent 25%, transparent 75%, #ffffff 75%, #ffffff);
   background-size: 60px 60px;
   background-position: 0 0, 30px 30px;
 }
@@ -5549,7 +5550,7 @@ svg {
   /* IE10+ */
   background: linear-gradient(to bottom, #3498db 0%, #2980b9 100%);
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$primary-color', endColorstr='#2980b9',GradientType=0 );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$primary-color', endColorstr='#2980b9',GradientType=0 );
   /* IE6-9 */
 }
 
@@ -5587,7 +5588,7 @@ svg {
   /* IE10+ */
   background: linear-gradient(to bottom, #e74c3c 0%, #c0392b 100%) !important;
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$red-color', endColorstr='$red-color-dark',GradientType=0 ) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$red-color', endColorstr='$red-color-dark',GradientType=0 ) !important;
   /* IE6-9 */
 }
 .theme-blue-gradient .emerald-bg {
@@ -5605,7 +5606,7 @@ svg {
   /* IE10+ */
   background: linear-gradient(to bottom, #3498db 0%, #2980b9 100%) !important;
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$primary-color', endColorstr='#2980b9',GradientType=0 ) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$primary-color', endColorstr='#2980b9',GradientType=0 ) !important;
   /* IE6-9 */
 }
 .theme-blue-gradient .yellow-bg {
@@ -5623,7 +5624,7 @@ svg {
   /* IE10+ */
   background: linear-gradient(to bottom, #f1c40f 0%, #f39c12 100%) !important;
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$yellow-color', endColorstr='$yellow-color-dark',GradientType=0 ) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$yellow-color', endColorstr='$yellow-color-dark',GradientType=0 ) !important;
   /* IE6-9 */
 }
 .theme-blue-gradient .green-bg {
@@ -5641,7 +5642,7 @@ svg {
   /* IE10+ */
   background: linear-gradient(to bottom, #2ecc71 0%, #27ae60 100%) !important;
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$green-color', endColorstr='$green-color-dark',GradientType=0 ) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$green-color', endColorstr='$green-color-dark',GradientType=0 ) !important;
   /* IE6-9 */
 }
 .theme-blue-gradient .purple-bg {
@@ -5659,7 +5660,7 @@ svg {
   /* IE10+ */
   background: linear-gradient(to bottom, #9b59b6 0%, #8e44ad 100%) !important;
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$purple-color', endColorstr='$purple-color-dark',GradientType=0 ) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$purple-color', endColorstr='$purple-color-dark',GradientType=0 ) !important;
   /* IE6-9 */
 }
 .theme-blue-gradient .gray-bg {
@@ -5677,7 +5678,7 @@ svg {
   /* IE10+ */
   background: linear-gradient(to bottom, #95a5a6 0%, #7f8c8d 100%) !important;
   /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='$gray-color', endColorstr='$gray-color-dark',GradientType=0 ) !important;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$gray-color', endColorstr='$gray-color-dark',GradientType=0 ) !important;
   /* IE6-9 */
 }
 .theme-blue-gradient .pace .pace-progress {
