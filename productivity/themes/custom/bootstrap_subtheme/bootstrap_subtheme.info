@@ -46,6 +46,7 @@ stylesheets[all][] = css/theme/calendar.css
 scripts[] = 'js/scripts.js'
 scripts[] = 'js/pace.min.js'
 scripts[] = 'js/jquery.nanoscroller.min.js'
+scripts[] = 'js/jquery.easypiechart.min.js'
 
 ; scripts[] = 'bootstrap/js/alert.js'
 ; scripts[] = 'bootstrap/js/button.js'

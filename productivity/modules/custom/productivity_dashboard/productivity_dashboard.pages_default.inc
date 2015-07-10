@@ -1,13 +1,13 @@
 <?php
 /**
  * @file
- * productivity_dashbard.pages_default.inc
+ * productivity_dashboard.pages_default.inc
  */
 
 /**
  * Implements hook_default_page_manager_pages().
  */
-function productivity_dashbard_default_page_manager_pages() {
+function productivity_dashboard_default_page_manager_pages() {
   $page = new stdClass();
   $page->disabled = FALSE; /* Edit this to true to make a default page disabled initially */
   $page->api_version = 1;
@@ -57,6 +57,28 @@ function productivity_dashbard_default_page_manager_pages() {
   $display->uuid = '6e918963-d0c7-4d4a-9842-a0cee900c389';
   $display->content = array();
   $display->panels = array();
+    $pane = new stdClass();
+    $pane->pid = 'new-917fe274-1d55-41b1-8d5d-073025699b00';
+    $pane->panel = 'top';
+    $pane->type = 'teaser';
+    $pane->subtype = 'teaser';
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'override_title' => 0,
+      'override_title_text' => '',
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => NULL,
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 0;
+    $pane->locks = array();
+    $pane->uuid = '917fe274-1d55-41b1-8d5d-073025699b00';
+    $display->content['new-917fe274-1d55-41b1-8d5d-073025699b00'] = $pane;
+    $display->panels['top'][0] = 'new-917fe274-1d55-41b1-8d5d-073025699b00';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;

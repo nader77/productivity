@@ -1,7 +1,0 @@
-<?php
-/**
- * @file
- * Code for the Productivity dashbard feature.
- */
-
-include_once 'productivity_dashbard.features.inc';
