@@ -58,6 +58,8 @@
 <head>
   <link rel="profile" href="<?php print $grddl_profile; ?>" />
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="<?php print $theme_path;?>/css/nanoscroller.css" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <?php print $head; ?>
@@ -66,6 +68,8 @@
   <!-- HTML5 element support for IE6-8 -->
   <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="<?php print $theme_path;?>/js/html5shiv.js"></script>
+    <script src= "<?php print $theme_path;?>/js/respond.min.js"></script>
   <![endif]-->
   <?php print $scripts; ?>
 </head>

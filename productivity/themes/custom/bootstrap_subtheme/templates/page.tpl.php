@@ -73,8 +73,6 @@
  * @ingroup themeable
  */
 ?>
-
-
 <div id="theme-wrapper">
   <header class="navbar" id="header-navbar">
     <div class="container">
@@ -88,30 +86,46 @@
           <span class="fa fa-bars"></span>
         </button>
 
-        <div class="nav-no-collapse" id="header-nav">
-            <?php if (!empty($primary_nav)): ?>
-              <?php print render($primary_nav); ?>
-            <?php endif; ?>
-            <?php if (!empty($secondary_nav)): ?>
-              <?php print render($secondary_nav); ?>
-            <?php endif; ?>
-            <?php if (!empty($page['navigation'])): ?>
-              <?php print render($page['navigation']); ?>
-            <?php endif; ?>
+        <div class="nav-no-collapse navbar-left pull-left hidden-sm hidden-xs">
           <ul class="nav navbar-nav pull-left">
-            <li class="dropdown" ng-show="companies.length > 1">
-              <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ company.label }} <span class="caret"></span></a>
-              <ul class="dropdown-menu" role="menu">
-                <li ng-repeat="company in companies">
-                  <a ui-sref="dashboard.campaigns.summary.by-day({ companyId: company.id, campaignId: campaignId })">{{ company.label }}</a>
-                </li>
-              </ul>
+            <li>
+              <a class="btn" id="make-small-nav">
+                <i class="fa fa-bars"></i>
+              </a>
             </li>
+          </ul>
+          <?php if (!empty($primary_nav)): ?>
+            <?php print render($primary_nav); ?>
+          <?php endif; ?>
+          <?php if (!empty($secondary_nav)): ?>
+            <?php print render($secondary_nav); ?>
+          <?php endif; ?>
+          <?php if (!empty($page['navigation'])): ?>
+            <?php print render($page['navigation']); ?>
+          <?php endif; ?>
+        </div>
 
-            <li class="dropdown hidden-xs" ng-show="isManager && notifications.length">
+        <div class="nav-no-collapse pull-right" id="header-nav">
+          <ul class="nav navbar-nav pull-right">
+            <li class="mobile-search">
+              <a class="btn">
+                <i class="fa fa-search"></i>
+              </a>
+
+              <div class="drowdown-search">
+                <form role="search">
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search...">
+                    <i class="fa fa-search nav-search-icon"></i>
+                  </div>
+                </form>
+              </div>
+
+            </li>
+            <li class="dropdown hidden-xs">
               <a class="btn dropdown-toggle" data-toggle="dropdown">
                 <i class="fa fa-warning"></i>
-                <span class="count">2</span>
+                <span class="count">8</span>
               </a>
               <ul class="dropdown-menu notifications-list">
                 <li class="pointer">
@@ -119,42 +133,135 @@
                     <div class="arrow"></div>
                   </div>
                 </li>
-                <li class="item-header">2 new notifications</li>
+                <li class="item-header">You have 6 new notifications</li>
                 <li class="item">
-                  <a>
-                    <i class="fa fa-edit"></i>
-                    <span class="content">Campaign change</span>
-                    <span class="time"><i class="fa fa-clock-o"></i>12 min.</span>
+                  <a href="#">
+                    <i class="fa fa-comment"></i>
+                    <span class="content">New comment on ‘Awesome P...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
                   </a>
                 </li>
                 <li class="item">
-                  <a>
-                    <i class="fa fa-edit"></i>
-                    <span class="content">Campaign change</span>
+                  <a href="#">
+                    <i class="fa fa-plus"></i>
+                    <span class="content">New user registration</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <i class="fa fa-envelope"></i>
+                    <span class="content">New Message from George</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="content">New purchase</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <i class="fa fa-eye"></i>
+                    <span class="content">New order</span>
                     <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
                   </a>
                 </li>
                 <li class="item-footer">
-                  <a ui-sref="dashboard.notifications">
+                  <a href="#">
                     View all notifications
                   </a>
                 </li>
               </ul>
             </li>
-
-            <li class="dropdown profile-dropdown">
-              <a ui-sref="dashboard.account" title="My account">
-                <img ng-src="{{ account.picture }}" alt=""><span class="hidden-xs">{{ account.label }}</span>
+            <li class="dropdown hidden-xs">
+              <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-envelope-o"></i>
+                <span class="count">16</span>
+              </a>
+              <ul class="dropdown-menu notifications-list messages-list">
+                <li class="pointer">
+                  <div class="pointer-inner">
+                    <div class="arrow"></div>
+                  </div>
+                </li>
+                <li class="item first-item">
+                  <a href="#">
+                    <img src="<?php print $theme_path;?>/images/samples/messages-photo-1.png" alt=""/>
+                      <span class="content">
+                          <span class="content-headline">
+                              George Clooney
+                          </span>
+                          <span class="content-text">
+                              Look, just because I don't be givin' no man a foot massage don't make it
+                              right for Marsellus to throw...
+                          </span>
+                      </span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <img src="<?php print $theme_path;?>/images/samples/messages-photo-2.png" alt=""/>
+                      <span class="content">
+                        <span class="content-headline">
+                            Emma Watson
+                        </span>
+                        <span class="content-text">
+                            Look, just because I don't be givin' no man a foot massage don't make it
+                            right for Marsellus to throw...
+                        </span>
+                      </span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <img src="<?php print $theme_path;?>/images/samples/messages-photo-3.png" alt=""/>
+                      <span class="content">
+                        <span class="content-headline">
+                            Robert Downey Jr.
+                        </span>
+                        <span class="content-text">
+                            Look, just because I don't be givin' no man a foot massage don't make it
+                            right for Marsellus to throw...
+                        </span>
+                      </span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item-footer">
+                  <a href="#">
+                    View all messages
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="hidden-xs">
+              <a class="btn">
+                <i class="fa fa-cog"></i>
               </a>
             </li>
-
-            <li>
-              <a href ng-click="logout()">
+            <li class="dropdown profile-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="<?php print $theme_path;?>/images/samples/scarlet-159.png" alt=""/>
+                <span class="hidden-xs">Scarlett Johansson</span> <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="user-profile.html"><i class="fa fa-user"></i>Profile</a></li>
+                <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
+                <li><a href="#"><i class="fa fa-envelope-o"></i>Messages</a></li>
+                <li><a href="#"><i class="fa fa-power-off"></i>Logout</a></li>
+              </ul>
+            </li>
+            <li class="hidden-xxs">
+              <a class="btn">
                 <i class="fa fa-power-off"></i>
               </a>
             </li>
           </ul>
-
         </div>
       </div>
     </div>

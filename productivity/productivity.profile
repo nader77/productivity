@@ -146,6 +146,7 @@ function productivity_setup_set_variables() {
   $variables = array(
     'jquery_update_jquery_version' => 1.10,
     'productivity_time_tracking_hours_count_as_day' => 7,
+    'site_frontpage' => 'dashboard',
   );
 
   foreach ($variables as $key => $value) {

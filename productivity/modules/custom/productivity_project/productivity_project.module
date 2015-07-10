@@ -22,6 +22,17 @@ function productivity_project_menu() {
 }
 
 /**
+ * Implements hook_ctools_plugin_directory().
+ */
+function productivity_project_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+
+
+/**
  * Access callback; Check permissions for user and the bundle of the entity.
  *
  * @param object $node

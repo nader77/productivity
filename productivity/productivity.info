@@ -55,6 +55,7 @@ dependencies[] = views_bulk_operations
 ; productivity profile.
 dependencies[] = productivity_account
 dependencies[] = productivity_admin
+dependencies[] = productivity_dashboard
 dependencies[] = productivity_github
 dependencies[] = productivity_migrate
 dependencies[] = productivity_mailgun

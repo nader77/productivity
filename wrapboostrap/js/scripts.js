@@ -4,67 +4,67 @@ $(function($) {
 			opacity: 1
 		});
 	}, 200);
-	
+
 	$('#sidebar-nav .dropdown-toggle').on('click', function (e) {
 		e.preventDefault();
-		
+
 		var $item = $(this).parent();
 
 		if (!$item.hasClass('open')) {
 			$item.parent().find('.open .submenu').slideUp('fast');
 			$item.parent().find('.open').toggleClass('open');
 		}
-		
+
 		$item.toggleClass('open');
-		
+
 		if ($item.hasClass('open')) {
 			$item.children('.submenu').slideDown('fast');
-		} 
+		}
 		else {
 			$item.children('.submenu').slideUp('fast');
 		}
 	});
-	
+
 	$('body').on('mouseenter', '#page-wrapper.nav-small #sidebar-nav .dropdown-toggle', function (e) {
 		var $sidebar = $(this).parents('#sidebar-nav');
 
 		if ($( document ).width() >= 992) {
 			var $item = $(this).parent();
-	
+
 			$item.addClass('open');
 			$item.children('.submenu').slideDown('fast');
 		}
 	});
-	
+
 	$('body').on('mouseleave', '#page-wrapper.nav-small #sidebar-nav > .nav-pills > li', function (e) {
 		var $sidebar = $(this).parents('#sidebar-nav');
 
 		if ($( document ).width() >= 992) {
 			var $item = $(this);
-	
+
 			if ($item.hasClass('open')) {
 				$item.find('.open .submenu').slideUp('fast');
 				$item.find('.open').removeClass('open');
 				$item.children('.submenu').slideUp('fast');
 			}
-			
+
 			$item.removeClass('open');
 		}
 	});
-	
+
 	$('#make-small-nav').click(function (e) {
 		$('#page-wrapper').toggleClass('nav-small');
 	});
-	
+
 	$(window).smartresize(function(){
 		if ($( document ).width() <= 991) {
 			$('#page-wrapper').removeClass('nav-small');
 		}
 	});
-	
+
 	$('.mobile-search').click(function(e) {
 		e.preventDefault();
-		
+
 		$('.mobile-search').addClass('active');
 		$('.mobile-search form input.form-control').focus();
 	});
@@ -77,14 +77,14 @@ $(function($) {
 			container.removeClass('active');
 		}
 	});
-	
+
 	$('.fixed-leftmenu #col-left').nanoScroller({
     	alwaysVisible: true,
     	iOSNativeScrolling: false,
     	preventPageScrolling: true,
     	contentClass: 'col-left-nano-content'
     });
-	
+
 	// build all tooltips from data-attributes
 	$("[data-toggle='tooltip']").each(function (index, el) {
 		$(el).tooltip({
@@ -125,7 +125,7 @@ $.fn.removeClassPrefix = function(prefix) {
 			timeout = setTimeout(delayed, threshold || 100);
 		};
 	}
-	// smartresize 
+	// smartresize
 	jQuery.fn[sr] = function(fn){	return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr); };
 
 })(jQuery,'smartresize');

@@ -26,10 +26,14 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
 function bootstrap_subtheme_preprocess_html(&$variables) {
   // Add ng-app="plApp" attribute to the body tag.
   $variables['attributes_array']['ng-app'] = 'productivityApp';
-  $variables['body_attributes_array']['class'][] = 'theme-whbl';
   $variables['body_attributes_array']['class'][] = 'pace-done';
+  $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
+
 }
 
+function bootstrap_subtheme_preprocess_page(&$variables) {
+  $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
+}
 /**
  * Implements hook_element_info_alter().
  *
