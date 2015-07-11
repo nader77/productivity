@@ -282,6 +282,19 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
               <ul class="nav nav-pills nav-stacked">
                 <li class="active">
+                  <a href="index.html">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                  </a>
+                </li>
+                <li class="active">
+                  <a href="index.html">
+                    <i class="fa fa-money"></i>
+                    <span>Payments</span>
+                    <span class="label label-danger label-circle pull-right">05</span>
+                  </a>
+                </li>
+                <li class="">
                   <a class="dropdown-toggle" data-target=".submenu.reports" data-toggle="collapse">
                     <i class="fa fa-bar-chart-o"></i>
                     <span>Reports</span>
