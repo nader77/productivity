@@ -38,6 +38,9 @@ projects[entityreference][patch][] = "https://www.drupal.org/files/issues/migrat
 projects[entityreference_filter][subdir] = "contrib"
 projects[entityreference_filter][version] = "1.4"
 
+projects[gravatar][subdir] = "contrib"
+projects[gravatar][version] = "1.x-dev"
+
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "3.5"
 

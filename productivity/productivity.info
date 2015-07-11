@@ -30,6 +30,7 @@ dependencies[] = date_popup
 dependencies[] = entity
 dependencies[] = entity_token
 dependencies[] = entityreference
+dependencies[] = gravatar
 dependencies[] = jquery_update
 dependencies[] = features
 dependencies[] = migrate

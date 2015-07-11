@@ -94,12 +94,12 @@
               </a>
             </li>
           </ul>
-          <?php if (!empty($primary_nav)): ?>
-            <?php print render($primary_nav); ?>
-          <?php endif; ?>
-          <?php if (!empty($secondary_nav)): ?>
-            <?php print render($secondary_nav); ?>
-          <?php endif; ?>
+<!--          --><?php //if (!empty($primary_nav)): ?>
+<!--            --><?php //print render($primary_nav); ?>
+<!--          --><?php //endif; ?>
+<!--          --><?php //if (!empty($secondary_nav)): ?>
+<!--            --><?php //print render($secondary_nav); ?>
+<!--          --><?php //endif; ?>
           <?php if (!empty($page['navigation'])): ?>
             <?php print render($page['navigation']); ?>
           <?php endif; ?>
@@ -240,7 +240,7 @@
               </ul>
             </li>
             <li class="hidden-xs">
-              <a class="btn">
+              <a href="<?php print url('admin');?>" class="btn">
                 <i class="fa fa-cog"></i>
               </a>
             </li>
@@ -250,7 +250,7 @@
                 <span class="hidden-xs">Scarlett Johansson</span> <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                <li><a href="user-profile.html"><i class="fa fa-user"></i>Profile</a></li>
+                <li><a href="<?php print url('user');?>"><i class="fa fa-user"></i>Profile</a></li>
                 <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
                 <li><a href="#"><i class="fa fa-envelope-o"></i>Messages</a></li>
                 <li><a href="<?php print url('user/logout');?>"><i class="fa fa-power-off"></i>Logout</a></li>
