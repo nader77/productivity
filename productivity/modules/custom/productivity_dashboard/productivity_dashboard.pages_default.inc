@@ -53,7 +53,7 @@ function productivity_dashboard_default_page_manager_pages() {
     ),
   );
   $display->cache = array();
-  $display->title = '';
+  $display->title = 'Dashboard';
   $display->uuid = '6e918963-d0c7-4d4a-9842-a0cee900c389';
   $display->content = array();
   $display->panels = array();

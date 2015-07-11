@@ -47,6 +47,7 @@ scripts[] = 'js/scripts.js'
 scripts[] = 'js/pace.min.js'
 scripts[] = 'js/jquery.nanoscroller.min.js'
 scripts[] = 'js/jquery.easypiechart.min.js'
+scripts[] = 'js/jquery.countTo.js'
 
 ; scripts[] = 'bootstrap/js/alert.js'
 ; scripts[] = 'bootstrap/js/button.js'

@@ -73,6 +73,7 @@
         $('.mobile-search').addClass('active');
         $('.mobile-search form input.form-control').focus();
       });
+
       $(document).mouseup(function (e) {
         var container = $('.mobile-search');
 
@@ -106,6 +107,8 @@
         });
         return this;
       };
+
+      $('.infographic-box .value .timer').countTo({});
 
     }
   };

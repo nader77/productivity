@@ -4,9 +4,20 @@
       <div class="project-box-header emerald-bg">
         <div class="name">
           <a href="#">
-            The Fighter
+            Nike site
           </a>
         </div>
+      </div>
+
+      <div class="project-box-footer clearfix">
+        <a href="#">
+          <span class="value">2000H</span>
+          <span class="label">Project Scope</span>
+        </a>
+        <a href="#">
+          <span class="value">18H</span>
+          <span class="label">Last day H/Done</span>
+        </a>
       </div>
 
       <div class="project-box-content">
@@ -18,16 +29,12 @@
 
       <div class="project-box-footer clearfix">
         <a href="#">
-          <span class="value">12</span>
-          <span class="label">Tasks</span>
+          <span class="value">$200</span>
+          <span class="label">Due Amount</span>
         </a>
         <a href="#">
-          <span class="value">1</span>
-          <span class="label">Alerts</span>
-        </a>
-        <a href="#">
-          <span class="value">82</span>
-          <span class="label">Messages</span>
+          <span class="value">$100000</span>
+          <span class="label">Paid amount</span>
         </a>
       </div>
 
@@ -48,7 +55,7 @@
 <!-- this page specific inline scripts -->
 <script>
   jQuery(function() {
-    jQuery('.chart').easyPieChart({
+    jQuery  ('.chart').easyPieChart({
       easing: 'easeOutBounce',
       onStep: function(from, to, percent) {
         jQuery(this.el).find('.percent').text(Math.round(percent));
