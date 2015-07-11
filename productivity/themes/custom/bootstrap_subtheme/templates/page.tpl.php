@@ -257,7 +257,7 @@
               </ul>
             </li>
             <li class="hidden-xxs">
-              <a class="btn">
+              <a  href="<?php print url('user/logout');?>" class="btn">
                 <i class="fa fa-power-off"></i>
               </a>
             </li>
