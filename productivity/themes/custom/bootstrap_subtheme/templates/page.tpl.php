@@ -287,7 +287,7 @@
                     <span>Dashboard</span>
                   </a>
                 </li>
-                <li class="active">
+                <li class="">
                   <a href="index.html">
                     <i class="fa fa-money"></i>
                     <span>Payments</span>

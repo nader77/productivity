@@ -22,6 +22,13 @@ function productivity_project_menu() {
 }
 
 /**
+ * Implements hook_node_presave().
+ */
+function productivity_project_node_presave($node) {
+
+}
+
+/**
  * Implements hook_ctools_plugin_directory().
  */
 function productivity_project_ctools_plugin_directory($module, $plugin) {

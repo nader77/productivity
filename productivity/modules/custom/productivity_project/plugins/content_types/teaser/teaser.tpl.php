@@ -4,19 +4,19 @@
       <div class="project-box-header emerald-bg">
         <div class="name">
           <a href="#">
-            Nike site
+            Nike site | T&M
           </a>
         </div>
       </div>
 
       <div class="project-box-footer clearfix">
         <a href="#">
-          <span class="value">2000H</span>
+          <span class="value">2000 Hours</span>
           <span class="label">Project Scope</span>
         </a>
         <a href="#">
-          <span class="value">18H</span>
-          <span class="label">Last day H/Done</span>
+          <span class="value">180 Hours</span>
+          <span class="label">This month</span>
         </a>
       </div>
 
