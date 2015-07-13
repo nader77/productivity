@@ -2,11 +2,12 @@
   "development": {
     "backend": "http://localhost/productivity/www",
     "debugUiRouter": true,
-    "calendar": false
+    "calendar": false,
+    "local": true
   },
   "production": {
-    "backend": "https://example.com",
     "debugUiRouter": false,
-    "calendar": false
+    "calendar": false,
+    "local": false
   }
 }
