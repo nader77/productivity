@@ -8,27 +8,29 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('TrackingFormCtrl', function ($scope, $stateParams, $state, $log, projects, Tracking, tracking, Config) {
+  .controller('TrackingFormCtrl', function ($scope, $stateParams, $state, $log, projects, Tracking, tracking, Config, Preferences) {
 
     $scope.tracking = tracking;
     if (Config.debug) {
       console.log(tracking);
     }
 
-    $scope.calendar = Config.calendar;
+    // Get the state of the calendar from the user's preferences, Using
+    // JSON.parse because local-storage stores variables only as strings.
+    $scope.calendar = angular.isDefined(Preferences.getCalendarPreference()) ? JSON.parse(Preferences.getCalendarPreference()) : false;
     $scope.calendarState = $scope.calendar ? 'Hide' : 'Show';
 
     /**
      * Toggles calendar.
      *
-     * Shows/Hides the calender triggered by clicking on the "Show calendar" button,
-     * changes the text in the button as well.
-     * The calendar get it's state from the config,
-     * this way we can maintain it's state through out the routing.
+     * Shows/Hides the calender triggered by clicking on the "Show calendar"
+     * button changes the text in the button as well, The calendar get it's
+     * state from the preferences service, this way we can maintain it's state
+     * through out the session.
      */
     $scope.toggleCalendar = function() {
-      Config.calendar = !Config.calendar;
-      $scope.calendar = Config.calendar;
+      $scope.calendar = !$scope.calendar;
+      Preferences.setCalendarPreference($scope.calendar);
       $scope.calendarState = $scope.calendar ? 'Hide' : 'Show';
     };
 
