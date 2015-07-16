@@ -18,7 +18,8 @@ angular
     'ui.bootstrap',
     'ui.router',
     'angular-loading-bar',
-    'ui.calendar'
+    'ui.calendar',
+    'gizra.location'
   ])
   .config(function($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
 
@@ -179,9 +180,9 @@ angular
     $rootScope.debug = Config.debugUiRouter;
 
     // If we're not on a local env, take the backend url for base URL.
-    if (!Config.local) {
-      Config.backend = window.location.protocol + '//' +  window.location.host + '/';
-    }
+    // if (!Config.local) {
+    //   Config.backend = window.location.protocol + '//' +  window.location.host + '/';
+    // }
 
 
       if (!!Config.debugUiRouter) {
