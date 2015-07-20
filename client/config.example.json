@@ -1,21 +1,18 @@
 {
   "development": {
     "backend": "http://localhost/productivity/www",
-<<<<<<< HEAD
-    "debugUiRouter": true,
-    "calendar": false,
+    "urlPattern": "http://localhost/${appname}/www",
+    "appname": "productivity",
     "local": true
+    "calendar": false,
+    "debugUiRouter": true,
   },
   "production": {
     "debugUiRouter": false,
     "calendar": false,
-    "local": false
-=======
+    "urlPattern": "http:/${{host}.${domain}",
+    "domain": "pantheon.io",
+    "local": false,
     "debugUiRouter": true
-  },
-  "production": {
-    "backend": "https://example.com",
-    "debugUiRouter": false
->>>>>>> 66b3940ebf844e79ba5afdba7785692addaac838
   }
 }
