@@ -36,10 +36,10 @@ angular
          * @returns {*}
          */
         function generateUrlFormTemplate(options) {
+          var matches;
           var regex = /\${(\w*)}/;
 
-          while ((matches = regex.exec(option.urlPattern)) !== null) {
-            debugger;
+          while ((matches = regex.exec(options.urlPattern)) !== null) {
             if (matches.index === regex.lastIndex) {
               regex.lastIndex++;
             }
