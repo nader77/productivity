@@ -2,13 +2,14 @@
 
 describe('Decorator: $location', function() {
   // load the angular.module using angular-mocks.
+  beforeEach(module('config'));
   beforeEach(module('gizra.location'));
   var $location,
     $browser;
   // before each spec runs.
   beforeEach(inject(function(_$location_, _$browser_) {
     $location = _$location_;
-    $$browser = _$browser_;
+    $browser = _$browser_;
   }));
 
   // the specs will be here.
