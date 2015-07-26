@@ -23,6 +23,7 @@ module.exports = function(config) {
       'bower_components/angular-mocks/angular-mocks.js',
       'app/scripts/config.js',
       'app/scripts/decorators/gizra.location.js',
+      'test/spec/decorators/config.spec.js',
       'test/spec/decorators/gizra.location.spec.js'
     ],
 
