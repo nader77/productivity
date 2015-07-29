@@ -8,7 +8,7 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('Account', function ($q, $http, $timeout, $location, $rootScope, $log) {
+  .service('Account', function ($q, $http, $timeout, $rootScope, $log, Config) {
 
     // A private cache key.
     var cache = {};
@@ -32,7 +32,7 @@ angular.module('clientApp')
      */
     function getDataFromBackend() {
       var deferred = $q.defer();
-      var url = $location.backend() + '/api/me/';
+      var url = Config.backend + '/api/me/';
 
       $http({
         method: 'GET',

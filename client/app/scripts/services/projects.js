@@ -8,7 +8,7 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('Projects', function ($q, $http, $timeout, $location, $rootScope) {
+  .service('Projects', function ($q, $http, $timeout, Config, $rootScope) {
 
     // A private cache key.
     var cache = {};
@@ -33,7 +33,7 @@ angular.module('clientApp')
      */
     this.save = function(data) {
       var deferred = $q.defer();
-      var url = $location.backend() + '/api/projects';
+      var url = Config.backend + '/api/projects';
 
       $http({
         method: 'POST',
@@ -61,7 +61,7 @@ angular.module('clientApp')
         month: month
       };
 
-      var url = $location.backend() + '/api/projects';
+      var url = Config.backend + '/api/projects';
       $http({
         method: 'GET',
         url: url,

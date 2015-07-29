@@ -8,7 +8,7 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('Tracking', function ($q, $http, $timeout, $location, $rootScope, localStorageService, Config) {
+  .service('Tracking', function ($q, $http, $timeout, $rootScope, localStorageService, Config) {
 
     // A private cache key.
     var cache = {};
@@ -33,7 +33,7 @@ angular.module('clientApp')
      */
     this.save = function(data) {
       var deferred = $q.defer();
-      var url = $location.backend() + '/api/tracking';
+      var url = Config.backend + '/api/tracking';
       var method = 'POST';
 
       // Update existing.
@@ -75,7 +75,7 @@ angular.module('clientApp')
     this.getGithubPRs = function(projectId, employee, day, month, year) {
       return $http({
         method: 'GET',
-        url: $location.backend() + '/api/github-prs',
+        url: Config.backend + '/api/github-prs',
         params: {
           'filter[project]': projectId,
           employee: employee,
@@ -95,7 +95,7 @@ angular.module('clientApp')
     var getDataFromBackend = function(year, month, employee) {
       var deferred = $q.defer();
 
-      var url = $location.backend() + '/api/tracking?year=' + year + '&month=' + month;
+      var url = Config.backend + '/api/tracking?year=' + year + '&month=' + month;
 
       if (employee != undefined) {
         url += '&employee=' + employee;

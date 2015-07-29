@@ -395,11 +395,11 @@ module.exports = function (grunt) {
     // Environment configuration.
     ngconstant: {
       options: {
-        name: 'config'
+        name: 'gizra.config'
       },
       server: {
         constants: {
-          Config: grunt.file.readJSON('config.json')
+          configFile: grunt.file.readJSON('config.json')
         },
         values: {
           debug: true
@@ -410,7 +410,7 @@ module.exports = function (grunt) {
       },
       build: {
         constants: {
-          Config: grunt.file.readJSON('config.json')
+          configFile: grunt.file.readJSON('config.json')
         },
         options: {
           dest: '<%= yeoman.dist %>/scripts/config.js'
