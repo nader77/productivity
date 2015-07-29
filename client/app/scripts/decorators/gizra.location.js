@@ -9,7 +9,7 @@
  * Main module of the application, extend the actual $location service.
  */
 angular
-  .module('clientApp')
+  .module('gizra.location', [])
   .config(function($provide) {
     $provide.decorator('$location', function($delegate, Config) {
 

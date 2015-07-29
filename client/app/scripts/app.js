@@ -19,7 +19,7 @@ angular
     'ui.router',
     'angular-loading-bar',
     'ui.calendar',
-    //'gizra.location'
+    'gizra.location'
   ])
   .config(function($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
 
