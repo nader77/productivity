@@ -37,7 +37,7 @@ before_script:
   # Install client
   - cd client
   - npm cache clean
-  - npm install
+  - PATH="$(npm bin):$PATH" npm install
   - bower install
   - cp config.travis.json config.json
   - grunt serve > ~/grunt.log 2>&1 &
