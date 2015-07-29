@@ -9,25 +9,24 @@
  * Main module of the application, extend the actual $location service.
  */
 angular
-  .module('gizra.location', [
-    'config'
-  ])
+  .module('clientApp')
   .config(function($provide) {
-    $provide.decorator('$location', function($delegate) {
+    $provide.decorator('$location', function($delegate, Config) {
 
       /**
        * Extend service $location to return a backend url, base on options.
        *
        * @param options
        *   {
-       *     'appname': Config.appname,
-       *     'domain': Config.domain,
-       *     'local': Config.local
+       *     'urlPattern':  'http//${appname}/${skeleton}',
+       *     'appname': 'skeleton',
+       *     'domain': 'domain.com'
        *   }
        *
        * @returns {promise|void}
        */
-      $delegate.backend = function backend(options) {
+      $delegate.backendDynamic = function backendDynamic() {
+        var self = this;
         var uri;
 
         /**
@@ -37,48 +36,48 @@ angular
          */
         function generateUrlFormTemplate(options) {
           var matches;
+          var max;
           var regex = /\${(\w*)}/;
 
+          //uri = Config.urlPattern;
           while ((matches = regex.exec(options.urlPattern)) !== null) {
-            if (matches.index === regex.lastIndex) {
+            options.urlPattern = options.urlPattern.replace(matches[0], Config[self.enviroment()][matches[1]]);
+            if (matches.index === regex.lastIndex || max < 10) {
               regex.lastIndex++;
+              max++;
             }
-            // View your result using the m-variable.
-            // eg m[0] etc.
           }
 
-          return uri;
-        }
-
-        /**
-         * Binding element with options values.
-         *
-         * @param element
-         * @param options
-         *
-         * @returns {*}
-         */
-        function bindElement(element, options) {
-          switch(element) {
-            case 'host':
-              return this.host();
-              break;
-            default:
-              return options[element];
-              break;
-          }
+          return options.urlPattern;
         }
 
         // Save initial value of property reloadOnSearch per state.
-        return generateUrlFormTemplate(options);
+        try {
+          uri = generateUrlFormTemplate(Config[this.enviroment()]);
+        }
+        catch (e) {
+          throw new Error(e);
+        }
+
+        return uri || 'http://server/';
+      };
+
+
+      /**
+       * return enviroment where the client application is.
+       */
+      $delegate.backend = function backend() {
+        return Config[Config.enviroments[this.$$host]].backend;
+      };
+
+
+      /**
+       * return enviroment where the client application is.
+       */
+      $delegate.enviroment = function enviroment() {
+        return Config.enviroments[this.$$host];
       };
 
       return $delegate;
     });
-  })
-  .run(function(Config, $location) {
-    // Is possible uyse $location service with $http request intead Confir.url
-    Config.backend = $location.backend(Config);
-
-    console.log('gizra.location backend: ', Config.backend);
   })

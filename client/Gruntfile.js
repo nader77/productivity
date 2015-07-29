@@ -1,6 +1,7 @@
 // Generated on 2014-11-30 using generator-angular 0.10.0
 'use strict';
 
+var _ = require('lodash');
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -399,7 +400,7 @@ module.exports = function (grunt) {
       },
       server: {
         constants: {
-          Config: grunt.file.readJSON('config.json').development
+          Config: grunt.file.readJSON('config.json')
         },
         values: {
           debug: true
@@ -410,7 +411,7 @@ module.exports = function (grunt) {
       },
       build: {
         constants: {
-          Config: grunt.file.readJSON('config.json').production
+          Config: grunt.file.readJSON('config.json')
         },
         options: {
           dest: '<%= yeoman.dist %>/scripts/config.js'

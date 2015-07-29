@@ -8,7 +8,7 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('Auth', function ($injector, $rootScope, Utils, localStorageService, Config) {
+  .service('Auth', function ($injector, $rootScope, Utils, localStorageService, $location) {
 
     /**
      * Login by calling the Drupal REST server.
@@ -22,7 +22,7 @@ angular.module('clientApp')
       // Service 'Auth' can't depend on '$http', hence injecting it manually
       return $injector.get('$http')({
         method: 'GET',
-        url: Config.backend + '/api/login-token',
+        url: $location.backend() + '/api/login-token',
         headers: {
           'Authorization': 'Basic ' + Utils.Base64.encode(user.username + ':' + user.password)
         }

@@ -8,7 +8,7 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('TrackingProject', function ($q, $http, $timeout, Config, $rootScope, localStorageService) {
+  .service('TrackingProject', function ($q, $http, $timeout, $location, $rootScope, localStorageService) {
 
     // A private cache key.
     var cache = {};
@@ -32,7 +32,7 @@ angular.module('clientApp')
      */
     var getDataFromBackend = function(year, month) {
       var deferred = $q.defer();
-      var url = Config.backend + '/api/tracking-project?year=' + year + '&month=' + month;
+      var url = $location.backend() + '/api/tracking-project?year=' + year + '&month=' + month;
       console.log(url);
       // Debug mode.
       if (Config.debug) {

@@ -19,7 +19,7 @@ angular
     'ui.router',
     'angular-loading-bar',
     'ui.calendar',
-    'gizra.location'
+    //'gizra.location'
   ])
   .config(function($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
 
@@ -169,7 +169,9 @@ angular
     cfpLoadingBarProvider.includeSpinner = true;
     cfpLoadingBarProvider.latencyThreshold = 0;
   })
-  .run(function ($rootScope, $state, $stateParams, $log, Config) {
+  .run(function ($rootScope, $state, $stateParams, $log, $location, Config) {
+    console.log(Config, $location.enviroment(), $location.backend());
+    debugger;
     // It's very handy to add references to $state and $stateParams to the
     // $rootScope so that you can access them from any scope within your
     // applications.For example:
