@@ -169,9 +169,8 @@ angular
     cfpLoadingBarProvider.includeSpinner = true;
     cfpLoadingBarProvider.latencyThreshold = 0;
   })
-  .run(function ($rootScope, $state, $stateParams, $log, $location, Config) {
-    //$log.log(Config, $location.enviroment(), $location.backend());
-    debugger;
+  .run(function ($rootScope, $state, $stateParams, $log, Config) {
+    $log.log(Config.backend);
 
     // It's very handy to add references to $state and $stateParams to the
     // $rootScope so that you can access them from any scope within your
