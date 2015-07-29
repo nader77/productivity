@@ -1,18 +1,28 @@
 {
-  "development": {
+  "local": {
     "backend": "http://localhost/productivity/www",
-    "urlPattern": "http://localhost/${appname}/www",
-    "appname": "productivity",
-    "local": true
-    "calendar": false,
-    "debugUiRouter": true,
+    "local": true,
+    "debugUiRouter": true
   },
-  "production": {
-    "debugUiRouter": false,
-    "calendar": false,
-    "urlPattern": "http:/${{host}.${domain}",
-    "domain": "pantheon.io",
+  "dev": {
+    "backend": "http://dev-example.com",
     "local": false,
     "debugUiRouter": true
+  },
+  "test": {
+    "backend": "http://test-example.com",
+    "local": false,
+    "debugUiRouter": false
+  },
+  "live": {
+    "backend": "http://live-example.com",
+    "local": false,
+    "debugUiRouter": false
+  },
+  "enviroments": {
+    "localhost": "local",
+    "dev-example.com": "dev",
+    "test-example.com": "test",
+    "example.gizra.com": "live"
   }
 }
