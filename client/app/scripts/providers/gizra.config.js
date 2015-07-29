@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * @ngdoc Module to generate backend from a config file..
+ * @ngdoc Module to generate backend from a config file.
  * @name gizra.config
  * @description
  * # gizra.config
