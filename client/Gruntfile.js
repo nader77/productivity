@@ -1,7 +1,6 @@
 // Generated on 2014-11-30 using generator-angular 0.10.0
 'use strict';
 
-var _ = require('lodash');
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
