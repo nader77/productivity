@@ -29,6 +29,8 @@ install:
   - phpenv rehash
 
 before_script:
+  # Update npm
+  - npm install -g npm@^2.0.0
 
   # Install Drupal
   - cp travis.config.sh config.sh
@@ -36,8 +38,6 @@ before_script:
 
   # Install client
   - cd client
-  - npm cache clean
-  - npm install -g npm2
   - npm install
   - bower install
   - cp config.travis.json config.json
