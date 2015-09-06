@@ -13,8 +13,7 @@ before_install:
   - composer self-update
 
   # Install grunt.
-  - npm install -g grunt-cli
-  - npm install -g bower
+  - npm install -g grunt-cli bower
 
   # Install Sass and Compass for Grunt to work.
   - gem install compass
@@ -29,8 +28,13 @@ install:
   - phpenv rehash
 
 before_script:
-  # Update npm
-  - npm install -g npm@^2.0.0
+  # Create display.
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3 # give xvfb some time to start
+
+  # Run phantomJs.
+  - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
 
   # Install Drupal
   - cp travis.config.sh config.sh
@@ -51,12 +55,6 @@ before_script:
   - composer install --prefer-source
   - cd ..
 
-script:
-  # Create display.
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 3 # give xvfb some time to start
-
   # start a web server on port 8080, run in the background; wait for initialization
   - drush @productivity runserver 127.0.0.1:8080 &
   - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
@@ -64,8 +62,7 @@ script:
   # Wait for Grunt to finish loading.
   - until $(curl --output /dev/null --silent --head --fail http://localhost:9001); do sleep 1; echo '.'; done
 
-  # Run phantomJs.
-  - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
+script:
 
   # Run behat tests.
   - cd behat
