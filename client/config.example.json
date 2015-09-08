@@ -23,6 +23,6 @@
     "localhost": "local",
     "dev-example.com": "dev",
     "test-example.com": "test",
-    "example.gizra.com": "live"
+    "example.company.com": "live"
   }
 }

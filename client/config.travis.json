@@ -1,7 +1,29 @@
 {
-  "development": {
-    "backend": "http://127.0.0.1:8080",
-    "debugUiRouter": false,
-    "calendar": false
+  "local": {
+    "backend": "http://127.0.0.1:8080/productivity/www",
+    "local": true,
+    "debugUiRouter": true
+  },
+  "dev": {
+    "backend": "http://dev-example.com",
+    "local": false,
+    "debugUiRouter": true
+  },
+  "test": {
+    "backend": "http://test-example.com",
+    "local": false,
+    "debugUiRouter": false
+  },
+  "live": {
+    "backend": "http://live-example.com",
+    "local": false,
+    "debugUiRouter": false
+  },
+  "enviroments": {
+    "localhost": "local",
+    "127.0.0.1": "local",
+    "dev-example.com": "dev",
+    "test-example.com": "test",
+    "example.company.com": "live"
   }
 }
