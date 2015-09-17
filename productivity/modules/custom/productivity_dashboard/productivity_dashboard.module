@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Productivity dashboard feature.
+ */
+
+include_once 'productivity_dashboard.features.inc';

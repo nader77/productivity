@@ -138,6 +138,7 @@ angular
     $httpProvider.interceptors.push(function ($q, Auth, localStorageService) {
       return {
         'request': function (config) {
+
           if (!config.url.match(/login-token/)) {
             config.headers = {
               'access-token': localStorageService.get('access_token')
@@ -177,7 +178,13 @@ angular
     $rootScope.$stateParams = $stateParams;
     $rootScope.debug = Config.debugUiRouter;
 
-    if (!!Config.debugUiRouter) {
+    // If we're not on a local env, take the backend url for base URL.
+    if (!Config.local) {
+      Config.backend = window.location.protocol + '//' +  window.location.host + '/';
+    }
+
+
+      if (!!Config.debugUiRouter) {
       $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams) {
         $log.log('$stateChangeStart to ' + toState.to + '- fired when the transition begins. toState,toParams : \n', toState, toParams);
       });

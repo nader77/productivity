@@ -24,7 +24,10 @@ regions[page_bottom]    = 'Page bottom'
 ;; Stylesheets
 ;;;;;;;;;;;;;;;;;;;;;
 
+;stylesheets[all][] = bootstrap/css/bootstrap.min.css
 stylesheets[all][] = css/style.css
+stylesheets[all][] = css/theme/theme_styles.css
+stylesheets[all][] = css/theme/calendar.css
 
 
 ; For information on choosing the desired method, please read the Drupal
@@ -34,12 +37,18 @@ stylesheets[all][] = css/style.css
 ; ;----------------------------------
 ; ; METHOD 1: Bootstrap Source Files
 ; ;----------------------------------
-; 
+;
 ; ;;;;;;;;;;;;;;;;;;;;;
 ; ;; Scripts
 ; ;;;;;;;;;;;;;;;;;;;;;
-; 
-; scripts[] = 'bootstrap/js/affix.js'
+;
+;scripts[] = 'bootstrap/js/bootstrap.min.js'
+scripts[] = 'js/scripts.js'
+scripts[] = 'js/pace.min.js'
+scripts[] = 'js/jquery.nanoscroller.min.js'
+scripts[] = 'js/jquery.easypiechart.min.js'
+scripts[] = 'js/jquery.countTo.js'
+
 ; scripts[] = 'bootstrap/js/alert.js'
 ; scripts[] = 'bootstrap/js/button.js'
 ; scripts[] = 'bootstrap/js/carousel.js'
@@ -63,7 +72,13 @@ stylesheets[all][] = css/style.css
 ; Method 2 uses BootstrapCDN, the only thing you might need to provide here
 ; is overrides to Bootstrap theme settings. Copy them here from the base theme
 ; to override.
-
+settings[bootstrap_cdn_provider] = 'jsdelivr'
+settings[bootstrap_cdn_custom_css] = '//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.css'
+settings[bootstrap_cdn_custom_css_min] = '//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css'
+settings[bootstrap_cdn_custom_js] = '//cdn.jsdelivr.net/bootstrap/3.2.0/js/bootstrap.js'
+settings[bootstrap_cdn_custom_js_min] = '//cdn.jsdelivr.net/bootstrap/3.2.0/js/bootstrap.min.js'
+settings[bootstrap_cdn_jsdelivr_version] = '3.2.0'
+settings[bootstrap_cdn_jsdelivr_theme] = 'bootstrap'
 
 ; ;-------------------------
 ; ; Let panel know about all the layouts.
