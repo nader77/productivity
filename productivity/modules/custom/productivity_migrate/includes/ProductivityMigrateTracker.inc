@@ -60,13 +60,6 @@ class ProductivityMigrateTracker extends ProductivityMigrate {
 
   }
 
-  function prepareRow($row) {
-    // Normalize dudi.
-    if ($row->employee == 'dudi') {
-      $row->employee = 'david';
-    }
-  }
-
   function prepare($entity, $row) {
     $wrapper = entity_metadata_wrapper('node', $entity);
     if ($row->length_unit == 'days' || $row->length_unit == 'day') {
