@@ -10,6 +10,144 @@
 function productivity_time_tracking_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'multifield-field_issues_logs-field_github_issue'
+  $field_instances['multifield-field_issues_logs-field_github_issue'] = array(
+    'bundle' => 'field_issues_logs',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 2,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_github_issue',
+    'label' => 'GitHub issue',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 0,
+    ),
+  );
+
+  // Exported field_instance: 'multifield-field_issues_logs-field_issue_label'
+  $field_instances['multifield-field_issues_logs-field_issue_label'] = array(
+    'bundle' => 'field_issues_logs',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_issue_label',
+    'label' => 'Issue label',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance: 'multifield-field_issues_logs-field_issue_type'
+  $field_instances['multifield-field_issues_logs-field_issue_type'] = array(
+    'bundle' => 'field_issues_logs',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_issue_type',
+    'label' => 'Issue type',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance: 'multifield-field_issues_logs-field_time_spent'
+  $field_instances['multifield-field_issues_logs-field_time_spent'] = array(
+    'bundle' => 'field_issues_logs',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 1,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_time_spent',
+    'label' => 'Time Spent',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => 0,
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 2,
+    ),
+  );
+
   // Exported field_instance: 'node-time_tracking-field_day_type'
   $field_instances['node-time_tracking-field_day_type'] = array(
     'bundle' => 'time_tracking',
@@ -127,6 +265,45 @@ function productivity_time_tracking_field_default_field_instances() {
       'settings' => array(),
       'type' => 'options_select',
       'weight' => 6,
+    ),
+  );
+
+  // Exported field_instance: 'node-time_tracking-field_issues_logs'
+  $field_instances['node-time_tracking-field_issues_logs'] = array(
+    'bundle' => 'time_tracking',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'multifield',
+        'settings' => array(
+          'view_mode' => 'default',
+        ),
+        'type' => 'multifield_default',
+        'weight' => 8,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_issues_logs',
+    'label' => 'Issues logs',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'multifield',
+      'settings' => array(),
+      'type' => 'multifield_default',
+      'weight' => 8,
     ),
   );
 
@@ -273,8 +450,13 @@ function productivity_time_tracking_field_default_field_instances() {
   t('Day type');
   t('Description');
   t('Employee');
+  t('GitHub issue');
   t('Hours');
+  t('Issue label');
+  t('Issue type');
+  t('Issues logs');
   t('Project');
+  t('Time Spent');
   t('Work date');
 
   return $field_instances;

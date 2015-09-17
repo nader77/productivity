@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('DashboardCtrl', function ($scope, Auth, $state, account, $log) {
+  .controller('DashboardCtrl', function ($scope, Auth, $state, account) {
 
     var today = new Date();
     $scope.day = today.getDate();

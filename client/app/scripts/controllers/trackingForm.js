@@ -44,6 +44,27 @@ angular.module('clientApp')
       "July", "August", "September", "October", "November", "December" ];
 
 
+    // Set the allowed values for issue type.
+    $scope.issueTypes = [{
+      id: 'dev',
+      label: 'Development'
+    }, {
+      id: 'qa',
+      label: 'QA'
+    }, {
+      id: 'management',
+      label: 'Management'
+    }, {
+      id: 'designer',
+      label: 'Designer'
+    }, {
+      id: 'non_billable',
+      label: 'None billable'
+    }, {
+      id: 'review',
+      label: 'Review'
+    }];
+
     $scope.month = $stateParams.month;
     $scope.monthString = monthNames[$scope.month-1];
     $scope.year = $stateParams.year;
@@ -80,12 +101,19 @@ angular.module('clientApp')
       $scope.data = {};
       $scope.data.period = 'hour';
       $scope.data.type = 'regular';
+      $scope.data.length = 0;
+      $scope.data.issues = [{
+        issue: 0,
+        label: '',
+        type: 'dev',
+        time: ''
+      }];
       $scope.data.employee = $stateParams.username;
     }
     else {
       $scope.title = 'Your report for the '  + $stateParams.day + '/' + $stateParams.month + '/' +  $stateParams.year + ' ?';
       // Fill with existing nid.
-      angular.forEach(tracking[$stateParams.day], function(value, key) {
+      angular.forEach(tracking[$stateParams.day], function(value) {
         if (value.id == $stateParams.id) {
           $scope.data = value;
         }
@@ -197,6 +225,18 @@ angular.module('clientApp')
       var date = $stateParams.year + '.' + $stateParams.month + '.' +  $stateParams.day + ' 12:00:00';
       data.date = new Date(date).getTime() / 1000;
 
+      // Check if the data in all the issues is valid.
+      var issuesData = Tracking.checkIssuesData(data.issues);
+      // Add the total hours to the tracking data.
+      data.length = issuesData.totalHours;
+      // Cancel submit and return error when there's an error in issues.
+      if (issuesData.issuesErrors) {
+        $scope.messageClass = 'alert-danger';
+        $scope.message = issuesData.issuesErrors;
+        $scope.creating = false;
+        return;
+      }
+
       if (Config.debug) {
         console.log(data);
       }
@@ -281,18 +321,77 @@ angular.module('clientApp')
     };
 
     /**
-     * Create a default description when a project is selected;
-     * Fetch Github PRs from the current day and list them in the description.
+     * Remove issue.
+     *
+     * Removes issues that are already added to the work log or fetched from
+     * GitHub.
+     *
+     * @param key
+     *  The key of the issue in the data.
+     */
+    $scope.removeIssue = function(key) {
+      if ($scope.data.issues[key]) {
+        // Update the total hours.
+        $scope.data.length -= $scope.data.issues[key].time;
+        $scope.data.issues.splice(key, 1);
+      }
+    };
+
+    /**
+     * Add new issue.
+     *
+     * Adds a custom issue in addition to the issues pulled from GitHub.
+     */
+    $scope.addNewIssue = function() {
+      $scope.data.issues.push({
+        issue: 0,
+        label: '',
+        type: 'dev',
+        time: ''
+      });
+    };
+
+    /**
+     * Update total hours.
+     *
+     * Updates the total hours that are logged in a work day on some project.
+     */
+    $scope.updateTotalHours = function() {
+      var elements = angular.element('.issue-time');
+      var total = 0;
+      angular.forEach(elements, function(element) {
+        total += element.value ? parseFloat(element.value) : 0;
+      });
+      $scope.data.length = total;
+    };
+
+    /**
+     * Handle GitHub Pull Requests.
+     *
+     * Create a list of issues when a project is selected;
+     * Fetch GitHub PRs from the current day and list them as issues in the
+     * tracking.
      */
     $scope.updateDescription = function() {
       Tracking.getGithubPRs($scope.data.projectID, $scope.employee, $scope.day, $scope.month, $scope.year)
         .success(function(data) {
-          $scope.data.description = '';
+          // Reset the issues so we don't have issues from multiple projects.
+          $scope.data.issues = [];
           angular.forEach(data.data, function(pr) {
-            $scope.data.description += '#' + pr.issue + ': ' + pr.label + '\n';
+            $scope.data.issues.push({
+              issue: pr.id,
+              label: '#' + pr.issue + ': ' + pr.label,
+              type: 'dev',
+              time: ''
+            });
           });
+          // Add an empty issue if the project didn't have any issues from
+          // GitHub, Because we don't wanna lose the row of fields completely.
+          if (!$scope.data.issues.length) {
+            $scope.addNewIssue();
+          }
         });
-    }
+    };
   });
 
 

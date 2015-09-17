@@ -1,4 +1,4 @@
-node.tpl.php<?php
+<?php
 
 /**
  * @file
