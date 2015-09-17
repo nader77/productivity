@@ -20,6 +20,17 @@ function productivity_user_init() {
   }
 }
 
+/**
+ * Implements hook_permission().
+ */
+function  productivity_user_permission() {
+  return array(
+    'project admin' => array(
+      'title' => t('Project Admin'),
+      'description' => t('See Projects finance data.'),
+    ),
+  );
+}
 
 /**
  * Check if we are in live environment.

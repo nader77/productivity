@@ -246,8 +246,8 @@
             </li>
             <li class="dropdown profile-dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <img src="<?php print $theme_path;?>/images/samples/scarlet-159.png" alt=""/>
-                <span class="hidden-xs">Scarlett Johansson</span> <b class="caret"></b>
+                <img src="<?php print 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($user->mail))) . '.jpg';?>" alt="User gravater"/>
+                <span class="hidden-xs"><?php print $user->name;?></span> <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
                 <li><a href="<?php print url('user');?>"><i class="fa fa-user"></i>Profile</a></li>
@@ -282,13 +282,13 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
               <ul class="nav nav-pills nav-stacked">
                 <li class="active">
-                  <a href="index.html">
+                  <a href="<?php print $base_path;?>">
                     <i class="fa fa-dashboard"></i>
                     <span>Dashboard</span>
                   </a>
                 </li>
                 <li class="">
-                  <a href="index.html">
+                  <a href="<?php print $base_path;?>payments">
                     <i class="fa fa-money"></i>
                     <span>Payments</span>
                     <span class="label label-danger label-circle pull-right">05</span>
@@ -302,13 +302,13 @@
                   </a>
                   <ul class="submenu reports collapse">
                     <li>
-                      <a href="/admin/content/project-monthly-report">Monthly report</a>
+                      <a href="<?php print $base_path;?>admin/content/project-monthly-report">Monthly report</a>
                     </li>
                     <li>
-                      <a ui-sref="dashboard.campaigns.content({ companyId: company.id, campaignId: campaignId })" ui-sref-active="active">Top Campaign Content</a>
+                      <a href="<?php print $base_path;?>admin/content/projects">Projects</a>
                     </li>
                     <li>
-                      <a ui-sref="dashboard.campaigns.management({ companyId: company.id })" ui-sref-active="active">Campaign Management</a>
+                      <a href="<?php print $base_path;?>admin/content/github">Github</a>
                     </li>
                   </ul>
                 </li>

@@ -36,11 +36,6 @@ class ProductivityMigratePayment extends ProductivityMigrate {
       'ProductivityMigrateProject',
     );
 
-//    $field_names = array(
-//      'title',
-//    );
-//
-//    $this->addSimpleMappings($field_names);
 
     $this->addFieldMapping('field_date_expected', 'field_date_expected');
     $this->addFieldMapping('field_date_expected:timezone')
