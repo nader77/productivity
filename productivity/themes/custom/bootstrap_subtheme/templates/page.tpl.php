@@ -104,7 +104,7 @@
             <?php print render($page['navigation']); ?>
           <?php endif; ?>
         </div>
-
+        <?php if ($user->uid): ?>
         <div class="nav-no-collapse pull-right" id="header-nav">
           <ul class="nav navbar-nav pull-right">
             <li class="mobile-search">
@@ -263,6 +263,7 @@
             </li>
           </ul>
         </div>
+        <?php endif; ?>
       </div>
     </div>
   </header>
@@ -270,6 +271,7 @@
   <div id="page-wrapper" class="container fixed-footer" ng-class="{ 'nav-small': compactSidebar }">
 
     <div class="row">
+      <?php if ($user->uid): ?>
       <div id="nav-col">
         <section id="col-left" class="col-left-nano">
           <div id="col-left-inner" class="col-left-nano-content">
@@ -317,7 +319,7 @@
           </div>
         </section>
       </div>
-
+      <?php endif; ?>
       <div id="content-wrapper">
 
         <div class="main-container">
