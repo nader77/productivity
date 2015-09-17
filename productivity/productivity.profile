@@ -99,17 +99,17 @@ function productivity_setup_blocks() {
   $default_theme = variable_get('theme_default', 'bartik');
 
   $blocks = array(
-    array(
-      'module' => 'system',
-      'delta' => 'user-menu',
-      'theme' => $default_theme,
-      'status' => 1,
-      'weight' => 0,
-      'region' => 'header',
-      'pages' => '',
-      'title' => '<none>',
-      'cache' => DRUPAL_NO_CACHE,
-    ),
+//    array(
+//      'module' => 'system',
+//      'delta' => 'user-menu',
+//      'theme' => $default_theme,
+//      'status' => 1,
+//      'weight' => 0,
+//      'region' => 'header',
+//      'pages' => '',
+//      'title' => '<none>',
+//      'cache' => DRUPAL_NO_CACHE,
+//    ),
   );
 
   drupal_static_reset();
@@ -144,8 +144,9 @@ function productivity_setup_rebuild_permissions() {
  */
 function productivity_setup_set_variables() {
   $variables = array(
-    'jquery_update_jquery_version' => 1.8,
+    'jquery_update_jquery_version' => 1.10,
     'productivity_time_tracking_hours_count_as_day' => 7,
+    'site_frontpage' => 'dashboard',
   );
 
   foreach ($variables as $key => $value) {

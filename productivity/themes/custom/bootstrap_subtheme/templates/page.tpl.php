@@ -73,96 +73,309 @@
  * @ingroup themeable
  */
 ?>
-<header id="navbar" role="banner" class="<?php print $navbar_classes; ?>">
-  <div class="container">
-    <div class="navbar-header">
-      <?php if ($logo): ?>
+<div id="theme-wrapper">
+  <header class="navbar" id="header-navbar">
+    <div class="container">
       <a class="logo navbar-btn pull-left" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>">
         <img src="<?php print $logo; ?>" alt="<?php print t('Home'); ?>" />
       </a>
-      <?php endif; ?>
 
-      <?php if (!empty($site_name)): ?>
-      <a class="name navbar-brand" href="<?php print $front_page; ?>" title="<?php print t('Home'); ?>"><?php print $site_name; ?></a>
-      <?php endif; ?>
+      <div class="clearfix">
+        <button class="navbar-toggle" data-target=".navbar-ex1-collapse" data-toggle="collapse" type="button">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="fa fa-bars"></span>
+        </button>
 
-      <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-
-    <?php if (!empty($primary_nav) || !empty($secondary_nav) || !empty($page['navigation'])): ?>
-      <div class="navbar-collapse collapse">
-        <nav role="navigation">
-          <?php if (!empty($primary_nav)): ?>
-            <?php print render($primary_nav); ?>
-          <?php endif; ?>
-          <?php if (!empty($secondary_nav)): ?>
-            <?php print render($secondary_nav); ?>
-          <?php endif; ?>
+        <div class="nav-no-collapse navbar-left pull-left hidden-sm hidden-xs">
+          <ul class="nav navbar-nav pull-left">
+            <li>
+              <a class="btn" id="make-small-nav">
+                <i class="fa fa-bars"></i>
+              </a>
+            </li>
+          </ul>
+<!--          --><?php //if (!empty($primary_nav)): ?>
+<!--            --><?php //print render($primary_nav); ?>
+<!--          --><?php //endif; ?>
+<!--          --><?php //if (!empty($secondary_nav)): ?>
+<!--            --><?php //print render($secondary_nav); ?>
+<!--          --><?php //endif; ?>
           <?php if (!empty($page['navigation'])): ?>
             <?php print render($page['navigation']); ?>
           <?php endif; ?>
-        </nav>
+        </div>
+
+        <div class="nav-no-collapse pull-right" id="header-nav">
+          <ul class="nav navbar-nav pull-right">
+            <li class="mobile-search">
+              <a class="btn">
+                <i class="fa fa-search"></i>
+              </a>
+
+              <div class="drowdown-search">
+                <form role="search">
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search...">
+                    <i class="fa fa-search nav-search-icon"></i>
+                  </div>
+                </form>
+              </div>
+
+            </li>
+            <li class="dropdown hidden-xs">
+              <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-warning"></i>
+                <span class="count">8</span>
+              </a>
+              <ul class="dropdown-menu notifications-list">
+                <li class="pointer">
+                  <div class="pointer-inner">
+                    <div class="arrow"></div>
+                  </div>
+                </li>
+                <li class="item-header">You have 6 new notifications</li>
+                <li class="item">
+                  <a href="#">
+                    <i class="fa fa-comment"></i>
+                    <span class="content">New comment on ‘Awesome P...</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <i class="fa fa-plus"></i>
+                    <span class="content">New user registration</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <i class="fa fa-envelope"></i>
+                    <span class="content">New Message from George</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <i class="fa fa-shopping-cart"></i>
+                    <span class="content">New purchase</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <i class="fa fa-eye"></i>
+                    <span class="content">New order</span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item-footer">
+                  <a href="#">
+                    View all notifications
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="dropdown hidden-xs">
+              <a class="btn dropdown-toggle" data-toggle="dropdown">
+                <i class="fa fa-envelope-o"></i>
+                <span class="count">16</span>
+              </a>
+              <ul class="dropdown-menu notifications-list messages-list">
+                <li class="pointer">
+                  <div class="pointer-inner">
+                    <div class="arrow"></div>
+                  </div>
+                </li>
+                <li class="item first-item">
+                  <a href="#">
+                    <img src="<?php print $theme_path;?>/images/samples/messages-photo-1.png" alt=""/>
+                      <span class="content">
+                          <span class="content-headline">
+                              George Clooney
+                          </span>
+                          <span class="content-text">
+                              Look, just because I don't be givin' no man a foot massage don't make it
+                              right for Marsellus to throw...
+                          </span>
+                      </span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <img src="<?php print $theme_path;?>/images/samples/messages-photo-2.png" alt=""/>
+                      <span class="content">
+                        <span class="content-headline">
+                            Emma Watson
+                        </span>
+                        <span class="content-text">
+                            Look, just because I don't be givin' no man a foot massage don't make it
+                            right for Marsellus to throw...
+                        </span>
+                      </span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item">
+                  <a href="#">
+                    <img src="<?php print $theme_path;?>/images/samples/messages-photo-3.png" alt=""/>
+                      <span class="content">
+                        <span class="content-headline">
+                            Robert Downey Jr.
+                        </span>
+                        <span class="content-text">
+                            Look, just because I don't be givin' no man a foot massage don't make it
+                            right for Marsellus to throw...
+                        </span>
+                      </span>
+                    <span class="time"><i class="fa fa-clock-o"></i>13 min.</span>
+                  </a>
+                </li>
+                <li class="item-footer">
+                  <a href="#">
+                    View all messages
+                  </a>
+                </li>
+              </ul>
+            </li>
+            <li class="hidden-xs">
+              <a href="<?php print url('admin');?>" class="btn">
+                <i class="fa fa-cog"></i>
+              </a>
+            </li>
+            <li class="dropdown profile-dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <img src="<?php print 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($user->mail))) . '.jpg';?>" alt="User gravater"/>
+                <span class="hidden-xs"><?php print $user->name;?></span> <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="<?php print url('user');?>"><i class="fa fa-user"></i>Profile</a></li>
+                <li><a href="#"><i class="fa fa-cog"></i>Settings</a></li>
+                <li><a href="#"><i class="fa fa-envelope-o"></i>Messages</a></li>
+                <li><a href="<?php print url('user/logout');?>"><i class="fa fa-power-off"></i>Logout</a></li>
+              </ul>
+            </li>
+            <li class="hidden-xxs">
+              <a  href="<?php print url('user/logout');?>" class="btn">
+                <i class="fa fa-power-off"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-    <?php endif; ?>
-  </div>
-</header>
+    </div>
+  </header>
 
-<div class="main-container container">
+  <div id="page-wrapper" class="container fixed-footer" ng-class="{ 'nav-small': compactSidebar }">
 
-  <header role="banner" id="page-header">
-    <?php if (!empty($site_slogan)): ?>
-      <p class="lead"><?php print $site_slogan; ?></p>
-    <?php endif; ?>
+    <div class="row">
+      <div id="nav-col">
+        <section id="col-left" class="col-left-nano">
+          <div id="col-left-inner" class="col-left-nano-content">
+            <div id="user-left-box" class="clearfix hidden-sm hidden-xs">
+              <div class="user-box">
+                <span class="name">Welcome<br><?php if($user->uid) { print $user->name; } ?></span>
+              </div>
+            </div>
+            Menu
+            <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
+              <ul class="nav nav-pills nav-stacked">
+                <li class="active">
+                  <a href="<?php print $base_path;?>">
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                  </a>
+                </li>
+                <li class="">
+                  <a href="<?php print $base_path;?>payments">
+                    <i class="fa fa-money"></i>
+                    <span>Payments</span>
+                    <span class="label label-danger label-circle pull-right">05</span>
+                  </a>
+                </li>
+                <li class="">
+                  <a class="dropdown-toggle" data-target=".submenu.reports" data-toggle="collapse">
+                    <i class="fa fa-bar-chart-o"></i>
+                    <span>Reports</span>
+                    <i class="fa fa-chevron-circle-right drop-icon"></i>
+                  </a>
+                  <ul class="submenu reports collapse">
+                    <li>
+                      <a href="<?php print $base_path;?>admin/content/project-monthly-report">Monthly report</a>
+                    </li>
+                    <li>
+                      <a href="<?php print $base_path;?>admin/content/projects">Projects</a>
+                    </li>
+                    <li>
+                      <a href="<?php print $base_path;?>admin/content/github">Github</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </div>
 
-    <?php print render($page['header']); ?>
-  </header> <!-- /#page-header -->
+      <div id="content-wrapper">
 
-  <div class="row">
+        <div class="main-container">
 
-    <?php if (!empty($page['sidebar_first'])): ?>
-      <aside class="col-sm-3" role="complementary">
-        <?php print render($page['sidebar_first']); ?>
-      </aside>  <!-- /#sidebar-first -->
-    <?php endif; ?>
+          <header role="banner" id="page-header">
+            <?php if (!empty($site_slogan)): ?>
+              <p class="lead"><?php print $site_slogan; ?></p>
+            <?php endif; ?>
 
-    <section<?php print $content_column_class; ?>>
-      <?php if (!empty($page['highlighted'])): ?>
-        <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
-      <?php endif; ?>
-      <?php if (!empty($breadcrumb)): print $breadcrumb; endif;?>
-      <a id="main-content"></a>
-      <?php print render($title_prefix); ?>
-      <?php if (!empty($title)): ?>
-        <h1 class="page-header"><?php print $title; ?></h1>
-      <?php endif; ?>
-      <?php print render($title_suffix); ?>
-      <?php print $messages; ?>
-      <?php if (!empty($tabs)): ?>
-        <?php print render($tabs); ?>
-      <?php endif; ?>
-      <?php if (!empty($page['help'])): ?>
-        <?php print render($page['help']); ?>
-      <?php endif; ?>
-      <?php if (!empty($action_links)): ?>
-        <ul class="action-links"><?php print render($action_links); ?></ul>
-      <?php endif; ?>
-      <?php print render($page['content']); ?>
-    </section>
+            <?php print render($page['header']); ?>
+          </header> <!-- /#page-header -->
 
-    <?php if (!empty($page['sidebar_second'])): ?>
-      <aside class="col-sm-3" role="complementary">
-        <?php print render($page['sidebar_second']); ?>
-      </aside>  <!-- /#sidebar-second -->
-    <?php endif; ?>
+          <div class="row">
 
+            <?php if (!empty($page['sidebar_first'])): ?>
+              <aside class="col-sm-3" role="complementary">
+                <?php print render($page['sidebar_first']); ?>
+              </aside>  <!-- /#sidebar-first -->
+            <?php endif; ?>
+
+            <section<?php print $content_column_class; ?>>
+              <?php if (!empty($page['highlighted'])): ?>
+                <div class="highlighted jumbotron"><?php print render($page['highlighted']); ?></div>
+              <?php endif; ?>
+              <?php if (!empty($breadcrumb)): print $breadcrumb; endif;?>
+              <a id="main-content"></a>
+              <?php print render($title_prefix); ?>
+              <?php if (!empty($title)): ?>
+                <h1 class="page-header"><?php print $title; ?></h1>
+              <?php endif; ?>
+              <?php print render($title_suffix); ?>
+              <?php print $messages; ?>
+              <?php if (!empty($tabs)): ?>
+                <?php print render($tabs); ?>
+              <?php endif; ?>
+              <?php if (!empty($page['help'])): ?>
+                <?php print render($page['help']); ?>
+              <?php endif; ?>
+              <?php if (!empty($action_links)): ?>
+                <ul class="action-links"><?php print render($action_links); ?></ul>
+              <?php endif; ?>
+              <?php print render($page['content']); ?>
+            </section>
+
+            <?php if (!empty($page['sidebar_second'])): ?>
+              <aside class="col-sm-3" role="complementary">
+                <?php print render($page['sidebar_second']); ?>
+              </aside>  <!-- /#sidebar-second -->
+            <?php endif; ?>
+
+          </div>
+        </div>
+
+        <footer id="footer-bar" class="row">
+          <p id="footer-copyright" class="col-xs-12">© 2015 <a href="#">Gizra Productivity</a>.</p>
+          <?php print render($page['footer']); ?>
+        </footer>
+      </div>
+    </div>
   </div>
 </div>
-<footer class="footer container">
-  <?php print render($page['footer']); ?>
-</footer>

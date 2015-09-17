@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Productivity payment feature.
+ */
+
+include_once 'productivity_payment.features.inc';

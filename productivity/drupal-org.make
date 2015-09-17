@@ -3,7 +3,7 @@ api = 2
 
 ; Modules
 projects[admin_menu][subdir] = "contrib"
-projects[admin_menu][version] = "3.0-rc4"
+projects[admin_menu][version] = "3.x-dev"
 
 projects[admin_views][subdir] = "contrib"
 projects[admin_views][version] = "1.2"
@@ -37,6 +37,9 @@ projects[entityreference][patch][] = "https://www.drupal.org/files/issues/migrat
 
 projects[entityreference_filter][subdir] = "contrib"
 projects[entityreference_filter][version] = "1.4"
+
+projects[gravatar][subdir] = "contrib"
+projects[gravatar][version] = "1.x-dev"
 
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "3.5"
