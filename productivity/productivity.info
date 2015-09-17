@@ -38,6 +38,7 @@ dependencies[] = migrate_extras
 dependencies[] = flag
 dependencies[] = logs_http
 dependencies[] = module_filter
+dependencies[] = multifield
 dependencies[] = page_manager
 dependencies[] = panels
 dependencies[] = pathauto

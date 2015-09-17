@@ -77,6 +77,10 @@ projects[module_filter][version] = "2.0-alpha2"
 projects[money][subdir] = "contrib"
 projects[money][version] = "1.x-dev"
 
+projects[multifield][subdir] = "contrib"
+projects[multifield][version] = "1.x-dev"
+projects[multifield][patch][] = "https://www.drupal.org/files/issues/2041531-23-entity-api-support.patch"
+
 projects[panels][subdir] = "contrib"
 projects[panels][version] = "3.4"
 

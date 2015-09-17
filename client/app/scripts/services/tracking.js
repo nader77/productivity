@@ -8,7 +8,7 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('Tracking', function ($q, $http, $timeout, Config, $rootScope, localStorageService) {
+  .service('Tracking', function ($q, $http, $timeout, Config, $rootScope) {
 
     // A private cache key.
     var cache = {};
@@ -51,13 +51,13 @@ angular.module('clientApp')
         url: url,
         data: data
       }).
-        success(function(data, status, headers, config) {
+        success(function(data) {
           // this callback will be called asynchronously
           // when the response is available.
           data.error = false;
           deferred.resolve(data);
       }).
-        error(function(data, status, headers, config) {
+        error(function(data) {
           // called asynchronously if an error occurs
           // or server returns response with an error status.
           data.error = true;
@@ -86,6 +86,45 @@ angular.module('clientApp')
       });
     };
 
+    /**
+     * Check logged issues.
+     *
+     * Check there's at least one issue logged in the time track,
+     * Issues should have all the data, any missing data will return an error.
+     * Calculate the real total hours of tracking.
+     *
+     * @param issues
+     *  The existing issues in time-tracking.
+     *
+     * @returns {*}
+     *  An object containing the total hours and errors in the issues.
+     */
+    this.checkIssuesData = function(issues) {
+      var issuesData = {
+        issuesErrors: '',
+        totalHours: 0
+      };
+
+      var mandatoryFields = ['label', 'type', 'time'];
+
+      if (!issues.length) {
+        issuesData.issuesErrors = 'At least one issue should be added.';
+        return issuesData;
+      }
+      angular.forEach(issues, function(issue) {
+        angular.forEach(mandatoryFields, function(fieldName) {
+          if (!issue[fieldName]) {
+            issuesData.issuesErrors += 'Please fill the ' + fieldName + ' in all the issues. ';
+            return false;
+          }
+        });
+        // Add time to total hours if everything is filled.
+        issuesData.totalHours += parseFloat(issue.time);
+      });
+
+      return issuesData;
+    };
+
 
     /**
      * Return events array from the server.
@@ -97,7 +136,7 @@ angular.module('clientApp')
 
       var url = Config.backend + '/api/tracking?year=' + year + '&month=' + month;
 
-      if (employee != undefined) {
+      if (employee !== undefined) {
         url += '&employee=' + employee;
       }
 
@@ -138,7 +177,7 @@ angular.module('clientApp')
 
       // Broadcast a change event.
       $rootScope.$broadcast(broadcastUpdateEventName);
-    }
+    };
     $rootScope.$on('clearCache', function() {
       cache = {};
     });
