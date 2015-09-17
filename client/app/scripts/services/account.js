@@ -8,7 +8,7 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('Account', function ($q, $http, $timeout, Config, $rootScope, $log) {
+  .service('Account', function ($q, $http, $timeout, Config, $rootScope) {
 
     // A private cache key.
     var cache = {};
@@ -49,8 +49,6 @@ angular.module('clientApp')
     /**
      * Save meters in cache, and broadcast en event to inform that the meters data changed.
      *
-     * @param itemId
-     *   The item ID.
      * @param data
      *   The data to cache.
      */
@@ -73,10 +71,10 @@ angular.module('clientApp')
     /**
      * Prepare response; Convert ID to int.
      *
-     * As we explicetly require ui-router to match an int, we must case the
+     * As we explicitly require ui-router to match an int, we must case the
      * entity ID to integer.
      *
-     * @param list
+     * @param data
      *
      * @returns {*}
      */
@@ -94,7 +92,7 @@ angular.module('clientApp')
       });
 
       return data;
-    };
+    }
 
     $rootScope.$on('clearCache', function() {
       cache = {};

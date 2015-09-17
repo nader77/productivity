@@ -8,7 +8,7 @@
  * Service in the clientApp.
  */
 angular.module('clientApp')
-  .service('TrackingProject', function ($q, $http, $timeout, Config, $rootScope, localStorageService) {
+  .service('TrackingProject', function ($q, $http, $timeout, Config, $rootScope) {
 
     // A private cache key.
     var cache = {};
@@ -71,7 +71,7 @@ angular.module('clientApp')
 
       // Broadcast a change event.
       $rootScope.$broadcast(broadcastUpdateEventName);
-    }
+      };
     $rootScope.$on('clearCache', function() {
       cache = {};
     });
