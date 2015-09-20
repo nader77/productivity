@@ -141,7 +141,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    *
    * @throws Exception
    */
-  private function waitFor($fn, $timeout = 5000) {
+  private function waitFor($fn, $timeout = 10000) {
     $start = microtime(true);
     $end = $start + $timeout / 1000.0;
     while (microtime(true) < $end) {
