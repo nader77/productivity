@@ -36,7 +36,7 @@ function productivity_github_payload() {
   }
 
   $node = new stdClass();
-  $node->title = check_plain($payload->pull_request->title);
+  $node->title = htmlspecialchars($payload->pull_request->title, ENT_NOQUOTES, 'UTF-8');
   $node->type = 'github_issue';
   node_object_prepare($node);
   $node->language = LANGUAGE_NONE;
