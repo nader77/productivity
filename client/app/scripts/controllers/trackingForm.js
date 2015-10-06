@@ -202,7 +202,7 @@ angular.module('clientApp')
               start: new Date($scope.year, $scope.month - 1, event.day),
               allDay: true,
               type: event.type,
-              url: event.type == 'empty' ? '#/tracking/' + $scope.employee + '/' + $scope.year + '/' + $scope.month + '/' + event.day + '/new' : ''
+              url: event.type == 'empty' ? '#/tracking/' + $scope.employee + '/' + $scope.year + '/' + $scope.month + '/' + event.day + '/new' : '#/tracking/' + $scope.employee + '/' + $scope.year + '/' + $scope.month + '/' + event.day + '/' + event.id
             });
           }
         }
@@ -225,16 +225,19 @@ angular.module('clientApp')
       var date = $stateParams.year + '.' + $stateParams.month + '.' +  $stateParams.day + ' 12:00:00';
       data.date = new Date(date).getTime() / 1000;
 
-      // Check if the data in all the issues is valid.
-      var issuesData = Tracking.checkIssuesData(data.issues);
-      // Add the total hours to the tracking data.
-      data.length = issuesData.totalHours;
-      // Cancel submit and return error when there's an error in issues.
-      if (issuesData.issuesErrors) {
-        $scope.messageClass = 'alert-danger';
-        $scope.message = issuesData.issuesErrors;
-        $scope.creating = false;
-        return;
+      // Check only regular time tracking.
+      if (data.type == 'regular') {
+        // Check if the data in all the issues is valid.
+        var issuesData = Tracking.checkIssuesData(data.issues);
+        // Add the total hours to the tracking data.
+        data.length = issuesData.totalHours;
+        // Cancel submit and return error when there's an error in issues.
+        if (issuesData.issuesErrors) {
+          $scope.messageClass = 'alert-danger';
+          $scope.message = issuesData.issuesErrors;
+          $scope.creating = false;
+          return;
+        }
       }
 
       if (Config.debug) {

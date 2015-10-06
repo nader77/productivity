@@ -54,11 +54,13 @@ angular
         }
       })
       .state('login', {
+        title: 'Login',
         url: '/login',
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
       })
       .state('dashboard', {
+        title: 'Dashboard',
         abstract: true,
         url: '',
         templateUrl: 'views/dashboard/main.html',
@@ -71,6 +73,7 @@ angular
         }
       })
       .state('dashboard.tracking-form', {
+        title: 'Tracking form',
         url: '/tracking/{username:string}/{year:int}/{month:int}/{day:string}/{id:string}',
         templateUrl: 'views/dashboard/tracking-form.html',
         controller: 'TrackingFormCtrl',
@@ -85,12 +88,14 @@ angular
         }
       })
       .state('dashboard.tracking', {
+        title: 'Tracking',
         url: '/tracking/{year:int}/{month:int}',
         templateUrl: 'views/dashboard/tracking.html',
         controller: 'TrackingCtrl',
         onEnter: page403
       })
       .state('dashboard.tracking-table', {
+        title: 'Tracking table',
         url: '/tracking-table/{year:int}/{month:int}',
         templateUrl: 'views/dashboard/tracking-table.html',
         controller: 'TrackingTableCtrl',
@@ -105,6 +110,7 @@ angular
         }
       })
       .state('dashboard.tracking.track', {
+        title: 'Tracking table',
         url: '/tracking-table/{trackId:int}',
         templateUrl: 'views/dashboard/tracking-table.html',
         controller: 'TrackingCtrl',
@@ -116,6 +122,7 @@ angular
         }
       })
       .state('dashboard.account', {
+        title: 'My account',
         url: '/my-account',
         templateUrl: 'views/dashboard/account/account.html',
         controller: 'AccountCtrl',
@@ -127,6 +134,7 @@ angular
         }
       })
       .state('403', {
+        title: 'Forbidden',
         url: '/403',
         templateUrl: 'views/403.html'
       });
