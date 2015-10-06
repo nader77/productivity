@@ -203,6 +203,7 @@ body{
     .fc-event {
       border: 0 none;
       padding: 1px;
+      color: white;
 
       &.empty-event {
         background-color: white;
@@ -211,7 +212,6 @@ body{
 
       &.regular-event {
         background-color: $color4_light;
-        color: white;
       }
 
       &.sick-event {
