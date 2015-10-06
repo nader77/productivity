@@ -111,7 +111,7 @@
                         </select>
                       </div>
                       <div class="col-xs-3">
-                        <input ng-model="issue.time" ng-change="updateTotalHours()" name="issue-time" type="number" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.50" ng-required="true" placeholder="8" class="form-control input-md issue-time">
+                        <input ng-model="issue.time" ng-change="updateTotalHours()" name="issue-time" type="number" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.50" ng-required="true" min="0" placeholder="8" class="form-control input-md issue-time">
                       </div>
                       <div class="col-xs-1">
                         <i ng-if="data.issues.length > 1" ng-click="removeIssue(key)" class="fa fa-minus-circle fa-2x"></i>
@@ -123,7 +123,7 @@
               </div>
 
               <!-- Total hours-->
-              <div class="form-group">
+              <div class="form-group" ng-if="data.type == 'regular'">
                 <label class="col-md-4 control-label">Total hours</label>
                 <div class="col-md-4 total-hours">
                   <span>{{data.length}}</span>
