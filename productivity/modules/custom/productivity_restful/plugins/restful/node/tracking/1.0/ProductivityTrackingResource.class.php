@@ -51,6 +51,11 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       'property' => 'field_day_type',
     );
 
+    $public_fields['description'] = array(
+      'property' => 'field_description',
+      'sub_property' => 'value',
+    );
+
     $public_fields['issues'] = array(
       'property' => 'field_issues_logs',
       'process_callbacks' => array(
