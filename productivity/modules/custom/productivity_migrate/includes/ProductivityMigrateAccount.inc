@@ -24,9 +24,7 @@ class ProductivityMigrateAccount extends ProductivityMigrate {
   /**
    * Configure the object during creation.
    */
-  public function __construct() {
-    parent::__construct();
-
+  public function __construct($arguments) {
+    parent::__construct($arguments);
   }
-
 }
