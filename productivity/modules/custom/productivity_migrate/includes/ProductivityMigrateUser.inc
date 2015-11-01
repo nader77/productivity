@@ -28,10 +28,8 @@ class ProductivityMigrateUser extends Migration {
   /**
    * Configure the object during creation.
    */
-  public function __construct() {
-    parent::__construct(
-      MigrateGroup::getInstance(PRODUCTIVITY_MIGRATION_GROUP)
-    );
+  public function __construct($arguments) {
+    parent::__construct($arguments);
 
     $this->description = t('Import users from CSV file.');
     // Create a map object for tracking the relationships between source rows.
