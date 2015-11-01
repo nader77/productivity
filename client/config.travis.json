@@ -1,7 +1,14 @@
 {
   "development": {
     "backend": "http://127.0.0.1:8080",
+    "debugUiRouter": true,
+    "calendar": false,
+    "local": true
+  },
+  "production": {
+    "backend": "http://live-productivity.pantheon.io",
     "debugUiRouter": false,
-    "calendar": false
+    "calendar": false,
+    "local": true
   }
 }

@@ -53,7 +53,6 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
 
     $public_fields['description'] = array(
       'property' => 'field_description',
-      'sub_property' => 'value',
     );
 
     $public_fields['issues'] = array(
