@@ -369,18 +369,36 @@ angular.module('clientApp')
     };
 
     /**
-     * Handle GitHub Pull Requests.
+     * Reset the issues so we don't have issues from multiple projects.
+     */
+    $scope.changeProject = function() {
+      $scope.data.issues = [];
+      $scope.getPRs();
+    }
+
+    /**
+     * Fetch project's github PRs for current date.
      *
-     * Create a list of issues when a project is selected;
      * Fetch GitHub PRs from the current day and list them as issues in the
      * tracking.
      */
-    $scope.updateDescription = function() {
+    $scope.getPRs = function() {
       Tracking.getGithubPRs($scope.data.projectID, $scope.employee, $scope.day, $scope.month, $scope.year)
         .success(function(data) {
-          // Reset the issues so we don't have issues from multiple projects.
-          $scope.data.issues = [];
+          // Remove empty tracking rows.
+          for (var i in $scope.data.issues) {
+            if (!$scope.data.issues[i].label) {
+              $scope.data.issues.splice(i, 1);
+            }
+          }
           angular.forEach(data.data, function(pr) {
+            // Ignore PRs that are already listed.
+            for (var i in $scope.data.issues) {
+              if ($scope.data.issues[i].issue == pr.id) {
+                return;
+              }
+            }
+
             $scope.data.issues.push({
               issue: pr.id,
               label: '#' + pr.issue + ': ' + pr.label,
