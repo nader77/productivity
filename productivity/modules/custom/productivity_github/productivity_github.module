@@ -22,37 +22,39 @@ function productivity_github_menu() {
  * Create a pull request node when a pull request is opened.
  */
 function productivity_github_payload() {
+  // Verify payload is in the $_POST array.
+  $_POST['payload'] = empty($_POST['payload']) ? file_get_contents("php://input") : $_POST['payload'];
+
+  if (variable_get('productivity_debug_payload', FALSE)) {
+    // Debug GitHub request.
+    $debug_array = array(
+      'post' => $_POST,
+      'request' => $_REQUEST,
+      'server' => $_SERVER,
+    );
+
+    watchdog('productivity', 'Github hook activated, data:\n' . print_r($debug_array, TRUE));
+  }
+
   if (empty($_POST['payload'])) {
     return;
   }
 
   $payload = json_decode($_POST['payload']);
-  if (empty($payload->action) ||  $payload->action != 'opened' || empty($payload->pull_request)) {
-    return;
-  }
+  $headers = getallheaders();
+  $event = isset($headers['X-GitHub-Event']) ? $headers['X-GitHub-Event'] : FALSE;
+  $action = $payload->action;
 
-  if (variable_get('productivity_debug_payload', FALSE)) {
-    watchdog('productivity', print_r($payload, TRUE));
+  // Handle the payload in a separate function.
+  $function_name = 'productivity_gituhub_payload_handle_' . $event . '_' . $action;
+  if (function_exists($function_name)) {
+    $function_name($payload);
   }
-
-  $node = new stdClass();
-  $node->title = htmlspecialchars($payload->pull_request->title, ENT_NOQUOTES, 'UTF-8');
-  $node->type = 'github_issue';
-  node_object_prepare($node);
-  $node->language = LANGUAGE_NONE;
-  $node->status = NODE_PUBLISHED;
-  $node->uid = productivity_github_get_uid_by_github_username(check_plain($payload->pull_request->user->login));
-  $wrapper = entity_metadata_wrapper('node', $node);
-  $wrapper->field_employee->set($node->uid);
-  $wrapper->field_project->set(productivity_github_get_project_by_repository($payload->pull_request->head->repo));
-  $wrapper->body->value->set($payload->pull_request->body);
-  $wrapper->field_issue_id->set((int)$payload->pull_request->number);
-  $wrapper->field_work_date->set(strtotime($payload->pull_request->updated_at));
-  $wrapper->field_github_project_id->set($payload->pull_request->head->repo->full_name);
-  $wrapper->save();
 }
 
 /**
+ * Get user ID from the GitHub username.
+ *
  * @param string $github_username
  *   A github username.
  *
@@ -68,6 +70,8 @@ function productivity_github_get_uid_by_github_username($github_username) {
 }
 
 /**
+ * Get the project ID from the repository name.
+ *
  * @param $repository_info
  *  A github repository names.
  *
@@ -121,4 +125,195 @@ function _productivity_github_get_entity_id_by_field_value($field, $bundle, $val
   if (!empty($result['entity_id'])) {
     return $result['entity_id'];
   }
+}
+
+/**
+ * Handle a pull request synchronization.
+ *
+ * @param $payload
+ *   GitHub payload.
+ *
+ * @see https://developer.github.com/v3/activity/events/types/#pullrequestevent
+ */
+function productivity_gituhub_payload_handle_pull_request_synchronize($payload) {
+  // We need to check if it's the same user an update the same entity, if it's
+  // a different user then we need to create a new entity.
+
+  $nid = productivity_github_get_entity_id_by_push_info($payload);
+  if ($nid) {
+    // Update push dates if the entity exists.
+    $wrapper = entity_metadata_wrapper('node', $nid);
+    $push_dates = $wrapper->field_push_date->value();
+    $push_dates[] = strtotime($payload->repository->pushed_at);
+    $wrapper->field_push_date->set($push_dates);
+    $wrapper->save();
+  }
+  else {
+    // Create a new entity if a new user has pushed to the pull request.
+    productivity_gituhub_payload_handle_pull_request_opened($payload);
+  }
+}
+
+/**
+ * Handle a new pull request.
+ *
+ * @param $payload
+ *   GitHub payload.
+ *
+ * @see https://developer.github.com/v3/activity/events/types/#pullrequestevent
+ */
+function productivity_gituhub_payload_handle_pull_request_opened($payload) {
+  // When a PR is opened we need to create a new entity.
+
+  // Create the node if there's a user ID.
+  $uid = productivity_github_get_uid_by_github_username(check_plain($payload->sender->login));
+  if (!$uid) {
+    return;
+  }
+
+  $node = new stdClass();
+  $node->title = check_plain($payload->pull_request->title);
+  $node->type = 'github_issue';
+  node_object_prepare($node);
+  $node->language = LANGUAGE_NONE;
+  $node->status = NODE_PUBLISHED;
+  $node->uid = $uid;
+
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $wrapper->field_employee->set($node->uid);
+  $wrapper->field_project->set(productivity_github_get_project_by_repository($payload->repository));
+  $wrapper->field_issue_id->set((int)$payload->pull_request->number);
+  $wrapper->field_push_date->set(array(strtotime($payload->pull_request->updated_at)));
+  $wrapper->field_github_content_type->set('pull_request');
+
+  $project_id = $payload->repository->full_name;
+  $wrapper->field_github_project_id->set($project_id);
+  $body = $payload->pull_request->body;
+  $wrapper->body->value->set($body);
+
+  // Attempt to get an issue number.
+  $issue_id = _productivity_github_issue_number_from_body($body);
+
+  if ($issue_id) {
+    // Find a local node for the issue.
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', 'github_issue')
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->fieldCondition('field_issue_id', 'value', $issue_id)
+      ->fieldCondition('field_github_project_id', 'value', $project_id)
+      ->fieldCondition('field_github_content_type', 'value', 'issue')
+      ->range(0, 1)
+      ->execute();
+
+    if (!empty($result['node'])) {
+      $wrapper->field_issue_reference->set(key($result['node']));
+    }
+  }
+
+  $wrapper->save();
+}
+
+/**
+ * Handle a new issue.
+ *
+ * @param $payload
+ *  GitHub payload.
+ *
+ * @see https://developer.github.com/v3/activity/events/types/#issuesevent
+ */
+function productivity_gituhub_payload_handle_issues_opened($payload) {
+  // Simplify code.
+  $data = $payload->issue;
+
+  $title = htmlspecialchars($data->title, ENT_NOQUOTES, 'UTF-8');
+
+  $node = new stdClass();
+  $node->title = $title;
+  $node->type = 'github_issue';
+  node_object_prepare($node);
+  $node->language = LANGUAGE_NONE;
+  $node->status = NODE_PUBLISHED;
+  $node->uid = productivity_github_get_uid_by_github_username(check_plain($data->user->login));
+
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $wrapper->body->value->set($data->body);
+
+  $fields = array(
+    'field_employee' => $node->uid,
+    'field_project' => productivity_github_get_project_by_repository($payload->repository),
+    'field_issue_id' => (int)$data->number,
+    'field_push_date' => array(strtotime($data->updated_at)),
+    'field_github_project_id' => $payload->repository->full_name,
+    'field_github_content_type' => 'issue',
+  );
+
+  // Get time estimate from title, if it has any.
+  $matches = array();
+  if (preg_match('/\[([0-9]+)[h|H]\]|\[([0-9]+\.[0-9]+)[h|H]\]/', $title, $matches)) {
+    // The iss has a time estimate.
+    $time_estimate = empty($matches[1]) ? (empty($matches[2]) ? 0 : $matches[2]) : $matches[1];
+
+    $fields += array(
+      'field_time_estimate' => $time_estimate,
+    );
+  }
+
+  foreach ($fields as $field_name => $field_value) {
+    $wrapper->{$field_name}->set($field_value);
+  }
+
+  $wrapper->save();
+}
+
+/**
+ * Get GitHub entity ID from GitHub's API info.
+ *
+ * @param $payload
+ *  The push info from GitHub API.
+ *
+ * @return mixed
+ *  The GitHub entity ID.
+ */
+function productivity_github_get_entity_id_by_push_info($payload) {
+  $uid = productivity_github_get_uid_by_github_username(check_plain($payload->sender->login));
+  $issue_id = (int)$payload->pull_request->number;
+  $project_id = productivity_github_get_project_by_repository($payload->repository);
+
+  // Check if there's any entity opened already for this pull request (issue)
+  // which is referencing the current pusher.
+  $query = new EntityFieldQuery();
+  $result = $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'github_issue')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_issue_id', 'value', $issue_id)
+    ->fieldCondition('field_employee', 'target_id', $uid)
+    ->fieldCondition('field_project', 'target_id', $project_id)
+    ->range(0, 1)
+    ->execute();
+
+  if (!empty($result['node'])) {
+    return key($result['node']);
+  }
+}
+
+/**
+ * Get the issue number from the pull request body.
+ *
+ * @param $text string
+ *  Pull request's body.
+ *
+ * @return number
+ *  Issue number in Github.
+ */
+function _productivity_github_issue_number_from_body($text) {
+  $matches = array();
+  if (preg_match("/\#([0-9]*)/", $text, $matches)) {
+
+    // Found an issue.
+    return intval($matches[1]);
+  }
+
+  return FALSE;
 }
