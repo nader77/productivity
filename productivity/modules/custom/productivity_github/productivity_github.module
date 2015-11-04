@@ -43,6 +43,17 @@ function productivity_github_payload() {
   $payload = json_decode($_POST['payload']);
   $headers = getallheaders();
   $event = isset($headers['X-GitHub-Event']) ? $headers['X-GitHub-Event'] : FALSE;
+
+  // Allow only specific events.
+  $allowed_events = array(
+    'issues',
+    'pull_request',
+  );
+  if (!in_array($event, $allowed_events)) {
+    watchdog('productivity', t('A not allowed Github API event of type "@event" was sent.', array('@event' => $event)));
+    return;
+  }
+
   $action = $payload->action;
 
   // Handle the payload in a separate function.
@@ -144,9 +155,26 @@ function productivity_gituhub_payload_handle_pull_request_synchronize($payload) 
     // Update push dates if the entity exists.
     $wrapper = entity_metadata_wrapper('node', $nid);
     $push_dates = $wrapper->field_push_date->value();
-    $push_dates[] = strtotime($payload->repository->pushed_at);
-    $wrapper->field_push_date->set($push_dates);
-    $wrapper->save();
+
+    // Check if the same date have been already submitted (Ignore time).
+    // We don't want to create a big list of dates on each commit.
+    $date_is_saved = FALSE;
+    if (!empty($push_dates)) {
+      foreach ($push_dates as $date) {
+        $date_formatted = date('d/m/Y', $date);
+        $pushed_date_formatted = date('d/m/Y', strtotime($payload->repository->pushed_at));
+        watchdog('productivity', 'pushed_date_formmated:' . $pushed_date_formatted);
+        watchdog('productivity', 'date_formmated:' . $date_formatted);
+        if ($date_formatted == $pushed_date_formatted) {
+          $date_is_saved = TRUE;
+        }
+      }
+    }
+    if (!$date_is_saved) {
+      $push_dates[] = strtotime($payload->repository->pushed_at);
+      $wrapper->field_push_date->set($push_dates);
+      $wrapper->save();
+    }
   }
   else {
     // Create a new entity if a new user has pushed to the pull request.
