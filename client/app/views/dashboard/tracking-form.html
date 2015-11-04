@@ -1,8 +1,22 @@
 <div class="tracking-form-page">
   <div class="container">
     <div class="row">
-      <h2>Track your work</h2>
-      <div class="col-md-12">
+      <div class="col-md-4">
+        <h2>Track your work</h2>
+      </div>
+      <div class="col-md-6 month-nav">
+        <a ui-sref="dashboard.tracking-form({username: employee, year: prevYear, month: prevMonth, day: '01', id:'new'})"
+           class="fa fa-caret-left"></a>
+        <a ui-sref="dashboard.tracking-table({year: year, month: month})">{{ monthString }} - {{ year }}</a>
+        <a ui-sref="dashboard.tracking-form({username: employee, year: nextYear, month: nextMonth, day: '01', id:'new'})"
+          class="fa fa-caret-right"></a>
+      </div>
+      <div class="col-md-2">
+        <button ng-click="toggleCalendar()" type="button" class="btn btn-info calendar-btn">{{calendarState}} Calendar</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12" ng-if="!calendar">
         <table class="table table-striped table-hover track-item-table table-condensed">
           <thead>
           <tr>
@@ -29,6 +43,14 @@
           </tbody>
         </table>
       </div>
+      <div class="col-md-12" ng-if="calendar">
+        <ul>
+          <li ng-repeat="event in eventSources.events">
+            {{event.title}} starts in {{event.start}}
+          </li>
+        </ul>
+        <div id="calendar" ui-calendar="uiConfig.calendar" ng-model="eventSources"></div>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -39,8 +61,8 @@
 
               <!-- Day type (inline) -->
               <div class="form-group">
-                <label class="col-md-4 control-label" for="daytype">Day type</label>
-                <div class="col-md-4">
+                <label class="col-md-4 control-label">Day type</label>
+                <div class="col-md-8">
                   <label class="radio-inline" for="daytype-0">
                     <input type="radio" ng-model="data.type" name="daytype" id="daytype-0" value="regular" checked="checked">
                     Regular
@@ -57,34 +79,59 @@
                     <input type="radio" ng-model="data.type"  name="daytype" id="daytype-3" value="miluim">
                     Miluim
                   </label>
+                  <label class="radio-inline" for="daytype-4">
+                    <input type="radio" ng-model="data.type"  name="daytype" id="daytype-4" value="convention">
+                    Convention
+                  </label>
                 </div>
               </div>
-              <div class="regular-day-wrapper" ng-show="data.type == 'regular'">
+              <div class="regular-day-wrapper" ng-if="data.type == 'regular'">
 
                 <!-- Select Project -->
                 <div class="form-group">
-                  <label class="col-md-4 control-label" for="project">Project</label>
-                  <div class="col-md-4">
+                  <label class="col-sm-4 col-xs-2 control-label" for="project">Project</label>
+                  <div class="col-sm-3 col-xs-8">
                     <select id="project" ng-model="data.projectID" name="project" class="form-control"
-                            ng-options="project.id as project.label for project in projects">
+                            ng-options="project.id as project.label for project in projects" ng-change="changeProject()"
+                            ng-disabled="owner(data)">
                     </select>
                   </div>
-                </div>
-
-                <!-- Text input-->
-                <div class="form-group">
-                  <label class="col-md-4 control-label" for="timelength">Hours</label>
-                  <div class="col-md-4">
-                    <input id="timelength" ng-model="data.length" name="length" type="text" placeholder="example 8" class="form-control input-md">
+                  <div class="col-sm-1 col-xs-2">
+                    <a ng-if="!data.projectID" disabled class="btn btn-primary"><i class="fa fa-refresh"></i></a>
+                    <a ng-if="data.projectID" class="btn btn-primary" ng-click="getPRs()"><i class="fa fa-refresh"></i></a>
                   </div>
                 </div>
 
-                <!-- Description -->
+                <!-- Issues tracker -->
                 <div class="form-group">
-                  <label class="col-md-4 control-label" for="description">Description</label>
+                  <label class="col-md-4 control-label">Issues</label>
                   <div class="col-md-4">
-                    <textarea id="description"  class="form-control" ng-model="data.description" name="description"></textarea>
+                    <div class="row issues-row" ng-if="data.issues" ng-repeat="(key, issue) in data.issues">
+                      <div class="col-xs-5">
+                        <input ng-model="issue.label" name="issue-label" type="text" ng-required="true" placeholder="#1: example" class="form-control input-md issue-label">
+                      </div>
+                      <div class="col-xs-3">
+                        <select name="issues-hours" ng-model="issue.type" class="form-control" ng-required="true" id="issue-type"
+                                ng-options="type.id as type.label for type in issueTypes">
+                        </select>
+                      </div>
+                      <div class="col-xs-3">
+                        <input ng-model="issue.time" ng-change="updateTotalHours()" name="issue-time" type="number" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.50" ng-required="true" min="0" placeholder="8" class="form-control input-md issue-time">
+                      </div>
+                      <div class="col-xs-1">
+                        <i ng-if="data.issues.length > 1" ng-click="removeIssue(key)" class="fa fa-minus-circle fa-2x"></i>
+                        <i ng-if="$last && !newIssues.length" ng-click="addNewIssue()" class="fa fa-plus-circle fa-2x"></i>
+                      </div>
+                    </div>
                   </div>
+                </div>
+              </div>
+
+              <!-- Total hours-->
+              <div class="form-group" ng-if="data.type == 'regular'">
+                <label class="col-md-4 control-label">Total hours</label>
+                <div class="col-md-4 total-hours">
+                  <span>{{data.length}}</span>
                 </div>
               </div>
 
@@ -94,6 +141,7 @@
                 <div class="col-md-4">
                   <button id="submit" ng-disabled="creating" name="submit" type="submit" class="btn btn-primary">Save</button>
                   <a ui-sref="dashboard.tracking-form({username: data.employee, year: year, month: month, day: day, id: 'new'})" class="btn btn-success">New</a>
+                  <a ng-click="remove(data)" ng-if="owner(data)" class="btn btn-danger">Remove</a>
 
                   <div ng-class="messageClass" class="alert alert-dismissible" role="alert" ng-show="message != ''" >
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -106,7 +154,7 @@
           </form>
       </div>
       <div ui-view></div>
-      <pre>
+      <pre ng-if="debug">
         Employee: {{ data.employee }}
         Project ID: {{ data.projectID }}
         Track ID: {{ data.id }}

@@ -11,6 +11,8 @@
 
 # The profile used to install the platform.
 PROFILE_NAME="productivity"
+# This will be used to create a symbolic link inside drupal with the dist app.
+APP_NAME="client"
 # The human name of the install profile
 PROFILE_TITLE="Productivity"
 
@@ -68,7 +70,10 @@ MYSQL_DB_NAME="productivity"
 ##
 
 # Post install script.
-# function post_install {}
+# function post_install {
+# # replace .htaccess with my local server.
+# replace "# RewriteBase /drupal" "RewriteBase /~xxx/productivity/www/" -- www/.htaccess
+#}
 
 # Post upgrade script.
 # function post_upgrade {}

@@ -15,10 +15,9 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
   if (function_exists($preprocess_function)) {
     $preprocess_function($variables);
   }
-}
-
-function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
-  $variables['tracking'] = productivity_time_tracking_total_hours($variables['nid']);
+  if ($node->type == 'project' && node_access('update', $node)) {
+    $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), url('recalculate-project-time/' . $node->nid, array('absolute' => TRUE)));
+  }
 }
 
 /**
@@ -27,8 +26,14 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
 function bootstrap_subtheme_preprocess_html(&$variables) {
   // Add ng-app="plApp" attribute to the body tag.
   $variables['attributes_array']['ng-app'] = 'productivityApp';
+  $variables['body_attributes_array']['class'][] = 'pace-done';
+  $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
+
 }
 
+function bootstrap_subtheme_preprocess_page(&$variables) {
+  $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
+}
 /**
  * Implements hook_element_info_alter().
  *

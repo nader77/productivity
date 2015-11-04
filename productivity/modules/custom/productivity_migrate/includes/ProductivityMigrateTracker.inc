@@ -30,8 +30,8 @@ class ProductivityMigrateTracker extends ProductivityMigrate {
   /**
    * Configure the object during creation.
    */
-  public function __construct() {
-    parent::__construct();
+  public function __construct($arguments) {
+    parent::__construct($arguments);
 
     $this->dependencies = array(
       'ProductivityMigrateUser',
@@ -58,13 +58,6 @@ class ProductivityMigrateTracker extends ProductivityMigrate {
       ->addFieldMapping('field_project', 'project')
       ->sourceMigration('ProductivityMigrateProject');
 
-  }
-
-  function prepareRow($row) {
-    // Normalize dudi.
-    if ($row->employee == 'dudi') {
-      $row->employee = 'david';
-    }
   }
 
   function prepare($entity, $row) {

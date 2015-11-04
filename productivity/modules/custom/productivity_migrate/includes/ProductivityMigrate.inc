@@ -22,10 +22,8 @@ abstract class ProductivityMigrate extends Migration {
   /**
    * Class constructor.
    */
-  public function __construct() {
-    parent::__construct(
-      MigrateGroup::getInstance(PRODUCTIVITY_MIGRATION_GROUP)
-    );
+  public function __construct($arguments) {
+    parent::__construct($arguments);
 
     // Make sure we can use it for node and term only.
     if (!$this->isEntityTypeSupported($this->entityType)) {

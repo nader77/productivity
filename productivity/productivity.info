@@ -30,15 +30,20 @@ dependencies[] = date_popup
 dependencies[] = entity
 dependencies[] = entity_token
 dependencies[] = entityreference
+dependencies[] = gravatar
+dependencies[] = jquery_update
 dependencies[] = features
 dependencies[] = migrate
 dependencies[] = message
+dependencies[] = message_notify
 dependencies[] = migrate_extras
 dependencies[] = flag
 dependencies[] = logs_http
 dependencies[] = module_filter
+dependencies[] = multifield
 dependencies[] = page_manager
 dependencies[] = panels
+dependencies[] = views_content
 dependencies[] = pathauto
 dependencies[] = restful
 dependencies[] = restful_token_auth
@@ -50,11 +55,14 @@ dependencies[] = views_bulk_operations
 ; productivity modules ------------------------------------------------------------
 ; Add here productivity modules that should be enabled when installing the
 ; productivity profile.
-dependencies[] = productivity_migrate
 dependencies[] = productivity_account
+dependencies[] = productivity_admin
+dependencies[] = productivity_dashboard
+dependencies[] = productivity_github
 dependencies[] = productivity_migrate
 dependencies[] = productivity_mailgun
 dependencies[] = productivity_project
+dependencies[] = productivity_payment
 dependencies[] = productivity_restful
 dependencies[] = productivity_salary
 dependencies[] = productivity_time_tracking

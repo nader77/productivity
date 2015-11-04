@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('HomepageCtrl', function ($scope, $state, account, $log) {
+  .controller('HomepageCtrl', function ($scope, $state, account) {
     if (account) {
       var today = new Date();
       var dd = today.getDate();

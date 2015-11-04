@@ -6,6 +6,24 @@
 
 include_once 'productivity_time_tracking.features.inc';
 
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Add a custom field ("Hours to count as one day") to the admin form "site information".
+ * URL: admin/config/system/site-information.
+ */
+function productivity_time_tracking_form_system_site_information_settings_alter(&$form, &$form_state) {
+  $form['productivity_time_tracking_hours_count_as_day'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Hours to count as one day'),
+    '#default_value' => variable_get('productivity_time_tracking_hours_count_as_day'),
+  );
+  $form['productivity_time_tracking_managers_email'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Managers email'),
+    '#default_value' => variable_get('productivity_time_tracking_managers_email'),
+  );
+}
 
 /**
  * Get general days in a given month.
@@ -18,6 +36,38 @@ function productivity_time_tracking_get_global_days($month, $year) {
   $request['month'] = $month;
   $request['global'] = TRUE;
   $result = $handler->get('', $request);
+
+  // Normalize global days.
+  $assoc_globals = array();
+  foreach ($result as $gday) {
+    $assoc_globals[$gday['day']] = array(
+      'id' => 'new',
+      'length' => 'G',
+      'type' => 'global',
+      'day' => (string) $gday['day'],
+      'projectName' => $gday['description'],
+    );
+  }
+  return $assoc_globals;
+}
+
+/**
+ * Save tracking using service.
+ */
+function productivity_time_tracking_save($timestamp, $employee, $project_nid) {
+  // Call the restfull service.
+  $handler = restful_get_restful_handler('tracking');
+  $request = array();
+  $request['date'] = $timestamp;
+  $request['employee'] = $employee;
+  $request['projectID'] = $project_nid;
+  $request['type'] = 'regular';
+  $request['length'] = 8.0;
+  $request['period'] = 'hour';
+  $request['description'] = 'Automated with bulk';
+
+  $result = $handler->post('', $request);
+
   return $result;
 }
 
@@ -29,14 +79,111 @@ function productivity_time_tracking_get_global_days($month, $year) {
  * @param array $employees
  * @return array
  */
-function productivity_time_tracking_total_hours($project_nid, $date_range = array(), $employees = array()) {
+function productivity_time_tracking_get_employee_tracking_count($strtime, $employee) {
+  $query = new EntityFieldQuery();
+  $account = user_load_by_name($employee);
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'time_tracking')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_work_date', 'value', $strtime)
+    ->fieldCondition('field_employee', 'target_id', $account->uid)
+    ->count();
+
+  return $query->execute();
+}
+
+/**
+ * Calculate the number of days on a certain project.
+ *
+ * Counts number of entries which has a certain number of hours (productivity_time_tracking_hours_count_as_day)
+ * as days and sums up the remaining hours and divides them on "hours_count_as_day"
+ * to calculate the number of the remaining days.
+ *
+ * @param float $project_nid
+ *    The node ID of the project.
+ * @param array $date
+ *    The range to add up the days.
+ * @param stdClass $account
+ *    The account of the user.
+ *
+ * @return float
+ *    The number of days in the project.
+ */
+function productivity_time_tracking_total_days($project_nid, $date = array(),  $account = NULL) {
+  // If the variable "hours_count_as_day" is not set, The default day is 8 Hours.
+  $hours_as_day = variable_get('productivity_time_tracking_hours_count_as_day', 8);
+  $query = new EntityFieldQuery();
+  $query->entityCondition('entity_type', 'node')
+    ->entityCondition('bundle', 'time_tracking')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_track_hours', 'value', $hours_as_day, '>=')
+    ->fieldCondition('field_project', 'target_id', $project_nid)
+    ->addMetaData('account', $account)
+    ->count();
+
+  if (!empty($date)) {
+    $start_date =  $date['year'] . '-' . $date['month'] . '-01'. ' 00:00:00';
+    $end_date = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_date)));
+    $query->fieldCondition('field_work_date', 'value', array($start_date, $end_date), 'BETWEEN');
+  }
+
+  $days_count = $query->execute();
+
+  // Calculate the remaining hours in the project.
+  // Using 'db_select' because we need the SUM.
+  $fragments_query = db_select('field_data_field_track_hours', 'h');
+  $fragments_query->leftJoin('field_data_field_project', 'p', 'h.entity_id = p.entity_id');
+  // If Date range is given, calculate within that period.
+  if (!empty($date)) {
+    $fragments_query->leftJoin('field_data_field_work_date', 'd', 'h.entity_id = d.entity_id');
+    $fragments_query->condition("field_work_date_value", array($start_date, $end_date), 'BETWEEN');
+  }
+
+  $fragments_query
+    ->condition("field_track_hours_value", $hours_as_day, '<')
+    ->condition('field_project_target_id', $project_nid, '=');
+
+
+  $fragments_query->addExpression('SUM(field_track_hours_value)', 'sum_of_hours');
+
+  $remaining_hours = $fragments_query->execute()->fetchAll();
+
+  if (!empty($remaining_hours)) {
+    $days_count = ($remaining_hours[0]->sum_of_hours / $hours_as_day) + $days_count;
+  }
+
+  return $days_count;
+}
+
+/**
+ * Total hours done in a project.
+ *
+ * @param $project_nid
+ * @param array $date
+ * @param bool $account
+ *
+ * @return array
+ */
+function productivity_time_tracking_total_hours($project_nid, $date = array(),  $account = FALSE) {
+  if (!$account) {
+    global $user;
+    $account = $user;
+  }
   $query = new EntityFieldQuery();
 
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'time_tracking')
     ->propertyCondition('status', NODE_PUBLISHED)
     ->fieldCondition('field_day_type', 'value', 'regular')
+    ->addMetaData('account', $account)
     ->fieldCondition('field_project', 'target_id', $project_nid);
+
+  if (!empty($date)) {
+    $start_date =  $date['year'] . '-' . $date['month'] . '-01'. ' 00:00:00';
+    $end_date = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_date)));
+    $query->fieldCondition('field_work_date', 'value', $start_date, '>=');
+    $query->fieldCondition('field_work_date', 'value', $end_date, '<');
+  }
 
   $result = $query->execute();
 
@@ -52,8 +199,7 @@ function productivity_time_tracking_total_hours($project_nid, $date_range = arra
     $wrapper = entity_metadata_wrapper('node', $res->nid);
     $total['hour'] += $wrapper->field_track_hours->value();
   }
-  // TODO: make a better conversion for days, using count query.
-  $total['day'] = $total['hour'] / 8;
+  $total['day'] = productivity_time_tracking_total_days($project_nid, $date, $account);
   return $total;
 }
 
@@ -61,6 +207,7 @@ function productivity_time_tracking_total_hours($project_nid, $date_range = arra
  * Implements hook_node_presave().
  *
  * Set the node title automatically.
+ * Update parent project's days/hours accordingly.
  */
 function productivity_time_tracking_node_presave($node) {
   if ($node->type == 'time_tracking') {
@@ -70,7 +217,36 @@ function productivity_time_tracking_node_presave($node) {
       ($wrapper->__isset('field_employee') ? ($wrapper->field_employee->label() . '-') : '') .
       ($wrapper->__isset('field_project') ? ($wrapper->field_project->label() . '-') : '') .
       $wrapper->field_day_type->value();
+
     $wrapper->title->set($title);
+
+    // Add days/hours to parent project's total.
+    if ($wrapper->field_day_type->value() == 'regular') {
+      $hours = 0;
+
+      $project_wrapper = $wrapper->field_project;
+
+      if ($project_wrapper->value() && isset($project_wrapper->field_hours)) {
+        $hours = $project_wrapper->field_hours->value();
+      }
+
+      if (empty($node->is_new)) {
+        $original_wrapper = entity_metadata_wrapper('node', $node->original);
+        $hours -= $original_wrapper->field_track_hours->value();
+      }
+
+      $hours += $wrapper->field_track_hours->value();
+
+      if ($project_wrapper->value()) {
+        $days_count = productivity_time_tracking_total_days($project_wrapper->getIdentifier());
+        $project_wrapper->field_hours->set($hours);
+        $project_wrapper->field_days->set($days_count);
+        $project_wrapper->save();
+        // Notification for major milestone meeting.
+        // TODO: improve by sending an invite to calendar meeting.
+        productivity_project_logged_hours_notify($project_wrapper->value());
+      }
+    }
   }
 }
 
@@ -108,4 +284,159 @@ function productivity_time_tracking_mail_create() {
   $wrapper = entity_metadata_wrapper('message', $message);
   $wrapper->save();
   // TODO: Save tracking entity.
+}
+
+/**
+ * Send message to user if he/she doesn't have tracking for yesterday.
+ *
+ * @param $account
+ *  User object.
+ */
+function productivity_time_tracking_send_reminder($account) {
+  // Get the yesterday date.
+  $yesterday_starts = date('Y-m-d 00:00:00', strtotime('-1 days'));
+  $yesterday_ends = date('Y-m-d 23:59:59', strtotime('-1 days'));
+
+  $query = db_select('field_data_field_work_date', 'd');
+  $query->leftJoin('node', 'n', 'd.entity_id = n.nid');
+
+  $results = $query->fields('d', array('entity_id'))
+    ->condition("field_work_date_value", array($yesterday_starts, $yesterday_ends), 'BETWEEN')
+    ->condition("type", "time_tracking")
+    ->condition("status", NODE_PUBLISHED)
+    ->condition("uid", $account->uid)
+    ->execute()
+    ->fetchAll();
+
+  // Don't send a message when we have logged work from yesterday.
+  if (!empty($results)) {
+    return;
+  }
+
+  $values = array(
+    'subject' => 'Productivity',
+    'uid' => $account->uid
+  );
+  $message = message_create('mail_reminder', $values);
+
+  $wrapper = entity_metadata_wrapper('user', $account);
+
+  $wrapper->field_last_notification->set(time());
+  $wrapper->save();
+  // Send mail to users
+  message_notify_send_message($message);
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * Send reminder to existing developers,
+ * That did not filled time tracking yesterday.
+ */
+function productivity_time_tracking_cron() {
+
+  $now = date('H', time());
+  $timetosend = explode('-', variable_get('time_to_send_reminder', '9-13'));
+  if (intval($now) < $timetosend[0] || intval($now) > $timetosend[1]) {
+    // Send notifications in defined time period.
+    return;
+  }
+
+  $weekend = variable_get('productivity_weekend', '5,6');
+  $days = explode(',', $weekend);
+  $dw = date('N', strtotime('-1 days'));
+  // Yesterday was weekend, so there shouldn't be any records.
+  foreach($days as $day) {
+    if ($dw == $day) {
+      return;
+    }
+  }
+
+  // Select users that don't have time tracking records during the whole
+  // previous day.
+
+  // Get all active developers, that should have tracking.
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'user')
+    ->propertyCondition('status', 1)
+    ->fieldCondition('field_job_type', 'value', 'developer')
+    ->fieldCondition('field_employment_status', 'value', 'employed')
+    ->execute();
+
+  if (empty($result['user'])) {
+    // There are no active employed developers.
+    return;
+  }
+
+  $accounts = user_load_multiple(array_keys($result['user']));
+  foreach ($accounts as $account) {
+    // Check if this user has already got notification today.
+    $wrapper = entity_metadata_wrapper('user', $account);
+    if ($wrapper->field_last_notification->value() >= strtotime(date('Y-m-d 00:00:00', time()))) {
+      // Notification has been already sent today.
+      continue;
+    }
+    productivity_time_tracking_send_reminder($account);
+  }
+}
+
+/**
+ * Implements hook_token_info().
+ */
+function productivity_time_tracking_token_info() {
+  $info['tokens']['date']['yesterday'] = array(
+    'name' => t('Yesterday date'),
+    'description' => t('Returns the yesterday date in format "YYYY/M/D"'),
+  );
+  return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ */
+function productivity_time_tracking_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+
+    if (isset($tokens['yesterday']) && isset($data['date'])) {
+      $replacements[$tokens['yesterday']] = date('Y/m/d', $data['date'] - 86400);
+    }
+
+  return $replacements;
+}
+
+/**
+ * Bulk update time tracking.
+ */
+/**
+ * Implements hook_element_info().
+ */
+function productivity_time_tracking_bulk_update($month, $year, $employee, $project_nid) {
+  $globals = productivity_time_tracking_get_global_days($month, $year);
+  $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));
+  dpm(print_r($globals));
+  // Save all days that are empty.
+  for ($i = 1; $i <= $last_day_this_month; $i++) {
+
+    $timestamp = strtotime($i . '.' . $month . '.' . $year);
+    $week_day = date( "w", $timestamp);
+    // Bypass Friday or Saturday.
+    if (in_array($week_day, array(5, 6))) {
+      dpm('Bypass WE:' . $i);
+      continue;
+    }
+    // Bypass Globals.
+    if (isset($globals[str_pad($i, 2, '0', STR_PAD_LEFT)])) {
+      dpm('Bypass Global:' . $i);
+      continue;
+    }
+    $strtime =  "$year-$month-$i 00:00:00";
+    if (!productivity_time_tracking_get_employee_tracking_count($strtime, $employee)) {
+      productivity_time_tracking_save($timestamp, $employee, $project_nid);
+      dpm('Saved day for ' . $i);
+    }
+    else {
+      dpm('Bypass saving for ' . $i);
+    }
+  }
 }

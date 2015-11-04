@@ -16,7 +16,7 @@ firesass = false
 
 # Location of the theme's resources.
 css_dir         = "css"
-sass_dir        = "sass"
+sass_dir        = "scss"
 extensions_dir  = "sass-extensions"
 images_dir      = "images"
 javascripts_dir = "js"
@@ -45,7 +45,7 @@ line_comments = false
 
 # Add the relative path to the base theme as an import path so that we can
 # easily use assets from the base theme.
-add_import_path "sass"
+add_import_path "scss"
 
 # Pass options to sass. For development, we turn on the FireSass-compatible
 # debug_info if the firesass config variable above is true.

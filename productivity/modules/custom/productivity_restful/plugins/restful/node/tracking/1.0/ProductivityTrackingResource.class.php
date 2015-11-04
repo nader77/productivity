@@ -12,7 +12,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
 
 
   /**
-   * Overrides \RestfulEntityBaseNode::publicFieldsInfo().
+   * Overrides \ProductivityEntityBaseNode::publicFieldsInfo().
    */
   public function publicFieldsInfo() {
     $public_fields = parent::publicFieldsInfo();
@@ -55,6 +55,13 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       'property' => 'field_description',
     );
 
+    $public_fields['issues'] = array(
+      'property' => 'field_issues_logs',
+      'process_callbacks' => array(
+        array($this, 'getIssues'),
+      ),
+    );
+
     $public_fields['editLink'] = array(
       'property' => 'nid',
       'process_callbacks' => array(
@@ -62,7 +69,40 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       ),
     );
 
+    $public_fields['status'] = array(
+      'property' => 'status',
+    );
+
     return $public_fields;
+  }
+
+  /**
+   *  Get a list of issues.
+   *
+   * Each time-tracking node has multiple issues, each one contains reference
+   * to the GitHub issue node, label, time and type.
+   *
+   * @param $value
+   *  The list of issues and the fields of each one.
+   *
+   * @return array
+   *  Clean list of issues.
+   */
+  protected function getIssues($value) {
+    $issues = array();
+    foreach ($value as $issue) {
+      // We cannot use `wrapper` on the sub-fields of a multi-field.
+      $issues[] = array(
+        'issue' => $issue->field_github_issue[LANGUAGE_NONE][0]['target_id'],
+        'label' => $issue->field_issue_label[LANGUAGE_NONE][0]['value'],
+        'type' => $issue->field_issue_type[LANGUAGE_NONE][0]['value'],
+        // Need to convert the value to a decimal number to be accepted by the
+        // HTML5 input field.
+        'time' => (float) number_format($issue->field_time_spent[LANGUAGE_NONE][0]['value'], 2),
+      );
+    }
+
+    return $issues;
   }
 
   /**
@@ -102,9 +142,11 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     $query = new EntityFieldQuery();
     $uids = productivity_user_get_active_uids($request['month'], $request['year']);
 
-    $query->entityCondition('entity_type', 'user')
+    $query->entityCondition('entity_type', 'user');
+    if ($uids) {
       // Load active users for the date that have developer or QA job type.
-      ->propertyCondition('uid', $uids, 'IN');
+      $query->propertyCondition('uid', $uids, 'IN');
+    }
     return $query;
   }
 
@@ -162,11 +204,7 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       $query->fieldCondition('field_day_type', 'value', $global_day, 'NOT IN');
     }
 
-    $start_timestamp =  $request['year'] . '-' . $request['month'] . '-01'. ' 00:00:00';
-    $end_timestamp = date('Y-m-d 00:00:00', strtotime('+1 month', strtotime($start_timestamp)));
-    $query->fieldCondition('field_work_date', 'value', $start_timestamp, '>=');
-    $query->fieldCondition('field_work_date', 'value', $end_timestamp, '<');
-
+    $this->setWorkDateTimeSpan($query, '+1 month');
 
     if (!empty($request['employee'])) {
       $user_by_name = user_load_by_name($request['employee']);
@@ -186,6 +224,9 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
    */
   protected function setPropertyValues(EntityMetadataWrapper $wrapper, $null_missing_fields = FALSE) {
     $request = $this->getRequest();
+    if (($request['type'] == 'regular') && (!isset($request['issues']) || empty($request['issues']))) {
+      throw new \RestfulBadRequestException('At least one issue should be added.');
+    }
 
     $wrapper->field_work_date->set($request['date']);
     $wrapper->field_day_type->set($request['type']);
@@ -197,8 +238,37 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       }
 
       $wrapper->field_project->set($request['projectID']);
-      $wrapper->field_description->set($request['description']);
       $wrapper->field_track_hours->set($request['length']);
+
+      $field_issues = array();
+      // Mandatory fields in each issue logged in any given "time-tracking".
+      $mandatory_fields = array(
+        'label',
+        'time',
+        'type',
+      );
+      foreach ($request['issues'] as $issue) {
+        // Check that none of the required variables for each issue is missing.
+        foreach ($mandatory_fields as $field_name) {
+          if (!$issue[$field_name]) {
+            throw new \RestfulBadRequestException("Please fill the $field_name in all the issues.");
+          }
+        }
+        // Cannot use the `wrapper` on the sub-fields of a multi-field.
+        $field_issues[] = array(
+          'field_github_issue' => array(LANGUAGE_NONE => array(array('target_id' => $issue['issue']))),
+          'field_issue_label' => array(LANGUAGE_NONE => array(array('value' => $issue['label']))),
+          'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $issue['type']))),
+          'field_time_spent' => array(LANGUAGE_NONE => array(array('value' => $issue['time']))),
+        );
+      }
+
+      $wrapper->field_issues_logs->set($field_issues);
+    }
+
+    // Change status if it's sent with the request.
+    if (isset($request['status'])) {
+      $wrapper->status->set($request['status']);
     }
 
     // Allow changing the entity just before it's saved. For example, setting
