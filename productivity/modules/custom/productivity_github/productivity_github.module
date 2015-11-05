@@ -41,8 +41,7 @@ function productivity_github_payload() {
   }
 
   $payload = json_decode($_POST['payload']);
-  $headers = getallheaders();
-  $event = isset($headers['X-GitHub-Event']) ? $headers['X-GitHub-Event'] : FALSE;
+  $event = isset($_SERVER['HTTP_X_GITHUB_EVENT']) ? $_SERVER['HTTP_X_GITHUB_EVENT'] : FALSE;
 
   // Allow only specific events.
   $allowed_events = array(

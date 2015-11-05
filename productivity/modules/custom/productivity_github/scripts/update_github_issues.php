@@ -50,10 +50,9 @@ while ($i < $count) {
 
   foreach ($nodes as $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
-    $work_date = $wrapper->field_work_date->value();
 
     try {
-      $wrapper->field_push_date->set(array($work_date));
+      $wrapper->field_github_content_type->set('pull_request');
       $wrapper->save();
 
     } catch (Exception $e) {
