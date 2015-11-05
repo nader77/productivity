@@ -49,7 +49,10 @@ function productivity_github_payload() {
     'pull_request',
   );
   if (!in_array($event, $allowed_events)) {
-    watchdog('productivity', t('A not allowed Github API event of type "@event" was sent.', array('@event' => $event)));
+    watchdog('productivity', t('A not allowed Github API event of type "@event" from the repository "@repo" was sent.', array(
+      '@event' => $event,
+      '@repo' => $payload->repository->full_name,
+    )));
     return;
   }
 
