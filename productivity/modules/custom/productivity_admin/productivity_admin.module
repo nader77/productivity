@@ -5,3 +5,54 @@
  */
 
 include_once 'productivity_admin.features.inc';
+
+/**
+ * Implements hook_menu().
+ */
+function productivity_admin_menu() {
+  $items = array();
+
+  $items['admin/config/system/productivity_settings'] = array(
+    'title' => 'Productivity configuration',
+    'description' => 'Set productivity configuration settings',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('productivity_admin_configuration'),
+    'access arguments' => array('manage productivity.io settings'),
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function productivity_admin_permission() {
+  return array(
+    'manage productivity.io settings' => array(
+      'title' => t('Manage productivity.io settings'),
+    ),
+  );
+}
+
+/**
+ * Page callback; Provide a form to manage all the variables of productivity.io.
+ */
+function productivity_admin_configuration($form_state) {
+  $form = array();
+
+  $form['github_public'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Github app public key'),
+    '#description' => t("In order to prevent rate limit restriction when looking for repositories you'll need to provide a github public key"),
+    '#default_value' => variable_get('github_public'),
+  );
+
+  $form['github_secret'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Github app secret key'),
+    '#description' => t("In order to prevent rate limit restriction when looking for repositories you'll need to provide a github secret key"),
+    '#default_value' => variable_get('github_secret'),
+  );
+
+  return system_settings_form($form);
+}

@@ -18,6 +18,16 @@ function productivity_project_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['repository_autocomplete'] = array(
+    'page callback' => 'productivity_project_repository_autocomplete',
+    'access callback' => TRUE,
+  );
+
+  $items['repository_autocomplete_invalidate'] = array(
+    'page callback' => 'productivity_project_repository_autocomplete_invalidate',
+    'access callback' => TRUE,
+  );
+
   return $items;
 }
 
@@ -36,8 +46,6 @@ function productivity_project_ctools_plugin_directory($module, $plugin) {
     return 'plugins/' . $plugin;
   }
 }
-
-
 
 /**
  * Access callback; Check permissions for user and the bundle of the entity.
@@ -82,6 +90,16 @@ function productivity_project_recalculate_hours($node) {
 function productivity_project_form_project_node_form_alter(&$form, &$form_state) {
   $form['field_hours']['#disabled'] = TRUE;
   $form['field_days']['#disabled'] = TRUE;
+
+  // Set the repo name as autocomplete.
+  foreach ($form['field_github_repository_name'][LANGUAGE_NONE] as &$element) {
+    if (empty($element['value'])) {
+      continue;
+    }
+    $element['value']['#autocomplete_path'] = 'repository_autocomplete';
+  }
+
+  $form['field_github_repository_name']['#prefix'] = l(t('Invalidate list of repositories'), 'repository_autocomplete_invalidate', array('query' => array('destination' => $_GET['q'])));
 }
 
 /**
@@ -186,4 +204,97 @@ function productivity_project_calculate_percentage($scope, $hours) {
   $hours_as_day = variable_get('productivity_time_tracking_hours_count_as_day', 8);
   $scope_in_hours = $scope['period'] == 'hour' ? $scope['interval'] : $scope['interval'] * $hours_as_day;
   return number_format(($hours / $scope_in_hours) * 100, 2);
+}
+
+/**
+ * Page callback; Return list of the repositories for easy project creation.
+ */
+function productivity_project_repository_autocomplete($string = '') {
+
+  $repositories = _productivity_project_build_repo_list();
+
+  $results = array();
+  foreach ($repositories as $full_name => $name) {
+    if ($string && strpos($name, $string) !== FALSE) {
+      $results[$full_name] = $name;
+    }
+  }
+
+  drupal_json_output($results);
+}
+
+/**
+ * Github API don't allow us search against repos. name. This API function will
+ * build a cached version that will be invalidate each day or by a click of a
+ * button.
+ *
+ * @return array
+ *   Array of repository name as the key and the full name as the value.
+ */
+function _productivity_project_build_repo_list() {
+  if (!productivity_project_repository_autocomplete_need_invalidate() && $results = variable_get('productivity_project_repositories')) {
+    // Return the cached lists of projects.
+    return $results;
+  }
+
+  $address = 'https://api.github.com/orgs/gizra/repos';
+  $results = array();
+
+  list($public, $secret) = array(variable_get('github_public'), variable_get('github_secret'));
+  if ($public && $secret) {
+    $query = '?client_id=' . $public . '&client_secret='. $secret . '&page=';
+  }
+  else {
+    $query = '?page=';
+  }
+
+  $i = 1;
+  while (TRUE) {
+    // Get the results for the current pagination.
+    $data = drupal_http_request($address . $query . $i);
+
+    $output = drupal_json_decode($data->data);
+
+    if ($data->code != 200) {
+      $params['@error'] =  implode(' ', $output);
+      $message = t('There was a problem requesting the repositories: @error', $params);
+      drupal_set_message($message, 'error');
+      watchdog('productivity_project', $message);
+      break;
+    }
+
+    if (!$output) {
+      // No more repositories. Break the loop.
+      break;
+    }
+
+    foreach ($output as $repository) {
+      $results[$repository['full_name']] = $repository['name'];
+    }
+
+    $i++;
+  }
+
+  variable_set('productivity_project_repositories', $results);
+  variable_set('productivity_project_repositories_defined', time());
+  return $results;
+}
+
+/**
+ * Invalidating the list of projects.
+ */
+function productivity_project_repository_autocomplete_invalidate() {
+  variable_set('productivity_project_repositories', NULL);
+  drupal_set_message(t('The repositories list has been invalidated.'));
+  $destination = !empty($_GET['destination']) ? $_GET['destination'] : '<front>';
+  drupal_goto($destination);
+}
+
+/**
+ * Check if we need to invalidate the repositories lists.
+ *
+ * @return boolean
+ */
+function productivity_project_repository_autocomplete_need_invalidate() {
+  return REQUEST_TIME - variable_get('productivity_project_repositories_defined') >= 86400;
 }
