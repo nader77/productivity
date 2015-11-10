@@ -99,14 +99,13 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     return $table;
   }
 
-  $unaccounted_row = array(
-    'class' => 'row-unaccounted',
+  $total_row = array(
+    'class' => 'row-total',
     'data' => array(
-      'issue_id' => '-',
-      'issue_name' => t('Unaccounted'),
-      'estimate' => '-',
-      'actual' => 0,
-      'completed' => '-',
+      'name' => array('data' => t('Total'), 'colspan' => 2),
+      'total_estimate' => 0,
+      'total_actual' => 0,
+      'completed' => '',
     ),
   );
 
@@ -117,24 +116,31 @@ function productivity_github_time_tracking_issue_table($project_nid) {
 
     if (!empty($table['rows'][$target_id])) {
       // This tracking points directly at an issue.
-      $table['rows'][$target_id]['data']['actual'] += $time_spent;
-      continue;
+      $relevant_row = &$table['rows'][$target_id];
+      $relevant_row['data']['actual'] += $time_spent;
     }
-
-    if (!empty($pull_requests[$target_id]) && !empty($table['rows'][$pull_requests[$target_id]['parent_issue']])) {
+    elseif (!empty($pull_requests[$target_id]) && !empty($table['rows'][$pull_requests[$target_id]['parent_issue']])) {
       // This is a pull request pointing at an issue.
-      $table['rows'][$pull_requests[$target_id]['parent_issue']]['data']['actual'] += $time_spent;
-      continue;
+      $relevant_row = &$table['rows'][$pull_requests[$target_id]['parent_issue']];
+      $relevant_row['data']['actual'] += $time_spent;
     }
 
-    // This is a pull request not pointing at an issue.
-    $unaccounted_row['data']['actual'] += $time_spent;
+    if (isset($relevant_row) && $relevant_row['data']['actual'] > $relevant_row['data']['estimate']) {
+      $relevant_row['class'] = 'row-bad';
+    }
+
+    // Add to totals.
+    $total_row['data']['total_actual'] += $time_spent;
+    if (!empty($relevant_row['data']['estimate'])) {
+      $total_row['data']['total_estimate'] += $relevant_row['data']['estimate'];
+    }
+
+    // Row becomes irrelevant in the next loop run.
+    unset($relevant_row);
   }
 
-  if ($unaccounted_row['data']['actual'] != 0) {
-    // Found hours without a specific issue (only pull request).
-    $table['rows'][] = $unaccounted_row;
-  }
+  // Total row. Includes non-referenced issues.
+  $table['rows'][] = $total_row;
 
   return $table;
 }
