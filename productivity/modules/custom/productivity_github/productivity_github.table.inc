@@ -39,10 +39,11 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   $issue_nodes = node_load_multiple($issue_nids);
 
   // Prepare table for tracking data.
+  $side = 'even';
   foreach($issue_nodes as $node_id => $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
     $table['rows'][$node_id] = array(
-      'class' => 'row-ok',
+      'class' => 'row-ok-' . $side,
       'data' => array(
         'issue_id' => $wrapper->field_issue_id->value(),
         'issue_name' => $wrapper->label(),
@@ -51,6 +52,8 @@ function productivity_github_time_tracking_issue_table($project_nid) {
         'completed' => 'N/A',
       ),
     );
+
+    $side = $side == 'even' ? 'odd' : 'even';
   }
 
   // Get list of pull request IDs related to the issues.
@@ -100,7 +103,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   }
 
   $total_row = array(
-    'class' => 'row-total',
     'data' => array(
       'name' => array('data' => t('Total'), 'colspan' => 2),
       'total_estimate' => 0,
@@ -109,6 +111,7 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     ),
   );
 
+  $side = 'even';
   foreach($result as $row) {
     // Figure out if this points at an issue, pull request, or at nothing at all.
     $target_id = $row->field_issues_logs_field_github_issue_target_id;
@@ -126,7 +129,7 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     }
 
     if (isset($relevant_row) && $relevant_row['data']['actual'] > $relevant_row['data']['estimate']) {
-      $relevant_row['class'] = 'row-bad';
+      $relevant_row['class'] = 'row-bad-' . $side;
     }
 
     // Add to totals.
@@ -137,9 +140,11 @@ function productivity_github_time_tracking_issue_table($project_nid) {
 
     // Row becomes irrelevant in the next loop run.
     unset($relevant_row);
+    $side = $side == 'even' ? 'odd' : 'even';
   }
 
   // Total row. Includes non-referenced issues.
+  $total_row['class'] = 'row-total-' . $side;
   $table['rows'][] = $total_row;
 
   return $table;
