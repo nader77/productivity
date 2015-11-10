@@ -58,6 +58,7 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     );
   }
 
+
   // Get list of pull request IDs related to the issues.
   $query = db_select('node', 'n');
   $query->rightJoin('field_data_field_github_content_type', 'ct', 'ct.entity_id = n.nid');
@@ -65,25 +66,59 @@ function productivity_github_time_tracking_issue_table($project_nid) {
 
   $result = $query
     ->fields('n', array('title', 'nid'))
+    ->fields('ir', array('field_issue_reference_target_id'))
     ->condition('type', 'github_issue')
     ->condition('status', NODE_PUBLISHED)
     ->condition('ct.field_github_content_type_value', 'pull_request')
     ->condition('ir.field_issue_reference_target_id', $issue_nids, 'IN')
     ->execute()
-    ->fetchAll();
+    ->fetchAllAssoc('nid');
 
-  if (empty($result['node'])) {
-    // Issues have no pull requests.
+
+  if (empty($result)) {
+    // The Github issues have no pull requests attached to them.
+    return $table;
   }
 
+  $pull_requests = array();
+  foreach($result as $pull_request) {
+    $pull_requests[$pull_request->nid] = array(
+      'title' => $pull_request->title,
+      'parent_issue' => $pull_request->field_issue_reference_target_id,
+    );
+  }
+
+  // Tracking could point to issues as well as pull requests.
+  $possible_tracking_node_ids_references = array_keys($pull_requests) + $issue_nids;
+
+  // Get all tracking data for all the pull requests.
+  $query = db_select('field_data_field_issues_logs', 'il');
+  $result = $query
+    ->fields('il', array('field_issues_logs_field_github_issue_target_id', 'field_issues_logs_field_time_spent_value'))
+    ->condition('entity_type', 'node')
+    ->condition('bundle', 'time_tracking')
+    ->condition('field_issues_logs_field_github_issue_target_id', $possible_tracking_node_ids_references, 'IN')
+    ->execute()
+    ->fetchAll();
 
 
+  if (empty($result)) {
+    // No tracking data to process.
+    return $table;
+  }
 
+  dpm($pull_requests);
+  dpm($result);
+  dpm($table['rows']);
 
-  // Get all tracking data for all the issues.
+  $unaccounted_row = array(
+    '-',
+    t('Unaccounted'),
+  );
 
-
-  dpm($table);
+  foreach($result as $row) {
+    // Figure out if this points at an issue, pull request, or at nothing at all.
+  }
 
   return $table;
 }
