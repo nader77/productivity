@@ -7,8 +7,19 @@
 /**
  * Menu callback; display tracking table for issues.
  */
-function productivity_time_tracking_issue_table($project_nid) {
-  $project_name = 'Foo';
+function productivity_github_time_tracking_issue_table($project_nid) {
+  $table = array(
+    'header' => array(
+      t('Issue ID'),
+      t('Issue name'),
+      t('Time estimate'),
+      t('Actual time'),
+      t('Completed'),
+    ),
+    'data' => array(),
+  );
+
+  $project_wrapper = entity_metadata_wrapper('node', $project_nid);
 
   // Get list of issues for a specific project.
   $query = new EntityFieldQuery();
@@ -21,11 +32,33 @@ function productivity_time_tracking_issue_table($project_nid) {
     ->execute();
 
   if (empty($result['node'])) {
-    return t('No issues found for project @project.', array('@project' => $project_name));
+    return t('No issues found for project @project.', array('@project' => $project_wrapper->label()));
   }
 
-  $issues_nids = array_keys($result['node']);
+  $issue_nids = array_keys($result['node']);
+  $issue_nodes = node_load_multiple($issue_nids);
 
+  // Prepare table for tracking data.
+  foreach($issue_nodes as $node_id => $node) {
+    $wrapper = entity_metadata_wrapper('node', $node);
+    $table['rows'][$node_id] = array(
+      'class' => 'row-ok',
+      'data' => array(
+        // Issue ID.
+        $wrapper->field_issue_id->value(),
+        // Issue name,
+        $wrapper->label(),
+        // Time estimate.
+        $wrapper->field_time_estimate->value(),
+        // Actual time.
+        'N/A',
+        // Completed.
+        'N/A',
+      ),
+    );
+  }
+
+  // Get list of pull request IDs related to the issues.
   $query = db_select('node', 'n');
   $query->rightJoin('field_data_field_github_content_type', 'ct', 'ct.entity_id = n.nid');
   $query->rightJoin('field_data_field_issue_reference', 'ir', 'ir.entity_id = n.nid');
@@ -35,31 +68,39 @@ function productivity_time_tracking_issue_table($project_nid) {
     ->condition('type', 'github_issue')
     ->condition('status', NODE_PUBLISHED)
     ->condition('ct.field_github_content_type_value', 'pull_request')
-    ->condition('ir.field_issue_reference_target_id', $issues_nids, 'IN')
+    ->condition('ir.field_issue_reference_target_id', $issue_nids, 'IN')
     ->execute()
     ->fetchAll();
 
+  if (empty($result['node'])) {
+    // Issues have no pull requests.
+  }
 
-  dpm($result);
-  // Get list of pull request IDs related to the issues.
+
+
 
 
   // Get all tracking data for all the issues.
 
-  $table = array();
+
+  dpm($table);
 
   return $table;
 }
 
-function productivity_time_display_tracking_issue_table() {
+function productivity_github_time_display_tracking_issue_table() {
   $form = productivity_time_tracking_issue_table_get_form();
 
 
   $project_nid = 9279; // FIXME: get the nid from the form & redirect
-  $table = productivity_time_tracking_issue_table($project_nid);
+
+  $table = array();
+  if ($project_nid) {
+    $table = productivity_github_time_tracking_issue_table($project_nid);
+  }
 
   if (!is_array($table)) {
-    // Table returned as a message.
+    // Table returned an error message.
     return $table;
   }
 

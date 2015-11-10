@@ -18,7 +18,7 @@ function productivity_github_menu() {
   $items['tracking/per-issue'] = array(
     'title' => t('Issue tracking table'),
     'access arguments' => array('access admin panel'),
-    'page callback' => 'productivity_time_display_tracking_issue_table',
+    'page callback' => 'productivity_github_time_display_tracking_issue_table',
     'type' => MENU_CALLBACK,
     'file' => 'productivity_github.table.inc'
   );
