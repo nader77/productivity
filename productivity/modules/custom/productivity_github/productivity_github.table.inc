@@ -44,16 +44,11 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     $table['rows'][$node_id] = array(
       'class' => 'row-ok',
       'data' => array(
-        // Issue ID.
-        $wrapper->field_issue_id->value(),
-        // Issue name,
-        $wrapper->label(),
-        // Time estimate.
-        $wrapper->field_time_estimate->value(),
-        // Actual time.
-        'N/A',
-        // Completed.
-        'N/A',
+        'issue_id' => $wrapper->field_issue_id->value(),
+        'issue_name' => $wrapper->label(),
+        'estimate' => $wrapper->field_time_estimate->value(),
+        'actual' => 0,
+        'completed' => 'N/A',
       ),
     );
   }
@@ -112,12 +107,40 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   dpm($table['rows']);
 
   $unaccounted_row = array(
-    '-',
-    t('Unaccounted'),
+    'class' => 'row-unaccounted',
+    'data' => array(
+      'issue_id' => '-',
+      'issue_name' => 'Unaccounted',
+      'estimate' => '-',
+      'actual' => 0,
+      'completed' => '-',
+    ),
   );
 
   foreach($result as $row) {
     // Figure out if this points at an issue, pull request, or at nothing at all.
+    $target_id = $row->field_issues_logs_field_github_issue_target_id;
+    $time_spent = $row->field_issues_logs_field_time_spent_value;
+
+    if (!empty($table['rows'][$target_id])) {
+      // This tracking points directly at an issue.
+      $table['rows'][$target_id]['data']['actual'] += $time_spent;
+      continue;
+    }
+
+    if (!empty($pull_requests[$target_id]) && !empty($table['rows'][$pull_requests[$target_id]['parent_issue']])) {
+      // This is a pull request pointing at an issue.
+      $table['rows'][$pull_requests[$target_id]['parent_issue']]['data']['actual'] += $time_spent;
+      continue;
+    }
+
+    // This is a pull request not pointing at an issue.
+    $unaccounted_row['data']['actual'] += $time_spent;
+  }
+
+  if ($unaccounted_row['data']['actual'] != 0) {
+    // Found hours without a specific issue (only pull request).
+    $table['rows'][] = $unaccounted_row;
   }
 
   return $table;
