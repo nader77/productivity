@@ -53,7 +53,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     );
   }
 
-
   // Get list of pull request IDs related to the issues.
   $query = db_select('node', 'n');
   $query->rightJoin('field_data_field_github_content_type', 'ct', 'ct.entity_id = n.nid');
@@ -68,7 +67,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     ->condition('ir.field_issue_reference_target_id', $issue_nids, 'IN')
     ->execute()
     ->fetchAllAssoc('nid');
-
 
   if (empty($result)) {
     // The Github issues have no pull requests attached to them.
@@ -96,21 +94,16 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     ->execute()
     ->fetchAll();
 
-
   if (empty($result)) {
     // No tracking data to process.
     return $table;
   }
 
-  dpm($pull_requests);
-  dpm($result);
-  dpm($table['rows']);
-
   $unaccounted_row = array(
     'class' => 'row-unaccounted',
     'data' => array(
       'issue_id' => '-',
-      'issue_name' => 'Unaccounted',
+      'issue_name' => t('Unaccounted'),
       'estimate' => '-',
       'actual' => 0,
       'completed' => '-',
@@ -146,27 +139,19 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   return $table;
 }
 
-function productivity_github_time_display_tracking_issue_table() {
-  $form = productivity_time_tracking_issue_table_get_form();
+function productivity_github_time_display_tracking_issue_table($project_node_id = 0) {
+  if (!$project_node_id) {
 
-
-  $project_nid = 9279; // FIXME: get the nid from the form & redirect
-
-  $table = array();
-  if ($project_nid) {
-    $table = productivity_github_time_tracking_issue_table($project_nid);
+    return theme('item_list', array('items' => productivity_time_tracking_issue_table_get_list()));
   }
 
+  $table = productivity_github_time_tracking_issue_table($project_node_id);
   if (!is_array($table)) {
     // Table returned an error message.
     return $table;
   }
 
-  $return = "";
-//  $return .= theme('form', $form);
-  $return .= theme('table', $table);
-
-  return $return;
+  return theme('table', $table);
 }
 
 
@@ -174,9 +159,7 @@ function productivity_github_time_display_tracking_issue_table() {
  * Build form for the per-issue tracking table.
  * @return array
  */
-function productivity_time_tracking_issue_table_get_form() {
-  $form = array();
-
+function productivity_time_tracking_issue_table_get_list() {
   // Selection box for projects.
   $query = db_select('node', 'n');
   $result = $query
@@ -193,8 +176,10 @@ function productivity_time_tracking_issue_table_get_form() {
   // TODO
   $projects = array();
   foreach($result as $project) {
-    $projects[$project->nid] = $project->title;
+    $projects[strtolower($project->title)] = l($project->title, 'tracking/per-issue/' . $project->nid);
   }
 
-  return $form;
+  ksort($projects);
+
+  return $projects;
 }
