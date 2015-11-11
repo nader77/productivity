@@ -1,4 +1,64 @@
-/* line 1, ../sass/style.scss */
-* {
-  color: red;
+/* Variables */
+/* line 4, ../sass/style.scss */
+body {
+  font-family: 'Roboto Condensed', arial, sans-serif;
+  background: rgba(187, 182, 162, 0.3);
+}
+
+/* line 9, ../sass/style.scss */
+hr {
+  display: block;
+  margin: 11px 0px;
+  height: 1px;
+  border-bottom: 1px solid #dad9d1;
+  background: #EAE9E3;
+}
+
+/* line 17, ../sass/style.scss */
+.wrapper {
+  margin: 20px auto;
+  height: 630px;
+  padding: 12px;
+  border: 1px solid rgba(45, 45, 56, 0.26);
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0px 7px 2px 0px rgba(0, 0, 0, 0.05);
+}
+
+/* line 27, ../sass/style.scss */
+#dashboard {
+  margin: 0px;
+  padding: 15px;
+  width: 100%;
+  height: 100%;
+  color: white;
+  background: #2D2D38;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+/* line 36, ../sass/style.scss */
+#dashboard .wrapper {
+  margin: 55px auto;
+  max-width: 380px;
+}
+/* line 41, ../sass/style.scss */
+#dashboard h2 {
+  margin-top: 0px;
+  margin-bottom: 20px;
+  text-transform: capitalize;
+}
+/* line 47, ../sass/style.scss */
+#dashboard .number-pad {
+  width: 600px;
+  border: 1px solid white;
+}
+/* line 52, ../sass/style.scss */
+#dashboard .digit {
+  color: white;
+  background: #5F90BB;
+  border: none;
+  border-radius: 2px;
+}
+/* line 58, ../sass/style.scss */
+#dashboard .digit:hover {
+  background: #3d6990;
 }
