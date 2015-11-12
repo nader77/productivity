@@ -80,6 +80,7 @@ body {
   .dashboard {
     position: relative;
     padding-bottom: 45px;
+    min-height: 460px;
     color: white;
     background: rgba(45, 45, 56, 0.52);
     border: 1px solid $border-dark;
@@ -154,9 +155,12 @@ body {
 }
 
 .numbers-pad {
-  width: 252px;
-  padding: 4px;
-  @include border-radius(3px);
+  margin: 0px auto;
+  padding: 13px;
+  width: 259px;
+  margin-top: 25px;
+  @include border-radius(5px);
+  @extend .light-border;
 }
 
 .digit {
