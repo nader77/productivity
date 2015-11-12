@@ -164,16 +164,30 @@ body {
   height: 368px;
 
   .digit {
+    position: relative;
     width: 66px;
     height: 66px;
     margin: 7px 7px;
     font-weight: 700;
     color: #4DC3B5;
-    @include border-radius(50%);
+    @include border-radius(13px);
     @extend .soft-shadow;
     @include transition(0.5s ease-in-out all);
     border: none;
     background: rgba(255, 255, 255, 0.0);
+
+    &:after {
+      content: "";
+      position: absolute;
+      left: 6px;
+      top: 6px;
+      height: 82%;
+      width: 82%;
+      @include border-radius(9px);
+      padding: 13px 21px;
+      border: 1px solid;
+      border-color: rgba(255, 255, 255, 0.4);
+    }
 
     &:last-child {
       margin-left: 85px;
@@ -182,13 +196,10 @@ body {
     &:hover {
       background: rgba(255, 255, 255, 0.3);
       @extend .hard-shadow;
-    }
 
-    span {
-      display: inline-block;
-      @include border-radius(50%);
-      padding: 13px 21px;
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      &:after {
+        border-color: #4DC3B5;
+      }
     }
   }
 }
