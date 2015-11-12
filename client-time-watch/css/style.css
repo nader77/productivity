@@ -28,36 +28,39 @@ body {
 /* line 28, ../sass/style.scss */
 .clear-btn.-with-icon {
   position: relative;
-  padding-left: 39px;
+  padding: 5px 7px;
 }
-/* line 33, ../sass/style.scss */
+/* line 32, ../sass/style.scss */
+.clear-btn.-with-icon:before {
+  content: "";
+  position: absolute;
+  top: 0px;
+  left: 33px;
+  width: 1px;
+  background-color: #b1aba4;
+  height: 100%;
+}
+/* line 43, ../sass/style.scss */
 .clear-btn.-active {
   background: rgba(255, 255, 255, 0.78);
   color: #555250;
   border-color: #545251;
 }
-/* line 38, ../sass/style.scss */
-.clear-btn.-active > .icon {
-  border-right-color: #545251;
+/* line 49, ../sass/style.scss */
+.clear-btn.-active:before {
+  background-color: #545251;
 }
-/* line 43, ../sass/style.scss */
+/* line 54, ../sass/style.scss */
 .clear-btn > .icon {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  border-right: 1px solid;
-  border-right-color: #b1aba4;
-  height: 100%;
-  padding-right: 6px;
-  padding-left: 6px;
-  line-height: 38px;
+  vertical-align: middle;
+  margin-right: 11px;
 }
 
-/* line 56, ../sass/style.scss */
+/* line 60, ../sass/style.scss */
 .led-light {
   padding: 27px 15px 15px 15px;
 }
-/* line 59, ../sass/style.scss */
+/* line 63, ../sass/style.scss */
 .led-light .border {
   width: 26px;
   height: 15px;
@@ -71,7 +74,7 @@ body {
   box-shadow: 0px 2px 29px #0AE09F;
 }
 
-/* line 69, ../sass/style.scss */
+/* line 73, ../sass/style.scss */
 #dashboard {
   position: relative;
   margin: 60px auto;
@@ -87,34 +90,55 @@ body {
   -webkit-box-shadow: 0px 6px 11px 0px rgba(0, 0, 0, 0.54);
   box-shadow: 0px 6px 11px 0px rgba(0, 0, 0, 0.54);
 }
-/* line 80, ../sass/style.scss */
+/* line 84, ../sass/style.scss */
 #dashboard:after {
   content: "";
   position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 17px;
+  width: 100%;
+  height: 1px;
+  background-color: #545251;
 }
 
-/* line 86, ../sass/style.scss */
+/* line 96, ../sass/style.scss */
 .header-list {
   border-bottom: 1px solid #545251;
-  line-height: 38px;
 }
-/* line 90, ../sass/style.scss */
+/* line 99, ../sass/style.scss */
 .header-list .item {
-  height: 72px;
-  padding: 15px;
+  min-height: 72px;
   border-right: 1px solid #545251;
 }
-/* line 96, ../sass/style.scss */
-.header-list .actions {
-  padding-left: 30px;
-  padding-right: 30px;
+/* line 104, ../sass/style.scss */
+.header-list .time,
+.header-list .date {
+  padding-top: 22px;
 }
-/* line 100, ../sass/style.scss */
+/* line 109, ../sass/style.scss */
+.header-list .time {
+  width: 98px;
+}
+/* line 111, ../sass/style.scss */
+.header-list .time i {
+  color: #0AE09F;
+}
+/* line 116, ../sass/style.scss */
+.header-list .date {
+  width: 290px;
+}
+/* line 120, ../sass/style.scss */
+.header-list .actions {
+  padding-top: 15px;
+  width: 400px;
+}
+/* line 124, ../sass/style.scss */
 .header-list .actions > .action:nth-child(n+2) {
   margin-left: 15px;
 }
 
-/* line 106, ../sass/style.scss */
+/* line 130, ../sass/style.scss */
 .numbers-pad {
   width: 252px;
   padding: 4px;
@@ -123,7 +147,7 @@ body {
   border-radius: 3px;
 }
 
-/* line 112, ../sass/style.scss */
+/* line 136, ../sass/style.scss */
 .digit {
   width: 70px;
   height: 70px;
@@ -132,11 +156,11 @@ body {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
-/* line 118, ../sass/style.scss */
+/* line 142, ../sass/style.scss */
 .digit:last-child {
   margin-left: 85px;
 }
-/* line 122, ../sass/style.scss */
+/* line 146, ../sass/style.scss */
 .digit:hover {
   background: rgba(255, 255, 255, 0.3);
 }

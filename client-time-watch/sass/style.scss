@@ -27,7 +27,17 @@ body {
 
   &.-with-icon {
     position: relative;
-    padding-left: 39px;
+    padding: 5px 7px;
+
+    &:before {
+      content: "";
+      position: absolute;
+      top: 0px;
+      left: 33px;
+      width: 1px;
+      background-color: $light;
+      height: 100%;
+    }
   }
 
   &.-active {
@@ -35,21 +45,15 @@ body {
     color: #555250;
     border-color: $border-dark;
 
-    >.icon {
-      border-right-color: $border-dark;
+
+    &:before {
+      background-color: $border-dark;
     }
   }
 
   >.icon {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    border-right: 1px solid;
-    border-right-color: $light;
-    height: 100%;
-    padding-right: 6px;
-    padding-left: 6px;
-    line-height: 38px;
+    vertical-align: middle;
+    margin-right: 11px;
   }
 }
 
@@ -80,22 +84,42 @@ body {
   &:after {
     content: "";
     position: absolute;
+    right: 0;
+    left: 0;
+    bottom: 17px;
+    width: 100%;
+    height: 1px;
+    background-color: $border-dark;
   }
 }
 
 .header-list {
   border-bottom: 1px solid $border-dark;
-  line-height: 38px;
 
   .item {
-    height: 72px;
-    padding: 15px;
+    min-height: 72px;
     border-right: 1px solid #545251;
   }
 
+  .time,
+  .date {
+    padding-top: 22px;
+  }
+
+  .time {
+    width: 98px;
+    i {
+      color: #0AE09F;
+    }
+  }
+
+  .date {
+    width: 290px;
+  }
+
   .actions {
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-top: 15px;
+    width: 400px;
 
     >.action:nth-child(n+2) {
       margin-left: 15px;
