@@ -53,8 +53,17 @@ body {
   }
 }
 
-.led-indicator {
-  display: inline-block;
+.led-light {
+  padding: 27px 15px 15px 15px;
+
+  .border {
+    width: 26px;
+    height: 15px;
+    background: #4DC3B5;
+    border: 1px solid #27A07B;
+    @include border-radius(3px);
+    @include box-shadow(0px 2px 29px #0AE09F);
+  }
 }
 
 #dashboard {
@@ -76,19 +85,16 @@ body {
     height: 72px;
     padding: 15px;
     border-right: 1px solid #545251;
-    float: left;
   }
-}
 
-.actions {
-  >.action:nth-child(n+2) {
-    margin-left: 15px;
+  .actions {
+    padding-left: 30px;
+    padding-right: 30px;
+
+    >.action:nth-child(n+2) {
+      margin-left: 15px;
+    }
   }
-}
-
-.date ,
-.time {
-
 }
 
 .number-pad {
