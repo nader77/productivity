@@ -1,21 +1,44 @@
 /* Variables */
 /* line 4, ../sass/style.scss */
-body {
-  font-family: 'Roboto Condensed', arial, sans-serif;
-  background: rgba(187, 182, 162, 0.3);
+html {
+  background: url("../images/bg.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
-/* line 9, ../sass/style.scss */
+/* line 12, ../sass/style.scss */
+body {
+  font-family: 'Roboto Condensed', arial, sans-serif;
+}
+
+/* line 17, ../sass/style.scss */
+hr {
+  background: #505059;
+  height: 1px;
+  display: block;
+  border-bottom: 1px solid rgba(63, 63, 68, 0.72);
+  border-top: 1px solid #555563;
+}
+/* line 24, ../sass/style.scss */
+hr.no-margin {
+  margin: 0px;
+}
+
+/* line 29, ../sass/style.scss */
 .wrapper {
   margin: 20px auto;
   padding: 12px;
   height: 630px;
   border: 1px solid rgba(45, 45, 56, 0.26);
-  border-radius: 5px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
   background: white;
   box-shadow: 0px 7px 2px 0px rgba(0, 0, 0, 0.05);
 }
-/* line 18, ../sass/style.scss */
+/* line 38, ../sass/style.scss */
 .wrapper #dashboard {
   margin: 0px;
   padding: 15px;
@@ -25,15 +48,16 @@ body {
   background: #2D2D38;
   border: 1px solid rgba(0, 0, 0, 0.1);
 }
-/* line 27, ../sass/style.scss */
-.wrapper #dashboard header {
-  height: 100px;
-  border: 1px solid rgba(45, 45, 56, 0.26);
-  border-radius: 5px;
-  background: white;
+/* line 47, ../sass/style.scss */
+.wrapper #dashboard .box {
+  border: 1px solid rgba(45, 45, 56, 0.65);
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.17);
   box-shadow: 0px 7px 2px 0px rgba(0, 0, 0, 0.05);
 }
-/* line 35, ../sass/style.scss */
+/* line 54, ../sass/style.scss */
 .wrapper #dashboard .number-pad {
   width: 252px;
   padding: 4px;
@@ -46,7 +70,7 @@ body {
   -webkit-border-radius: 3px;
   border-radius: 3px;
 }
-/* line 44, ../sass/style.scss */
+/* line 63, ../sass/style.scss */
 .wrapper #dashboard .digit {
   color: white;
   background: #606071;
@@ -60,12 +84,12 @@ body {
   border-bottom: 1px solid #2D2D38;
   border-radius: 2px;
 }
-/* line 57, ../sass/style.scss */
+/* line 76, ../sass/style.scss */
 .wrapper #dashboard .digit.block {
   width: 233px;
   height: 55px;
 }
-/* line 62, ../sass/style.scss */
+/* line 81, ../sass/style.scss */
 .wrapper #dashboard .digit:hover {
   background: #3d3d48;
 }

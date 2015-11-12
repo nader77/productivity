@@ -6,17 +6,34 @@
       <title></title>
       <meta name="description" content="">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <!-- CSS -->
+      <!-- CSS vendor -->
       <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-MfvZlkHCEqatNoGiOXveE8FIwMzZg4W85qfrfIFBfYc= sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+      <!-- Fonts vendor -->
       <link href='https://fonts.googleapis.com/css?family=Roboto+Condensed:400,700,300' rel='stylesheet' type='text/css'>
+      <!-- CSS -->
       <link rel="stylesheet" href="css/style.css">
     </head>
     <body>s
     <div class="container">
       <div class="wrapper">
         <div id="dashboard">
-          <header></header>
-          <div class="clearfix">
+          <header class="box">
+            <hr class="no-margin"/>
+            <div class="row">
+              <div class="col-xs-4">
+                <div>
+                  <button><i class="fa fa-briefcase"></i> Enter the office</button>
+                  <button><i class="fa fa-home"></i> Leaving the office</button>
+                </div>
+              </div>
+              <div class="col-xs-4">
+                <div> Led indicator </div>
+              </div>
+            </div>
+            <hr class="no-margin" />
+          </header>
+          <div class="clearfix hidden">
             <div class="number-pad">
               <button class="btn digit">9</button>
               <button class="btn digit">8</button>
@@ -33,7 +50,8 @@
         </div>
       </div>
     </div>
-    <!-- Js -->
+    <!-- Js vendor -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha256-Sk3nkD6mLTMOF0EOpNtsIry+s1CsaqQC1rVLTAy+0yc= sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
     </body>
 </html>
