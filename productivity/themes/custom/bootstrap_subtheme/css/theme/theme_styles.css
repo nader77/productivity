@@ -6515,3 +6515,12 @@ svg {
     background-color: #1abc9c;
   }
 }
+
+.table.per-issue-table.table-striped tr.row-ok-even td {
+  background-color: rgba(16, 255, 18, 0.47); }
+.table.per-issue-table.table-striped tr.row-ok-odd td {
+  background-color: rgba(16, 255, 18, 0.69); }
+.table.per-issue-table.table-striped tr.row-bad-odd td {
+  background-color: rgba(255, 76, 96, 0.93); }
+.table.per-issue-table.table-striped tr.row-bad-even td {
+  background-color: rgba(255, 76, 96, 0.69); }
