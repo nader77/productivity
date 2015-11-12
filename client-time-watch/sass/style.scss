@@ -19,10 +19,14 @@ body {
   background-color: transparent;
 }
 
-.clear-btn {
-  background: rgba(255, 255, 255, 0.08);
+.light-border {
   border: 1px solid;
   border-color: $light;
+}
+
+.clear-btn {
+  background: rgba(255, 255, 255, 0.08);
+  @extend .light-border;
   @include border-radius(4px);
 
   &.-with-icon {
@@ -38,6 +42,11 @@ body {
       background-color: $light;
       height: 100%;
     }
+
+    >.icon {
+      padding-top: 1px;
+      margin-right: 11px;
+    }
   }
 
   &.-active {
@@ -45,84 +54,92 @@ body {
     color: #555250;
     border-color: $border-dark;
 
-
     &:before {
       background-color: $border-dark;
     }
   }
-
-  >.icon {
-    padding-top: 1px;
-    margin-right: 11px;
-  }
 }
 
-.led-light {
-  padding: 27px 15px 15px 15px;
-
-  .border {
-    width: 26px;
-    height: 15px;
-    background: #4DC3B5;
-    border: 1px solid #27A07B;
-    @include border-radius(3px);
-    @include box-shadow(0px 2px 29px #0AE09F);
-  }
-}
-
-#dashboard {
-  position: relative;
+.container {
   margin: 60px auto;
-  height: 550px;
-  width: 90%;
-  color: white;
-  background: rgba(45, 45, 56, 0.52);
-  border: 1px solid $border-dark;
-  @include border-radius(4px);
-  @include box-shadow(0px 6px 11px 0px rgba(0, 0, 0, 0.54));
 
-  &:after {
-    content: "";
-    position: absolute;
-    right: 0;
-    left: 0;
-    bottom: 17px;
-    width: 100%;
-    height: 1px;
-    background-color: $border-dark;
-  }
-}
+  .dashboard {
+    position: relative;
+    padding-bottom: 45px;
+    color: white;
+    background: rgba(45, 45, 56, 0.52);
+    border: 1px solid $border-dark;
+    @include border-radius(4px);
+    @include box-shadow(0px 6px 11px 0px rgba(0, 0, 0, 0.54));
 
-.header-list {
-  border-bottom: 1px solid $border-dark;
+    &:after {
+      content: "";
+      position: absolute;
+      right: 0;
+      left: 0;
+      bottom: 17px;
+      width: 100%;
+      height: 1px;
+      background-color: $border-dark;
+    }
 
-  .item {
-    min-height: 72px;
-    border-right: 1px solid #545251;
-  }
-
-  .time,
-  .date {
-    padding-top: 22px;
-  }
-
-  .time {
-    width: 98px;
-    i {
-      color: #0AE09F;
+    >.main-header:nth-child(n+2) {
+      border-left: 1px solid $border-dark;
     }
   }
+}
 
-  .date {
-    width: 290px;
-  }
+.main-header {
+  height: 68px;
+  border-bottom: 1px solid $border-dark;
 
-  .actions {
-    padding-top: 15px;
-    width: 400px;
+  &.actions {
+    padding: 15px;
 
     >.action:nth-child(n+2) {
       margin-left: 15px;
+    }
+  }
+
+  &.info {
+    padding-top: 21px;
+
+    .time {
+      margin-left: 15px;
+
+      i {
+        color: #0AE09F;
+      }
+    }
+
+    .light-border {
+      padding: 5px;
+      @include border-radius(3px);
+    }
+  }
+
+  &.led {
+    padding-top: 21px;
+
+    .light {
+      margin-left: 7px;
+      display: inline-block;
+      vertical-align: middle;
+      width: 26px;
+      height: 15px;
+      border: 1px solid;
+      border-color: #27A07B;
+      background: #4DC3B5;
+      @include border-radius(3px);
+      @include box-shadow(0px 2px 29px #0AE09F);
+      @include transition(0.5s ease-in-out all);
+
+      &.off {
+        border-color: #A02727;
+        background: #C34D4D;
+        @include box-shadow(0px 2px 29px #E00A0A);
+
+      }
     }
   }
 }
