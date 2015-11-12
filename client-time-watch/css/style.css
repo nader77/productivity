@@ -15,36 +15,51 @@ body {
 }
 
 /* line 20, ../sass/style.scss */
-hr {
-  background: #505059;
-  height: 1px;
-  display: block;
-  border-bottom: 1px solid rgba(63, 63, 68, 0.72);
-  border-top: 1px solid #555563;
-}
-/* line 27, ../sass/style.scss */
-hr.no-margin {
-  margin: 0px;
-}
-
-/* line 32, ../sass/style.scss */
 .clear-btn {
   font-size: 18px;
   font-weight: lighter;
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
+  border: 1px solid;
+  border-color: rgba(255, 255, 255, 0.4);
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  border-radius: 4px;
   padding: 8px;
 }
+/* line 29, ../sass/style.scss */
+.clear-btn.-with-icon {
+  position: relative;
+  padding-left: 39px;
+}
+/* line 34, ../sass/style.scss */
+.clear-btn.-active {
+  background: rgba(255, 255, 255, 0.78);
+  color: #555250;
+  border-color: rgba(45, 45, 56, 0.35);
+}
+/* line 39, ../sass/style.scss */
+.clear-btn.-active > .icon {
+  border-right-color: rgba(45, 45, 56, 0.35);
+}
+/* line 44, ../sass/style.scss */
+.clear-btn > .icon {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  border-right: 1px solid;
+  border-right-color: rgba(255, 255, 255, 0.4);
+  height: 100%;
+  padding-right: 6px;
+  padding-left: 6px;
+  line-height: 38px;
+}
 
-/* line 41, ../sass/style.scss */
+/* line 57, ../sass/style.scss */
 .led-indicator {
   display: inline-block;
 }
 
-/* line 45, ../sass/style.scss */
+/* line 61, ../sass/style.scss */
 #dashboard {
   margin: 60px auto;
   height: 550px;
@@ -59,18 +74,21 @@ hr.no-margin {
   -webkit-box-shadow: 0px 6px 11px 0px rgba(0, 0, 0, 0.54);
   box-shadow: 0px 6px 11px 0px rgba(0, 0, 0, 0.54);
 }
-/* line 55, ../sass/style.scss */
+/* line 71, ../sass/style.scss */
 #dashboard .actions {
   border-right: 1px solid #545251;
   display: inline-block;
   padding: 15px;
 }
-/* line 61, ../sass/style.scss */
+/* line 76, ../sass/style.scss */
+#dashboard .actions > *:nth-child(n+2) {
+  margin-left: 15px;
+}
+/* line 81, ../sass/style.scss */
 #dashboard .main-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
   border-bottom: 1px solid rgba(45, 45, 56, 0.35);
 }
-/* line 66, ../sass/style.scss */
+/* line 85, ../sass/style.scss */
 #dashboard .box {
   border: 1px solid rgba(45, 45, 56, 0.65);
   -moz-border-radius: 3px;
@@ -81,7 +99,7 @@ hr.no-margin {
   -webkit-box-shadow: 0px 7px 2px 0px rgba(0, 0, 0, 0.05);
   box-shadow: 0px 7px 2px 0px rgba(0, 0, 0, 0.05);
 }
-/* line 73, ../sass/style.scss */
+/* line 92, ../sass/style.scss */
 #dashboard .number-pad {
   width: 252px;
   padding: 4px;
@@ -94,7 +112,7 @@ hr.no-margin {
   -webkit-border-radius: 3px;
   border-radius: 3px;
 }
-/* line 82, ../sass/style.scss */
+/* line 101, ../sass/style.scss */
 #dashboard .digit {
   color: white;
   background: #606071;
@@ -108,12 +126,12 @@ hr.no-margin {
   border-bottom: 1px solid #2D2D38;
   border-radius: 2px;
 }
-/* line 95, ../sass/style.scss */
+/* line 114, ../sass/style.scss */
 #dashboard .digit.block {
   width: 233px;
   height: 55px;
 }
-/* line 100, ../sass/style.scss */
+/* line 119, ../sass/style.scss */
 #dashboard .digit:hover {
   background: #3d3d48;
 }
