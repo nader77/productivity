@@ -132,12 +132,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
       $relevant_row['data']['actual'] += $time_spent;
     }
 
-    // Add to totals.
-    $total_row['data']['total_actual'] += $time_spent;
-    if (!empty($relevant_row['data']['estimate'])) {
-      $total_row['data']['total_estimate'] += $relevant_row['data']['estimate'];
-    }
-
     // Row becomes irrelevant in the next loop run.
     unset($relevant_row);
   }
@@ -147,6 +141,10 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   foreach($table['rows'] as &$row) {
     $data = &$row['data'];
     $side = ($side == 'odd') ? 'even' : 'odd';
+
+    // Total row.
+    $total_row['data']['total_estimate'] += $data['estimate'];
+    $total_row['data']['total_actual'] += $data['actual'];
 
     // Calculate overtime.
     $data['overtime'] = $data['actual'] - $data['estimate'];
