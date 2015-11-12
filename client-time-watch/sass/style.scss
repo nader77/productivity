@@ -24,10 +24,19 @@ body {
   border-color: $light;
 }
 
+.soft-shadow {
+  @include box-shadow(0px 0px 7px 0px rgba(0, 0, 0, 0.12));
+}
+
+.hard-shadow {
+  @include box-shadow(0px 0px 7px 0px rgba(0, 0, 0, 0.38));
+}
+
 .clear-btn {
   background: rgba(255, 255, 255, 0.08);
   @extend .light-border;
   @include border-radius(4px);
+  @extend .soft-shadow;
 
   &.-with-icon {
     position: relative;
@@ -53,9 +62,14 @@ body {
     background: rgba(255, 255, 255, 0.78);
     color: #555250;
     border-color: $border-dark;
+    @extend .hard-shadow;
 
     &:before {
       background-color: $border-dark;
+    }
+
+    &.-with-icon >.icon {
+      color: #3590BD;
     }
   }
 }
@@ -146,10 +160,12 @@ body {
 }
 
 .digit {
-  width: 70px;
-  height: 70px;
-  margin: 4px 4px;
+  width: 60px;
+  height: 60px;
+  margin: 7px 7px;
   @include border-radius(50%);
+  @extend .soft-shadow;
+  @include transition(0.5s ease-in-out all);
 
   &:last-child {
    margin-left: 85px;
@@ -157,6 +173,7 @@ body {
 
   &:hover {
     background: rgba(255, 255, 255, 0.3);
+    @extend .hard-shadow;
   }
 }
 
