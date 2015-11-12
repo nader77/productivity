@@ -196,17 +196,28 @@ body {
   -o-transition: ease-in-out 0.5s all;
   -webkit-transition: ease-in-out 0.5s all;
   transition: ease-in-out 0.5s all;
+  border: none;
+  background: rgba(255, 255, 255, 0);
 }
-/* line 176, ../sass/style.scss */
+/* line 178, ../sass/style.scss */
 .numbers-pad .digit:last-child {
   margin-left: 85px;
 }
-/* line 180, ../sass/style.scss */
+/* line 182, ../sass/style.scss */
 .numbers-pad .digit:hover {
   background: rgba(255, 255, 255, 0.3);
 }
-
 /* line 187, ../sass/style.scss */
+.numbers-pad .digit span {
+  display: inline-block;
+  -moz-border-radius: 50%;
+  -webkit-border-radius: 50%;
+  border-radius: 50%;
+  padding: 13px 21px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/* line 196, ../sass/style.scss */
 .view {
   border-left: 1px solid #545251;
   height: 373px;
