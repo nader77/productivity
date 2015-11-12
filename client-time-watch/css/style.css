@@ -52,7 +52,7 @@ body {
 }
 /* line 54, ../sass/style.scss */
 .clear-btn > .icon {
-  vertical-align: middle;
+  padding-top: 1px;
   margin-right: 11px;
 }
 
