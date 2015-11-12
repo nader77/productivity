@@ -67,6 +67,7 @@ body {
 }
 
 #dashboard {
+  position: relative;
   margin: 60px auto;
   height: 550px;
   width: 90%;
@@ -75,6 +76,11 @@ body {
   border: 1px solid $border-dark;
   @include border-radius(4px);
   @include box-shadow(0px 6px 11px 0px rgba(0, 0, 0, 0.54));
+
+  &:after {
+    content: "";
+    position: absolute;
+  }
 }
 
 .header-list {
@@ -97,35 +103,24 @@ body {
   }
 }
 
-.number-pad {
+.numbers-pad {
   width: 252px;
   padding: 4px;
-  border: 1px solid $light;
-  float: right;
-  @include box-shadow(4px 4px 30px 0px #252729);
   @include border-radius(3px);
 }
 
 .digit {
-  color: white;
-  background: $light-gray;
   width: 70px;
   height: 70px;
   margin: 4px 4px;
-  font-size: 22px;
-  font-weight: bold;
-  border: none;
-  border-top: 1px solid $light;
-  border-bottom: 1px solid $dark-gray;
-  border-radius: 2px;
+  @include border-radius(50%);
 
-  &.block {
-    width: 233px;
-    height: 55px;
+  &:last-child {
+   margin-left: 85px;
   }
 
   &:hover {
-    background: darken($light-gray, 15%);
+    background: rgba(255, 255, 255, 0.3);
   }
 }
 
