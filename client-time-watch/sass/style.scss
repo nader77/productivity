@@ -13,18 +13,17 @@ html {
 }
 
 body {
+  font-weight: lighter;
+  font-size: 18px;
   font-family: 'Roboto Condensed', arial, sans-serif;
   background-color: transparent;
 }
 
 .clear-btn {
-  font-size: 18px;
-  font-weight: lighter;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid;
   border-color: $light;
   @include border-radius(4px);
-  padding: 8px;
 
   &.-with-icon {
     position: relative;
@@ -67,57 +66,62 @@ body {
   border: 1px solid $border-dark;
   @include border-radius(4px);
   @include box-shadow(0px 6px 11px 0px rgba(0, 0, 0, 0.54));
+}
 
-  .actions {
+.header-list {
+  border-bottom: 1px solid $border-dark;
+  line-height: 38px;
+
+  .item {
+    height: 72px;
     padding: 15px;
-    >.action:nth-child(n+2) {
-      margin-left: 15px;
-    }
-  }
-
-  .header-list {
-    border-bottom: 1px solid $border-dark;
-
-    .item {
-      border-right: 1px solid #545251;
-      display: inline-block;
-    }
-  }
-
-  .number-pad {
-    width: 252px;
-    padding: 4px;
-    border: 1px solid $light;
-    float: right;
-    @include box-shadow(4px 4px 30px 0px #252729);
-    @include border-radius(3px);
-  }
-
-  .digit {
-    color: white;
-    background: $light-gray;
-    width: 70px;
-    height: 70px;
-    margin: 4px 4px;
-    font-size: 22px;
-    font-weight: bold;
-    border: none;
-    border-top: 1px solid $light;
-    border-bottom: 1px solid $dark-gray;
-    border-radius: 2px;
-
-    &.block {
-      width: 233px;
-      height: 55px;
-    }
-
-    &:hover {
-      background: darken($light-gray, 15%);
-    }
+    border-right: 1px solid #545251;
+    float: left;
   }
 }
 
+.actions {
+  >.action:nth-child(n+2) {
+    margin-left: 15px;
+  }
+}
 
+.date ,
+.time {
+
+}
+
+.number-pad {
+  width: 252px;
+  padding: 4px;
+  border: 1px solid $light;
+  float: right;
+  @include box-shadow(4px 4px 30px 0px #252729);
+  @include border-radius(3px);
+}
+
+.digit {
+  color: white;
+  background: $light-gray;
+  width: 70px;
+  height: 70px;
+  margin: 4px 4px;
+  font-size: 22px;
+  font-weight: bold;
+  border: none;
+  border-top: 1px solid $light;
+  border-bottom: 1px solid $dark-gray;
+  border-radius: 2px;
+
+  &.block {
+    width: 233px;
+    height: 55px;
+  }
+
+  &:hover {
+    background: darken($light-gray, 15%);
+  }
+}
 
 
 
