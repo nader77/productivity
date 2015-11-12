@@ -106,15 +106,10 @@ body {
 
     .time {
       margin-left: 15px;
-
-      i {
-        color: #0AE09F;
-      }
     }
 
-    .light-border {
-      padding: 5px;
-      @include border-radius(3px);
+    .icon {
+      color: #0AE09F;
     }
   }
 
