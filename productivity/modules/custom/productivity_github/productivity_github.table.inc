@@ -21,6 +21,7 @@ function productivity_github_time_tracking_issue_table($project_nid) {
       t('Status'),
     ),
     'data' => array(),
+    'attributes' => array('class' => array('per-issue-table')),
   );
 
   $project_wrapper = entity_metadata_wrapper('node', $project_nid);
@@ -43,11 +44,10 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   $issue_nodes = node_load_multiple($issue_nids);
 
   // Prepare table for tracking data.
-  $side = 'even';
   foreach($issue_nodes as $node_id => $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
     $table['rows'][$node_id] = array(
-      'class' => 'row-ok-' . $side,
+      'class' => '',
       'data' => array(
         'issue_id' => $wrapper->field_issue_id->value(),
         'issue_name' => $wrapper->label(),
@@ -58,8 +58,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
         'status' => 'WIP',
       ),
     );
-
-    $side = $side == 'even' ? 'odd' : 'even';
   }
 
   // Get list of pull request IDs related to the issues.
@@ -118,7 +116,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     ),
   );
 
-  $side = 'even';
   foreach($result as $row) {
     // Figure out if this points at an issue, pull request, or at nothing at all.
     $target_id = $row->field_issues_logs_field_github_issue_target_id;
@@ -135,10 +132,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
       $relevant_row['data']['actual'] += $time_spent;
     }
 
-    if (isset($relevant_row) && $relevant_row['data']['actual'] > $relevant_row['data']['estimate']) {
-      $relevant_row['class'] = 'row-bad-' . $side;
-    }
-
     // Add to totals.
     $total_row['data']['total_actual'] += $time_spent;
     if (!empty($relevant_row['data']['estimate'])) {
@@ -147,16 +140,20 @@ function productivity_github_time_tracking_issue_table($project_nid) {
 
     // Row becomes irrelevant in the next loop run.
     unset($relevant_row);
-    $side = $side == 'even' ? 'odd' : 'even';
   }
 
   // Final calculations.
+  $side = 'odd';
   foreach($table['rows'] as &$row) {
     $data = &$row['data'];
+    $side = ($side == 'odd') ? 'even' : 'odd';
 
     // Calculate overtime.
     $data['overtime'] = $data['actual'] - $data['estimate'];
     $total_row['data']['total_overtime'] += $data['overtime'];
+
+    // Add class.
+    $row['class'] = ($data['actual'] > $data['estimate'] ? 'row-bad-' : 'row-ok-') . $side;
   }
 
   // Total row. Includes non-referenced issues.

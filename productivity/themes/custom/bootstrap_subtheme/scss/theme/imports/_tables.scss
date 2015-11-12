@@ -81,6 +81,25 @@
 			}
 		}
 	}
+
+	&.per-issue-table.table-striped {
+
+		tr.row-ok-even td {
+			background-color: rgba(16, 255, 18, 0.47);
+		}
+
+		tr.row-ok-odd td {
+			background-color: rgba(16, 255, 18, 0.69);
+		}
+
+		tr.row-bad-odd td {
+			background-color: rgba(255, 76, 96, 0.93);
+		}
+
+		tr.row-bad-even td {
+			background-color: rgba(255, 76, 96, 0.69);
+		}
+	}
 }
 .dataTable thead th:hover {
 	color: $primary-color;
