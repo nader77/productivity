@@ -3,6 +3,9 @@
  * @file
  * Code for the Productivity time tracking feature.
  */
+define('PRODUCTIVITY_GITHUB_ISSUE_OPEN_STATUS', t('WIP'));
+define('PRODUCTIVITY_GITHUB_ISSUE_CLOSED_STATUS', t('Done'));
+
 
 /**
  * Menu callback; display tracking table for issues.
@@ -14,7 +17,8 @@ function productivity_github_time_tracking_issue_table($project_nid) {
       t('Issue name'),
       t('Time estimate'),
       t('Actual time'),
-      t('Completed'),
+      t('Overtime'),
+      t('Status'),
     ),
     'data' => array(),
   );
@@ -47,9 +51,11 @@ function productivity_github_time_tracking_issue_table($project_nid) {
       'data' => array(
         'issue_id' => $wrapper->field_issue_id->value(),
         'issue_name' => $wrapper->label(),
-        'estimate' => $wrapper->field_time_estimate->value(),
+        'estimate' => intval($wrapper->field_time_estimate->value()),
         'actual' => 0,
-        'completed' => 'N/A',
+        'overtime' => 0,
+        // TODO: Followup - closing/opening issue should change this.
+        'status' => 'WIP',
       ),
     );
 
@@ -107,7 +113,8 @@ function productivity_github_time_tracking_issue_table($project_nid) {
       'name' => array('data' => t('Total'), 'colspan' => 2),
       'total_estimate' => 0,
       'total_actual' => 0,
-      'completed' => '',
+      'total_overtime' => 0,
+      'status' => '',
     ),
   );
 
@@ -143,6 +150,15 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     $side = $side == 'even' ? 'odd' : 'even';
   }
 
+  // Final calculations.
+  foreach($table['rows'] as &$row) {
+    $data = &$row['data'];
+
+    // Calculate overtime.
+    $data['overtime'] = $data['actual'] - $data['estimate'];
+    $total_row['data']['total_overtime'] += $data['overtime'];
+  }
+
   // Total row. Includes non-referenced issues.
   $total_row['class'] = 'row-total-' . $side;
   $table['rows'][] = $total_row;
@@ -156,13 +172,19 @@ function productivity_github_time_display_tracking_issue_table($project_node_id 
     return theme('item_list', array('items' => productivity_time_tracking_issue_table_get_list()));
   }
 
+  $node = node_load($project_node_id);
+  drupal_set_title(t('@project issue tracking table', array('@project' => $node->title)));
+
   $table = productivity_github_time_tracking_issue_table($project_node_id);
   if (!is_array($table)) {
     // Table returned an error message.
     return $table;
   }
 
-  return theme('table', $table);
+  // Add a link to go to the project selection.
+  $go_back_link = '<div class="back-link">' . l(t('Back to project list'), 'tracking/per-issue') . '</div>';
+
+  return  $go_back_link . theme('table', $table);
 }
 
 
@@ -171,7 +193,7 @@ function productivity_github_time_display_tracking_issue_table($project_node_id 
  * @return array
  */
 function productivity_time_tracking_issue_table_get_list() {
-  // Selection box for projects.
+  // List of links for projects.
   $query = db_select('node', 'n');
   $result = $query
     ->fields('n', array('title', 'nid'))
@@ -184,12 +206,10 @@ function productivity_time_tracking_issue_table_get_list() {
     return t('No projects found in the database');
   }
 
-  // TODO
   $projects = array();
   foreach($result as $project) {
     $projects[strtolower($project->title)] = l($project->title, 'tracking/per-issue/' . $project->nid);
   }
-
   ksort($projects);
 
   return $projects;
