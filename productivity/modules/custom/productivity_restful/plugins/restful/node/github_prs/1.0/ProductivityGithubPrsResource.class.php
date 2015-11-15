@@ -58,6 +58,10 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
     }
     $query->fieldCondition('field_employee', 'target_id', $account->uid);
 
+
+    // Get only pull requests.
+    $query->fieldCondition('field_github_content_type', 'value', 'pull_request');
+
     return $query;
   }
 
