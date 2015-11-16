@@ -71,7 +71,7 @@ body {
     }
 
     &.-with-icon >.icon {
-      color: #3590BD;
+      color: $blue;
     }
   }
 }
@@ -157,6 +157,7 @@ body {
 }
 
 .numbers-pad {
+  direction: rtl;
   margin: 0px auto;
   padding: 13px;
   width: 279px;
@@ -174,6 +175,7 @@ body {
     @extend .soft-shadow;
     @include transition(0.5s ease-in-out all);
     border: none;
+    outline: none;
     background: rgba(255, 255, 255, 0.0);
 
     &:after {
@@ -181,16 +183,20 @@ body {
       position: absolute;
       left: 6px;
       top: 6px;
-      height: 82%;
-      width: 82%;
+      height: 54px;
+      width: 54px;
       @include border-radius(9px);
       padding: 13px 21px;
       border: 1px solid;
       border-color: rgba(255, 255, 255, 0.4);
     }
 
-    &:last-child {
-      margin-left: 85px;
+    &.-double {
+      width: 149px;
+
+      &:after {
+        width: 137px;
+      }
     }
 
     &:hover {
@@ -198,8 +204,12 @@ body {
       @extend .hard-shadow;
 
       &:after {
-        border-color: #4DC3B5;
+        border-color: $highlight-green;
       }
+    }
+
+    &.-reset {
+      color: $orange;
     }
   }
 }
