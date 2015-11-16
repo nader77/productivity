@@ -152,15 +152,15 @@ body {
       color: white;
       background: rgba(255, 255, 255, 0.11);
 
-      &.spinner {
-        display: none;
+      &.dynamic {
+        color: $digit;
       }
 
-      &.success {
+      &.-success {
         color: $highlight-green;
       }
 
-      &.error {
+      &.-error {
         color: $orange;
       }
     }
@@ -246,7 +246,7 @@ body {
   width: 279px;
   height: 368px;
 
-  .digit {
+  button {
     position: relative;
     width: 66px;
     height: 66px;

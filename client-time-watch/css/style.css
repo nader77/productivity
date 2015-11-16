@@ -28,14 +28,14 @@ body {
 }
 
 /* line 31, ../sass/style.scss */
-.soft-shadow, .clear-btn, .numbers-pad .digit {
+.soft-shadow, .clear-btn, .numbers-pad button {
   -moz-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.12);
   -webkit-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.12);
   box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.12);
 }
 
 /* line 35, ../sass/style.scss */
-.hard-shadow, .clear-btn.-active, .numbers-pad .digit.-active {
+.hard-shadow, .clear-btn.-active, .numbers-pad button.-active {
   -moz-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
   -webkit-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
   box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
@@ -167,15 +167,15 @@ body {
   background: rgba(255, 255, 255, 0.11);
 }
 /* line 155, ../sass/style.scss */
-.pin-code .code .icon.spinner {
-  display: none;
+.pin-code .code .icon.dynamic {
+  color: #4DC3B5;
 }
 /* line 159, ../sass/style.scss */
-.pin-code .code .icon.success {
+.pin-code .code .icon.-success {
   color: greenyellow;
 }
 /* line 163, ../sass/style.scss */
-.pin-code .code .icon.error {
+.pin-code .code .icon.-error {
   color: #F9A11A;
 }
 
@@ -272,7 +272,7 @@ body {
   height: 368px;
 }
 /* line 249, ../sass/style.scss */
-.numbers-pad .digit {
+.numbers-pad button {
   position: relative;
   width: 66px;
   height: 66px;
@@ -287,35 +287,35 @@ body {
   background: rgba(255, 255, 255, 0.1);
 }
 /* line 262, ../sass/style.scss */
-.numbers-pad .digit.-double {
+.numbers-pad button.-double {
   width: 149px;
 }
 /* line 265, ../sass/style.scss */
-.numbers-pad .digit.-double:after {
+.numbers-pad button.-double:after {
   width: 137px;
 }
 /* line 270, ../sass/style.scss */
-.numbers-pad .digit.-active {
+.numbers-pad button.-active {
   background: rgba(255, 255, 255, 0.4);
 }
 /* line 274, ../sass/style.scss */
-.numbers-pad .digit.-active:after {
+.numbers-pad button.-active:after {
   border-color: greenyellow;
 }
 /* line 279, ../sass/style.scss */
-.numbers-pad .digit.-reset {
+.numbers-pad button.-reset {
   color: #F9A11A;
 }
 /* line 282, ../sass/style.scss */
-.numbers-pad .digit.-reset.-active:after {
+.numbers-pad button.-reset.-active:after {
   border-color: #F9A11A;
 }
 /* line 287, ../sass/style.scss */
-.numbers-pad .digit[disabled] {
+.numbers-pad button[disabled] {
   color: rgba(255, 255, 255, 0.4);
 }
 /* line 291, ../sass/style.scss */
-.numbers-pad .digit:after {
+.numbers-pad button:after {
   content: "";
   position: absolute;
   left: 6px;
