@@ -60,7 +60,7 @@ projects[logs_http][subdir] = "contrib"
 projects[logs_http][version] = "1.1"
 
 projects[mailsystem][subdir] = "contrib"
-projects[mailsystem][version] = 2.34
+projects[mailsystem][version] = "3.x-dev"
 
 projects[message][subdir] = "contrib"
 projects[message][version] = "1.10"
