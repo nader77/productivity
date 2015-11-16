@@ -72,7 +72,7 @@ projects[message_subscribe][subdir] = "contrib"
 projects[message_subscribe][version] = "1.0-rc2"
 
 projects[mimemail][subdir] = "contrib"
-projects[mimemail][version] = "1.0-beta3"
+projects[mimemail][version] = "1.0-beta4"
 
 projects[module_filter][subdir] = "contrib"
 projects[module_filter][version] = "2.0"
@@ -95,6 +95,9 @@ projects[restful][download][type] = "git"
 projects[restful][download][url] = "https://github.com/RESTful-Drupal/restful.git"
 projects[restful][download][branch] = "7.x-1.x"
 projects[restful][subdir] = "contrib"
+
+projects[smtp][subdir] = "contrib"
+projects[smtp][version] = "7.x-1.2"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
