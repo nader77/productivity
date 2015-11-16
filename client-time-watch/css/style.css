@@ -30,7 +30,7 @@ body {
 }
 
 /* line 31, ../sass/style.scss */
-.hard-shadow, .clear-btn.-active, .numbers-pad .digit:hover {
+.hard-shadow, .clear-btn.-active, .numbers-pad .digit.-active {
   -moz-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
   -webkit-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
   box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
@@ -194,15 +194,43 @@ body {
   -moz-border-radius: 13px;
   -webkit-border-radius: 13px;
   border-radius: 13px;
-  -moz-transition: ease-in-out 0.5s all;
-  -o-transition: ease-in-out 0.5s all;
-  -webkit-transition: ease-in-out 0.5s all;
-  transition: ease-in-out 0.5s all;
+  -moz-transition: ease-in-out 0.1s all;
+  -o-transition: ease-in-out 0.1s all;
+  -webkit-transition: ease-in-out 0.1s all;
+  transition: ease-in-out 0.1s all;
   border: none;
   outline: none;
   background: rgba(255, 255, 255, 0);
 }
 /* line 181, ../sass/style.scss */
+.numbers-pad .digit.-double {
+  width: 149px;
+}
+/* line 184, ../sass/style.scss */
+.numbers-pad .digit.-double:after {
+  width: 137px;
+}
+/* line 189, ../sass/style.scss */
+.numbers-pad .digit.-active {
+  background: rgba(255, 255, 255, 0.3);
+}
+/* line 193, ../sass/style.scss */
+.numbers-pad .digit.-active:after {
+  border-color: greenyellow;
+}
+/* line 198, ../sass/style.scss */
+.numbers-pad .digit.-reset {
+  color: #F9A11A;
+}
+/* line 201, ../sass/style.scss */
+.numbers-pad .digit.-reset.-active:after {
+  border-color: #F9A11A;
+}
+/* line 206, ../sass/style.scss */
+.numbers-pad .digit[disabled] {
+  color: rgba(255, 255, 255, 0.4);
+}
+/* line 210, ../sass/style.scss */
 .numbers-pad .digit:after {
   content: "";
   position: absolute;
@@ -217,28 +245,8 @@ body {
   border: 1px solid;
   border-color: rgba(255, 255, 255, 0.4);
 }
-/* line 194, ../sass/style.scss */
-.numbers-pad .digit.-double {
-  width: 149px;
-}
-/* line 197, ../sass/style.scss */
-.numbers-pad .digit.-double:after {
-  width: 137px;
-}
-/* line 202, ../sass/style.scss */
-.numbers-pad .digit:hover {
-  background: rgba(255, 255, 255, 0.3);
-}
-/* line 206, ../sass/style.scss */
-.numbers-pad .digit:hover:after {
-  border-color: greenyellow;
-}
-/* line 211, ../sass/style.scss */
-.numbers-pad .digit.-reset {
-  color: #F9A11A;
-}
 
-/* line 217, ../sass/style.scss */
+/* line 225, ../sass/style.scss */
 .view {
   border-left: 1px solid #545251;
   height: 373px;

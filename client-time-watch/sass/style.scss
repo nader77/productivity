@@ -173,10 +173,39 @@ body {
     color: #4DC3B5;
     @include border-radius(13px);
     @extend .soft-shadow;
-    @include transition(0.5s ease-in-out all);
+    @include transition(0.1s ease-in-out all);
     border: none;
     outline: none;
     background: rgba(255, 255, 255, 0.0);
+
+    &.-double {
+      width: 149px;
+
+      &:after {
+        width: 137px;
+      }
+    }
+
+    &.-active {
+      background: rgba(255, 255, 255, 0.3);
+      @extend .hard-shadow;
+
+      &:after {
+        border-color: $highlight-green;
+      }
+    }
+
+    &.-reset {
+      color: $orange;
+
+      &.-active:after {
+        border-color: $orange;
+      }
+    }
+
+    &[disabled] {
+      color: rgba(255, 255, 255, 0.4);
+    }
 
     &:after {
       content: "";
@@ -189,27 +218,6 @@ body {
       padding: 13px 21px;
       border: 1px solid;
       border-color: rgba(255, 255, 255, 0.4);
-    }
-
-    &.-double {
-      width: 149px;
-
-      &:after {
-        width: 137px;
-      }
-    }
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.3);
-      @extend .hard-shadow;
-
-      &:after {
-        border-color: $highlight-green;
-      }
-    }
-
-    &.-reset {
-      color: $orange;
     }
   }
 }
