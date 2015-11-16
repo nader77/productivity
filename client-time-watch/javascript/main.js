@@ -8,7 +8,7 @@ $(document).ready(function() {
   setInterval( function(){
     // Remove class.
     $('.led .light').toggleClass('on');
-  }, 3000);
+  }, 1700);
 
   // Demo click handler for the "digit" button.
   var digitClickHandler = function() {
@@ -30,10 +30,10 @@ $(document).ready(function() {
       if (digitsCounter != maxDigits) {
         return;
       }
-      // Disable all digits it it's the 4th digit that was clicked.
-      // Strip class "active" from the breakpoints icons.
+
+      // Disable all digits buttons it it's the 4th digit that was clicked.
       $('button').each(function() {
-        $(this).prop('disabled', true).removeClass('-active');
+        $(this).prop('disabled', true);
       });
 
     }, 45);
