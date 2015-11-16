@@ -125,6 +125,10 @@ body {
   padding-top: 14px;
 
   .code {
+    border: 1px solid $light;
+    @include border-radius(3px);
+    border: 1px solid $light;
+
     .item {
       float: left;
       width: 20%;
@@ -138,17 +142,8 @@ body {
       }
     }
 
-    >.item:nth-child(n+3) {
-      border-left: 1px solid $border-dark;
-    }
-
-    >.item:first-child {
-      @include border-radius(3px 0px 0px 3px);
-    }
-
-    >.item:last-child {
-      border-left: none;
-      @include border-radius(0px 3px 3px 0px);
+    >.item:nth-child(n+2) {
+      border-left: 1px solid $light;
     }
 
     .icon {
