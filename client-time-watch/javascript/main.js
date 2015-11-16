@@ -4,9 +4,13 @@ $(document).ready(function() {
   var maxDigits = 4;
   var digitsCounter = 0;
 
-  /**
-   * Demo click handler for the "digit" button.
-   */
+  // Mockup the connection led light indicator.
+  setInterval( function(){
+    // Remove class.
+    $('.led .light').toggleClass('on');
+  }, 400);
+
+  // Demo click handler for the "digit" button.
   var digitClickHandler = function() {
     var self = this;
 
@@ -16,13 +20,13 @@ $(document).ready(function() {
     // Enable reset button
     $('.digit.-reset').prop('disabled', false);
 
-    $(self).toggleClass('-active');
+    $(self).addClass('-active');
 
     setTimeout( function(){
       // Remove class.
-      $(self).toggleClass('-active');
+      $(self).removeClass('-active');
 
-      //// Return early.
+      // Return early.
       if (digitsCounter != maxDigits) {
         return;
       }
@@ -32,11 +36,9 @@ $(document).ready(function() {
         $(this).prop('disabled', true);
       });
 
-    } , 150 );
+    }, 45);
   };
 
-  /**
-   * On "click" handler for the "digit button".
-   */
+  // Digit click handler callback.
   $(".numbers-pad .digit").on("click", digitClickHandler);
 });
