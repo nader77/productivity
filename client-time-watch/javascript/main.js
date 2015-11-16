@@ -33,7 +33,7 @@ $(document).ready(function() {
       // Disable all digits it it's the 4th digit that was clicked.
       // Strip class "active" from the breakpoints icons.
       $('button').each(function() {
-        $(this).prop('disabled', true);
+        $(this).prop('disabled', true).removeClass('-active');
       });
 
     }, 45);
