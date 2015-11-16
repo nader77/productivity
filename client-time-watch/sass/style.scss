@@ -45,7 +45,7 @@ body {
   letter-spacing: 0.025em;
 
   &[disabled] {
-    color: rgba(255, 255, 255, 0.4);
+    color: $disabled;
   }
 
   &.-with-icon {
@@ -93,7 +93,7 @@ body {
     padding-bottom: 45px;
     min-height: 521px;
     color: white;
-    background: rgba(45, 45, 56, 0.52);
+    background: rgba(45, 45, 56, 0.55);
     border: 1px solid $border-dark;
     @include border-radius(4px);
     @include box-shadow(0px 6px 11px 0px rgba(0, 0, 0, 0.54));
@@ -121,6 +121,57 @@ body {
   }
 }
 
+.pin-code {
+  padding-top: 14px;
+
+  .code {
+    .item {
+      float: left;
+      width: 20%;
+      height: 39px;
+      line-height: 39px;
+      color: $digit;
+      font-weight: bold;
+
+      &.-active {
+        background: rgba(255, 255, 255, 0.11);
+      }
+    }
+
+    >.item:nth-child(n+3) {
+      border-left: 1px solid $border-dark;
+    }
+
+    >.item:first-child {
+      @include border-radius(3px 0px 0px 3px);
+    }
+
+    >.item:last-child {
+      border-left: none;
+      @include border-radius(0px 3px 3px 0px);
+    }
+
+    .icon {
+      font-weight: lighter;
+      width: 10%;
+      color: white;
+      background: rgba(255, 255, 255, 0.11);
+
+      &.spinner {
+        display: none;
+      }
+
+      &.success {
+        color: $highlight-green;
+      }
+
+      &.error {
+        color: $orange;
+      }
+    }
+  }
+}
+
 .main-header {
   height: 68px;
   border-bottom: 1px solid $border-dark;
@@ -133,7 +184,7 @@ body {
     }
 
     .icon {
-      color: #0AE09F;
+      color: $green-base;
     }
   }
 
@@ -173,22 +224,22 @@ body {
       }
 
       &.on {
-        border-color: #27A07B;
-        background: #4DC3B5;
-        @include box-shadow(0px 2px 29px #0AE09F);
+        border-color: darken($digit, 20%);
+        background: $digit;
+        @include box-shadow(0px 2px 29px $digit);
       }
 
       &.off {
         border-color: #A02727;
         background: #C34D4D;
         @include box-shadow(0px 2px 29px #E00A0A);
-
       }
     }
   }
 }
 
 .projects {
+  margin-top: 30px;
   display: inline-block;
   border-radius: 3px;
 }
@@ -206,12 +257,12 @@ body {
     height: 66px;
     margin: 7px 7px;
     font-weight: 700;
-    color: #4DC3B5;
+    color: $digit;
     @include border-radius(13px);
     @extend .soft-shadow;
     border: none;
     outline: none;
-    background: rgba(255, 255, 255, 0.0);
+    background: rgba(255, 255, 255, 0.1);
 
     &.-double {
       width: 149px;
@@ -222,7 +273,7 @@ body {
     }
 
     &.-active {
-      background: rgba(255, 255, 255, 0.3);
+      background: $disabled;
       @extend .hard-shadow;
 
       &:after {
@@ -239,7 +290,7 @@ body {
     }
 
     &[disabled] {
-      color: rgba(255, 255, 255, 0.4);
+      color: $disabled;
     }
 
     &:after {

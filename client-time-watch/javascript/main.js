@@ -8,7 +8,7 @@ $(document).ready(function() {
   setInterval( function(){
     // Remove class.
     $('.led .light').toggleClass('on');
-  }, 400);
+  }, 3000);
 
   // Demo click handler for the "digit" button.
   var digitClickHandler = function() {
@@ -39,15 +39,12 @@ $(document).ready(function() {
     }, 45);
   };
 
-  // Demo click handler for the "digit" button.
-  var ProjectClickHandler = function() {
-    var self = this;
-    $(self).toggleClass('-active');
-  };
-
   // Digit click handler callback.
   $(".numbers-pad .digit").on("click", digitClickHandler);
 
   // Digit click handler callback.
-  $(".projects button.item").on("click", ProjectClickHandler);
+  $(".projects button.item").on("click", function() {
+    $(this).toggleClass('-active');
+  });
+
 });
