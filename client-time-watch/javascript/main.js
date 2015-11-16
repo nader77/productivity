@@ -81,13 +81,11 @@ $(document).ready(function() {
 
       // In case of success.
       if (pinCode === validPinCode) {
-        $icon.addClass('-success');
-        $icon.append('<i class="fa fa-check success"></i>');
+        $icon.append('<i class="fa fa-check -success"></i>');
       }
       // In case of error.
       else {
-        $icon.addClass('-error');
-        $icon.append('<i class="fa fa-times error"></i>');
+        $icon.append('<i class="fa fa-times -error"></i>');
       }
     }, 300)
 

@@ -154,14 +154,16 @@ body {
 
       &.dynamic {
         color: $digit;
-      }
 
-      &.-success {
-        color: $highlight-green;
-      }
+        > * {
+          &.-success {
+            color: $highlight-green;
+          }
 
-      &.-error {
-        color: $orange;
+          &.-error {
+            color: $orange;
+          }
+        }
       }
     }
   }
