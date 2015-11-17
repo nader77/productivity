@@ -237,9 +237,7 @@ function productivity_time_tracking_node_presave($node) {
   $skip_issue_update = FALSE;
 
   foreach($wrapper->field_issues_logs as $key => $field_wrapper) {
-    dpm($field_wrapper->value(), $key);
     if ($field_wrapper->__isset('field_github_issue')) {
-      dpm('updating');
       // Re-calculate how many hours were worked on the issue that the time
       // tracking is referencing, or the issue that's referenced by the pull
       // request the node is referencing.
@@ -249,9 +247,9 @@ function productivity_time_tracking_node_presave($node) {
         // This is an update to the tracking, update data correctly.
         $original_wrapper = entity_metadata_wrapper('node', $node->original);
 
-//        if (!empty($original_wrapper->field_issues_log->get($key))) {
-//          $old_track_time = $original_wrapper->field_issues_log->get($key)->field_track_hours->value();
-//        }
+        if (!empty($original_wrapper->field_issues_logs->get($key))) {
+          $old_track_time = $original_wrapper->field_issues_logs->get($key)->field_time_spent->value();
+        }
       }
 
       // Note that this could be either a pull request or an issue.
@@ -263,10 +261,10 @@ function productivity_time_tracking_node_presave($node) {
           if ($github_issue_wrapper->__isset('field_issue_reference')) {
             // Pointing at a pull request - get the issue wrapper.
             $github_issue_wrapper = $github_issue_wrapper->field_issue_reference;
-          } else {
+          }
+          else {
             // This pull request does not have an issue. Can't calculate total
             // issue hours.
-            dpm('skipped '. $key);
             $skip_issue_update = TRUE;
           }
         }
@@ -278,7 +276,6 @@ function productivity_time_tracking_node_presave($node) {
           // Save this value into the issue node.
           $github_issue_wrapper->field_actual_hours->set($issue_hours);
           $github_issue_wrapper->save();
-          dpm('saved '. $github_issue_wrapper->getIdentifier() );
         }
       }
     }
