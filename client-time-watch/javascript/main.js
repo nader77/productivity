@@ -3,65 +3,55 @@ $(document).ready(function() {
   // Init default values.
   var maxDigits = 4;
   var digitsCounter = 0;
-  var $deleteButton = $('button#delete');
-  var pinCode = '';
   var validPinCode = '1234';
 
-  // Mockup the connection led light indicator.
-  setInterval( function(){
-    // Remove class.
-    $('.led .light').toggleClass('on');
-  }, 1700);
+  // Elements
+  var $deleteButton = $('button#delete');
+  var $codePin = $('.code .pin');
 
-  // Demo click handler for the "digit" button.
+  // Dummy ping to server to check connectivity.
+  CheckServerConnection(1700);
+
+  // Dummy "digit" button click.
   var digitClickHandler = function() {
     var self = this;
 
     // Display the target "digit" value.
-    $($('.code .pin').get(digitsCounter)).text($(self).text());
+    $($codePin.get(digitsCounter)).text($(self).text());
 
     // Increment digit counter.
     digitsCounter++;
+    console.log(digitsCounter);
 
-    // Enable reset button
+    // Add class "-active" for UX.
+    toggoleButtonActivity(self)
+
+    // Enable the "delete" button.
     $deleteButton.prop('disabled', false);
 
-    // Add active class
-    $(self).addClass('-active');
-
-    setTimeout( function(){
-      // Remove class.
-      $(self).removeClass('-active');
-
-      // Return early.
-      if (digitsCounter != maxDigits) {
-        return;
-      }
+    // Dummy request to server.
+    if (digitsCounter == maxDigits) {
       serverResponse();
-    }, 45);
+      return;
+    }
   };
 
   // Demo click handler for the "reset" button.
   var deleteButtonkHandler = function() {
     var self = this;
 
-    // On click add class active.
-    $(self).addClass('-active');
+    // Add class "-active" for UX.
+    toggoleButtonActivity(self)
 
-    setTimeout( function(){
-      // Remove class.
-      $(self).removeClass('-active');
-    }, 45);
-
-    // Delete last digit from the record.
-    $($('.code .pin').get(digitsCounter - 1)).text('');
+    // Delete the last digit from the record.
+    $($codePin.get(digitsCounter - 1)).text('');
     digitsCounter--;
   }
 
-  // button click handler callback.
+  // "Digit" button click handler callback.
   $(".numbers-pad .digit").on("click", digitClickHandler);
 
-  // Project button click handler callback.
+  // "Project" button click handler callback.
   $(".projects button.item").on("click", function() {
     $(this).toggleClass('-active');
   });
@@ -103,6 +93,23 @@ $(document).ready(function() {
     });
   }
 
+  // Toggle button activity
+  function toggoleButtonActivity(button) {
+    // Add active class
+    $(button).addClass('-active');
 
+    setTimeout( function(){
+      // Remove class.
+      $(button).removeClass('-active');
+    }, 45);
+  }
+
+  // Turn "ON" the led "light" indicator.
+  function CheckServerConnection(time) {
+    setInterval( function(){
+      // Remove class.
+      $('.led .light').toggleClass('on');
+    }, time);
+  }
 
 });
