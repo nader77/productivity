@@ -152,58 +152,55 @@ body {
   height: 39px;
   line-height: 39px;
   color: #4DC3B5;
+  font-size: 22px;
   font-weight: bold;
 }
-/* line 141, ../sass/style.scss */
+/* line 142, ../sass/style.scss */
 .pin-code .code .item.-active {
   background: rgba(255, 255, 255, 0.11);
 }
-/* line 146, ../sass/style.scss */
+/* line 147, ../sass/style.scss */
 .pin-code .code > .item:nth-child(n+2) {
   border-left: 1px solid #b1aba4;
 }
-/* line 150, ../sass/style.scss */
+/* line 151, ../sass/style.scss */
 .pin-code .code .icon {
   font-weight: lighter;
   width: 10%;
   color: white;
   background: rgba(255, 255, 255, 0.11);
 }
-/* line 156, ../sass/style.scss */
-.pin-code .code .icon.-dynamic-icon {
-  color: #4DC3B5;
-}
-/* line 160, ../sass/style.scss */
+/* line 158, ../sass/style.scss */
 .pin-code .code .icon.-dynamic-icon > *.-success {
   color: #8dbf49;
 }
-/* line 164, ../sass/style.scss */
+/* line 162, ../sass/style.scss */
 .pin-code .code .icon.-dynamic-icon > *.-error {
   color: #d69d43;
 }
 
-/* line 173, ../sass/style.scss */
+/* line 170, ../sass/style.scss */
 .main-header {
   height: 68px;
   border-bottom: 1px solid #545251;
 }
-/* line 177, ../sass/style.scss */
+/* line 174, ../sass/style.scss */
 .main-header.info {
   padding-top: 21px;
 }
-/* line 180, ../sass/style.scss */
+/* line 177, ../sass/style.scss */
 .main-header.info .time {
   margin-left: 15px;
 }
-/* line 184, ../sass/style.scss */
+/* line 181, ../sass/style.scss */
 .main-header.info .icon {
   color: #0AE09F;
 }
-/* line 189, ../sass/style.scss */
+/* line 186, ../sass/style.scss */
 .main-header.led {
   padding-top: 21px;
 }
-/* line 192, ../sass/style.scss */
+/* line 189, ../sass/style.scss */
 .main-header.led .light {
   position: relative;
   display: inline-block;
@@ -224,7 +221,7 @@ body {
   -webkit-transition: ease-in-out 0.5s all;
   transition: ease-in-out 0.5s all;
 }
-/* line 205, ../sass/style.scss */
+/* line 202, ../sass/style.scss */
 .main-header.led .light:after, .main-header.led .light:before {
   content: "";
   position: absolute;
@@ -233,15 +230,15 @@ body {
   background-color: rgba(0, 0, 0, 0.15);
   height: 100%;
 }
-/* line 215, ../sass/style.scss */
+/* line 212, ../sass/style.scss */
 .main-header.led .light:before {
   left: 4px;
 }
-/* line 219, ../sass/style.scss */
+/* line 216, ../sass/style.scss */
 .main-header.led .light:after {
   right: 4px;
 }
-/* line 223, ../sass/style.scss */
+/* line 220, ../sass/style.scss */
 .main-header.led .light.on {
   border-color: #2b7f75;
   background: #4DC3B5;
@@ -249,7 +246,7 @@ body {
   -webkit-box-shadow: 0 2px 29px #4DC3B5;
   box-shadow: 0 2px 29px #4DC3B5;
 }
-/* line 229, ../sass/style.scss */
+/* line 226, ../sass/style.scss */
 .main-header.led .light.off {
   border-color: #A02727;
   background: #C34D4D;
@@ -258,14 +255,14 @@ body {
   box-shadow: 0 2px 29px #E00A0A;
 }
 
-/* line 238, ../sass/style.scss */
+/* line 235, ../sass/style.scss */
 .projects {
   margin-top: 30px;
   display: inline-block;
   border-radius: 3px;
 }
 
-/* line 244, ../sass/style.scss */
+/* line 241, ../sass/style.scss */
 .numbers-pad {
   direction: rtl;
   margin: 10px auto 0 auto;
@@ -273,12 +270,13 @@ body {
   width: 314px;
   height: 368px;
 }
-/* line 251, ../sass/style.scss */
+/* line 248, ../sass/style.scss */
 .numbers-pad button {
   position: relative;
   width: 79px;
   height: 79px;
   margin: 7px 7px;
+  font-size: 30px;
   font-weight: 700;
   color: #4DC3B5;
   -moz-border-radius: 13px;
@@ -288,35 +286,35 @@ body {
   outline: none;
   background: rgba(255, 255, 255, 0.1);
 }
-/* line 264, ../sass/style.scss */
+/* line 262, ../sass/style.scss */
 .numbers-pad button.-double {
   width: 176px;
 }
-/* line 267, ../sass/style.scss */
+/* line 265, ../sass/style.scss */
 .numbers-pad button.-double:after {
   width: 164px;
 }
-/* line 272, ../sass/style.scss */
+/* line 270, ../sass/style.scss */
 .numbers-pad button.-active {
   background: rgba(255, 255, 255, 0.4);
 }
-/* line 276, ../sass/style.scss */
+/* line 274, ../sass/style.scss */
 .numbers-pad button.-active:after {
   border-color: #8dbf49;
 }
-/* line 281, ../sass/style.scss */
+/* line 279, ../sass/style.scss */
 .numbers-pad button.-delete {
   color: #d69d43;
 }
-/* line 284, ../sass/style.scss */
+/* line 282, ../sass/style.scss */
 .numbers-pad button.-delete.-active:after {
   border-color: #d69d43;
 }
-/* line 289, ../sass/style.scss */
+/* line 287, ../sass/style.scss */
 .numbers-pad button[disabled] {
   color: rgba(255, 255, 255, 0.4);
 }
-/* line 293, ../sass/style.scss */
+/* line 291, ../sass/style.scss */
 .numbers-pad button:after {
   content: "";
   position: absolute;
@@ -331,13 +329,13 @@ body {
   border: 1px solid #b1aba4;
 }
 
-/* line 307, ../sass/style.scss */
+/* line 305, ../sass/style.scss */
 .view {
   height: 486px;
   border-left: 1px solid #545251;
   padding: 30px 40px 50px 40px;
 }
-/* line 312, ../sass/style.scss */
+/* line 310, ../sass/style.scss */
 .view .wrapper {
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
   opacity: 0;
@@ -355,12 +353,12 @@ body {
   -webkit-transition: ease-in-out 1s opacity;
   transition: ease-in-out 1s opacity;
 }
-/* line 321, ../sass/style.scss */
+/* line 319, ../sass/style.scss */
 .view .wrapper.-active {
   filter: progid:DXImageTransform.Microsoft.Alpha(enabled=false);
   opacity: 1;
 }
-/* line 325, ../sass/style.scss */
+/* line 323, ../sass/style.scss */
 .view .wrapper .message {
   position: relative;
   padding: 8px 8px 8px 48px;
@@ -370,7 +368,7 @@ body {
   -webkit-border-radius: 3px;
   border-radius: 3px;
 }
-/* line 333, ../sass/style.scss */
+/* line 331, ../sass/style.scss */
 .view .wrapper .message:after {
   content: "";
   position: absolute;
@@ -380,19 +378,19 @@ body {
   width: 1px;
   background: rgba(0, 0, 0, 0.11);
 }
-/* line 343, ../sass/style.scss */
+/* line 341, ../sass/style.scss */
 .view .wrapper .message.-error {
   background: #d69d43;
 }
-/* line 349, ../sass/style.scss */
+/* line 347, ../sass/style.scss */
 .view .wrapper .message.-success.-in {
   background: #8dbf49;
 }
-/* line 353, ../sass/style.scss */
+/* line 351, ../sass/style.scss */
 .view .wrapper .message.-success.-out {
   background: #5193B7;
 }
-/* line 358, ../sass/style.scss */
+/* line 356, ../sass/style.scss */
 .view .wrapper .message > .icon {
   position: absolute;
   left: 10px;

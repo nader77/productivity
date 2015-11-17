@@ -5,6 +5,7 @@ $(document).ready(function() {
   var digitsCounter = 0;
   var validPinCode = '1234';
   var projectSelected = false;
+  var touchOrClickEvent = is_touch_device() ? 'touchstart' : 'click';
 
   // Elements
   var $deleteButton = $('button.-delete');
@@ -77,7 +78,7 @@ $(document).ready(function() {
       // Display the view.
       $viewWrapper.addClass('-active')
     }, 500)
-  };
+  }
 
   // Toggle button activity
   function toggleButtonActivity(button) {
@@ -87,8 +88,8 @@ $(document).ready(function() {
     setTimeout( function(){
       // Remove class.
       $(button).removeClass('-active');
-    }, 45);
-  };
+    }, 100);
+  }
 
   // Turn "ON" the led "light" indicator.
   function CheckServerConnection(time) {
@@ -96,7 +97,7 @@ $(document).ready(function() {
       // Remove class.
       $('.led .light').toggleClass('on');
     }, time);
-  };
+  }
 
   // Server returns "success" response.
   function responseSuccess() {
@@ -110,17 +111,17 @@ $(document).ready(function() {
       $dynamicIcon.html('');
 
       // Hide the view.
-      //$viewWrapper.removeClass('-active')
+      $viewWrapper.removeClass('-active')
 
     }, 2000)
 
-  };
+  }
 
   // Server returns "error" response.
   function responseError() {
     $dynamicIcon.append('<i class="fa fa-exclamation-triangle -error"></i>');
     reset();
-  };
+  }
 
   // Disable all buttons.
   function DisableAllButtons() {
@@ -128,7 +129,7 @@ $(document).ready(function() {
     $('button').each(function() {
       $(this).prop('disabled', true);
     });
-  };
+  }
 
   // Enable all buttons.
   function EnableAllButtons() {
@@ -136,13 +137,13 @@ $(document).ready(function() {
     $('button').each(function() {
       $(this).prop('disabled', false);
     });
-  };
+  }
 
   // Delete "pin-code".
   function DeletePinCode() {
     $('.code .pin').text('');
     digitsCounter = 0;
-  };
+  }
 
   // Reset the dashboard.
   function reset() {
@@ -152,15 +153,20 @@ $(document).ready(function() {
   }
 
   // "Digit" button click handler callback.
-  $(".numbers-pad .digit").on("click", digitClickHandler);
+  $(".numbers-pad .digit").on(touchOrClickEvent, digitClickHandler);
 
   // "Project" button click handler callback.
-  $(".projects button.item").on("click", function() {
+  $(".projects button.item").on(touchOrClickEvent, function() {
     $(this).toggleClass('-active');
     projectSelected = !projectSelected;
   });
 
   // Delete button click handler callback.
-  $deleteButton.on("click", deleteButtonHandler);
+  $deleteButton.on(touchOrClickEvent, deleteButtonHandler);
+
+    function is_touch_device() {
+      return 'ontouchstart' in window // works on most browsers
+        || 'onmsgesturechange' in window; // works on ie10
+    }
 
 });

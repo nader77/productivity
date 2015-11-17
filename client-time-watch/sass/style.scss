@@ -136,6 +136,7 @@ body {
       height: 39px;
       line-height: 39px;
       color: $digit;
+      font-size: 22px;
       font-weight: bold;
 
       &.-active {
@@ -153,17 +154,13 @@ body {
       color: white;
       background: rgba(255, 255, 255, 0.11);
 
-      &.-dynamic-icon {
-        color: $digit;
+      &.-dynamic-icon > * {
+        &.-success {
+          color: $green;
+        }
 
-        > * {
-          &.-success {
-            color: $green;
-          }
-
-          &.-error {
-            color: $orange;
-          }
+        &.-error {
+          color: $orange;
         }
       }
     }
@@ -253,6 +250,7 @@ body {
     width: 79px;
     height: 79px;
     margin: 7px 7px;
+    font-size: 30px;
     font-weight: 700;
     color: $digit;
     @include border-radius(13px);
