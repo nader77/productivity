@@ -152,7 +152,7 @@ body {
       color: white;
       background: rgba(255, 255, 255, 0.11);
 
-      &#dynamic-icon {
+      &.-dynamic-icon {
         color: $digit;
 
         > * {
@@ -278,7 +278,7 @@ body {
       }
     }
 
-    &#delete {
+    &.-delete {
       color: $orange;
 
       &.-active:after {

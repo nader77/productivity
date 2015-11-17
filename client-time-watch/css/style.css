@@ -167,15 +167,15 @@ body {
   background: rgba(255, 255, 255, 0.11);
 }
 /* line 155, ../sass/style.scss */
-.pin-code .code .icon#dynamic-icon {
+.pin-code .code .icon.-dynamic-icon {
   color: #4DC3B5;
 }
 /* line 159, ../sass/style.scss */
-.pin-code .code .icon#dynamic-icon > *.-success {
+.pin-code .code .icon.-dynamic-icon > *.-success {
   color: greenyellow;
 }
 /* line 163, ../sass/style.scss */
-.pin-code .code .icon#dynamic-icon > *.-error {
+.pin-code .code .icon.-dynamic-icon > *.-error {
   color: #F9A11A;
 }
 
@@ -303,11 +303,11 @@ body {
   border-color: greenyellow;
 }
 /* line 281, ../sass/style.scss */
-.numbers-pad button#delete {
+.numbers-pad button.-delete {
   color: #F9A11A;
 }
 /* line 284, ../sass/style.scss */
-.numbers-pad button#delete.-active:after {
+.numbers-pad button.-delete.-active:after {
   border-color: #F9A11A;
 }
 /* line 289, ../sass/style.scss */
