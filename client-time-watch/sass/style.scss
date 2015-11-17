@@ -191,7 +191,6 @@ body {
 
     .light {
       position: relative;
-      margin-left: 7px;
       display: inline-block;
       vertical-align: middle;
       width: 45px;
@@ -200,7 +199,7 @@ body {
       border-color: #316F5C;
       @include border-radius(3px);
       background: #44756F;
-      @include box-shadow(0 2px 29px #28584A);
+      @include box-shadow(0 1px 0 1px rgba(37, 38, 39, 0.15));
       @include transition(0.5s ease-in-out all);
 
       &:after,
@@ -306,15 +305,13 @@ body {
 }
 
 .view {
-  border-left: 1px solid $border-dark;
   height: 486px;
-  padding-top: 100px;
-  padding-bottom: 28px;
+  border-left: 1px solid $border-dark;
+  padding: 30px 40px 50px 40px;
 
   .wrapper {
-//    @include opacity(0.0);
+    @include opacity(0.0);
     padding: 15px;
-    height: 100%;
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: $soft-bg;
     @include border-radius(3px);
