@@ -4,6 +4,8 @@ api = 2
 ; Modules
 projects[admin_menu][subdir] = "contrib"
 projects[admin_menu][version] = "3.x-dev"
+; Fix error on clear cache, https://www.drupal.org/node/2502695
+projects[admin_menu][patch] = "https://www.drupal.org/files/issues/admin_menu-issetmapfix-2502695-3.patch"
 
 projects[admin_views][subdir] = "contrib"
 projects[admin_views][version] = "1.5"
@@ -100,7 +102,7 @@ projects[restful][download][branch] = "7.x-1.x"
 projects[restful][subdir] = "contrib"
 
 projects[smtp][subdir] = "contrib"
-projects[smtp][version] = "7.x-1.2"
+projects[smtp][version] = "1.2"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
