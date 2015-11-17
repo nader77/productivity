@@ -17,8 +17,11 @@ $(document).ready(function() {
   var digitClickHandler = function() {
     var self = this;
 
+    // Delete dynamic icon.
+    $dynamicIcon.html('');
+
     // Add class "-active" for UX.
-    toggleButtonActivity(self)
+    toggleButtonActivity(self);
 
     // Enable the "delete" button.
     $deleteButton.prop('disabled', false);
@@ -37,10 +40,8 @@ $(document).ready(function() {
   var deleteButtonHandler = function() {
     var self = this;
 
-    if (digitsCounter == maxDigits) {
-      // Delete icon.
-      $dynamicIcon.html('');
-    }
+    // Delete dynamic icon.
+    $dynamicIcon.html('');
 
     // Add class "-active" for UX.
     toggleButtonActivity(self)
@@ -54,18 +55,7 @@ $(document).ready(function() {
       // Disable the "delete" button.
       $deleteButton.prop('disabled', true);
     }
-  }
-
-  // "Digit" button click handler callback.
-  $(".numbers-pad .digit").on("click", digitClickHandler);
-
-  // "Project" button click handler callback.
-  $(".projects button.item").on("click", function() {
-    $(this).toggleClass('-active');
-  });
-
-  // Delete button click handler callback.
-  $deleteButton.on("click", deleteButtonHandler);
+  };
 
   // Dummy server response.
   function serverResponse() {
@@ -79,12 +69,11 @@ $(document).ready(function() {
     setTimeout(function(){
       // Delete icon.
       $dynamicIcon.html('');
-
       // Interpolate server response.
       $('.code .pin').text() === validPinCode ? responseSuccess() : responseError();
 
-    }, 500)
-  }
+    }, 1200)
+  };
 
   // Toggle button activity
   function toggleButtonActivity(button) {
@@ -95,7 +84,7 @@ $(document).ready(function() {
       // Remove class.
       $(button).removeClass('-active');
     }, 45);
-  }
+  };
 
   // Turn "ON" the led "light" indicator.
   function CheckServerConnection(time) {
@@ -103,19 +92,21 @@ $(document).ready(function() {
       // Remove class.
       $('.led .light').toggleClass('on');
     }, time);
-  }
+  };
 
   // Server returns "success" response.
   function responseSuccess() {
     $dynamicIcon.append('<i class="fa fa-check -success"></i>');
     DisableAllButtons();
-  }
+  };
 
   // Server returns "error" response.
   function responseError() {
     $dynamicIcon.append('<i class="fa fa-exclamation-triangle -error"></i>');
+    DeletePinCode();
     EnableAllButtons();
-  }
+    $deleteButton.prop('disabled', true);
+  };
 
   // Disable all buttons.
   function DisableAllButtons() {
@@ -123,7 +114,7 @@ $(document).ready(function() {
     $('button').each(function() {
       $(this).prop('disabled', true);
     });
-  }
+  };
 
   // Enable all buttons.
   function EnableAllButtons() {
@@ -131,6 +122,23 @@ $(document).ready(function() {
     $('button').each(function() {
       $(this).prop('disabled', false);
     });
-  }
+  };
+
+  // Delete "pin-code".
+  function DeletePinCode() {
+    $('.code .pin').text('');
+    digitsCounter = 0;
+  };
+
+  // "Digit" button click handler callback.
+  $(".numbers-pad .digit").on("click", digitClickHandler);
+
+  // "Project" button click handler callback.
+  $(".projects button.item").on("click", function() {
+    $(this).toggleClass('-active');
+  });
+
+  // Delete button click handler callback.
+  $deleteButton.on("click", deleteButtonHandler);
 
 });
