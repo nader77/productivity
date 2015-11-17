@@ -93,12 +93,12 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     foreach ($value as $issue) {
       // We cannot use `wrapper` on the sub-fields of a multi-field.
       $issues[] = array(
-        'issue' => $issue->field_github_issue[LANGUAGE_NONE][0]['target_id'],
-        'label' => $issue->field_issue_label[LANGUAGE_NONE][0]['value'],
-        'type' => $issue->field_issue_type[LANGUAGE_NONE][0]['value'],
+        'issue' => is_array($issue->field_github_issue[LANGUAGE_NONE]) ? $issue->field_github_issue[LANGUAGE_NONE][0]['target_id'] : 0,
+        'label' => is_array($issue->field_issue_label[LANGUAGE_NONE]) ? $issue->field_issue_label[LANGUAGE_NONE][0]['value'] : '',
+        'type' => is_array($issue->field_issue_type[LANGUAGE_NONE]) ? $issue->field_issue_type[LANGUAGE_NONE][0]['value'] : '',
         // Need to convert the value to a decimal number to be accepted by the
         // HTML5 input field.
-        'time' => (float) number_format($issue->field_time_spent[LANGUAGE_NONE][0]['value'], 2),
+        'time' => is_array($issue->field_time_spent[LANGUAGE_NONE]) ? (float) number_format($issue->field_time_spent[LANGUAGE_NONE][0]['value'], 2) : 0,
       );
     }
 

@@ -4,6 +4,8 @@ api = 2
 ; Modules
 projects[admin_menu][subdir] = "contrib"
 projects[admin_menu][version] = "3.x-dev"
+; Fix error on clear cache, https://www.drupal.org/node/2502695
+projects[admin_menu][patch] = "https://www.drupal.org/files/issues/admin_menu-issetmapfix-2502695-3.patch"
 
 projects[admin_views][subdir] = "contrib"
 projects[admin_views][version] = "1.5"
@@ -48,7 +50,7 @@ projects[features][subdir] = "contrib"
 projects[features][version] = "2.7"
 
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][version] = "2.0-beta1"
+projects[file_entity][version] = "2.x-dev"
 
 projects[interval][subdir] = "contrib"
 projects[interval][version] = "1.0"
@@ -60,10 +62,13 @@ projects[logs_http][subdir] = "contrib"
 projects[logs_http][version] = "1.1"
 
 projects[mailsystem][subdir] = "contrib"
-projects[mailsystem][version] = 2.34
+projects[mailsystem][version] = "3.x-dev"
 
 projects[message][subdir] = "contrib"
 projects[message][version] = "1.10"
+
+projects[message_ui][subdir] = "contrib"
+projects[message_ui][version] = "1.4"
 
 projects[message_notify][subdir] = "contrib"
 projects[message_notify][version] = "2.5"
@@ -72,7 +77,7 @@ projects[message_subscribe][subdir] = "contrib"
 projects[message_subscribe][version] = "1.0-rc2"
 
 projects[mimemail][subdir] = "contrib"
-projects[mimemail][version] = "1.0-beta3"
+projects[mimemail][version] = "1.0-beta4"
 
 projects[module_filter][subdir] = "contrib"
 projects[module_filter][version] = "2.0"
@@ -96,6 +101,9 @@ projects[restful][download][url] = "https://github.com/RESTful-Drupal/restful.gi
 projects[restful][download][branch] = "7.x-1.x"
 projects[restful][subdir] = "contrib"
 
+projects[smtp][subdir] = "contrib"
+projects[smtp][version] = "1.2"
+
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
 
@@ -103,10 +111,10 @@ projects[token][subdir] = "contrib"
 projects[token][version] = "1.6"
 
 projects[views][subdir] = "contrib"
-projects[views][version] = "3.11"
+projects[views][version] = "3.13"
 
 projects[views_data_export][subdir] = "contrib"
-projects[views_data_export][version] = "3.x-dev"
+projects[views_data_export][version] = "4.x-dev"
 
 projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.3"

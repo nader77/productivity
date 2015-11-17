@@ -12,7 +12,8 @@
 # The profile used to install the platform.
 PROFILE_NAME="productivity"
 # This will be used to create a symbolic link inside drupal with the dist app.
-APP_NAME="client"
+# need to change from  client/dist or client/app according to the desired folder.
+APP_NAME="client/dist"
 # The human name of the install profile
 PROFILE_TITLE="Productivity"
 
