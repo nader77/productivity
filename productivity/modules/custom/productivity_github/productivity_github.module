@@ -363,3 +363,61 @@ function _productivity_github_issue_number_from_body($text) {
 
   return FALSE;
 }
+
+/**
+ * Get the current number of hours an issue has been worked on.
+ *
+ * @param $node_id int
+ *   Github issue node ID.
+ * @return int
+ *   Total number of hours already worked on a certain issue.
+ */
+function productivity_github_sum_issue_hours($node_id) {
+  $sum = 0;
+
+  // Get list of pull request IDs related to the issue.
+  $query = db_select('node', 'n');
+  $query->rightJoin('field_data_field_github_content_type', 'ct', 'ct.entity_id = n.nid');
+  $query->rightJoin('field_data_field_issue_reference', 'ir', 'ir.entity_id = n.nid');
+
+  $result = $query
+    ->fields('n', array('title', 'nid'))
+    ->fields('ir', array('field_issue_reference_target_id'))
+    ->condition('type', 'github_issue')
+    ->condition('status', NODE_PUBLISHED)
+    ->condition('ct.field_github_content_type_value', 'pull_request')
+    ->condition('ir.field_issue_reference_target_id', $node_id)
+    ->execute()
+    ->fetchAllAssoc('nid');
+
+  if (empty($result)) {
+    // The Github issue have no pull requests attached to it.
+    return $sum;
+  }
+
+  // We want to catch any time tracking that points at the issue itself.
+  $searched_node_ids = array_keys($result); + array($node_id);
+
+  // Get all tracking data for all the pull requests.
+  $query = db_select('field_data_field_issues_logs', 'il');
+  $result = $query
+    ->fields('il', array('field_issues_logs_field_time_spent_value'))
+    ->condition('entity_type', 'node')
+    ->condition('bundle', 'time_tracking')
+    ->condition('field_issues_logs_field_github_issue_target_id', $searched_node_ids, 'IN')
+    ->execute()
+    ->fetchAll();
+
+  if (empty($result)) {
+    // No tracking data to process.
+    return $sum;
+  }
+
+  foreach($result as $row) {
+    // Sum up the rows.
+    $sum += $row->field_issues_logs_field_time_spent_value;
+  }
+
+
+  return $sum;
+}
