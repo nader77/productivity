@@ -211,8 +211,6 @@ function productivity_time_tracking_total_hours($project_nid, $date = array(),  
  */
 function productivity_time_tracking_node_presave($node) {
 
-  dpm($node);
-
   if ($node->type != 'time_tracking') {
     // Not a time tracking node.
     return;
@@ -478,8 +476,6 @@ function productivity_time_tracking_node_insert($node) {
  *   Time tracking node that has been updated or inserted.
  */
 function _productivity_time_tracking_update_issue($node) {
-  dpm($node);
-
   $wrapper = entity_metadata_wrapper('node', $node);
 
   // Skip updating the issue node if something is wrong.
