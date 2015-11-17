@@ -86,7 +86,7 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   }
 
   // Add total row.
-  $table['rows'][] = $total_row;
+  array_unshift($table['rows'], $total_row);
 
   // Final calculations.
   $side = 'odd';
@@ -100,8 +100,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
       'data' => $data['overtime'],
     );
   }
-
-  dpm($table);
 
   return $table;
 }
