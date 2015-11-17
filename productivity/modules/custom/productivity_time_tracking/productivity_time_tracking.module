@@ -481,6 +481,13 @@ function _productivity_time_tracking_update_issue($node) {
   // Skip updating the issue node if something is wrong.
   $skip_issue_update = FALSE;
 
+  $old_count = 0;
+
+  if (empty($node->is_new)) {
+    $original_wrapper = entity_metadata_wrapper('node', $node->original);
+    $old_count = $original_wrapper->field_issues_logs->count();
+  }
+
   foreach($wrapper->field_issues_logs as $key => $field_wrapper) {
     if ($field_wrapper->__isset('field_github_issue')) {
       // Re-calculate how many hours were worked on the issue that the time
@@ -488,13 +495,10 @@ function _productivity_time_tracking_update_issue($node) {
       // request the node is referencing.
 
       $old_track_time = 0;
-      if (empty($node->is_new)) {
-        // This is an update to the tracking, update data correctly.
-        $original_wrapper = entity_metadata_wrapper('node', $node->original);
-
-        if (!empty($original_wrapper->field_issues_logs->get($key))) {
-          $old_track_time = $original_wrapper->field_issues_logs->get($key)->field_time_spent->value();
-        }
+      // This is an update to the tracking, update data correctly.
+      if ($key + 1 < $old_count ) {
+        // Order of the multifield shouldn't change.
+        $old_track_time = $original_wrapper->field_issues_logs->get($key)->field_time_spent->value();
       }
 
       // Note that this could be either a pull request or an issue.
