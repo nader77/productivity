@@ -58,26 +58,26 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     $wrapper = entity_metadata_wrapper('node', $node);
     $estimate = floatval($wrapper->field_time_estimate->value());
     $actual = floatval($wrapper->field_actual_hours->value());
-    $row_data = array(
+    $issue_row = array(
       'class' => '',
       'data' => array(
         'issue_id' => $wrapper->field_issue_id->value(),
         'issue_name' => $wrapper->label(),
         'estimate' => $estimate,
         'actual' => $actual,
-        'overtime' => $estimate - $actual,
+        'overtime' => $actual - $estimate,
         // TODO: Followup - closing/opening issue should change this.
         'status' => 'WIP',
       ),
     );
 
     // Total row.
-    $total_row['data']['total_estimate'] += $row_data['estimate'];
-    $total_row['data']['total_actual'] += $row_data['actual'];
-    $total_row['data']['total_overtime'] += $row_data['overtime'];
+    $total_row['data']['total_estimate'] += $issue_row['data']['estimate'];
+    $total_row['data']['total_actual'] += $issue_row['data']['actual'];
+    $total_row['data']['total_overtime'] += $issue_row['data']['overtime'];
 
     // Add to the table
-    $table['rows'][$node_id] = $row_data;
+    $table['rows'][$node_id] = $issue_row;
   }
 
   // Final calculations.
