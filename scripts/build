@@ -68,6 +68,5 @@ source $ROOT/scripts/helper-colors.sh
   # Move the App in place.
   echo
   echo -e "${LBLUE}> Create symbolic link to the $APP_NAME profile${RESTORE}"
-  # need to change to dist folder when releasing
   ln -s ../$APP_NAME www/app
 )
