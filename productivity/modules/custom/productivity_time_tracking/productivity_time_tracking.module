@@ -211,6 +211,8 @@ function productivity_time_tracking_total_hours($project_nid, $date = array(),  
  */
 function productivity_time_tracking_node_presave($node) {
 
+  dpm($node);
+
   if ($node->type != 'time_tracking') {
     // Not a time tracking node.
     return;
@@ -230,44 +232,55 @@ function productivity_time_tracking_node_presave($node) {
     return;
   }
   $hours = 0;
-  $issue_hours = 0;
 
   // Skip updating the issue node if something is wrong.
   $skip_issue_update = FALSE;
 
-  if ($wrapper->__isset('field_issue_reference')) {
-    // Re-calculate how many hours were worked on the issue that the time
-    // tracking is referencing, or the issue that's referenced by the pull
-    // request the node is referencing.
+  foreach($wrapper->field_issues_logs as $key => $field_wrapper) {
+    dpm($field_wrapper->value(), $key);
+    if ($field_wrapper->__isset('field_github_issue')) {
+      dpm('updating');
+      // Re-calculate how many hours were worked on the issue that the time
+      // tracking is referencing, or the issue that's referenced by the pull
+      // request the node is referencing.
 
-    $old_track_time = 0;
-    if (empty($node->is_new)) {
-      $original_wrapper = entity_metadata_wrapper('node', $node->original);
-      $old_track_time = $original_wrapper->field_track_hours->value();
-    }
+      $old_track_time = 0;
+      if (empty($node->is_new)) {
+        // This is an update to the tracking, update data correctly.
+        $original_wrapper = entity_metadata_wrapper('node', $node->original);
 
-    // Note that this could be either a pull request or an issue.
-    $github_issue_wrapper = $wrapper->field_issue_reference;
-    if ($github_issue_wrapper->field_github_content_type->value != 'issue') {
-
-      if ($github_issue_wrapper->__iseet('field_issue_reference')) {
-        // Pointing at a pull request - get the issue wrapper.
-        $github_issue_wrapper = $github_issue_wrapper->field_issue_reference;
+//        if (!empty($original_wrapper->field_issues_log->get($key))) {
+//          $old_track_time = $original_wrapper->field_issues_log->get($key)->field_track_hours->value();
+//        }
       }
-      else {
-        // This pull request does not have an issue. Can't calculate total
-        // issue hours.
-        $skip_issue_update = TRUE;
+
+      // Note that this could be either a pull request or an issue.
+      if ($field_wrapper->__isset('field_github_issue')) {
+
+        $github_issue_wrapper = $field_wrapper->field_github_issue;
+        if ($github_issue_wrapper->field_github_content_type->value() != 'issue') {
+
+          if ($github_issue_wrapper->__isset('field_issue_reference')) {
+            // Pointing at a pull request - get the issue wrapper.
+            $github_issue_wrapper = $github_issue_wrapper->field_issue_reference;
+          } else {
+            // This pull request does not have an issue. Can't calculate total
+            // issue hours.
+            dpm('skipped '. $key);
+            $skip_issue_update = TRUE;
+          }
+        }
+
+        if (!$skip_issue_update) {
+          // Calculate the total hours worked on the issue.
+          $issue_hours = $field_wrapper->field_time_spent->value() - $old_track_time + productivity_github_sum_issue_hours($github_issue_wrapper->getIdentifier());
+
+          // Save this value into the issue node.
+          $github_issue_wrapper->field_actual_hours->set($issue_hours);
+          $github_issue_wrapper->save();
+          dpm('saved '. $github_issue_wrapper->getIdentifier() );
+        }
       }
-    }
-
-    if (!$skip_issue_update) {
-      // Calculate the total hours worked on the issue.
-      $issue_hours =  $wrapper->field_track_hours->value() - $old_track_time + productivity_github_sum_issue_hours($github_issue_wrapper->getIdentifier());
-
-      // Save this value into the issue node.
-      $github_issue_wrapper->field_actual_hours->set($issue_hours);
-      $github_issue_wrapper->save();
     }
   }
 
