@@ -55,7 +55,57 @@ function productivity_github_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-github_issue-field_employee'.
+  // Exported field_instance: 'node-github_issue-field_actual_hours'
+  $field_instances['node-github_issue-field_actual_hours'] = array(
+    'bundle' => 'github_issue',
+    'default_value' => array(
+      0 => array(
+        'value' => 0,
+      ),
+    ),
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 2,
+          'thousand_separator' => ' ',
+        ),
+        'type' => 'number_decimal',
+        'weight' => 10,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_actual_hours',
+    'label' => 'Actual Hours',
+    'required' => 0,
+    'settings' => array(
+      'max' => '',
+      'min' => 0,
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 34,
+    ),
+  );
+
+  // Exported field_instance: 'node-github_issue-field_employee'
   $field_instances['node-github_issue-field_employee'] = array(
     'bundle' => 'github_issue',
     'default_value' => NULL,
@@ -433,6 +483,7 @@ function productivity_github_field_default_field_instances() {
 
   // Translatables
   // Included for use with string extractors like potx.
+  t('Actual Hours');
   t('Description');
   t('Employee');
   t('Github Content Type');

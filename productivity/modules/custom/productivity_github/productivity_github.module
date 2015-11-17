@@ -396,7 +396,7 @@ function productivity_github_sum_issue_hours($node_id) {
   }
 
   // We want to catch any time tracking that points at the issue itself.
-  $searched_node_ids = array_keys($result); + array($node_id);
+  $searched_node_ids = array_keys($result) + array($node_id);
 
   // Get all tracking data for all the pull requests.
   $query = db_select('field_data_field_issues_logs', 'il');
