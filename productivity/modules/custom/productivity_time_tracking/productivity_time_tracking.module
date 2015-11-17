@@ -210,43 +210,76 @@ function productivity_time_tracking_total_hours($project_nid, $date = array(),  
  * Update parent project's days/hours accordingly.
  */
 function productivity_time_tracking_node_presave($node) {
-  if ($node->type == 'time_tracking') {
-    $wrapper = entity_metadata_wrapper('node', $node);
-    $title =
-      date('d M Y', $wrapper->field_work_date->value()) . ' - ' .
-      ($wrapper->__isset('field_employee') ? ($wrapper->field_employee->label() . '-') : '') .
-      ($wrapper->__isset('field_project') ? ($wrapper->field_project->label() . '-') : '') .
-      $wrapper->field_day_type->value();
 
-    $wrapper->title->set($title);
+  if ($node->type != 'time_tracking') {
+    // Not a time tracking node.
+    return;
+  }
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $title =
+    date('d M Y', $wrapper->field_work_date->value()) . ' - ' .
+    ($wrapper->__isset('field_employee') ? ($wrapper->field_employee->label() . '-') : '') .
+    ($wrapper->__isset('field_project') ? ($wrapper->field_project->label() . '-') : '') .
+    $wrapper->field_day_type->value();
 
-    // Add days/hours to parent project's total.
-    if ($wrapper->field_day_type->value() == 'regular') {
-      $hours = 0;
+  $wrapper->title->set($title);
 
-      $project_wrapper = $wrapper->field_project;
+  // Add days/hours to parent project's total.
+  if ($wrapper->field_day_type->value() != 'regular') {
+    // Done.
+    return;
+  }
+  $hours = 0;
 
-      if ($project_wrapper->value() && isset($project_wrapper->field_hours)) {
-        $hours = $project_wrapper->field_hours->value();
-      }
+  if ($wrapper->__isset('field_issue_reference')) {
+    // Re-calculate how many hours were worked on the issue that the time tracking
+    // is referencing, or the issue that's referenced by the pull request the node
+    // is referencing.
 
-      if (empty($node->is_new)) {
-        $original_wrapper = entity_metadata_wrapper('node', $node->original);
-        $hours -= $original_wrapper->field_track_hours->value();
-      }
-
-      $hours += $wrapper->field_track_hours->value();
-
-      if ($project_wrapper->value()) {
-        $days_count = productivity_time_tracking_total_days($project_wrapper->getIdentifier());
-        $project_wrapper->field_hours->set($hours);
-        $project_wrapper->field_days->set($days_count);
-        $project_wrapper->save();
-        // Notification for major milestone meeting.
-        // TODO: improve by sending an invite to calendar meeting.
-        productivity_project_logged_hours_notify($project_wrapper->value());
-      }
+    // Note that this could be either a pull request or an issue.
+    $github_issue_wrapper = $wrapper->field_issue_reference;
+    if ($github_issue_wrapper->field_github_content_type->value == 'issue') {
+      // Pointing at an issue.
+      $issue_hours =  $wrapper->field_track_hours->value() + productivity_github_sum_issue_hours($github_issue_wrapper->getIdentifier());
     }
+    else {
+      // Pointing at a pull request.
+
+    }
+
+    if (empty($node->is_new)) {
+      $original_wrapper = entity_metadata_wrapper('node', $node->original);
+      $hours -= $original_wrapper->field_track_hours->value();
+    }
+
+
+  }
+
+
+
+
+
+  $project_wrapper = $wrapper->field_project;
+
+  if ($project_wrapper->value() && isset($project_wrapper->field_hours)) {
+    $hours = $project_wrapper->field_hours->value();
+  }
+
+  if (empty($node->is_new)) {
+    $original_wrapper = entity_metadata_wrapper('node', $node->original);
+    $hours -= $original_wrapper->field_track_hours->value();
+  }
+
+  $hours += $wrapper->field_track_hours->value();
+
+  if ($project_wrapper->value()) {
+    $days_count = productivity_time_tracking_total_days($project_wrapper->getIdentifier());
+    $project_wrapper->field_hours->set($hours);
+    $project_wrapper->field_days->set($days_count);
+    $project_wrapper->save();
+    // Notification for major milestone meeting.
+    // TODO: improve by sending an invite to calendar meeting.
+    productivity_project_logged_hours_notify($project_wrapper->value());
   }
 }
 
