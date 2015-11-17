@@ -56,7 +56,6 @@ $(document).ready(function() {
     }
   }
 
-
   // "Digit" button click handler callback.
   $(".numbers-pad .digit").on("click", digitClickHandler);
 
@@ -74,29 +73,17 @@ $(document).ready(function() {
     // Displaying the loader.
     $dynamicIcon.append('<i class="fa fa-circle-o-notch fa-spin"></i>');
 
+    // Disable all buttons - while request is still in progress.
+    DisableAllButtons();
+
     setTimeout(function(){
       // Delete icon.
       $dynamicIcon.html('');
 
-      // Reset all buttons.
-      $('button').each(function() {
-        $(this).prop('disabled', false);
-      });
+      // Interpolate server response.
+      $('.code .pin').text() === validPinCode ? responseSuccess() : responseError();
 
-      // success.
-      if ($('.code .pin').text() === validPinCode) {
-        $dynamicIcon.append('<i class="fa fa-check -success"></i>');
-
-        // Disable all buttons.
-        $('button').each(function() {
-          $(this).prop('disabled', true);
-        });
-      }
-      // Error.
-      else {
-        $dynamicIcon.append('<i class="fa fa-exclamation-triangle -error"></i>');
-      }
-    }, 300)
+    }, 500)
   }
 
   // Toggle button activity
@@ -116,6 +103,34 @@ $(document).ready(function() {
       // Remove class.
       $('.led .light').toggleClass('on');
     }, time);
+  }
+
+  // Server returns "success" response.
+  function responseSuccess() {
+    $dynamicIcon.append('<i class="fa fa-check -success"></i>');
+    DisableAllButtons();
+  }
+
+  // Server returns "error" response.
+  function responseError() {
+    $dynamicIcon.append('<i class="fa fa-exclamation-triangle -error"></i>');
+    EnableAllButtons();
+  }
+
+  // Disable all buttons.
+  function DisableAllButtons() {
+    // Disable all buttons - while request is still in progress.
+    $('button').each(function() {
+      $(this).prop('disabled', true);
+    });
+  }
+
+  // Enable all buttons.
+  function EnableAllButtons() {
+    // Disable all buttons - while request is still in progress.
+    $('button').each(function() {
+      $(this).prop('disabled', false);
+    });
   }
 
 });
