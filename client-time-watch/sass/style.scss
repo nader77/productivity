@@ -91,7 +91,7 @@ body {
   .dashboard {
     position: relative;
     padding-bottom: 45px;
-    min-height: 521px;
+    min-height: 573px;
     color: white;
     background: rgba(45, 45, 56, 0.55);
     border: 1px solid $border-dark;
@@ -245,13 +245,13 @@ body {
   direction: rtl;
   margin: 10px auto 0 auto;
   padding: 13px;
-  width: 279px;
+  width: 314px;
   height: 368px;
 
   button {
     position: relative;
-    width: 66px;
-    height: 66px;
+    width: 79px;
+    height: 79px;
     margin: 7px 7px;
     font-weight: 700;
     color: $digit;
@@ -262,10 +262,10 @@ body {
     background: rgba(255, 255, 255, 0.1);
 
     &.-double {
-      width: 149px;
+      width: 176px;
 
       &:after {
-        width: 137px;
+        width: 164px;
       }
     }
 
@@ -295,8 +295,8 @@ body {
       position: absolute;
       left: 6px;
       top: 6px;
-      height: 54px;
-      width: 54px;
+      height: 67px;
+      width: 67px;
       @include border-radius(9px);
       padding: 13px 21px;
       border: 1px solid;
@@ -307,7 +307,7 @@ body {
 
 .view {
   border-left: 1px solid $border-dark;
-  height: 433px;
+  height: 486px;
 
   .message {
     position: relative;
