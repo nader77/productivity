@@ -4,6 +4,7 @@ $(document).ready(function() {
   var maxDigits = 4;
   var digitsCounter = 0;
   var validPinCode = '1234';
+  var projectSelected = false;
 
   // Elements
   var $deleteButton = $('button.-delete');
@@ -72,7 +73,7 @@ $(document).ready(function() {
       // Interpolate server response.
       $('.code .pin').text() === validPinCode ? responseSuccess() : responseError();
 
-    }, 1200)
+    }, 500)
   };
 
   // Toggle button activity
@@ -98,14 +99,20 @@ $(document).ready(function() {
   function responseSuccess() {
     $dynamicIcon.append('<i class="fa fa-check -success"></i>');
     DisableAllButtons();
+
+    setTimeout(function(){
+      // Reset the dashboard.
+      reset();
+      // Delete dynamic icon.
+      $dynamicIcon.html('');
+    }, 2000)
+
   };
 
   // Server returns "error" response.
   function responseError() {
     $dynamicIcon.append('<i class="fa fa-exclamation-triangle -error"></i>');
-    DeletePinCode();
-    EnableAllButtons();
-    $deleteButton.prop('disabled', true);
+    reset();
   };
 
   // Disable all buttons.
@@ -130,12 +137,21 @@ $(document).ready(function() {
     digitsCounter = 0;
   };
 
+  // Reset the dashboard.
+  function reset() {
+    DeletePinCode();
+    EnableAllButtons();
+    $deleteButton.prop('disabled', true);
+  }
+
   // "Digit" button click handler callback.
   $(".numbers-pad .digit").on("click", digitClickHandler);
 
   // "Project" button click handler callback.
   $(".projects button.item").on("click", function() {
     $(this).toggleClass('-active');
+    projectSelected = !projectSelected;
+    console.log(projectSelected);
   });
 
   // Delete button click handler callback.
