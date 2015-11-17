@@ -43,69 +43,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   $issue_nids = array_keys($result['node']);
   $issue_nodes = node_load_multiple($issue_nids);
 
-  // Prepare table for tracking data.
-  foreach($issue_nodes as $node_id => $node) {
-    $wrapper = entity_metadata_wrapper('node', $node);
-    $table['rows'][$node_id] = array(
-      'class' => '',
-      'data' => array(
-        'issue_id' => $wrapper->field_issue_id->value(),
-        'issue_name' => $wrapper->label(),
-        'estimate' => intval($wrapper->field_time_estimate->value()),
-        'actual' => 0,
-        'overtime' => 0,
-        // TODO: Followup - closing/opening issue should change this.
-        'status' => 'WIP',
-      ),
-    );
-  }
-
-  // Get list of pull request IDs related to the issues.
-  $query = db_select('node', 'n');
-  $query->rightJoin('field_data_field_github_content_type', 'ct', 'ct.entity_id = n.nid');
-  $query->rightJoin('field_data_field_issue_reference', 'ir', 'ir.entity_id = n.nid');
-
-  $result = $query
-    ->fields('n', array('title', 'nid'))
-    ->fields('ir', array('field_issue_reference_target_id'))
-    ->condition('type', 'github_issue')
-    ->condition('status', NODE_PUBLISHED)
-    ->condition('ct.field_github_content_type_value', 'pull_request')
-    ->condition('ir.field_issue_reference_target_id', $issue_nids, 'IN')
-    ->execute()
-    ->fetchAllAssoc('nid');
-
-  if (empty($result)) {
-    // The Github issues have no pull requests attached to them.
-    return $table;
-  }
-
-  $pull_requests = array();
-  foreach($result as $pull_request) {
-    $pull_requests[$pull_request->nid] = array(
-      'title' => $pull_request->title,
-      'parent_issue' => $pull_request->field_issue_reference_target_id,
-    );
-  }
-
-  // Tracking could point to issues as well as pull requests.
-  $possible_tracking_node_ids_references = array_keys($pull_requests) + $issue_nids;
-
-  // Get all tracking data for all the pull requests.
-  $query = db_select('field_data_field_issues_logs', 'il');
-  $result = $query
-    ->fields('il', array('field_issues_logs_field_github_issue_target_id', 'field_issues_logs_field_time_spent_value'))
-    ->condition('entity_type', 'node')
-    ->condition('bundle', 'time_tracking')
-    ->condition('field_issues_logs_field_github_issue_target_id', $possible_tracking_node_ids_references, 'IN')
-    ->execute()
-    ->fetchAll();
-
-  if (empty($result)) {
-    // No tracking data to process.
-    return $table;
-  }
-
   $total_row = array(
     'data' => array(
       'name' => array('data' => t('Total'), 'colspan' => 2),
@@ -116,24 +53,31 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     ),
   );
 
-  foreach($result as $row) {
-    // Figure out if this points at an issue, pull request, or at nothing at all.
-    $target_id = $row->field_issues_logs_field_github_issue_target_id;
-    $time_spent = $row->field_issues_logs_field_time_spent_value;
+  // Prepare table for tracking data.
+  foreach($issue_nodes as $node_id => $node) {
+    $wrapper = entity_metadata_wrapper('node', $node);
+    $estimate = floatval($wrapper->field_time_estimate->value());
+    $actual = floatval($wrapper->field_actual_hours->value());
+    $row_data = array(
+      'class' => '',
+      'data' => array(
+        'issue_id' => $wrapper->field_issue_id->value(),
+        'issue_name' => $wrapper->label(),
+        'estimate' => $estimate,
+        'actual' => $actual,
+        'overtime' => $estimate - $actual,
+        // TODO: Followup - closing/opening issue should change this.
+        'status' => 'WIP',
+      ),
+    );
 
-    if (!empty($table['rows'][$target_id])) {
-      // This tracking points directly at an issue.
-      $relevant_row = &$table['rows'][$target_id];
-      $relevant_row['data']['actual'] += $time_spent;
-    }
-    elseif (!empty($pull_requests[$target_id]) && !empty($table['rows'][$pull_requests[$target_id]['parent_issue']])) {
-      // This is a pull request pointing at an issue.
-      $relevant_row = &$table['rows'][$pull_requests[$target_id]['parent_issue']];
-      $relevant_row['data']['actual'] += $time_spent;
-    }
+    // Total row.
+    $total_row['data']['total_estimate'] += $row_data['estimate'];
+    $total_row['data']['total_actual'] += $row_data['actual'];
+    $total_row['data']['total_overtime'] += $row_data['overtime'];
 
-    // Row becomes irrelevant in the next loop run.
-    unset($relevant_row);
+    // Add to the table
+    $table['rows'][$node_id] = $row_data;
   }
 
   // Final calculations.
@@ -141,14 +85,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   foreach($table['rows'] as &$row) {
     $data = &$row['data'];
     $side = ($side == 'odd') ? 'even' : 'odd';
-
-    // Total row.
-    $total_row['data']['total_estimate'] += $data['estimate'];
-    $total_row['data']['total_actual'] += $data['actual'];
-
-    // Calculate overtime.
-    $data['overtime'] = $data['actual'] - $data['estimate'];
-    $total_row['data']['total_overtime'] += $data['overtime'];
 
     // Add class.
     $row['class'] = ($data['actual'] > $data['estimate'] ? 'row-bad-' : 'row-ok-') . $side;
