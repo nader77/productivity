@@ -101,6 +101,14 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   return $table;
 }
 
+/**
+ * Render the time tracking per issue table.
+ *
+ * @param int $project_node_id
+ *   Project to process.
+ * @return string
+ *   Rendered HTML.
+ */
 function productivity_github_time_display_tracking_issue_table($project_node_id = 0) {
   if (!$project_node_id) {
 
