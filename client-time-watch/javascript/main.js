@@ -10,6 +10,7 @@ $(document).ready(function() {
   var $deleteButton = $('button.-delete');
   var $codePin = $('.code .pin');
   var $dynamicIcon = $('.-dynamic-icon');
+  var $viewWrapper = $('.view .wrapper');
 
   // Dummy ping to server to check connectivity.
   CheckServerConnection(1700);
@@ -73,6 +74,8 @@ $(document).ready(function() {
       // Interpolate server response.
       $('.code .pin').text() === validPinCode ? responseSuccess() : responseError();
 
+      // Display the view.
+      $viewWrapper.addClass('-active')
     }, 500)
   };
 
@@ -105,6 +108,10 @@ $(document).ready(function() {
       reset();
       // Delete dynamic icon.
       $dynamicIcon.html('');
+
+      // Hide the view.
+      //$viewWrapper.removeClass('-active')
+
     }, 2000)
 
   };
@@ -151,7 +158,6 @@ $(document).ready(function() {
   $(".projects button.item").on("click", function() {
     $(this).toggleClass('-active');
     projectSelected = !projectSelected;
-    console.log(projectSelected);
   });
 
   // Delete button click handler callback.
