@@ -1,0 +1,6 @@
+ID,Title,Date start,Date end,Account,Type (fix vs T&M),Rate type(hours/days/month/global),Rate,Rate Currency,Scope,Scope unit (hours/days/month),Status
+nike1,nike Site,01.05.2014,1.12.2014,nike,fix,global,155000.00,ILS,607,hour,active
+nike2,Nike CRM,01.03.2014,1.12.2014,nike,fix,global,75000.00,ILS,207,hour,active
+nike3,Nike run fast,01.08.2014,01.02.2014,nike,T&M,days,760,EUR,90,day,active
+adidas1,adidas jump,01.01.2014,,adidas,fix,,0,ILS,12,month,active
+adidas2,"Adidas fashion",01.01.2013,,adidas,T&M,hours,250,ILS,10,hour,active
