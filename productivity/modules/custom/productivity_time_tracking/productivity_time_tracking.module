@@ -271,10 +271,6 @@ function productivity_time_tracking_node_presave($node) {
     }
   }
 
-
-
-
-
   $project_wrapper = $wrapper->field_project;
 
   if ($project_wrapper->value() && isset($project_wrapper->field_hours)) {

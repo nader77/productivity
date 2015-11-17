@@ -56,12 +56,16 @@ function productivity_github_time_tracking_issue_table($project_nid) {
   // Prepare table for tracking data.
   foreach($issue_nodes as $node_id => $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
+
     $estimate = floatval($wrapper->field_time_estimate->value());
     $actual = floatval($wrapper->field_actual_hours->value());
+    $github_issue_id = $wrapper->field_issue_id->value();
+    $project_link =  'http://github.com/' . $wrapper->field_github_project_id->value();
+
     $issue_row = array(
       'class' => '',
       'data' => array(
-        'issue_id' => $wrapper->field_issue_id->value(),
+        'issue_id' => l($github_issue_id,  $project_link . '/issues/' . $github_issue_id, array('attributes' => array('target' => '_blank'))),
         'issue_name' => $wrapper->label(),
         'estimate' => $estimate,
         'actual' => $actual,
