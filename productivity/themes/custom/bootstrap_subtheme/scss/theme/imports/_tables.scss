@@ -84,19 +84,24 @@
 
 	&.per-issue-table.table-striped {
 
-		tr.row-ok-even td {
+		th, td {
+			text-align:center;
+			vertical-align:middle;
+		}
+
+		td.cell-ok-even {
 			background-color: rgba(16, 255, 18, 0.47);
 		}
 
-		tr.row-ok-odd td {
+		td.cell-ok-odd {
 			background-color: rgba(16, 255, 18, 0.69);
 		}
 
-		tr.row-bad-odd td {
+		td.cell-bad-odd {
 			background-color: rgba(255, 76, 96, 0.93);
 		}
 
-		tr.row-bad-even td {
+		td.cell-bad-even {
 			background-color: rgba(255, 76, 96, 0.69);
 		}
 	}

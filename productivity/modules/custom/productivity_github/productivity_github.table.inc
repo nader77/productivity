@@ -45,10 +45,11 @@ function productivity_github_time_tracking_issue_table($project_nid) {
 
   $total_row = array(
     'data' => array(
-      'name' => array('data' => t('Total'), 'colspan' => 2),
-      'total_estimate' => 0,
-      'total_actual' => 0,
-      'total_overtime' => 0,
+      'placeholder' => '',
+      'name' => array('data' => t('Total')),
+      'estimate' => 0,
+      'actual' => 0,
+      'overtime' => 0,
       'status' => '',
     ),
   );
@@ -76,13 +77,16 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     );
 
     // Total row.
-    $total_row['data']['total_estimate'] += $issue_row['data']['estimate'];
-    $total_row['data']['total_actual'] += $issue_row['data']['actual'];
-    $total_row['data']['total_overtime'] += $issue_row['data']['overtime'];
+    $total_row['data']['estimate'] += $issue_row['data']['estimate'];
+    $total_row['data']['actual'] += $issue_row['data']['actual'];
+    $total_row['data']['overtime'] += $issue_row['data']['overtime'];
 
     // Add to the table
     $table['rows'][$node_id] = $issue_row;
   }
+
+  // Add total row.
+  $table['rows'][] = $total_row;
 
   // Final calculations.
   $side = 'odd';
@@ -90,13 +94,14 @@ function productivity_github_time_tracking_issue_table($project_nid) {
     $data = &$row['data'];
     $side = ($side == 'odd') ? 'even' : 'odd';
 
-    // Add class.
-    $row['class'] = ($data['actual'] > $data['estimate'] ? 'row-bad-' : 'row-ok-') . $side;
+    // Add class only to overtime cells.
+    $data['overtime'] = array(
+      'class' => ($data['actual'] > $data['estimate'] ? 'cell-bad-' : 'cell-ok-') . $side,
+      'data' => $data['overtime'],
+    );
   }
 
-  // Total row. Includes non-referenced issues.
-  $total_row['class'] = 'row-total-' . $side;
-  $table['rows'][] = $total_row;
+  dpm($table);
 
   return $table;
 }
