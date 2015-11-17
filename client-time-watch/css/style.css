@@ -29,16 +29,16 @@ body {
 
 /* line 31, ../sass/style.scss */
 .soft-shadow, .clear-btn, .numbers-pad button {
-  -moz-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.12);
-  -webkit-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.12);
-  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.12);
+  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.12);
 }
 
 /* line 35, ../sass/style.scss */
 .hard-shadow, .clear-btn.-active, .numbers-pad button.-active {
-  -moz-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
-  -webkit-box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
-  box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.38);
+  -moz-box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.38);
+  -webkit-box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.38);
+  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.38);
 }
 
 /* line 39, ../sass/style.scss */
@@ -63,7 +63,7 @@ body {
 .clear-btn.-with-icon:before {
   content: "";
   position: absolute;
-  top: 0px;
+  top: 0;
   left: 33px;
   width: 1px;
   background-color: #b1aba4;
@@ -105,9 +105,9 @@ body {
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
-  -moz-box-shadow: 0px 6px 11px 0px rgba(0, 0, 0, 0.54);
-  -webkit-box-shadow: 0px 6px 11px 0px rgba(0, 0, 0, 0.54);
-  box-shadow: 0px 6px 11px 0px rgba(0, 0, 0, 0.54);
+  -moz-box-shadow: 0 6px 11px 0 rgba(0, 0, 0, 0.54);
+  -webkit-box-shadow: 0 6px 11px 0 rgba(0, 0, 0, 0.54);
+  box-shadow: 0 6px 11px 0 rgba(0, 0, 0, 0.54);
 }
 /* line 101, ../sass/style.scss */
 .container .dashboard:after {
@@ -214,9 +214,9 @@ body {
   -webkit-border-radius: 3px;
   border-radius: 3px;
   background: #44756F;
-  -moz-box-shadow: 0px 2px 29px #28584A;
-  -webkit-box-shadow: 0px 2px 29px #28584A;
-  box-shadow: 0px 2px 29px #28584A;
+  -moz-box-shadow: 0 2px 29px #28584A;
+  -webkit-box-shadow: 0 2px 29px #28584A;
+  box-shadow: 0 2px 29px #28584A;
   -moz-transition: ease-in-out 0.5s all;
   -o-transition: ease-in-out 0.5s all;
   -webkit-transition: ease-in-out 0.5s all;
@@ -226,7 +226,7 @@ body {
 .main-header.led .light:after, .main-header.led .light:before {
   content: "";
   position: absolute;
-  top: 0px;
+  top: 0;
   width: 1px;
   background-color: rgba(0, 0, 0, 0.15);
   height: 100%;
@@ -243,17 +243,17 @@ body {
 .main-header.led .light.on {
   border-color: #2b7f75;
   background: #4DC3B5;
-  -moz-box-shadow: 0px 2px 29px #4DC3B5;
-  -webkit-box-shadow: 0px 2px 29px #4DC3B5;
-  box-shadow: 0px 2px 29px #4DC3B5;
+  -moz-box-shadow: 0 2px 29px #4DC3B5;
+  -webkit-box-shadow: 0 2px 29px #4DC3B5;
+  box-shadow: 0 2px 29px #4DC3B5;
 }
 /* line 229, ../sass/style.scss */
 .main-header.led .light.off {
   border-color: #A02727;
   background: #C34D4D;
-  -moz-box-shadow: 0px 2px 29px #E00A0A;
-  -webkit-box-shadow: 0px 2px 29px #E00A0A;
-  box-shadow: 0px 2px 29px #E00A0A;
+  -moz-box-shadow: 0 2px 29px #E00A0A;
+  -webkit-box-shadow: 0 2px 29px #E00A0A;
+  box-shadow: 0 2px 29px #E00A0A;
 }
 
 /* line 238, ../sass/style.scss */
@@ -266,7 +266,7 @@ body {
 /* line 244, ../sass/style.scss */
 .numbers-pad {
   direction: rtl;
-  margin: 10px auto 0px auto;
+  margin: 10px auto 0 auto;
   padding: 13px;
   width: 279px;
   height: 368px;
@@ -334,4 +334,27 @@ body {
 .view {
   border-left: 1px solid #545251;
   height: 433px;
+}
+/* line 312, ../sass/style.scss */
+.view .message {
+  position: relative;
+  padding: 8px;
+  display: inline-block;
+  border: 1px solid rgba(0, 0, 0, 0.45);
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.64);
+  -moz-box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.24);
+  -webkit-box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.24);
+  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.24);
+}
+/* line 321, ../sass/style.scss */
+.view .message > .icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
 }

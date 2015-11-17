@@ -29,11 +29,11 @@ body {
 }
 
 .soft-shadow {
-  @include box-shadow(0px 0px 7px 0px rgba(0, 0, 0, 0.12));
+  @include box-shadow(0 0 7px 0 rgba(0, 0, 0, 0.12));
 }
 
 .hard-shadow {
-  @include box-shadow(0px 0px 7px 0px rgba(0, 0, 0, 0.38));
+  @include box-shadow(0 0 7px 0 rgba(0, 0, 0, 0.38));
 }
 
 .clear-btn {
@@ -55,7 +55,7 @@ body {
     &:before {
       content: "";
       position: absolute;
-      top: 0px;
+      top: 0;
       left: 33px;
       width: 1px;
       background-color: $light;
@@ -96,7 +96,7 @@ body {
     background: rgba(45, 45, 56, 0.55);
     border: 1px solid $border-dark;
     @include border-radius(4px);
-    @include box-shadow(0px 6px 11px 0px rgba(0, 0, 0, 0.54));
+    @include box-shadow(0 6px 11px 0 rgba(0, 0, 0, 0.54));
 
     &:after {
       content: "";
@@ -199,14 +199,14 @@ body {
       border-color: #316F5C;
       @include border-radius(3px);
       background: #44756F;
-      @include box-shadow(0px 2px 29px #28584A);
+      @include box-shadow(0 2px 29px #28584A);
       @include transition(0.5s ease-in-out all);
 
       &:after,
       &:before {
         content: "";
         position: absolute;
-        top: 0px;
+        top: 0;
         width: 1px;
         background-color: rgba(0, 0, 0, 0.15);
         height: 100%;
@@ -223,13 +223,13 @@ body {
       &.on {
         border-color: darken($digit, 20%);
         background: $digit;
-        @include box-shadow(0px 2px 29px $digit);
+        @include box-shadow(0 2px 29px $digit);
       }
 
       &.off {
         border-color: #A02727;
         background: #C34D4D;
-        @include box-shadow(0px 2px 29px #E00A0A);
+        @include box-shadow(0 2px 29px #E00A0A);
       }
     }
   }
@@ -243,7 +243,7 @@ body {
 
 .numbers-pad {
   direction: rtl;
-  margin: 10px auto 0px auto;
+  margin: 10px auto 0 auto;
   padding: 13px;
   width: 279px;
   height: 368px;
@@ -310,7 +310,25 @@ body {
   height: 433px;
 
   .message {
+    position: relative;
+    padding: 8px;
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, 0.45);
+    @include border-radius(3px);
+    background: rgba(255, 255, 255, 0.64);
+    @include box-shadow(0 0 7px 0 rgba(0, 0, 0, 0.24));
 
+    > .icon {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      @include border-radius(2px);
+
+    }
+
+    > .text {
+
+    }
   }
 }
 
