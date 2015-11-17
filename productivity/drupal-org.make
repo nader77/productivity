@@ -48,7 +48,7 @@ projects[features][subdir] = "contrib"
 projects[features][version] = "2.7"
 
 projects[file_entity][subdir] = "contrib"
-projects[file_entity][version] = "2.0-beta1"
+projects[file_entity][version] = "2.x-dev"
 
 projects[interval][subdir] = "contrib"
 projects[interval][version] = "1.0"
@@ -109,10 +109,10 @@ projects[token][subdir] = "contrib"
 projects[token][version] = "1.6"
 
 projects[views][subdir] = "contrib"
-projects[views][version] = "3.11"
+projects[views][version] = "3.13"
 
 projects[views_data_export][subdir] = "contrib"
-projects[views_data_export][version] = "3.x-dev"
+projects[views_data_export][version] = "4.x-dev"
 
 projects[views_bulk_operations][subdir] = "contrib"
 projects[views_bulk_operations][version] = "3.3"
