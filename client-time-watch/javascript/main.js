@@ -3,7 +3,7 @@ $(document).ready(function() {
   // Init default values.
   var maxDigits = 4;
   var digitsCounter = 0;
-  var $resetButton = $('button.-reset');
+  var $deleteButton = $('button#delete');
   var pinCode = '';
   var validPinCode = '1234';
 
@@ -17,15 +17,14 @@ $(document).ready(function() {
   var digitClickHandler = function() {
     var self = this;
 
-    var digitValue = $(self).text();
-    $($('.code .pin').get(digitsCounter)).text(digitValue);
-    pinCode += digitValue;
+    // Display the target "digit" value.
+    $($('.code .pin').get(digitsCounter)).text($(self).text());
 
     // Increment digit counter.
     digitsCounter++;
 
     // Enable reset button
-    $resetButton.prop('disabled', false);
+    $deleteButton.prop('disabled', false);
 
     // Add active class
     $(self).addClass('-active');
@@ -43,44 +42,53 @@ $(document).ready(function() {
   };
 
   // Demo click handler for the "reset" button.
-  var resetClickHandler = function() {
+  var deleteButtonkHandler = function() {
     var self = this;
 
+    // On click add class active.
     $(self).addClass('-active');
-
-    $($('.code .pin').get(digitsCounter - 1)).text('');
-    digitsCounter--;
 
     setTimeout( function(){
       // Remove class.
       $(self).removeClass('-active');
     }, 45);
+
+    // Delete last digit from the record.
+    $($('.code .pin').get(digitsCounter - 1)).text('');
+    digitsCounter--;
   }
 
-  // Digit click handler callback.
+  // button click handler callback.
   $(".numbers-pad .digit").on("click", digitClickHandler);
 
-  // Digit click handler callback.
+  // Project button click handler callback.
   $(".projects button.item").on("click", function() {
     $(this).toggleClass('-active');
   });
 
-  // Mockup for the server response
+  // Delete button click handler callback.
+  $deleteButton.on("click", deleteButtonkHandler);
+
+  // Dummy server response.
   function serverResponse() {
-    var $icon = $('.icon.dynamic');
+
+    // Dynamic icon.
+    var $icon = $('#dynamic-icon');
+
+    // Displaying the loader.
     $icon.append('<i class="fa fa-circle-o-notch fa-spin"></i>');
 
     setTimeout(function(){
       // Clear inner content first.
       $icon.html('');
 
-      // Enable all digits buttons.
+      // Reset all buttons.
       $('button').each(function() {
         $(this).prop('disabled', false);
       });
 
       // In case of success.
-      if (pinCode === validPinCode) {
+      if ($('.code .pin').text() === validPinCode) {
         $icon.append('<i class="fa fa-check -success"></i>');
       }
       // In case of error.
@@ -95,7 +103,6 @@ $(document).ready(function() {
     });
   }
 
-  // Reset button click handler callback.
-  $resetButton.on("click", resetClickHandler);
+
 
 });
