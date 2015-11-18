@@ -155,8 +155,12 @@ body {
       background: rgba(255, 255, 255, 0.11);
 
       &.-dynamic-icon > * {
-        &.-success {
+        &.-in {
           color: $green;
+        }
+
+        &.-out {
+          color: $blue;
         }
 
         &.-error {
@@ -232,10 +236,8 @@ body {
   }
 }
 
-.projects {
+.project {
   margin-top: 30px;
-  display: inline-block;
-  border-radius: 3px;
 }
 
 .numbers-pad {
@@ -254,17 +256,16 @@ body {
     font-weight: 700;
     color: $digit;
     @include border-radius(13px);
-    @extend .soft-shadow;
+    @include text-shadow(1px 2px 2px rgba(35, 35, 35, 0.27));
+    @include box-shadow(0 0 7px 0 rgba(0, 0, 0, 0.11));
+
     border: none;
     outline: none;
     background: rgba(255, 255, 255, 0.1);
+    @include text-shadow(1px 2px 2px rgba(35, 35, 35, 0.27));
 
     &.-double {
       width: 176px;
-
-      &:after {
-        width: 164px;
-      }
     }
 
     &.-active {
@@ -291,10 +292,10 @@ body {
     &:after {
       content: "";
       position: absolute;
-      left: 6px;
       top: 6px;
-      height: 67px;
-      width: 67px;
+      bottom: 6px;
+      right: 6px;
+      left: 6px;
       @include border-radius(9px);
       padding: 13px 21px;
       border: 1px solid $light;
@@ -314,7 +315,7 @@ body {
     background: $soft-bg;
     @include border-radius(3px);
     @include box-shadow(0 0 7px 0 rgba(0, 0, 0, 0.06));
-    @include transition(1.0s ease-in-out opacity);
+    @include transition(0.8s ease-in-out opacity);
 
     &.-active {
       @include opacity(1.0);
@@ -357,14 +358,16 @@ body {
         position: absolute;
         left: 10px;
         top: 12px;
-        color: rgba(0, 0, 0, 0.32);
-        text-shadow: 1px 2px 2px rgba(255, 255, 255, 0.1);
+      }
+
+      > .symbol {
+        position: absolute;
         left: 105px;
         top: 72px;
         color: rgba(0, 0, 0, 0.32);
+        @include text-shadow(1px 2px 2px rgba(255, 255, 255, 0.1));
         font-size: 360px;
       }
-
     }
   }
 }
