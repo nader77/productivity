@@ -11,7 +11,7 @@ $(document).ready(function() {
   var $deleteButton = $('button.-delete');
   var $codePin = $('.code .pin');
   var $dynamicIcon = $('.-dynamic-icon');
-  var $viewWrapper = $('.view .wrapper');
+  var $viewWrapper = $('.view .main');
 
   // Dummy ping to server to check connectivity.
   CheckServerConnection(1700);
