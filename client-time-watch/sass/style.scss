@@ -309,7 +309,7 @@ body {
   padding: 30px 40px 50px 40px;
 
   .wrapper {
-    @include opacity(0.0);
+//    @include opacity(0.0);
     padding: 15px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     background: $soft-bg;
@@ -354,7 +354,7 @@ body {
         }
       }
 
-      > .icon {
+      .icon {
         position: absolute;
         left: 10px;
         top: 12px;

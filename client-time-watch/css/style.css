@@ -340,8 +340,6 @@ body {
 }
 /* line 311, ../sass/style.scss */
 .view .wrapper {
-  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-  opacity: 0;
   padding: 15px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   background: rgba(255, 255, 255, 0.08);
@@ -394,7 +392,7 @@ body {
   background: #5193B7;
 }
 /* line 357, ../sass/style.scss */
-.view .wrapper .message > .icon {
+.view .wrapper .message .icon {
   position: absolute;
   left: 10px;
   top: 12px;

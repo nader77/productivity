@@ -151,10 +151,10 @@ $(document).ready(function() {
   }
 
   // "Digit" button click handler callback.
-  $(".numbers-pad .digit").on(touchOrClickEvent, digitClickHandler);
+  $('.numbers-pad .digit').on(touchOrClickEvent, digitClickHandler);
 
   // "Project" button click handler callback.
-  $(".projects button.item").on(touchOrClickEvent, function() {
+  $('button.project').on(touchOrClickEvent, function() {
     $(this).toggleClass('-active');
     projectSelected = !projectSelected;
   });
@@ -163,8 +163,7 @@ $(document).ready(function() {
   $deleteButton.on(touchOrClickEvent, deleteButtonHandler);
 
     function is_touch_device() {
-      return 'ontouchstart' in window // works on most browsers
-        || 'onmsgesturechange' in window; // works on ie10
+      return 'ontouchstart' in window || 'onmsgesturechange' in window;
     }
 
 });
