@@ -101,7 +101,7 @@ $(document).ready(function() {
 
   // Server returns "success" response.
   function responseSuccess() {
-    $dynamicIcon.append('<i class="fa fa-check -success-in"></i>');
+    $dynamicIcon.append('<i class="fa fa-check -success -in"></i>');
     DisableAllButtons();
 
     setTimeout(function(){
@@ -112,9 +112,7 @@ $(document).ready(function() {
 
       // Hide the view.
       $viewWrapper.removeClass('-active')
-
-    }, 5000)
-
+    }, 2500)
   }
 
   // Server returns "error" response.
