@@ -16,11 +16,13 @@ class ProductivityWorkSessionsResource extends \ProductivityEntityBaseNode {
     $public_fields['start'] = array(
       'property' => 'field_session_date',
       'sub_property' => 'value',
+      'process_callbacks' => array('intval'),
     );
 
     $public_fields['end'] = array(
       'property' => 'field_session_date',
       'sub_property' => 'value2',
+      'process_callbacks' => array('intval'),
     );
 
     $public_fields['employee'] = array(
