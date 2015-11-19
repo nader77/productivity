@@ -5,25 +5,35 @@
  * Contains ProductivityTimewatchPunchResource.
  */
 
-class ProductivityTimewatchPunchResource extends \ProductivityEntityBaseNode {
+class ProductivityTimewatchPunchResource extends \ProductivityWorkSessionsResource {
 
+  /**
+   * Overrides \RestfulDataProviderEFQ::controllersInfo().
+   */
+  public static function controllersInfo() {
+    return array(
+      '' => array(
+        \RestfulInterface::POST => 'createOrUpdateWorkSession',
+      ),
+    );
+  }
 
   /**
    * Create a new session or update an open session.
    */
-  public function createEntity() {
+  public function createOrUpdateWorkSession() {
     $request = $this->getRequest();
 
     $account = $this->getAccount();
-    if (!node_access('create', 'work_session', $account)) {
-      throw new RestfulForbiddenException('You do not have access to create work sessions.');
+    if (!user_access('timewatch punch')) {
+      throw new RestfulForbiddenException('No punch access.');
     }
 
     if (empty($request['pincode'])) {
       throw new \RestfulBadRequestException('Pincode is required');
     }
 
-    $uid = productivity_session_get_uid_by_pincode($request['pincode']);
+    $uid = productivity_timewatch_get_uid_by_pincode($request['pincode']);
     if (!$uid) {
       throw new \RestfulBadRequestException('Wrong pincode');
     }
@@ -52,20 +62,15 @@ class ProductivityTimewatchPunchResource extends \ProductivityEntityBaseNode {
       $wrapper = entity_metadata_wrapper('node', $node);
       $wrapper->field_employee->set($uid);
       $wrapper->field_session_date->value->set(REQUEST_TIME);
-      $action = 'entered';
     }
     else {
       // Otherwise set the end date of the open session.
       $wrapper = entity_metadata_wrapper('node', key($result['node']));
       $wrapper->field_session_date->value2->set(REQUEST_TIME);
-      $action = 'left';
     }
 
     $wrapper->save();
 
-    return array(
-      'employee' => $employee_account->name,
-      'action' => $action,
-    );
+    return $this->viewEntity($wrapper->getIdentifier());
   }
 }
