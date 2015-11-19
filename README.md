@@ -13,8 +13,9 @@ The system is tightly coupled with Github, since we use Github issue queue for
 all project, the system knows to pull all your work from Github and display it
 in the time tracking page, leaving the developer to just type the amount of time
 spent on each task.
-![https://raw.github.com/Gizra/productivity/master/assets/images/Gizra_-_Tracking_form.png.png]
-(https://raw.github.com/Gizra/productivity/master/assets/images/Gizra_-_Tracking_form.png.png)
+![https://raw.githubusercontent.com/Gizra/productivity/master/assets/images/Gizra_-_Tracking_form.png]
+(https://raw.githubusercontent.com/Gizra/productivity/master/assets/images/Gizra_-_Tracking_form.png)
+
 Time Boxing - Each task is estimated and the time is recorded on the issue Title
 using a suffix in square brackets ```[2h]```
 ![https://raw.github.com/Gizra/productivity/master/assets/images/Block_access.png]
