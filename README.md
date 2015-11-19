@@ -1,6 +1,7 @@
 [![Build Status](https://magnum.travis-ci.com/Gizra/productivity.svg?token=p2M1EeCrd3dY32WxWj3X&branch=master)](https://magnum.travis-ci.com/Gizra/productivity)
 
-# Productivity.io
+
+# Gizra Productivity 
 Productity is Gizra's ERP/Project management system, and is part of The Gizra Way
 methodology, the system manages the following areas:
 
