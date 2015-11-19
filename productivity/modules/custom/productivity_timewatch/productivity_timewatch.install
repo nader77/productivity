@@ -1,0 +1,20 @@
+<?php
+/**
+ * Implements hook_install().
+ *
+ * Create a role for the timewatch, which is allowed to only add and update work
+ * sessions.
+ */
+function productivity_timewatch_install() {
+  $role = new stdClass();
+  $role->name = 'timewatch';
+  $role->weight = 10;
+  user_role_save($role);
+
+  $permissions = array(
+    'create work_session content',
+    'edit any work_session content',
+  );
+
+//  user_role_grant_permissions($role->rid, $permissions);
+}
