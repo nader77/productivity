@@ -53,3 +53,15 @@ function productivity_timewatch_user_presave(&$edit, $account, $category) {
     throw new \Exception('Please choose a different pincode.');
   }
 }
+
+/**
+ * Implements hook_permission().
+ */
+function productivity_timewatch_permission() {
+  return array(
+    'timewatch punch' => array(
+      'title' => t('Timewatch punch'),
+      'description' => t('Start or end a work session.'),
+    ),
+  );
+}

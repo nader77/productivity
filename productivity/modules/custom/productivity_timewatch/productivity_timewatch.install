@@ -11,10 +11,5 @@ function productivity_timewatch_install() {
   $role->weight = 10;
   user_role_save($role);
 
-  $permissions = array(
-    'create work_session content',
-    'edit any work_session content',
-  );
-
-//  user_role_grant_permissions($role->rid, $permissions);
+  user_role_grant_permissions($role->rid, array('timewatch punch'));
 }
