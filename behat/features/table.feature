@@ -22,7 +22,7 @@ Feature: Per-issue Table
   @api
   Scenario: Check tracking table after tracking for issue was added.
     Given I login with user "admin"
-    And   I add 1 hour tracking for "Example Issue"
+    And   I add 1 hour tracking for "Example Issue" in "Example Project"
     And   I visit per hour table for "Example Project"
     Then  I should see in the "Example Issue" line 1 "Overtime"
     And   I should see in the "Total" line 1 "Overtime"
@@ -44,6 +44,6 @@ Feature: Per-issue Table
   @api
   Scenario: Check tracking table after tracking for issue was added.
     Given I login with user "admin"
-    And   I add 1 hour tracking for the pull request for "Example Issue 2"
+    And   I add 1 hour tracking for the pull request for "Example Issue 2" in "Example Project"
     And   I visit per hour table for "Example Project"
     Then  I should see in the "Example Issue 2" line 1 "Overtime"
