@@ -37,7 +37,7 @@ Feature: Per-issue Table
   @api
   Scenario: Check tracking table after another pull request was added.
     Given I login with user "admin"
-    When  I add pull request for issue "Example Issue 2" for "Example Project"
+    When  I add pull request for issue "Example Issue 2" in "Example Project"
     And   I visit per hour table for "Example Project"
     Then  I should see in the "Example Issue 2" line 0 "Overtime"
 
