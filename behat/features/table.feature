@@ -42,7 +42,7 @@ Feature: Per-issue Table
     Then  I should see in the "Example Issue 2" line 0 "Overtime"
 
   @api
-  Scenario: Check tracking table after tracking for issue was added.
+  Scenario: Check tracking table after tracking for the pull request was added.
     Given I login with user "admin"
     And   I add 1 hour tracking for the pull request for "Example Issue 2" in "Example Project"
     And   I visit per hour table for "Example Project"
