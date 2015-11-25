@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Productivity time tracking module.
+ */
+
+/**
+ * Updtae issue logs field.
+ */
+function productivity_time_tracking_update_7000() {
+  features_revert(array('productivity_time_tracking'));
+
+  // Clear caches.
+  cache_clear_all();
+}
