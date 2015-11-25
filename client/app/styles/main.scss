@@ -22,6 +22,8 @@ $bg_color: #e7ebee;
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 @import "compass/css3/border-radius";
 @import 'loadingbar.scss';
+@import "media_lg";
+@import "media_md";
 
 
 body {
@@ -273,6 +275,13 @@ body {
       .tracking-form {
         margin-top: 30px;
 
+        &.form-horizontal {
+
+          .control-label {
+            text-align: left;
+          }
+        }
+
         .issues-row {
           margin-bottom: 5px;
 
@@ -310,19 +319,11 @@ body {
         .total-hours {
           text-align: right;
 
-          @media (max-width: $screen-md) {
-            text-align: left;
-          }
-
           span {
             display: inline-block;
             margin: 2px 9% 0 0;
             font-size: 20px;
             font-weight: bold;
-
-            @media (max-width: $screen-md) {
-              margin: 2px 0 0 0;
-            }
           }
         }
       }
