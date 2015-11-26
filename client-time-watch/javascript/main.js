@@ -1,11 +1,16 @@
 $(document).ready(function() {
 
+  function is_touch_device() {
+    return 'ontouchstart' in window || 'onmsgesturechange' in window;
+  }
+
   // Init default values.
   var maxDigits = 4;
   var digitsCounter = 0;
   var validPinCode = '1234';
   var projectSelected = false;
-  var touchOrClickEvent = is_touch_device() ? 'touchstart' : 'click';
+  var startDeviceClick = is_touch_device() ? 'touchstart' : 'mousedown';
+  var endDeviceClick = is_touch_device() ? 'touchend' : 'mouseup';
 
   // Elements
   var $deleteButton = $('button.-delete');
@@ -24,7 +29,8 @@ $(document).ready(function() {
     $dynamicIcon.html('');
 
     // Add class "-active" for UX.
-    toggleButtonActivity(self);
+    //$(self).addClass('-active');
+    $(self).toggleClass('-active');
 
     // Enable the "delete" button.
     $deleteButton.prop('disabled', false);
@@ -47,7 +53,8 @@ $(document).ready(function() {
     $dynamicIcon.html('');
 
     // Add class "-active" for UX.
-    toggleButtonActivity(self)
+    //$(self).addClass('-active');
+    $(self).toggleClass('-active');
 
     // Delete the last digit from the record.
     $($codePin.get(digitsCounter - 1)).text('');
@@ -78,17 +85,6 @@ $(document).ready(function() {
       // Display the view.
       $viewWrapper.addClass('-active')
     }, 500)
-  }
-
-  // Toggle button activity
-  function toggleButtonActivity(button) {
-    // Add active class
-    $(button).addClass('-active');
-
-    setTimeout( function(){
-      // Remove class.
-      $(button).removeClass('-active');
-    }, 100);
   }
 
   // Turn "ON" the led "light" indicator.
@@ -150,20 +146,27 @@ $(document).ready(function() {
     $deleteButton.prop('disabled', true);
   }
 
-  // "Digit" button click handler callback.
-  $('.numbers-pad .digit').on(touchOrClickEvent, digitClickHandler);
-
   // "Project" button click handler callback.
-  $('button.project').on(touchOrClickEvent, function() {
+  $('button.project').on(startDeviceClick, function() {
     $(this).toggleClass('-active');
     projectSelected = !projectSelected;
   });
 
-  // Delete button click handler callback.
-  $deleteButton.on(touchOrClickEvent, deleteButtonHandler);
+  // "Digit" button click handler callback.
+  $('.numbers-pad .digit').on(startDeviceClick, digitClickHandler);
+  $('.numbers-pad .digit').on(endDeviceClick, function() {
+    // Toggle active class
+    //$(this).removeClass('-active');
+    $(this).toggleClass('-active');
+  });
 
-    function is_touch_device() {
-      return 'ontouchstart' in window || 'onmsgesturechange' in window;
-    }
+
+  // Delete button click handler callback.
+  $deleteButton.on(startDeviceClick, deleteButtonHandler);
+  $deleteButton.on(endDeviceClick, function(){
+    // Toggle active class
+    //$(this).removeClass('-active');
+    $(this).toggleClass('-active');
+  });
 
 });
