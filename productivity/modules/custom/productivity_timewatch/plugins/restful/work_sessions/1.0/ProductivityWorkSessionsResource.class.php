@@ -30,6 +30,15 @@ class ProductivityWorkSessionsResource extends \ProductivityEntityBaseNode {
       'sub_property' => 'name',
     );
 
+    $public_fields['project'] = array(
+      'property' => 'field_project',
+      'resource' => array(
+        'project' => array(
+          'name' => 'projects',
+        ),
+      ),
+    );
+
     return $public_fields;
   }
 }
