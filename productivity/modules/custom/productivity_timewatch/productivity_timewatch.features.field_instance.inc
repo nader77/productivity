@@ -49,6 +49,45 @@ function productivity_timewatch_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-work_session-field_project'.
+  $field_instances['node-work_session-field_project'] = array(
+    'bundle' => 'work_session',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_project',
+    'label' => 'Project',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 35,
+    ),
+  );
+
   // Exported field_instance: 'node-work_session-field_session_date'.
   $field_instances['node-work_session-field_session_date'] = array(
     'bundle' => 'work_session',
@@ -142,6 +181,7 @@ function productivity_timewatch_field_default_field_instances() {
   // Included for use with string extractors like potx.
   t('Employee');
   t('Pincode');
+  t('Project');
   t('Session date');
 
   return $field_instances;
