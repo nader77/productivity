@@ -33,6 +33,14 @@ class ProductivityTimewatchPunchResource extends \ProductivityWorkSessionsResour
       throw new \RestfulBadRequestException('Pincode is required');
     }
 
+    $project_node = NULL;
+    if (!empty($request['project'])) {
+      $project_node = node_load(intval($request['project']));
+      if (!$project_node || $project_node->type != 'project') {
+        throw new \RestfulBadRequestException(format_string('Invalid project ID #@project', array('@project' => $request['project'])));
+      }
+    }
+
     $uid = productivity_timewatch_get_uid_by_pincode($request['pincode']);
     if (!$uid) {
       throw new \RestfulBadRequestException('Wrong pincode');
@@ -62,6 +70,9 @@ class ProductivityTimewatchPunchResource extends \ProductivityWorkSessionsResour
       $wrapper = entity_metadata_wrapper('node', $node);
       $wrapper->field_employee->set($uid);
       $wrapper->field_session_date->value->set(REQUEST_TIME);
+      if ($project_node) {
+        $wrapper->field_project->set($project_node);
+      }
     }
     else {
       // Otherwise set the end date of the open session.
