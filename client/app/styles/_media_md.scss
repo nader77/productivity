@@ -1,0 +1,25 @@
+@media (max-width: $screen-md) {
+
+  body {
+
+    .container {
+
+      .tracking-form-page {
+
+        .tracking-form {
+
+          .form-group {
+
+            .total-hours {
+              text-align: left;
+
+              span {
+                margin: 2px 0 0 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

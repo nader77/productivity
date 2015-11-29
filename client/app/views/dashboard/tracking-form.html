@@ -53,16 +53,16 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12">
-        <form class="form-horizontal" role="form" ng-submit="save(data)">
+      <div class="col-md-10 col-md-push-1 col-md-pull-1">
+        <form class="form-horizontal tracking-form" role="form" ng-submit="save(data)">
             <fieldset>
               <!-- Form Name -->
               <legend>{{ title }}</legend>
 
               <!-- Day type (inline) -->
               <div class="form-group">
-                <label class="col-md-4 control-label">Day type</label>
-                <div class="col-md-8">
+                <label class="col-md-2 control-label">Day type</label>
+                <div class="col-md-10">
                   <label class="radio-inline" for="daytype-0">
                     <input type="radio" ng-model="data.type" name="daytype" id="daytype-0" value="regular" checked="checked">
                     Regular
@@ -89,14 +89,14 @@
 
                 <!-- Select Project -->
                 <div class="form-group">
-                  <label class="col-sm-4 col-xs-2 control-label" for="project">Project</label>
-                  <div class="col-sm-3 col-xs-8">
+                  <label class="col-md-2 col-xs-12 control-label" for="project">Project</label>
+                  <div class="col-md-8 col-xs-10">
                     <select id="project" ng-model="data.projectID" name="project" class="form-control"
                             ng-options="project.id as project.label for project in projects" ng-change="changeProject()"
                             ng-disabled="owner(data)">
                     </select>
                   </div>
-                  <div class="col-sm-1 col-xs-2">
+                  <div class="col-md-2 col-xs-2">
                     <a ng-if="!data.projectID" disabled class="btn btn-primary"><i class="fa fa-refresh"></i></a>
                     <a ng-if="data.projectID" class="btn btn-primary" ng-click="getPRs()"><i class="fa fa-refresh"></i></a>
                   </div>
@@ -104,21 +104,19 @@
 
                 <!-- Issues tracker -->
                 <div class="form-group">
-                  <label class="col-md-4 control-label">Issues</label>
-                  <div class="col-md-4">
+                  <label class="col-md-2 col-xs-12 control-label">Issues</label>
+                  <div class="col-md-8 col-xs-12">
                     <div class="row issues-row" ng-if="data.issues" ng-repeat="(key, issue) in data.issues">
-                      <div class="col-xs-5">
+                      <div class="col-md-7 col-xs-6">
                         <input ng-model="issue.label" name="issue-label" type="text" ng-required="true" placeholder="#1: example" class="form-control input-md issue-label">
                       </div>
-                      <div class="col-xs-3">
+                      <div class="col-md-3 col-xs-3">
                         <select name="issues-hours" ng-model="issue.type" class="form-control" ng-required="true" id="issue-type"
                                 ng-options="type.id as type.label for type in issueTypes">
                         </select>
                       </div>
-                      <div class="col-xs-3">
+                      <div class="col-md-2 col-xs-3">
                         <input ng-model="issue.time" ng-change="updateTotalHours()" name="issue-time" type="number" ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.50" ng-required="true" min="0" placeholder="8" class="form-control input-md issue-time">
-                      </div>
-                      <div class="col-xs-1">
                         <i ng-if="data.issues.length > 1" ng-click="removeIssue(key)" class="fa fa-minus-circle fa-2x"></i>
                         <i ng-if="$last && !newIssues.length" ng-click="addNewIssue()" class="fa fa-plus-circle fa-2x"></i>
                       </div>
@@ -129,20 +127,25 @@
 
               <!-- Total hours-->
               <div class="form-group" ng-if="data.type == 'regular'">
-                <label class="col-md-4 control-label">Total hours</label>
-                <div class="col-md-4 total-hours">
+                <label class="col-md-2 control-label">Total hours</label>
+                <div class="col-md-8 total-hours">
                   <span>{{data.length}}</span>
                 </div>
               </div>
 
               <!-- Button -->
               <div class="form-group">
-                <label class="col-md-4 control-label" for="submit"></label>
-                <div class="col-md-4">
-                  <button id="submit" ng-disabled="creating" name="submit" type="submit" class="btn btn-primary">Save</button>
-                  <a ui-sref="dashboard.tracking-form({username: data.employee, year: year, month: month, day: day, id: 'new'})" class="btn btn-success">New</a>
-                  <a ng-click="remove(data)" ng-if="owner(data)" class="btn btn-danger">Remove</a>
+                <label class="col-md-2 control-label" for="submit"></label>
+                <div class="col-md-10">
+                  <button id="submit" ng-disabled="creating" name="submit" type="submit" class="btn btn-primary"><i class="fa fa-check"></i> Save</button>
+                  <a ui-sref="dashboard.tracking-form({username: data.employee, year: year, month: month, day: day, id: 'new'})" class="btn btn-success"><i class="fa fa-plus-circle"></i> New</a>
+                  <a ng-click="remove(data)" ng-if="owner(data)" class="btn btn-danger"><i class="fa fa-times"></i> Remove</a>
+                </div>
+              </div>
 
+              <!-- Messages -->
+              <div class="row">
+                <div class="col-md-10 col-md-push-1 col-md-pull-1">
                   <div ng-class="messageClass" class="alert alert-dismissible" role="alert" ng-show="message != ''" >
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     {{ message }}
@@ -153,6 +156,8 @@
             </fieldset>
           </form>
       </div>
+    </div>
+    <div class="row">
       <div ui-view></div>
       <pre ng-if="debug">
         Employee: {{ data.employee }}

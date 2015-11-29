@@ -14,295 +14,318 @@ $color4_light: #478484;
 $color5: #4784B1;
 $color6: #a784B1;
 $color7: #645582;
+$color8: #d8d5d5;
+$color9: #f8f8f8;
+$bg_color: #e7ebee;
 
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
+@import "compass/css3/border-radius";
 @import 'loadingbar.scss';
+@import "media_lg";
+@import "media_md";
 
 
-body{
+body {
   font-family: Arial, sans-serif;
-}
 
-.tracking-table-page {
+  .container {
 
-  h2 {
+    .btn,
+    .form-control {
+      @include border-radius(0);
+    }
 
-    a {
+    .tracking-table-page {
 
-      &:hover {
-      text-decoration: none;
+      h2 {
+
+        a {
+
+          &:hover {
+            text-decoration: none;
+          }
+
+          &:active {
+            color: red;
+          }
+        }
+
       }
 
-      &:active {
-        color: red;
-      }
-    }
 
-  }
+      .track-item-table {
+        font-size: 16px;
 
+        li a {
+          height: 36px;
+        }
 
-  .track-item-table {
-    font-size: 16px;
+        td {
+          white-space: nowrap;
+        }
 
-    li a {
-      height: 36px;
-    }
-
-    td {
-      white-space: nowrap;
-    }
-
-    th {
-      padding: 8px 0 0 8px;
-    }
-  }
-
-  .track-item {
-
-    td {
-      padding: 10px 0 0 0;
-      width: 28px;
-    }
-
-    a {
-      padding: 10px;
-      color: $color3_dark;
-    }
-
-    .empty {
-      background-color: white;
-    }
-
-    .regular {
-      background-color: $color4_light;
-
-      a {
-        color: $color4;
-      }
-    }
-
-    .sick {
-      background-color: $color3;
-      margin-left: 5px;
-    }
-
-    .vacation {
-      background-color: $color3_light;
-      margin-left: 5px;
-    }
-
-    .holiday {
-      background-color: $color1_light;
-    }
-
-    .funday, .special {
-      background-color: $color2_light;
-    }
-
-    .miluim {
-      background-color: $color2_light;
-      margin-left: 5px;
-    }
-
-    .convention {
-      background-color: $color7;
-      color: white;
-    }
-
-    .weekend {
-      background-color: $color1_light;
-    }
-
-    .summary {
-      background-color: $color5;
-    }
-
-    .global {
-      background-color: $color6;
-    }
-  }
-}
-
-
-.tracking-page {
-
-  .axis {
-
-    path, line {
-      fill: none;
-      stroke: #b6b6b6;
-      shape-rendering: crispEdges;
-    }
-  }
-
-  .tick text {
-    fill: #999;
-  }
-
-  g.journal {
-
-    circle {
-      fill: rgb(230, 15, 13);
-
-      &.regular {
-        fill: rgb(230, 185, 213);
+        th {
+        }
       }
 
-      &.sick {
-        fill: rgb(40, 185, 13);
-      }
+      .track-item {
 
-      &.vacation {
-        fill: rgb(100, 00, 13);
-      }
+        td {
+          padding: 10px 0 0 0;
+          width: 28px;
+        }
 
-      &.holiday {
-        fill: rgb(00, 85, 13);
-      }
+        a {
+          padding: 10px;
+          color: $color3_dark;
+        }
 
-      &.funday {
-        fill: rgb(200, 185, 13);
-      }
+        .empty {
+          background-color: white;
+        }
 
-      &.miluim {
-        fill: rgb(100, 85, 13);
-      }
+        .regular {
+          background-color: $color4_light;
 
-      &.convention {
-        fill: rgb(100, 85, 130);
+          a {
+            color: $color4;
+          }
+        }
+
+        .sick {
+          background-color: $color3;
+          margin-left: 5px;
+        }
+
+        .vacation {
+          background-color: $color3_light;
+          margin-left: 5px;
+        }
+
+        .holiday {
+          background-color: $color1_light;
+        }
+
+        .funday, .special {
+          background-color: $color2_light;
+        }
+
+        .miluim {
+          background-color: $color2_light;
+          margin-left: 5px;
+        }
+
+        .convention {
+          background-color: $color7;
+          color: white;
+        }
+
+        .weekend {
+          background-color: $color1_light;
+        }
+
+        .summary {
+          background-color: $color5;
+        }
+
+        .global {
+          background-color: $color6;
+        }
       }
     }
 
-    &:hover {
-      cursor: pointer;
-    }
-  }
+    .tracking-page {
 
-  text.label {
-    font-size: 12px;
-    font-weight: bold;
-    cursor: pointer;
-  }
+      .axis {
 
-  text.value {
-    font-size: 12px;
-    font-weight: bold;
-  }
-}
-
-
-.tracking-form-page {
-  
-  .calendar-btn {
-    float: right;
-  }
-
-  #calendar {
-
-    .fc-event {
-      border: 0 none;
-      padding: 1px;
-      color: white;
-
-      &.empty-event {
-        background-color: white;
-        color: black;
+        path, line {
+          fill: none;
+          stroke: #b6b6b6;
+          shape-rendering: crispEdges;
+        }
       }
 
-      &.regular-event {
-        background-color: $color4_light;
+      .tick text {
+        fill: #999;
       }
 
-      &.sick-event {
-        background-color: $color3;
+      g.journal {
+
+        circle {
+          fill: rgb(230, 15, 13);
+
+          &.regular {
+            fill: rgb(230, 185, 213);
+          }
+
+          &.sick {
+            fill: rgb(40, 185, 13);
+          }
+
+          &.vacation {
+            fill: rgb(100, 00, 13);
+          }
+
+          &.holiday {
+            fill: rgb(00, 85, 13);
+          }
+
+          &.funday {
+            fill: rgb(200, 185, 13);
+          }
+
+          &.miluim {
+            fill: rgb(100, 85, 13);
+          }
+
+          &.convention {
+            fill: rgb(100, 85, 130);
+          }
+        }
+
+        &:hover {
+          cursor: pointer;
+        }
       }
 
-      &.vacation-event {
-        background-color: $color3_light;
-      }
-
-      &.holiday-event {
-        background-color: $color1_light;
-      }
-
-      &.funday-event,
-      &.special-event {
-        background-color: $color2_light;
-      }
-
-      &.miluim-event {
-        background-color: $color2_light;
-      }
-
-      &.convention-event {
-        background-color: $color7;
-      }
-
-      &.weekend-event {
-        background-color: $color1_light;
-      }
-
-      &.global-event {
-        background-color: $color6;
-      }
-    }
-  }
-
-  .month-nav {
-    font-size: 30px;
-    padding-left: 60px;
-
-    a:hover {
-      text-decoration: none;
-    }
-  }
-
-  .issues-row {
-    margin-bottom: 5px;
-
-    > div {
-      padding-left: 5px;
-      padding-right: 5px;
-
-      .issue-time {
-        text-align: center;
-      }
-
-      &:first-child {
-        padding-left: 15px;
-      }
-
-      .fa {
-        margin-top: 3px;
+      text.label {
+        font-size: 12px;
+        font-weight: bold;
         cursor: pointer;
+      }
 
-        &.fa-plus-circle {
-          color: $btn-success-bg;
-        }
-
-        &.fa-minus-circle {
-          color: $btn-danger-bg;
-        }
+      text.value {
+        font-size: 12px;
+        font-weight: bold;
       }
     }
-  }
 
-  .total-hours {
-    text-align: right;
+    .tracking-form-page {
 
-    @media (max-width: $screen-md) {
-      text-align: left;
-    }
+      .calendar-btn {
+        float: right;
+      }
 
-    span {
-      display: inline-block;
-      margin: 2px 12% 0 0;
-      font-size: 20px;
-      font-weight: bold;
+      #calendar {
 
-      @media (max-width: $screen-md) {
-        margin: 2px 0 0 0;
+        .fc-state-highlight {
+          background-color: $color9;
+        }
+
+        .fc-event {
+          border: 0 none;
+          padding: 1px;
+          color: white;
+          @include border-radius(0);
+
+          &.empty-event {
+            background-color: transparent;
+            color: black;
+          }
+
+          &.regular-event {
+            background-color: $color4_light;
+          }
+
+          &.sick-event {
+            background-color: $color3;
+          }
+
+          &.vacation-event {
+            background-color: $color3_light;
+          }
+
+          &.holiday-event {
+            background-color: $color1_light;
+          }
+
+          &.funday-event,
+          &.special-event {
+            background-color: $color2_light;
+          }
+
+          &.miluim-event {
+            background-color: $color2_light;
+          }
+
+          &.convention-event {
+            background-color: $color7;
+          }
+
+          &.weekend-event {
+            background-color: $color1_light;
+          }
+
+          &.global-event {
+            background-color: $color6;
+          }
+        }
+      }
+
+      .month-nav {
+        font-size: 30px;
+        padding-left: 60px;
+
+        a:hover {
+          text-decoration: none;
+        }
+      }
+
+      .tracking-form {
+        margin-top: 30px;
+
+        &.form-horizontal {
+
+          .control-label {
+            text-align: left;
+          }
+        }
+
+        .issues-row {
+          margin-bottom: 5px;
+
+          > div {
+            padding-left: 5px;
+            padding-right: 5px;
+
+            .issue-time {
+              text-align: center;
+              width: 60%;
+              display: inline-block;
+              float: left;
+            }
+
+            &:first-child {
+              padding-left: 15px;
+            }
+
+            .fa {
+              margin: 4px 0 0 5px;
+              float: left;
+              cursor: pointer;
+
+              &.fa-plus-circle {
+                color: $btn-success-bg;
+              }
+
+              &.fa-minus-circle {
+                color: $btn-danger-bg;
+              }
+            }
+          }
+        }
+
+        .total-hours {
+          text-align: right;
+
+          span {
+            display: inline-block;
+            margin: 2px 9% 0 0;
+            font-size: 20px;
+            font-weight: bold;
+          }
+        }
       }
     }
   }

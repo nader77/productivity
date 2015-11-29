@@ -63,6 +63,9 @@ angular.module('clientApp')
     }, {
       id: 'review',
       label: 'Review'
+    }, {
+      id: 'support',
+      label: 'Support'
     }];
 
     $scope.month = $stateParams.month;
