@@ -1,11 +1,7 @@
 <?php
 /**
  * @file
-<<<<<<< HEAD
- * Code for the restful feature.
-=======
  * Code for the RESTful integration.
->>>>>>> origin/hedley
  */
 
 if (!drupal_is_cli()) {
