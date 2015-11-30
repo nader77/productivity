@@ -71,7 +71,7 @@ class ProductivityTimewatchPunchResource extends \ProductivityWorkSessionsResour
       $wrapper->field_employee->set($uid);
       $wrapper->field_session_date->value->set(REQUEST_TIME);
       if ($project_node) {
-        $wrapper->field_project->set($project_node);
+        $wrapper->field_project->set($project_node->nid);
       }
     }
     else {
