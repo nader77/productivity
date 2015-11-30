@@ -81,6 +81,30 @@
 			}
 		}
 	}
+
+	&.per-issue-table.table-striped {
+
+		th, td {
+			text-align:center;
+			vertical-align:middle;
+		}
+
+		td.cell-ok-even {
+			background-color: rgba(16, 255, 18, 0.47);
+		}
+
+		td.cell-ok-odd {
+			background-color: rgba(16, 255, 18, 0.69);
+		}
+
+		td.cell-bad-odd {
+			background-color: rgba(255, 76, 96, 0.93);
+		}
+
+		td.cell-bad-even {
+			background-color: rgba(255, 76, 96, 0.69);
+		}
+	}
 }
 .dataTable thead th:hover {
 	color: $primary-color;
