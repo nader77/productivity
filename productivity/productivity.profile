@@ -40,7 +40,7 @@ function productivity_install_tasks() {
     'display' => FALSE,
   );
 
-  // Run this as the last task!
+  // Run this as the last task.
   $tasks['productivity_setup_rebuild_permissions'] = array(
     'display_name' => st('Rebuild Permissions'),
     'display' => FALSE,

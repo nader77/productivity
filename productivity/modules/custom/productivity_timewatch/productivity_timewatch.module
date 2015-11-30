@@ -1,0 +1,67 @@
+<?php
+/**
+ * @file
+ * Code for the Productivity session feature.
+ */
+
+include_once 'productivity_timewatch.features.inc';
+
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function productivity_timewatch_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'restful') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
+ * Find a user by pincode.
+ *
+ * @param string $pincode
+ *  A pincode
+ *
+ * @return int|NULL
+ *  User ID.
+ */
+function productivity_timewatch_get_uid_by_pincode($pincode) {
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'user')
+    ->fieldCondition('field_pincode', 'value', $pincode)
+    ->range(0, 1)
+    ->execute();
+
+  return !empty($result['user']) ? key($result['user']) : NULL;
+}
+
+/**
+ * Implements hook_user_presave().
+ */
+function productivity_timewatch_user_presave(&$edit, $account, $category) {
+  if (empty($edit['field_pincode'][LANGUAGE_NONE][0]['value'])) {
+    // Ignore users without pincode.
+    return;
+  }
+
+  $pincode = $edit['field_pincode'][LANGUAGE_NONE][0]['value'];
+
+  // Check if this pincode is already used by another user.
+  $uid = productivity_timewatch_get_uid_by_pincode($pincode);
+  if ($uid && $uid != $account->uid) {
+    throw new \Exception('Please choose a different pincode.');
+  }
+}
+
+/**
+ * Implements hook_permission().
+ */
+function productivity_timewatch_permission() {
+  return array(
+    'timewatch punch' => array(
+      'title' => t('Timewatch punch'),
+      'description' => t('Start or end a work session.'),
+    ),
+  );
+}

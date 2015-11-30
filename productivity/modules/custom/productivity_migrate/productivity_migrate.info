@@ -10,6 +10,7 @@ files[] = productivity_migrate.test
 files[] = includes/ProductivityMigrate.inc
 files[] = includes/ProductivityMigrateAccount.inc
 files[] = includes/ProductivityMigrateProject.inc
+files[] = includes/ProductivityMigrateTimewatchUser.inc
 files[] = includes/ProductivityMigrateTracker.inc
 files[] = includes/ProductivityMigrateUser.inc
 files[] = includes/ProductivityMigratePayment.inc
