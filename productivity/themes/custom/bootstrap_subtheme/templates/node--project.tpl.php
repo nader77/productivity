@@ -127,7 +127,7 @@ field_days
   </div>
   <div class="col-lg-12 col-sm-12 col-xs-12">
     <div class="main-box infographic-box">
-      <?php print $content['per_issue_table']; ?>
+      <?php print $per_issue_table; ?>
     </div>
   </div>
 </div

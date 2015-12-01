@@ -20,7 +20,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
       t('Overtime'),
       t('Status'),
     ),
-    'data' => array(),
     'attributes' => array('class' => array('per-issue-table')),
   );
 
