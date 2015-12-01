@@ -186,56 +186,5 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iWait() {
     sleep(10);
   }
-
-  /**
-   * @When I add a project :project_name
-   */
-  public function iAddAProject($project_name) {
-    throw new PendingException();
-  }
-
-  /**
-   * @When I visit per hour table for :project_name
-   */
-  public function iVisitPerHourTableFor($project_name) {
-    throw new PendingException();
-  }
-
-  /**
-   * @When I should see in the :line_num line :value :column
-   */
-  public function iShouldSeeInTheLine($line_num, $column, $value) {
-    throw new PendingException();
-  }
-
-  /**
-   * @When I add issue :issue_name for :project_name
-   */
-  public function iAddIssueFor($issue_name, $project_name) {
-    throw new PendingException();
-  }
-
-  /**
-   * @Given I add :number_of_hours hour tracking for :issue_name in :project_name
-   */
-  public function iAddHourTrackingForIn($issue_name, $project_name, $number_of_hours) {
-    throw new PendingException();
-  }
-
-  /**
-   * @When I add pull request for issue :issue_name in :project_name
-   */
-  public function iAddPullRequestForIssueFor($issue_name, $project_name) {
-    throw new PendingException();
-  }
-
-  /**
-   * @Given I add :number_of_hours hour tracking for the pull request for :issue_name in :project_name
-   */
-  public function iAddHourTrackingForThePullRequestForIn($issue_name, $project_name, $number_of_hours) {
-    throw new PendingException();
-  }
-
-
 }
 

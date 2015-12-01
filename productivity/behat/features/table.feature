@@ -9,7 +9,7 @@ Feature: Per-issue Table
     Given I am logged in as a user with the "administrator" role
     When  I add a project "Example Project"
     And   I visit per hour table for "Example Project"
-    Then  I should see in the "Total" line 0 "Overtime"
+    Then  I should see the text "No issues found for project Example Project"
 
   @api
   Scenario: Check tracking table after issue was added.

@@ -9,55 +9,6 @@ use Behat\Behat\Tester\Exception\PendingException;
 class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
   /**
-   * @When /^I login with user "([^"]*)"$/
-   */
-  public function iLoginWithUser($name) {
-    // @todo: Move password to YAML.
-    $password = 'admin';
-    $this->loginUser($name, $password);
-  }
-
-  /**
-   * Login a user to the site.
-   *
-   * @param $name
-   *   The user name.
-   * @param $password
-   *   The use password.
-   * @param bool $check_success
-   *   Determines if we should check for the login to be successful.
-   *
-   * @throws \Exception
-   */
-  protected function loginUser($name, $password, $check_success = TRUE) {
-    $this->getSession()->visit($this->locatePath('/#/login'));
-    $this->iWaitForCssElement('#login', 'appear');
-    $element = $this->getSession()->getPage();
-    $element->fillField('username', $name);
-    $element->fillField('password', $password);
-    $submit = $element->findButton('Log in');
-
-    if (empty($submit)) {
-      throw new \Exception(sprintf("No submit button at %s", $this->getSession()->getCurrentUrl()));
-    }
-
-    // Log in.
-    $submit->click();
-
-    if ($check_success) {
-      // Wait for the dashboard's menu to load.
-      $this->iWaitForCssElement('.navbar-brand', 'appear');
-    }
-  }
-
-  /**
-   * @When /^I login with bad credentials$/
-   */
-  public function iLoginWithBadCredentials() {
-    return $this->loginUser('wrong-foo', 'wrong-bar', FALSE);
-  }
-
-  /**
    * @When /^I open the calendar$/
    */
   public function iOpenTheCalendar() {
@@ -241,10 +192,33 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @When I should see in the :line_num line :value :column
+   * @Then I should see in the :line_name line :value :column
    */
-  public function iShouldSeeInTheLine($line_num, $column, $value) {
-    throw new PendingException();
+  public function iShouldSeeInTheLine($line_name, $column, $value) {
+    // List of columns and their nth-child values.
+    $columns = array(
+      'Issue ID' => 1,
+      'Issue name' => 2,
+      'Time estimate' => 3,
+      'Actual time' => 4,
+      'Overtime' => 5,
+      'Status' => 6,
+    );
+    $column_number = $columns[$column];
+
+    // Get table rows.
+    $page = $this->getSession()->getPage();
+    $elements = $page->findAll('css', ".per-issue-table tr");
+    if (empty($elements)) {
+      throw new \Exception("Per issue table not found.");
+    }
+
+    // Find correct row.
+    foreach($elements as $element) {
+      print_r($element);
+//      $name_column = $element->find(':nth-child(2)');
+      throw new \Exception("No name");
+    }
   }
 
   /**
@@ -286,8 +260,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     );
 
     $entity = entity_create('node', $values);
+    $entity->title= $title;
     $wrapper = entity_metadata_wrapper('node', $entity);
-    $wrapper->title->set($title);
 
     if ($type == 'github_issue') {
       // Set some more fields if available.
