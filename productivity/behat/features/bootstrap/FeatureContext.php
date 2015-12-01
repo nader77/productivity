@@ -287,7 +287,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Given I add one hour tracking for the pull request for :issue_name in :project_name
    */
   public function iAddHourTrackingForThePullRequestForIn($issue_name, $project_name) {
-    $this->iAddAProjectNamed($issue_name, $project_name);
+    $this->iAddHourTrackingForIn($issue_name, $project_name);
   }
 
   /**
