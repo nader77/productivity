@@ -10,14 +10,13 @@
 function productivity_time_tracking_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_day_type'
+  // Exported field_base: 'field_day_type'.
   $field_bases['field_day_type'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_day_type',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -42,21 +41,13 @@ function productivity_time_tracking_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_description'
+  // Exported field_base: 'field_description'.
   $field_bases['field_description'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_description',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -69,14 +60,13 @@ function productivity_time_tracking_field_default_field_bases() {
     'type' => 'text_long',
   );
 
-  // Exported field_base: 'field_github_issue'
+  // Exported field_base: 'field_github_issue'.
   $field_bases['field_github_issue'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_github_issue',
-    'foreign keys' => array(),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -105,21 +95,13 @@ function productivity_time_tracking_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_issue_label'
+  // Exported field_base: 'field_issue_label'.
   $field_bases['field_issue_label'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_issue_label',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -134,14 +116,13 @@ function productivity_time_tracking_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_issue_type'
+  // Exported field_base: 'field_issue_type'.
   $field_bases['field_issue_type'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_issue_type',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -156,6 +137,7 @@ function productivity_time_tracking_field_default_field_bases() {
         'management' => 'Management',
         'designer' => 'Designer',
         'non_billable' => 'None billable',
+        'support' => 'Support',
         'review' => 'Review',
       ),
       'allowed_values_function' => '',
@@ -164,21 +146,13 @@ function productivity_time_tracking_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_issues_logs'
+  // Exported field_base: 'field_issues_logs'.
   $field_bases['field_issues_logs'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_issues_logs',
-    'foreign keys' => array(
-      'field_issue_label_format' => array(
-        'columns' => array(
-          'field_issue_label_format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
     'indexes' => array(
       'field_github_issue_target_id' => array(
         0 => 'field_github_issue_target_id',
@@ -205,14 +179,13 @@ function productivity_time_tracking_field_default_field_bases() {
     'type' => 'multifield',
   );
 
-  // Exported field_base: 'field_project'
+  // Exported field_base: 'field_project'.
   $field_bases['field_project'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_project',
-    'foreign keys' => array(),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -241,14 +214,13 @@ function productivity_time_tracking_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_time_spent'
+  // Exported field_base: 'field_time_spent'.
   $field_bases['field_time_spent'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_time_spent',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -261,14 +233,13 @@ function productivity_time_tracking_field_default_field_bases() {
     'type' => 'number_decimal',
   );
 
-  // Exported field_base: 'field_track_hours'
+  // Exported field_base: 'field_track_hours'.
   $field_bases['field_track_hours'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_track_hours',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -281,14 +252,13 @@ function productivity_time_tracking_field_default_field_bases() {
     'type' => 'number_decimal',
   );
 
-  // Exported field_base: 'field_work_date'
+  // Exported field_base: 'field_work_date'.
   $field_bases['field_work_date'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_work_date',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'date',

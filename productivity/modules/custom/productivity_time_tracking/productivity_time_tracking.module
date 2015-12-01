@@ -505,7 +505,7 @@ function _productivity_time_tracking_update_issue($node) {
       if ($field_wrapper->__isset('field_github_issue')) {
 
         $github_issue_wrapper = $field_wrapper->field_github_issue;
-        if ($github_issue_wrapper->field_github_content_type->value() != 'issue') {
+        if ($github_issue_wrapper->value() && $github_issue_wrapper->field_github_content_type->value() != 'issue') {
 
           if ($github_issue_wrapper->__isset('field_issue_reference')) {
             // Pointing at a pull request - get the issue wrapper.
@@ -518,7 +518,7 @@ function _productivity_time_tracking_update_issue($node) {
           }
         }
 
-        if (!$skip_issue_update && $github_issue_wrapper->getBundle == 'github_issue') {
+        if (!$skip_issue_update && $github_issue_wrapper->getBundle() == 'github_issue') {
           // Calculate the total hours worked on the issue.
           $issue_hours = $field_wrapper->field_time_spent->value() - $old_track_time + productivity_github_sum_issue_hours($github_issue_wrapper->getIdentifier());
 

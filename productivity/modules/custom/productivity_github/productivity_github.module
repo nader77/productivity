@@ -369,6 +369,7 @@ function _productivity_github_issue_number_from_body($text) {
  *
  * @param $node_id int
  *   Github issue node ID.
+ *
  * @return int
  *   Total number of hours already worked on a certain issue.
  */
@@ -414,7 +415,6 @@ function productivity_github_sum_issue_hours($node_id) {
     // Sum up the rows.
     $sum += $row->field_issues_logs_field_time_spent_value;
   }
-
 
   return $sum;
 }

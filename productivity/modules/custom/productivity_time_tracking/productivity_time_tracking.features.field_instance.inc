@@ -10,7 +10,7 @@
 function productivity_time_tracking_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'multifield-field_issues_logs-field_github_issue'
+  // Exported field_instance: 'multifield-field_issues_logs-field_github_issue'.
   $field_instances['multifield-field_issues_logs-field_github_issue'] = array(
     'bundle' => 'field_issues_logs',
     'default_value' => NULL,
@@ -43,7 +43,7 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'multifield-field_issues_logs-field_issue_label'
+  // Exported field_instance: 'multifield-field_issues_logs-field_issue_label'.
   $field_instances['multifield-field_issues_logs-field_issue_label'] = array(
     'bundle' => 'field_issues_logs',
     'default_value' => NULL,
@@ -77,7 +77,7 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'multifield-field_issues_logs-field_issue_type'
+  // Exported field_instance: 'multifield-field_issues_logs-field_issue_type'.
   $field_instances['multifield-field_issues_logs-field_issue_type'] = array(
     'bundle' => 'field_issues_logs',
     'default_value' => NULL,
@@ -108,7 +108,7 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'multifield-field_issues_logs-field_time_spent'
+  // Exported field_instance: 'multifield-field_issues_logs-field_time_spent'.
   $field_instances['multifield-field_issues_logs-field_time_spent'] = array(
     'bundle' => 'field_issues_logs',
     'default_value' => NULL,
@@ -148,7 +148,7 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-time_tracking-field_day_type'
+  // Exported field_instance: 'node-time_tracking-field_day_type'.
   $field_instances['node-time_tracking-field_day_type'] = array(
     'bundle' => 'time_tracking',
     'default_value' => array(
@@ -189,7 +189,7 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-time_tracking-field_description'
+  // Exported field_instance: 'node-time_tracking-field_description'.
   $field_instances['node-time_tracking-field_description'] = array(
     'bundle' => 'time_tracking',
     'default_value' => NULL,
@@ -229,7 +229,7 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-time_tracking-field_employee'
+  // Exported field_instance: 'node-time_tracking-field_employee'.
   $field_instances['node-time_tracking-field_employee'] = array(
     'bundle' => 'time_tracking',
     'default_value' => NULL,
@@ -268,7 +268,7 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-time_tracking-field_issues_logs'
+  // Exported field_instance: 'node-time_tracking-field_issues_logs'.
   $field_instances['node-time_tracking-field_issues_logs'] = array(
     'bundle' => 'time_tracking',
     'default_value' => NULL,
@@ -307,7 +307,7 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-time_tracking-field_project'
+  // Exported field_instance: 'node-time_tracking-field_project'.
   $field_instances['node-time_tracking-field_project'] = array(
     'bundle' => 'time_tracking',
     'default_value' => NULL,
@@ -346,7 +346,7 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-time_tracking-field_track_hours'
+  // Exported field_instance: 'node-time_tracking-field_track_hours'.
   $field_instances['node-time_tracking-field_track_hours'] = array(
     'bundle' => 'time_tracking',
     'default_value' => NULL,
@@ -392,7 +392,7 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-time_tracking-field_work_date'
+  // Exported field_instance: 'node-time_tracking-field_work_date'.
   $field_instances['node-time_tracking-field_work_date'] = array(
     'bundle' => 'time_tracking',
     'deleted' => 0,
@@ -407,6 +407,7 @@ function productivity_time_tracking_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
         'weight' => 1,
