@@ -280,14 +280,14 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Given I add one hour tracking for :issue_name in :project_name
    */
   public function iAddHourTrackingForIn($issue_name, $project_name) {
-    $nid = $this->iCreateNodeOfType('tracking for ' . $issue_name, 'time_tracking', $project_name, $issue_name);
+    $this->iCreateNodeOfType('tracking for ' . $issue_name, 'time_tracking', $project_name, $issue_name);
   }
 
   /**
    * @Given I add one hour tracking for the pull request for :issue_name in :project_name
    */
   public function iAddHourTrackingForThePullRequestForIn($issue_name, $project_name) {
-    throw new PendingException();
+    $this->iAddAProjectNamed($issue_name, $project_name);
   }
 
   /**
@@ -342,9 +342,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       $wrapper->field_issues_logs->set(array(
         0 => array(
           'field_github_issue' => array(LANGUAGE_NONE => array(0 => array('target_id' => $issue_ref))),
-          'field_issue_label' => array(LANGUAGE_NONE => array(0 => array('value' => 'Example label'))),
-          'field_time_spent' => array(LANGUAGE_NONE => array(0 => array('value' => 1))),
-          'field_issue_type' => array(LANGUAGE_NONE => array(0 => array('value' => 'dev'))),
+          'field_issue_label'  => array(LANGUAGE_NONE => array(0 => array('value' => 'Example label'))),
+          'field_time_spent'   => array(LANGUAGE_NONE => array(0 => array('value' => 1))),
+          'field_issue_type'   => array(LANGUAGE_NONE => array(0 => array('value' => 'dev'))),
         ),
       ));
     }
