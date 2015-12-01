@@ -119,6 +119,7 @@ function productivity_github_time_display_tracking_issue_table($project_node_id 
   }
 
   $node = node_load($project_node_id);
+
   drupal_set_title(t('@project issue tracking table', array('@project' => $node->title)));
 
   $table = productivity_github_time_tracking_issue_table($project_node_id);

@@ -9,6 +9,6 @@ Feature: Login test
 
   @api
   Scenario: Attempt login.
-    Given I am logged in as a user with the "authenticated" role
+    Given I login with user "admin"
     When  I visit the homepage
     Then  I should see the text "My account"

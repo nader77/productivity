@@ -9,6 +9,36 @@ use Behat\Behat\Tester\Exception\PendingException;
 class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
   /**
+   * @When /^I login with user "([^"]*)"$/
+   */
+  public function iLoginWithUser($name) {
+    $password = $name == 'admin' ? 'admin' : '1234';
+    $this->loginUser($name, $password);
+  }
+
+  /**
+   * Login a user to the site.
+   *
+   * @param $name
+   *   The user name.
+   * @param $password
+   *   The use password.
+   */
+  protected function loginUser($name, $password) {
+    $this->user = new stdClass();
+    $this->user->name = $name;
+    $this->user->pass = $password;
+    $this->login();
+  }
+
+  /**
+   * @When /^I login with bad credentials$/
+   */
+  public function iLoginWithBadCredentials() {
+    return $this->loginUser('wrong-foo', 'wrong-bar');
+  }
+
+  /**
    * @When /^I open the calendar$/
    */
   public function iOpenTheCalendar() {
@@ -260,7 +290,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     );
 
     $entity = entity_create('node', $values);
-    $entity->title= $title;
+    $entity->title = $title;
     $wrapper = entity_metadata_wrapper('node', $entity);
 
     if ($type == 'github_issue') {
@@ -274,6 +304,39 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
         }
       }
     }
+
+    try {
+      $wrapper->save();
+      return TRUE;
+    }
+    catch (\Exception $e) {
+      if (!$check_saving) {
+        throw $e;
+      }
+      return FALSE;
+    }
+  }
+
+  /**
+   * @When I create a project named :title
+   */
+  public function iCreateAProjectNamed($title, $check_saving = FALSE) {
+    $account = user_load_by_name($this->user->name);
+    $values = array(
+      'title' => $title,
+      'type' => 'project',
+      'uid' => $account->uid,
+    );
+
+    $entity = entity_create('node', $values);
+//    $entity->title = $title;
+    $wrapper = entity_metadata_wrapper('node', $entity);
+
+    // Some default values.
+    $wrapper->field_type->set('T&M');
+    $wrapper->field_account->set(1);
+    $wrapper->field_rate_type->set('hours');
+    $wrapper->field_github_repository_name->set(array('Example/Example'));
 
     try {
       $wrapper->save();

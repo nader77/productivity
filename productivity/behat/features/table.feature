@@ -6,8 +6,8 @@ Feature: Per-issue Table
 
   @api
   Scenario: Check the tracking table for a new project.
-    Given I am logged in as a user with the "administrator" role
-    When  I add a project "Example Project"
+    Given I login with user "admin"
+    When  I create a project named "Example Project"
     And   I visit per hour table for "Example Project"
     Then  I should see the text "No issues found for project Example Project"
 
