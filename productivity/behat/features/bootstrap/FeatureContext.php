@@ -71,6 +71,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       ->entityCondition('bundle', strtolower($type))
       ->propertyCondition('title', $title)
       ->propertyCondition('status', NODE_PUBLISHED)
+      ->propertyOrderBy('nid', 'DESC')
       ->range(0, 1)
       ->execute();
     if (empty($result['node'])) {
@@ -214,9 +215,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @When I visit per hour table for :project_name
+   * @When I visit per issue table for :project_name
    */
-  public function iVisitPerHourTableFor($project_name) {
+  public function iVisitPerIssueTableFor($project_name) {
     $project_node_id = $this->getNodeIdByTitleBundleAndRef('project', $project_name);
     $this->getSession()->visit($this->locatePath('tracking/per-issue/' . $project_node_id));
   }
@@ -225,10 +226,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I should see in the :line_name line :value :column
    */
   public function iShouldSeeInTheLine($line_name, $column, $value) {
-
-    // Assert access allowed.
-    $this->assertSession()->pageTextNotContains('Access Denied');
-
     // List of columns and their nth-child values.
     $columns = array(
       'Issue ID' => 1,
@@ -247,11 +244,20 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       throw new \Exception("Per issue table not found.");
     }
 
+    // Remove the header row.
+    unset($elements[0]);
+
     // Find correct row.
     foreach($elements as $element) {
-      print_r($element->getContent());
-//      $name_column = $element->find(':nth-child(2)');
-      throw new \Exception("No name");
+      $name  = $element->find('css', ':nth-child(2)')->getText();
+
+      if ($name == $line_name) {
+        $column_value = $element->find('css', ':nth-child(' . $column_number . ')')->getText();
+        if ($column_value != $value) {
+          throw new \Exception('Wrong value when checking the per-issue table.');
+        }
+        break;
+      }
     }
   }
 
@@ -383,6 +389,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       ->entityCondition('bundle', strtolower($bundle))
       ->propertyCondition('title', $title)
       ->propertyCondition('status', NODE_PUBLISHED)
+      ->propertyOrderBy('nid', 'DESC')
       ->range(0, 1);
 
     if ($project_ref) {
