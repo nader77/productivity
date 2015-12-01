@@ -35,7 +35,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @When /^I login with bad credentials$/
    */
   public function iLoginWithBadCredentials() {
-    return $this->loginUser('wrong-foo', 'wrong-bar');
+    $this->loginUser('wrong-foo', 'wrong-bar');
   }
 
   /**
@@ -225,6 +225,10 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then I should see in the :line_name line :value :column
    */
   public function iShouldSeeInTheLine($line_name, $column, $value) {
+
+    // Assert access allowed.
+    $this->assertSession()->pageTextNotContains('Access Denied');
+
     // List of columns and their nth-child values.
     $columns = array(
       'Issue ID' => 1,
@@ -245,7 +249,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     // Find correct row.
     foreach($elements as $element) {
-      print_r($element);
+      print_r($element->getContent());
 //      $name_column = $element->find(':nth-child(2)');
       throw new \Exception("No name");
     }
@@ -255,7 +259,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @When I add issue :issue_name for :project_name
    */
   public function iAddIssueFor($issue_name, $project_name) {
-    throw new PendingException();
+    $this->iCreateNodeOfType($issue_name, 'github_issue', $project_name);
   }
 
   /**
@@ -297,10 +301,13 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       // Set some more fields if available.
       if ($project_node_id = $this->getNodeIdByTitleBundleAndRef('project', $project_name)) {
         $wrapper->field_project->set($project_node_id);
+        $wrapper->field_github_content_type->set('issue');
+        $wrapper->field_issue_id->set(12);
 
         if ($issue_name) {
           $issue_ref = $this->getNodeIdByTitleBundleAndRef('github_issue', $issue_name, $project_node_id);
           $wrapper->field_issue_reference->set($issue_ref);
+          $wrapper->field_github_content_type->set('pull_request');
         }
       }
     }
@@ -334,7 +341,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     // Some default values.
     $wrapper->field_type->set('T&M');
-    $wrapper->field_account->set(1);
     $wrapper->field_rate_type->set('hours');
     $wrapper->field_github_repository_name->set(array('Example/Example'));
 
