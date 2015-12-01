@@ -3,9 +3,8 @@
  * @file
  * Code for the Productivity time tracking feature.
  */
-define('PRODUCTIVITY_GITHUB_ISSUE_OPEN_STATUS', t('WIP'));
-define('PRODUCTIVITY_GITHUB_ISSUE_CLOSED_STATUS', t('Done'));
-
+define('PRODUCTIVITY_GITHUB_ISSUE_OPEN_STATUS', 'WIP');
+define('PRODUCTIVITY_GITHUB_ISSUE_CLOSED_STATUS', 'Done');
 
 /**
  * Menu callback; display tracking table for issues.
