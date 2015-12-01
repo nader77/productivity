@@ -67,6 +67,45 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
+   * @When /^I visit the homepage$/
+   */
+  public function iVisitTheHomepage() {
+    $this->getSession()->visit($this->locatePath('/'));
+  }
+
+  /**
+   * @When /^I visit the "([^"]*)" page$/
+   */
+  public function iVisitThePage($path) {
+    $this->getSession()->visit($this->locatePath($path));
+  }
+
+  /**
+   * @When /^I visit "([^"]*)" node of type "([^"]*)"$/
+   */
+  public function iVisitNodePageOfType($title, $type) {
+    $query = new \entityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'node')
+      ->entityCondition('bundle', strtolower($type))
+      ->propertyCondition('title', $title)
+      ->propertyCondition('status', NODE_PUBLISHED)
+      ->range(0, 1)
+      ->execute();
+    if (empty($result['node'])) {
+      $params = array(
+        '@title' => $title,
+        '@type' => $type,
+      );
+      throw new \Exception(format_string("Node @title of @type not found.", $params));
+    }
+    $nid = key($result['node']);
+    $params['@nid'] = $nid;
+    $this->getSession()->visit($this->locatePath('node/' . $nid));
+  }
+
+
+  /**
    * @Then /^I should wait for the text "([^"]*)" to "([^"]*)"$/
    */
   public function iShouldWaitForTheTextTo($text, $appear) {
@@ -118,7 +157,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       $entity->delete();
     }
   }
-
 
   /**
    * @BeforeScenario
@@ -324,5 +362,18 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     return $nid;
   }
 
+
+  /**
+   * @Then The response status code should be :code
+   */
+  public function theResponseStatusCodeShouldBe($code) {
+    $session = $this->getSession();
+
+    $response_code = $session->getStatusCode();
+    if ($response_code != $code)  {
+      $params['@code'] = $response_code;
+      throw new \Exception(format_string("Wrong status code, @code", $params));
+    }
+  }
 }
 
