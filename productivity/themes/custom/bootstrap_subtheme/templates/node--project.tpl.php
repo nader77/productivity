@@ -125,6 +125,11 @@ field_days
       <span class="value"><?php print render($content['field_days']);?></span>
     </div>
   </div>
+  <div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="main-box infographic-box">
+      <?php print $content['per_issue_table']; ?>
+    </div>
+  </div>
 </div
 
   <?php print render($content['links']); ?>

@@ -47,3 +47,9 @@ function bootstrap_subtheme_element_info_alter(&$elements) {
     }
   }
 }
+
+function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
+  $content = &$variables['content'];
+  module_load_include('inc','productivity_github', 'productivity_github.table');
+  $content['per_issue_table'] = productivity_github_time_display_tracking_issue_table($variables['nid'], FALSE);
+}
