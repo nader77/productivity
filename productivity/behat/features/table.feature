@@ -7,7 +7,7 @@ Feature: Per-issue Table
   @api
   Scenario: Check the tracking table for a new project.
     Given I login with user "admin"
-    When  I create a project named "Example Project"
+    When  I add a project named "Example Project"
     And   I visit per issue table for "Example Project"
     Then  I should see the text "No issues found for project Example Project"
 
@@ -22,7 +22,7 @@ Feature: Per-issue Table
   @api
   Scenario: Check tracking table after tracking for issue was added.
     Given I login with user "admin"
-    And   I add 1 hour tracking for "Example Issue" in "Example Project"
+    And   I add one hour tracking for "Example Issue" in "Example Project"
     And   I visit per issue table for "Example Project"
     Then  I should see in the "Example Issue" line 1 "Overtime"
     And   I should see in the "Total" line 1 "Overtime"
@@ -44,6 +44,6 @@ Feature: Per-issue Table
   @api
   Scenario: Check tracking table after tracking for the pull request was added.
     Given I login with user "admin"
-    And   I add 1 hour tracking for the pull request for "Example Issue 2" in "Example Project"
+    And   I add one hour tracking for the pull request for "Example Issue 2" in "Example Project"
     And   I visit per issue table for "Example Project"
     Then  I should see in the "Example Issue 2" line 1 "Overtime"

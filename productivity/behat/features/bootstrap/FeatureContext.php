@@ -208,10 +208,10 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @When I add a project :project_name
+   * @When I add a project named :project_name
    */
-  public function iAddAProject($project_name) {
-    $this->iCreateNodeOfType($project_name, 'project');
+  public function iAddAProjectNamed($project_name) {
+    $this->iCreateNodeOfType($project_name, 'project', NULL);
   }
 
   /**
@@ -269,23 +269,24 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Given I add :number_of_hours hour tracking for :issue_name in :project_name
-   */
-  public function iAddHourTrackingForIn($issue_name, $project_name, $number_of_hours) {
-    throw new PendingException();
-  }
-
-  /**
    * @When I add pull request for issue :issue_name in :project_name
    */
   public function iAddPullRequestForIssueFor($issue_name, $project_name) {
-    throw new PendingException();
+    $pull_reuqest_name = 'Example pull request for' . $issue_name;
+    $this->iCreateNodeOfType($pull_reuqest_name, 'github_issue', $project_name, $issue_name);
   }
 
   /**
-   * @Given I add :number_of_hours hour tracking for the pull request for :issue_name in :project_name
+   * @Given I add one hour tracking for :issue_name in :project_name
    */
-  public function iAddHourTrackingForThePullRequestForIn($issue_name, $project_name, $number_of_hours) {
+  public function iAddHourTrackingForIn($issue_name, $project_name) {
+    $this->iCreateNodeOfType('tracking for ' . $issue_name, 'time_tracking', $project_name, $issue_name);
+  }
+
+  /**
+   * @Given I add one hour tracking for the pull request for :issue_name in :project_name
+   */
+  public function iAddHourTrackingForThePullRequestForIn($issue_name, $project_name) {
     throw new PendingException();
   }
 
@@ -303,6 +304,13 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $entity->title = $title;
     $wrapper = entity_metadata_wrapper('node', $entity);
 
+    if ($type == 'project') {
+      $wrapper->field_scope->set(array(
+        'interval' => 10,
+        'period' => 'month',
+      ));
+    }
+
     if ($type == 'github_issue') {
       // Set some more fields if available.
       if ($project_node_id = $this->getNodeIdByTitleBundleAndRef('project', $project_name)) {
@@ -316,6 +324,31 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
           $wrapper->field_github_content_type->set('pull_request');
         }
       }
+    }
+
+    if ($type == 'time_tracking') {
+      // Set relevant fields.
+      if ($project_node_id = $this->getNodeIdByTitleBundleAndRef('project', $project_name)) {
+        $wrapper->field_project->set($project_node_id);
+      }
+
+      $issue_ref = $this->getNodeIdByTitleBundleAndRef('github_issue', $issue_name, $project_node_id);
+
+      $wrapper->field_description->set("foo");
+      $wrapper->field_work_date->set(time());
+      $wrapper->field_employee->set(1);
+      $wrapper->field_day_type->set('regular');
+      $wrapper->field_track_hours->set(1);
+      $wrapper->field_issues_logs->set(array(
+        0 => array(
+          'field_github_issue' => array(LANGUAGE_NONE => array(0 => array('target_id' => $issue_ref))),
+          'field_issue_label' => array(LANGUAGE_NONE => array(0 => array('value' => 'Example label'))),
+          'field_time_spent' => array(LANGUAGE_NONE => array(0 => array('value' => 1))),
+          'field_issue_type' => array(LANGUAGE_NONE => array(0 => array('value' => 'dev'))),
+        ),
+      ));
+
+
     }
 
     try {
