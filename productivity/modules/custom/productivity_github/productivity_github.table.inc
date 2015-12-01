@@ -150,7 +150,7 @@ function productivity_time_tracking_issue_table_get_list() {
     ->fetchAll();
 
   if (empty($result)) {
-    return t('No projects found in the database');
+    return t('No projects found in the database.');
   }
 
   $projects = array();

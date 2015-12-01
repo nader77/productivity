@@ -280,7 +280,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Given I add one hour tracking for :issue_name in :project_name
    */
   public function iAddHourTrackingForIn($issue_name, $project_name) {
-    $this->iCreateNodeOfType('tracking for ' . $issue_name, 'time_tracking', $project_name, $issue_name);
+    $nid = $this->iCreateNodeOfType('tracking for ' . $issue_name, 'time_tracking', $project_name, $issue_name);
   }
 
   /**
@@ -338,7 +338,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       $wrapper->field_work_date->set(time());
       $wrapper->field_employee->set(1);
       $wrapper->field_day_type->set('regular');
-      $wrapper->field_track_hours->set(1);
+      $wrapper->field_track_hours->set(0);
       $wrapper->field_issues_logs->set(array(
         0 => array(
           'field_github_issue' => array(LANGUAGE_NONE => array(0 => array('target_id' => $issue_ref))),
@@ -347,12 +347,24 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
           'field_issue_type' => array(LANGUAGE_NONE => array(0 => array('value' => 'dev'))),
         ),
       ));
-
-
     }
 
     try {
       $wrapper->save();
+
+      if ($type == 'time_tracking') {
+        // Save again using the node form. Won't work otherwise.
+        $this->getSession()->visit($this->locatePath('node/' . $wrapper->getIdentifier() . '/edit'));
+        $element = $this->getSession()->getPage();
+        $submit = $element->find('css', 'input#edit-submit');
+
+        if (empty($submit)) {
+          throw new \Exception(sprintf("No submit button at %s", $this->getSession()->getCurrentUrl()));
+        }
+
+        $submit->click();
+      }
+
       return TRUE;
     }
     catch (\Exception $e) {
