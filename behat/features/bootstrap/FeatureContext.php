@@ -46,7 +46,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     if ($check_success) {
       // Wait for the dashboard's menu to load.
-      $this->iWaitForCssElement('.navbar-brand', 'appear');
+      $this->iWaitForCssElement('#admin-menu-wrapper', 'appear');
     }
   }
 
@@ -187,3 +187,4 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     sleep(10);
   }
 }
+

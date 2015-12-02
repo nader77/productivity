@@ -134,6 +134,7 @@ function productivity_project_logged_hours_notify($node) {
     '25',
   );
 
+
   $total_hours = $wrapper->field_hours->value();
   $total_days = $wrapper->field_days->value();
   $percentage_notified = $wrapper->field_percentage_notification->value();
