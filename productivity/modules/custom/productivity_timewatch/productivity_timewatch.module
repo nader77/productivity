@@ -55,6 +55,25 @@ function productivity_timewatch_user_presave(&$edit, $account, $category) {
 }
 
 /**
+ * Implements hook_node_presave().
+ *
+ * Deleting drupal's default end date (When saving the session through drupal's
+ * form, it sets the end date to be the same as the start date by default).
+ */
+function productivity_timewatch_node_presave($node) {
+  if ($node->type != 'work_session') {
+    return;
+  }
+
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $date = $wrapper->field_session_date->value();
+  // Delete the end date in case it's identical to the start date.
+  if ($date['value'] == $date['value2']) {
+    $wrapper->field_session_date->value2->set(NULL);
+  }
+}
+
+/**
  * Implements hook_permission().
  */
 function productivity_timewatch_permission() {
