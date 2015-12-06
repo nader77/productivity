@@ -68,6 +68,12 @@ angular.module('clientApp')
       label: 'Support'
     }];
 
+    // Set vacation object.
+    $scope.vacationTypes = {
+      fullday: 'Full day',
+      halfday: 'Half a day'
+    };
+
     $scope.month = $stateParams.month;
     $scope.monthString = monthNames[$scope.month-1];
     $scope.year = $stateParams.year;
@@ -104,6 +110,7 @@ angular.module('clientApp')
       $scope.data = {};
       $scope.data.period = 'hour';
       $scope.data.type = 'regular';
+      $scope.data.vacationType = 'fullday';
       $scope.data.length = 0;
       $scope.data.issues = [{
         issue: 0,
@@ -222,6 +229,11 @@ angular.module('clientApp')
     $scope.save = function(data) {
       // Indicate we are in the middle of creation.
       $scope.creating = true;
+
+      // Remove vacation type if event is not a vacation.
+      if (data.type != 'vacation') {
+        delete data.vacationType;
+      }
 
       // Convert date to timestamp,
       // Need to add the hour to make a more accurate events.

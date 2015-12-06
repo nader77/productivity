@@ -47,6 +47,10 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       'property' => 'field_track_hours',
     );
 
+    $public_fields['vacationType'] = array(
+      'property' => 'field_vacation_type',
+    );
+
     $public_fields['type'] = array(
       'property' => 'field_day_type',
     );
@@ -264,6 +268,10 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       }
 
       $wrapper->field_issues_logs->set($field_issues);
+    }
+
+    if ($request['type'] == 'vacation') {
+      $wrapper->field_vacation_type->set($request['vacationType']);
     }
 
     // Change status if it's sent with the request.

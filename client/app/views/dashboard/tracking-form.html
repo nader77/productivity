@@ -125,6 +125,17 @@
                 </div>
               </div>
 
+              <div class="vacation-day-wrapper" ng-if="data.type == 'vacation'">
+                <div class="form-group">
+                  <label class="col-md-2 col-xs-12 control-label" for="project">Vacation type</label>
+                  <div class="col-md-8 col-xs-10">
+                    <select id="vacation-type" ng-model="data.vacationType" name="vacation-type" ng-required="true" class="control-form"
+                            ng-options="key as value for (key, value) in vacationTypes">
+                    </select>
+                  </div>
+                </div>
+              </div>
+
               <!-- Total hours-->
               <div class="form-group" ng-if="data.type == 'regular'">
                 <label class="col-md-2 control-label">Total hours</label>
