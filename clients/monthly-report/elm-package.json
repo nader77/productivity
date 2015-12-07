@@ -1,6 +1,6 @@
 { "version": "0.0.1"
 , "summary": "Monthly employee working hours report."
-, "repository": "https://github.com/gizra/productivity"
+, "repository": "https://github.com/gizra/productivity.git"
 , "license": "BSD3"
 , "source-directories":
   [ "src/elm"
