@@ -128,8 +128,11 @@ view address model =
 
         project =
           case record.project of
-            Just project -> project
-            Nothing -> "-"
+            Just project ->
+              div [ class "ui pink horizontal label" ] [ text project ]
+
+            Nothing ->
+              div [] []
 
         length =
           case record.length of
@@ -140,7 +143,7 @@ view address model =
           case record.end of
             Just end ->
               if record.changeDate > end then
-                span [ class "edited" ]
+                div [ class "edited ui mini label" ]
                   [ span [] [ text "נערך לאחרונה ב- " ]
                   , span [ dir "ltr" ] [ text <| date record.changeDate ]
                   ]
@@ -152,9 +155,14 @@ view address model =
 
         source =
           case record.source of
-            "timewatch" -> "שעון נוכחות"
-            "manual" -> "דיווח מרחוק"
-            _ -> record.source
+            "timewatch" ->
+              div [ class "ui green horizontal label" ] [ text "שעון נוכחות" ]
+
+            "manual" ->
+              div [ class "ui blue horizontal label" ] [ text "דיווח מרחוק" ]
+
+            _ ->
+              div [] [ text record.source ]
 
       in
         tr [ ]
@@ -162,8 +170,8 @@ view address model =
           , td [] [ text <| hour record.start ]
           , td [] [ text end ]
           , td [] [ text length ]
-          , td [] [ text project ]
-          , td [] [ text source ]
+          , td [] [ project ]
+          , td [] [ source ]
           , td [] [ changed ]
           ]
   in
