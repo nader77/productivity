@@ -10,7 +10,7 @@
 function productivity_project_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-project-field_account'
+  // Exported field_instance: 'node-project-field_account'.
   $field_instances['node-project-field_account'] = array(
     'bundle' => 'project',
     'default_value' => NULL,
@@ -49,7 +49,7 @@ function productivity_project_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-project-field_date'
+  // Exported field_instance: 'node-project-field_date'.
   $field_instances['node-project-field_date'] = array(
     'bundle' => 'project',
     'deleted' => 0,
@@ -64,6 +64,7 @@ function productivity_project_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
         'weight' => 0,
@@ -102,7 +103,7 @@ function productivity_project_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-project-field_days'
+  // Exported field_instance: 'node-project-field_days'.
   $field_instances['node-project-field_days'] = array(
     'bundle' => 'project',
     'default_value' => NULL,
@@ -148,7 +149,7 @@ function productivity_project_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-project-field_github_repository_name'
+  // Exported field_instance: 'node-project-field_github_repository_name'.
   $field_instances['node-project-field_github_repository_name'] = array(
     'bundle' => 'project',
     'default_value' => NULL,
@@ -193,7 +194,7 @@ If your not sure use the third one.',
     ),
   );
 
-  // Exported field_instance: 'node-project-field_hours'
+  // Exported field_instance: 'node-project-field_hours'.
   $field_instances['node-project-field_hours'] = array(
     'bundle' => 'project',
     'default_value' => NULL,
@@ -239,7 +240,7 @@ If your not sure use the third one.',
     ),
   );
 
-  // Exported field_instance: 'node-project-field_percentage_notification'
+  // Exported field_instance: 'node-project-field_percentage_notification'.
   $field_instances['node-project-field_percentage_notification'] = array(
     'bundle' => 'project',
     'default_value' => array(
@@ -271,7 +272,7 @@ If your not sure use the third one.',
     ),
     'entity_type' => 'node',
     'field_name' => 'field_percentage_notification',
-    'label' => 'Percentage notification',
+    'label' => 'Percentage notified',
     'required' => 0,
     'settings' => array(
       'max' => 100,
@@ -289,7 +290,7 @@ If your not sure use the third one.',
     ),
   );
 
-  // Exported field_instance: 'node-project-field_rate'
+  // Exported field_instance: 'node-project-field_rate'.
   $field_instances['node-project-field_rate'] = array(
     'bundle' => 'project',
     'default_value' => NULL,
@@ -624,7 +625,7 @@ If your not sure use the third one.',
     ),
   );
 
-  // Exported field_instance: 'node-project-field_rate_type'
+  // Exported field_instance: 'node-project-field_rate_type'.
   $field_instances['node-project-field_rate_type'] = array(
     'bundle' => 'project',
     'default_value' => NULL,
@@ -665,7 +666,7 @@ global - fix amount.',
     ),
   );
 
-  // Exported field_instance: 'node-project-field_scope'
+  // Exported field_instance: 'node-project-field_scope'.
   $field_instances['node-project-field_scope'] = array(
     'bundle' => 'project',
     'default_value' => NULL,
@@ -713,7 +714,7 @@ global - fix amount.',
     ),
   );
 
-  // Exported field_instance: 'node-project-field_status'
+  // Exported field_instance: 'node-project-field_status'.
   $field_instances['node-project-field_status'] = array(
     'bundle' => 'project',
     'default_value' => array(
@@ -754,7 +755,7 @@ global - fix amount.',
     ),
   );
 
-  // Exported field_instance: 'node-project-field_type'
+  // Exported field_instance: 'node-project-field_type'.
   $field_instances['node-project-field_type'] = array(
     'bundle' => 'project',
     'default_value' => NULL,
@@ -802,7 +803,7 @@ If your not sure use the third one.');
   t('Account');
   t('Date');
   t('Github repository name');
-  t('Percentage notification');
+  t('Percentage notified');
   t('Rate');
   t('Rate type');
   t('Refer to the unit of the budget amount.
