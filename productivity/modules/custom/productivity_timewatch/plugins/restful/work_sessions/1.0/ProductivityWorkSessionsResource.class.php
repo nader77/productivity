@@ -25,6 +25,11 @@ class ProductivityWorkSessionsResource extends \ProductivityEntityBaseNode {
       'process_callbacks' => array('intval'),
     );
 
+    $public_fields['length'] = array(
+      'property' => 'field_session_date',
+      'process_callbacks' => array(array($this, 'sessionLength')),
+    );
+
     $public_fields['employee'] = array(
       'property' => 'field_employee',
       'sub_property' => 'name',
@@ -82,5 +87,20 @@ class ProductivityWorkSessionsResource extends \ProductivityEntityBaseNode {
    */
   protected function getSource($account) {
     return in_array('timewatch', $account->roles) ? 'timewatch' : 'manual';
+  }
+
+  /**
+   * Process callback;
+   * Calculate session length, if it eneded.
+   */
+  protected function sessionLength($date) {
+    return $date['value2'] ? $date['value2'] - $date['value'] : NULL;
+  }
+
+  /**
+   * Add total sessions length to the hateoas.
+   */
+  public function additionalHateoas() {
+    return array('total_sessions_length' => array_sum(array_column($this->getList(), 'length')));
   }
 }

@@ -34,6 +34,7 @@ type alias Record =
   , employee : String
   , start : Int
   , end : Maybe Int
+  , length : Maybe Int
   , project : Maybe String
   , changeDate : Int
   , source : Source
@@ -42,6 +43,7 @@ type alias Record =
 type alias Response =
   { records : List Record
   , count : Int
+  , totalSessionsLength : Int
   }
 
 initialModel : Model
@@ -51,6 +53,7 @@ initialModel =
   , response =
     { records = []
     , count = 0
+    , totalSessionsLength = 0
     }
   }
 
@@ -98,10 +101,13 @@ update action model =
             , Effects.none
             )
 
+
 -- VIEW
 view : Signal.Address Action -> Model -> Html
 view address model =
   let
+    totalLength = toString <| toFloat model.response.totalSessionsLength / 3600
+
     row : Record -> Html
     row record =
       let
@@ -125,9 +131,9 @@ view address model =
             Just project -> project
             Nothing -> "-"
 
-        total =
-          case record.end of
-            Just end -> toString <| toFloat (end - record.start) / 3600
+        length =
+          case record.length of
+            Just length -> toString <| toFloat length / 3600
             Nothing -> "-"
 
         changed =
@@ -146,21 +152,16 @@ view address model =
 
         source =
           case record.source of
-            "timewatch" ->
-              "שעון נוכחות"
-
-            "manual" ->
-              "דיווח מרחוק"
-
-            _ ->
-              record.source
+            "timewatch" -> "שעון נוכחות"
+            "manual" -> "דיווח מרחוק"
+            _ -> record.source
 
       in
         tr [ ]
           [ td [] [ text <| day record.start ]
           , td [] [ text <| hour record.start ]
           , td [] [ text end ]
-          , td [] [ text total ]
+          , td [] [ text length ]
           , td [] [ text project ]
           , td [] [ text source ]
           , td [] [ changed ]
@@ -184,7 +185,7 @@ view address model =
           [ tr []
             [ th [] [ text <| (toString <| List.length model.response.records) ++ " ימים" ]
             , th [ colspan 2 ] []
-            , th [] [ text "x שעות"]
+            , th [] [ text <| totalLength ++ " שעות"]
             , th [ colspan 3 ] []
             ]
 
@@ -210,19 +211,21 @@ getJson url accessToken =
 
 parseRecords : Json.Decode.Decoder Response
 parseRecords =
-  Json.Decode.object2 Response
+  Json.Decode.object3 Response
     ( Json.Decode.at ["data"]
     <| Json.Decode.list
-    <| Json.Decode.object7 Record
+    <| Json.Decode.object8 Record
       ("id" := Json.Decode.int)
       ("employee" := Json.Decode.string)
       ("start" := Json.Decode.int)
       (Json.Decode.maybe ("end" := Json.Decode.int))
+      (Json.Decode.maybe ("length" := Json.Decode.int))
       (Json.Decode.maybe (Json.Decode.at["project"] <| ("label" := Json.Decode.string)))
       ("change_date" := Json.Decode.int)
       ("source" := Json.Decode.string)
     )
   ("count" := Json.Decode.int)
+  ("total_sessions_length" := Json.Decode.int)
 
 
 
