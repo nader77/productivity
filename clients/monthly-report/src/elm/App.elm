@@ -6,7 +6,7 @@ import Date.Format exposing (format)
 import Debug
 import Effects exposing (Effects)
 import Html exposing (..)
-import Html.Attributes exposing (class)
+import Html.Attributes exposing (..)
 import Html.Events exposing (onClick)
 import Http
 import Json.Decode exposing ((:=))
@@ -27,12 +27,16 @@ type Status =
   | Fetched
   | HttpError Http.Error
 
+type alias Source = String
+
 type alias Record =
   { id : Int
   , employee : String
   , start : Int
   , end : Maybe Int
   , project : Maybe String
+  , changeDate : Int
+  , source : Source
   }
 
 type alias Response =
@@ -109,6 +113,8 @@ view address model =
 
         hour time = timestampFormat time "%H:%M"
 
+        date time = timestampFormat time "%d/%m/%Y %H:%M"
+
         end =
           case record.end of
             Just end -> hour end
@@ -124,13 +130,40 @@ view address model =
             Just end -> toString <| toFloat (end - record.start) / 3600
             Nothing -> "-"
 
+        changed =
+          case record.end of
+            Just end ->
+              if record.changeDate > end then
+                span [ class "edited" ]
+                  [ span [] [ text "נערך לאחרונה ב- " ]
+                  , span [ dir "ltr" ] [ text <| date record.changeDate ]
+                  ]
+              else
+                span [] []
+
+            Nothing ->
+              span [] []
+
+        source =
+          case record.source of
+            "timewatch" ->
+              "שעון נוכחות"
+
+            "manual" ->
+              "דיווח מרחוק"
+
+            _ ->
+              record.source
+
       in
         tr [ ]
           [ td [] [ text <| day record.start ]
           , td [] [ text <| hour record.start ]
-          , td [] [ text <| end ]
-          , td [] [ text <| project ]
-          , td [] [ text <| total ]
+          , td [] [ text end ]
+          , td [] [ text total ]
+          , td [] [ text project ]
+          , td [] [ text source ]
+          , td [] [ changed ]
           ]
   in
     div []
@@ -140,11 +173,22 @@ view address model =
             [ th [] [ text "תאריך" ]
             , th [] [ text "כניסה" ]
             , th [] [ text "יציאה" ]
-            , th [] [ text "פרויקט" ]
             , th [] [ text "שעות" ]
+            , th [] [ text "פרויקט" ]
+            , th [] [ text "מקור דיווח" ]
+            , th [] [ text "הערות" ]
             ]
           ]
         , tbody [] ( List.map row model.response.records )
+        , tfoot []
+          [ tr []
+            [ th [] [ text <| (toString <| List.length model.response.records) ++ " ימים" ]
+            , th [ colspan 2 ] []
+            , th [] [ text "x שעות"]
+            , th [ colspan 3 ] []
+            ]
+
+          ]
         ]
       ]
 
@@ -158,23 +202,25 @@ getJson url accessToken =
     , url = url
     , body = Http.empty
     }
-    |> Http.fromJson decodeResponse
+    |> Http.fromJson parseRecords
     |> Task.toResult
     |> Task.map UpdateDataFromServer
     |> Effects.task
 
 
-decodeResponse : Json.Decode.Decoder Response
-decodeResponse =
+parseRecords : Json.Decode.Decoder Response
+parseRecords =
   Json.Decode.object2 Response
     ( Json.Decode.at ["data"]
     <| Json.Decode.list
-    <| Json.Decode.object5 Record
+    <| Json.Decode.object7 Record
       ("id" := Json.Decode.int)
       ("employee" := Json.Decode.string)
       ("start" := Json.Decode.int)
       (Json.Decode.maybe ("end" := Json.Decode.int))
       (Json.Decode.maybe (Json.Decode.at["project"] <| ("label" := Json.Decode.string)))
+      ("change_date" := Json.Decode.int)
+      ("source" := Json.Decode.string)
     )
   ("count" := Json.Decode.int)
 

@@ -44,6 +44,11 @@ class ProductivityWorkSessionsResource extends \ProductivityEntityBaseNode {
       'process_callbacks' => array('intval'),
     );
 
+    $public_fields['source'] = array(
+      'property' => 'author',
+      'process_callbacks' => array(array($this, 'getSource')),
+    );
+
     return $public_fields;
   }
 
@@ -69,5 +74,13 @@ class ProductivityWorkSessionsResource extends \ProductivityEntityBaseNode {
       ->fieldCondition('field_session_date', 'value', $end_time, '<=');
 
     return $query;
+  }
+
+  /**
+   * Process callback;
+   * Whether the entry was reported by the timewatch or manually by the user.
+   */
+  protected function getSource($account) {
+    return in_array('timewatch', $account->roles) ? 'timewatch' : 'manual';
   }
 }
