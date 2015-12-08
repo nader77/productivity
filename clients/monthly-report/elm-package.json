@@ -1,4 +1,4 @@
-{ "version": "0.0.1"
+{ "version": "0.1.0"
 , "summary": "Monthly employee working hours report."
 , "repository": "https://github.com/gizra/productivity.git"
 , "license": "BSD3"
@@ -15,5 +15,5 @@
   , "evancz/start-app": "2.0.2 <= v < 3.0.0"
   , "mgold/elm-date-format": "1.0.2 <= v < 2.0.0"
   }
-, "elm-version": "0.15.1 <= v < 0.17.0"
+, "elm-version": "0.16.0 <= v < 0.17.0"
 }

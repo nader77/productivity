@@ -7,11 +7,10 @@ import Debug
 import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Html.Events exposing (onClick)
 import Http
 import Json.Decode exposing ((:=))
-import String
 import Task
+import Utils.Http exposing (getErrorMessageFromHttpResponse)
 
 
 -- MODEL
@@ -61,20 +60,20 @@ initialModel =
 init : (Model, Effects Action)
 init =
   ( initialModel
-  , Task.succeed Reload |> Effects.task
+  , Task.succeed GetData |> Effects.task
   )
 
 
 -- UPDATE
 type Action =
-  Reload
+  GetData
   | UpdateDataFromServer (Result Http.Error Response)
 
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
-    Reload ->
+    GetData ->
       let
         url = Config.backendUrl ++ model.path ++ "?sort=start&filter[employee]=10&month=12&year=2015"
       in
@@ -196,7 +195,6 @@ view address model =
             , th [] [ text <| totalLength ++ " שעות"]
             , th [ colspan 3 ] []
             ]
-
           ]
         ]
       ]
@@ -234,20 +232,3 @@ parseRecords =
     )
   ("count" := Json.Decode.int)
   ("total_sessions_length" := Json.Decode.int)
-
-
-
-getErrorMessageFromHttpResponse : Http.Error -> String
-getErrorMessageFromHttpResponse error =
-  case error of
-    Http.Timeout ->
-      "Connection has timed out"
-
-    Http.BadResponse code message ->
-      message
-
-    Http.NetworkError ->
-      "A network error has occured"
-
-    Http.UnexpectedPayload message ->
-      "Unexpected response: " ++ message
