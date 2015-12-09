@@ -92,11 +92,12 @@ function productivity_timewatch_permission() {
 
 /**
  * Implements hook_form_FORM_ID_alter().
+ *
+ * Filter inactive employees from the timewatch form.
  */
 function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form_state) {
   // Hide the title.
   $form['title']['#access'] = FALSE;
-
 
   // Display only active employees.
   $uids = array();
