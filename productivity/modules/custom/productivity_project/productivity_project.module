@@ -300,3 +300,17 @@ function productivity_project_repository_autocomplete_invalidate() {
 function productivity_project_repository_autocomplete_need_invalidate() {
   return REQUEST_TIME - variable_get('productivity_project_repositories_defined') >= 86400;
 }
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Order the projects select alphabetically.
+ */
+function productivity_project_form_alter(&$form, &$form_state, $form_id) {
+  if (!empty($form['field_project'])) {
+    // Remove the "none" option, order the projects, and return the none.
+    $none_option = array_shift($form['field_project'][LANGUAGE_NONE]['#options']);
+    natcasesort($form['field_project'][LANGUAGE_NONE]['#options']);
+    array_unshift($form['field_project'][LANGUAGE_NONE]['#options'], $none_option);
+  }
+}
