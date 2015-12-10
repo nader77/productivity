@@ -71,6 +71,11 @@ function productivity_timewatch_node_presave($node) {
   if ($date['value'] == $date['value2']) {
     $wrapper->field_session_date->value2->set(NULL);
   }
+
+  // Set title.
+  $employee = $wrapper->field_employee->label();
+  $day = date('d/m/y', $date['value']);
+  $node->title = format_string('@date - @user', array('@date' => $day, '@user' => $employee));
 }
 
 /**
@@ -83,4 +88,44 @@ function productivity_timewatch_permission() {
       'description' => t('Start or end a work session.'),
     ),
   );
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * Filter inactive employees from the timewatch form.
+ */
+function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form_state) {
+  // Hide the title.
+  $form['title']['#access'] = FALSE;
+
+  // Display only active employees.
+  $uids = array();
+  $wrapper = entity_metadata_wrapper('node', $form['#node']);
+
+  // Get all active employees.
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'user')
+    ->propertyCondition('status', 1)
+    ->fieldCondition('field_employment_status', 'value', 'employed')
+    ->propertyOrderBy('name')
+    ->execute();
+  if (!empty($result['user'])) {
+    $uids = array_keys($result['user']);
+  }
+
+  // Make sure the selected employee is in the list, even if they're not active.
+  if ($wrapper->field_employee->value()) {
+    $uid = $wrapper->field_employee->getIdentifier();
+    if (!in_array($uid, $uids)) {
+      array_unshift($uids, $uid);
+    }
+  }
+  // Build the options list.
+  $options = array('_none' => '- ' . t('Select employee') . ' -');
+  foreach(user_load_multiple($uids) as $account) {
+    $options[$account->uid] = $account->name;
+  }
+  $form['field_employee'][LANGUAGE_NONE]['#options'] = $options;
 }

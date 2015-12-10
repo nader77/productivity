@@ -10,14 +10,13 @@
 function productivity_project_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_account'
+  // Exported field_base: 'field_account'.
   $field_bases['field_account'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_account',
-    'foreign keys' => array(),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',
@@ -46,14 +45,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
-  // Exported field_base: 'field_date'
+  // Exported field_base: 'field_date'.
   $field_bases['field_date'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_date',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'date',
@@ -76,14 +74,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_days'
+  // Exported field_base: 'field_days'.
   $field_bases['field_days'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_days',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -96,21 +93,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'number_decimal',
   );
 
-  // Exported field_base: 'field_github_repository_name'
+  // Exported field_base: 'field_github_repository_name'.
   $field_bases['field_github_repository_name'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_github_repository_name',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -125,14 +114,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_hours'
+  // Exported field_base: 'field_hours'.
   $field_bases['field_hours'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_hours',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -145,14 +133,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'number_decimal',
   );
 
-  // Exported field_base: 'field_percentage_notification'
+  // Exported field_base: 'field_percentage_notification'.
   $field_bases['field_percentage_notification'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_percentage_notification',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -163,14 +150,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'number_float',
   );
 
-  // Exported field_base: 'field_rate'
+  // Exported field_base: 'field_rate'.
   $field_bases['field_rate'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_rate',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'money',
@@ -184,14 +170,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'money',
   );
 
-  // Exported field_base: 'field_rate_type'
+  // Exported field_base: 'field_rate_type'.
   $field_bases['field_rate_type'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_rate_type',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -212,14 +197,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_scope'
+  // Exported field_base: 'field_scope'.
   $field_bases['field_scope'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_scope',
-    'foreign keys' => array(),
     'indexes' => array(
       'interval' => array(
         0 => 'interval',
@@ -235,14 +219,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'interval',
   );
 
-  // Exported field_base: 'field_status'
+  // Exported field_base: 'field_status'.
   $field_bases['field_status'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_status',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -262,14 +245,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_type'
+  // Exported field_base: 'field_type'.
   $field_bases['field_type'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_type',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
