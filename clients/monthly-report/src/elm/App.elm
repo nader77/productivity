@@ -1,6 +1,6 @@
 module App where
 
-import Config
+import Config exposing (backendUrl)
 import Date exposing (..)
 import Date.Format exposing (format)
 import Debug
@@ -18,6 +18,9 @@ type alias Model =
   { path : String
   , status : Status
   , response : Response
+  , employee : Employee
+  , month : Int
+  , year : Int
   }
 
 type Status =
@@ -45,6 +48,11 @@ type alias Response =
   , totalSessionsLength : Int
   }
 
+type alias Employee =
+  { id : Int
+  , name : String
+  }
+
 initialModel : Model
 initialModel =
   { path = "api/v1.0/work-sessions"
@@ -54,6 +62,12 @@ initialModel =
     , count = 0
     , totalSessionsLength = 0
     }
+  , employee =
+    { id = 10
+    , name = "aya"
+    }
+  , month = 12
+  , year = 2015
   }
 
 
@@ -75,7 +89,11 @@ update action model =
   case action of
     GetData ->
       let
-        url = Config.backendUrl ++ model.path ++ "?sort=start&filter[employee]=10&month=12&year=2015"
+        sort = "?sort=start"
+        employee = "&filter[employee]=" ++ toString model.employee.id
+        month = "&month=" ++ toString model.month
+        year = "&year=" ++ toString model.year
+        url = backendUrl ++ model.path ++ sort ++ employee ++ month ++ year
       in
         ( { model | status = Fetching }
         , getJson url Config.accessToken
@@ -105,7 +123,10 @@ update action model =
 view : Signal.Address Action -> Model -> Html
 view address model =
   let
-    totalLength = toString <| toFloat model.response.totalSessionsLength / 3600
+    totalLength = toString <| roundDecimal 2 <| toFloat model.response.totalSessionsLength / 3600
+
+    roundDecimal decimalPlaces f =
+      toFloat (round (f * 10 ^ decimalPlaces)) / 10 ^ decimalPlaces
 
     row : Record -> Html
     row record =
@@ -135,7 +156,7 @@ view address model =
 
         length =
           case record.length of
-            Just length -> toString <| toFloat length / 3600
+            Just length -> toString <| roundDecimal 2 (toFloat length / 3600)
             Nothing -> "-"
 
         changed =
