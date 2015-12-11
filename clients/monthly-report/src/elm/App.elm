@@ -123,10 +123,10 @@ update action model =
 view : Signal.Address Action -> Model -> Html
 view address model =
   let
-    totalLength = toString <| roundDecimal 2 <| toFloat model.response.totalSessionsLength / 3600
+    totalLength = toString <| roundDecimal 1 <| toFloat model.response.totalSessionsLength / 3600
 
     roundDecimal decimalPlaces f =
-      toFloat (round (f * 10 ^ decimalPlaces)) / 10 ^ decimalPlaces
+      toFloat (round <| f * 10 ^ decimalPlaces) / 10 ^ decimalPlaces
 
     row : Record -> Html
     row record =
@@ -156,7 +156,7 @@ view address model =
 
         length =
           case record.length of
-            Just length -> toString <| roundDecimal 2 (toFloat length / 3600)
+            Just length -> toString <| roundDecimal 1 <| toFloat length / 3600
             Nothing -> "-"
 
         changed =
