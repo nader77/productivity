@@ -99,7 +99,7 @@ function productivity_project_field_default_field_instances() {
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 3,
+      'weight' => 4,
     ),
   );
 
@@ -145,7 +145,7 @@ function productivity_project_field_default_field_instances() {
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 11,
+      'weight' => 12,
     ),
   );
 
@@ -190,7 +190,7 @@ If your not sure use the third one.',
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 9,
+      'weight' => 10,
     ),
   );
 
@@ -236,7 +236,7 @@ If your not sure use the third one.',
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 10,
+      'weight' => 11,
     ),
   );
 
@@ -286,7 +286,7 @@ If your not sure use the third one.',
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 12,
+      'weight' => 13,
     ),
   );
 
@@ -621,7 +621,7 @@ If your not sure use the third one.',
         'decimals_display_mode' => 'field',
       ),
       'type' => 'money_widget',
-      'weight' => 6,
+      'weight' => 7,
     ),
   );
 
@@ -662,7 +662,7 @@ global - fix amount.',
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 5,
+      'weight' => 6,
     ),
   );
 
@@ -710,7 +710,7 @@ global - fix amount.',
       'module' => 'interval',
       'settings' => array(),
       'type' => 'interval_default',
-      'weight' => 7,
+      'weight' => 8,
     ),
   );
 
@@ -751,7 +751,50 @@ global - fix amount.',
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 8,
+      'weight' => 9,
+    ),
+  );
+
+  // Exported field_instance: 'node-project-field_team_leads'.
+  $field_instances['node-project-field_team_leads'] = array(
+    'bundle' => 'project',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 13,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_team_leads',
+    'label' => 'Team leads',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete_tags',
+      'weight' => 3,
     ),
   );
 
@@ -788,7 +831,7 @@ global - fix amount.',
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 4,
+      'weight' => 5,
     ),
   );
 
@@ -814,6 +857,7 @@ global - fix amount.');
   t('Scope');
   t('Start and end date of project, in case of retainer or hourly without end date, just add a start date.');
   t('Status');
+  t('Team leads');
   t('Total days');
   t('Total hours');
   t('Type');
