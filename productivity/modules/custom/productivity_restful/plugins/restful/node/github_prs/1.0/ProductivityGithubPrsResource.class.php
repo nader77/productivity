@@ -50,7 +50,7 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
     $query = parent::getQueryForList();
 
     // Filter day.
-    $this->setPushDateTimeSpan($query, '+1 day');
+    $this->setPushDateTime($query);
 
     // Filter employee.
     if (!$account = user_load_by_name($request['employee'])) {
@@ -71,16 +71,16 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
    *
    * @param $query
    *   An entity field query object to add the work date constraint to.
-   * @param $interval
-   *   The span length. E.g. "+1 day" or "+1 month".
    *
    * @return array
    *   A start timestamp and an end timestamp.
    */
-  protected function setPushDateTimeSpan($query, $interval) {
-    list($start_time, $end_time) = $this->getTimeSpan($interval);
+  protected function setPushDateTime($query) {
+    $request = $this->getRequest();
 
-    $query->fieldCondition('field_push_date', 'value', $start_time, '>=');
-    $query->fieldCondition('field_push_date', 'value', $end_time, '<');
+    $day = isset($request['day']) ? $request['day'] : '01';
+    $work_date =  $request['year'] . '-' . $request['month'] . '-' . $day . ' 00:00:00';
+
+    $query->fieldCondition('field_push_date', 'value', $work_date);
   }
 }
