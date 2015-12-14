@@ -157,6 +157,33 @@ function productivity_project_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_rate',
+    'indexes' => array(
+      'field_issue_type_value' => array(
+        0 => 'field_issue_type_value',
+      ),
+      'id' => array(
+        0 => 'id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'multifield',
+    'settings' => array(
+      'entity_translation_sync' => array(
+        0 => 'id',
+      ),
+      'hide_blank_items' => 1,
+    ),
+    'translatable' => 0,
+    'type' => 'multifield',
+  );
+
+  // Exported field_base: 'field_rate_amount'.
+  $field_bases['field_rate_amount'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_rate_amount',
     'indexes' => array(),
     'locked' => 0,
     'module' => 'money',
