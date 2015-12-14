@@ -130,8 +130,17 @@
                   <label class="col-md-2 col-xs-12 control-label" for="project">Vacation type</label>
                   <div class="col-md-8 col-xs-10">
                     <select id="vacation-type" ng-model="data.vacationType" name="vacation-type" ng-required="true" class="control-form"
-                            ng-options="key as value for (key, value) in vacationTypes">
+                            ng-options="key as value for (key, value) in vacationTypes" ng-change="toggleStartTime()">
                     </select>
+                  </div>
+                </div>
+
+                <div class="start-time" ng-if="displayStartTime">
+                  <div class="form-group">
+                    <label class="col-md-2 col-xs-12 control-label" for="project">Start time</label>
+                    <div class="col-md-8 col-xs-10">
+                      <input id="start-time" ng-model="data.startTime" type="time" required />
+                    </div>
                   </div>
                 </div>
               </div>

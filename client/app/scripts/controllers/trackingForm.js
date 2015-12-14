@@ -389,7 +389,7 @@ angular.module('clientApp')
     $scope.changeProject = function() {
       $scope.data.issues = [];
       $scope.getPRs();
-    }
+    };
 
     /**
      * Fetch project's github PRs for current date.
@@ -428,6 +428,18 @@ angular.module('clientApp')
           }
         });
     };
+
+
+    /**
+     * Determine whether to display the start time input.
+     * Currently only when selecting half vacation day.
+     */
+    $scope.toggleStartTime = function() {
+      $scope.displayStartTime = $scope.data.vacationType != 'fullday';
+    };
+
+    // Init the start time input.
+    $scope.toggleStartTime();
   });
 
 
