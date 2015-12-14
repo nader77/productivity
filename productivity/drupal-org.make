@@ -143,3 +143,4 @@ libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/releases/do
 ; Themes
 projects[bootstrap][subdir] = "contrib"
 projects[bootstrap][version] = "3.x-dev"
+projects[bootstrap][type] = "theme"
