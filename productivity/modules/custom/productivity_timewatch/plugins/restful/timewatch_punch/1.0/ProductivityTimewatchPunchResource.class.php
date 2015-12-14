@@ -45,7 +45,6 @@ class ProductivityTimewatchPunchResource extends \ProductivityWorkSessionsResour
     if (!$uid) {
       throw new \RestfulBadRequestException('Wrong pincode');
     }
-    $employee_account = user_load($uid);
 
     // Find an existing session with no end date.
     $query = new EntityFieldQuery();
@@ -64,7 +63,6 @@ class ProductivityTimewatchPunchResource extends \ProductivityWorkSessionsResour
         'type' => 'work_session',
         'uid' => $account->uid,
         'status' => NODE_PUBLISHED,
-        'title' => format_string('@date - @user', array('@date' => date('d/m/y'), '@user' => $employee_account->name)),
       );
       $node = entity_create('node', $values);
       $wrapper = entity_metadata_wrapper('node', $node);
