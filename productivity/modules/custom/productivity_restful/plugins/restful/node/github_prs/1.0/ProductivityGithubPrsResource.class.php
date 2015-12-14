@@ -66,21 +66,20 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
   }
 
   /**
-   * Limit the work date to a certain time span, based on the day or month given
-   * in the request.
+   * Limit the push date to a certain day.
    *
    * @param $query
    *   An entity field query object to add the work date constraint to.
-   *
-   * @return array
-   *   A start timestamp and an end timestamp.
    */
   protected function setPushDateTime($query) {
     $request = $this->getRequest();
 
-    $day = isset($request['day']) ? $request['day'] : '01';
-    $work_date =  $request['year'] . '-' . $request['month'] . '-' . $day . ' 00:00:00';
+    // Set the work day from 00:00:00 to 23:59:59 to get all PRs in between.
+    $work_day = array(
+      $request['year'] . '-' . $request['month'] . '-' . $request['day'] . ' 00:00:00',
+      $request['year'] . '-' . $request['month'] . '-' . $request['day'] . ' 23:59:59',
+    );
 
-    $query->fieldCondition('field_push_date', 'value', $work_date);
+    $query->fieldCondition('field_push_date', 'value', $work_day, 'BETWEEN');
   }
 }
