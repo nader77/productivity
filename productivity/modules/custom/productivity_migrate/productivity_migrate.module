@@ -20,6 +20,7 @@ function productivity_migrate_migrate_api() {
     'ProductivityMigrateUser',
     'ProductivityMigrateTimewatchUser',
     'ProductivityMigrateTracker',
+    'ProductivityMigrateTrackingsToWorkSessions',
     'ProductivityMigratePayment',
   );
 
