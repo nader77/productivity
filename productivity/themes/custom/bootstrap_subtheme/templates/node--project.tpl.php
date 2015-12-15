@@ -130,11 +130,11 @@ field_days
         <tbody>
         <?php foreach($table_content as $value): ?>
           <tr>
-            <td><?php print strtoupper($value['field_issue_type']) ?></td>
-            <td><?php print $value['field_scope_time'] ?></td>
-            <td><?php print number_format($value['field_type_rate'], 2) . ' $' ?></td>
-            <td><?php print number_format($value['field_hours'], 0) . ' H' ?></td>
-            <td><?php print number_format($value['field_days'], 0) . ' D' ?></td>
+            <td><?php print strtoupper($value['field_issue_type']); ?></td>
+            <td><?php print $value['field_scope_time']; ?></td>
+            <td><?php print t('@type_rate $', array('@type_rate' => number_format($value['field_type_rate'], 2))); ?></td>
+            <td><?php print t('@type_hours H', array('@type_hours' => number_format($value['field_hours'], 0))); ?></td>
+            <td><?php print t('@type_days D', array('@type_days' => number_format($value['field_hours'], 0))); ?></td>
           </tr>
         <?php endforeach; ?>
         </tbody>
