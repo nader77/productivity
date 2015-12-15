@@ -45,6 +45,31 @@ function productivity_project_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
+  // Exported field_base: 'field_allow_session_reference'.
+  $field_bases['field_allow_session_reference'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_allow_session_reference',
+    'indexes' => array(
+      'value' => array(
+        0 => 'value',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'list',
+    'settings' => array(
+      'allowed_values' => array(
+        0 => '',
+        1 => '',
+      ),
+      'allowed_values_function' => '',
+    ),
+    'translatable' => 0,
+    'type' => 'list_boolean',
+  );
+
   // Exported field_base: 'field_date'.
   $field_bases['field_date'] = array(
     'active' => 1,
@@ -86,7 +111,7 @@ function productivity_project_field_default_field_bases() {
     'module' => 'number',
     'settings' => array(
       'decimal_separator' => '.',
-      'precision' => 10,
+      'precision' => 11,
       'scale' => 2,
     ),
     'translatable' => 0,
@@ -126,7 +151,7 @@ function productivity_project_field_default_field_bases() {
     'module' => 'number',
     'settings' => array(
       'decimal_separator' => '.',
-      'precision' => 10,
+      'precision' => 11,
       'scale' => 2,
     ),
     'translatable' => 0,
@@ -157,39 +182,6 @@ function productivity_project_field_default_field_bases() {
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_rate',
-    'indexes' => array(
-      'field_issue_type_value' => array(
-        0 => 'field_issue_type_value',
-      ),
-      'field_scope_interval' => array(
-        0 => 'field_scope_interval',
-      ),
-      'field_scope_period' => array(
-        0 => 'field_scope_period',
-      ),
-      'id' => array(
-        0 => 'id',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'multifield',
-    'settings' => array(
-      'entity_translation_sync' => array(
-        0 => 'id',
-      ),
-      'hide_blank_items' => 1,
-    ),
-    'translatable' => 0,
-    'type' => 'multifield',
-  );
-
-  // Exported field_base: 'field_rate_amount'.
-  $field_bases['field_rate_amount'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_rate_amount',
     'indexes' => array(),
     'locked' => 0,
     'module' => 'money',
@@ -278,6 +270,39 @@ function productivity_project_field_default_field_bases() {
     'type' => 'list_text',
   );
 
+  // Exported field_base: 'field_table_rate'.
+  $field_bases['field_table_rate'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_table_rate',
+    'indexes' => array(
+      'field_issue_type_value' => array(
+        0 => 'field_issue_type_value',
+      ),
+      'field_scope_interval' => array(
+        0 => 'field_scope_interval',
+      ),
+      'field_scope_period' => array(
+        0 => 'field_scope_period',
+      ),
+      'id' => array(
+        0 => 'id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'multifield',
+    'settings' => array(
+      'entity_translation_sync' => array(
+        0 => 'id',
+      ),
+      'hide_blank_items' => 1,
+    ),
+    'translatable' => 0,
+    'type' => 'multifield',
+  );
+
   // Exported field_base: 'field_team_leads'.
   $field_bases['field_team_leads'] = array(
     'active' => 1,
@@ -334,6 +359,26 @@ function productivity_project_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'list_text',
+  );
+
+  // Exported field_base: 'field_type_rate'.
+  $field_bases['field_type_rate'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_type_rate',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'money',
+    'settings' => array(
+      'max' => 99999999.99,
+      'min' => -99999999.99,
+      'precision' => 10,
+      'scale' => 2,
+    ),
+    'translatable' => 0,
+    'type' => 'money',
   );
 
   return $field_bases;
