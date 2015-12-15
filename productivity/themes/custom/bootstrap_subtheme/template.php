@@ -16,6 +16,12 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
     $preprocess_function($variables);
   }
   if ($node->type == 'project' && node_access('update', $node)) {
+    $tableRate = $node->field_table_rate['und']['0'];
+    $variables['field_days'] = $tableRate['field_days']['und']['0']['value'];
+    $variables['field_hours'] = $tableRate['field_hours']['und']['0']['value'];
+    $variables['field_issue_type'] = $tableRate['field_issue_type']['und']['0']['value'];
+    $variables['field_scope_time'] = $tableRate['field_scope']['und']['0']['interval'];
+    $variables['field_type_rate'] = $tableRate['field_type_rate']['und']['0']['amount'];
     $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), url('recalculate-project-time/' . $node->nid, array('absolute' => TRUE)));
   }
 }

@@ -81,16 +81,11 @@
  */
 ?>
 <div class="row">
-  <div class="col-lg-3 col-sm-6 col-xs-12">
+  <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-hand-o-up red-bg"></i>
-      <span class="headline">Total Hours</span>
+      <span class="headline"><?php print t('Total Hours') ?></span>
       <span class="value"><?php print render($content['field_hours']);?></span>
-    </div>
-    <div class="main-box infographic-box">
-      <i class="fa fa-money yellow-bg"></i>
-      <span class="headline">Total Scope</span>
-      <span class="value"><?php print render($content['field_scope']);?></span>
     </div>
   </div>
 <!--
@@ -104,28 +99,53 @@ field_status
 field_github_repository_name
 field_days
 -->
-  <div class="col-lg-3 col-sm-6 col-xs-12">
+  <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-shopping-cart emerald-bg"></i>
-      <span class="headline">Type</span>
+      <span class="headline"><?php print t('Type') ?></span>
       <span class="value"><?php print render($content['field_type']);?></span>
     </div>
   </div>
-  <div class="col-lg-3 col-sm-6 col-xs-12">
-    <div class="main-box infographic-box">
-      <i class="fa fa-money green-bg"></i>
-      <span class="headline">Rate</span>
-      <span class="value"><?php print render($content['field_rate']);?></span>
-    </div>
-  </div>
-  <div class="col-lg-3 col-sm-6 col-xs-12">
+  <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-money yellow-bg"></i>
-      <span class="headline">Days</span>
+      <span class="headline"><?php print t('Days') ?></span>
       <span class="value"><?php print render($content['field_days']);?></span>
     </div>
   </div>
 </div
+
+<div class=" table-responsive">
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th><?php print t('Type') ?></th>
+        <th><?php print t('Scope') ?></th>
+        <th><?php print t('Rate') ?></th>
+        <th><?php print t('Houes') ?></th>
+        <th><?php print t('Days') ?></th>
+      </tr>
+    </thead>
+    <tfoot>
+      <tr>
+        <td><?php print t('Sum') ?></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tfoot>
+    <tbody>
+      <tr>
+        <td><?php print $field_issue_type ?></td>
+        <td><?php print $field_scope_time ?></td>
+        <td><?php print number_format($field_type_rate, 2) . ' $' ?></td>
+        <td><?php print number_format($field_hours, 0) . ' H' ?></td>
+        <td><?php print number_format($field_days, 0) . ' D' ?></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 
   <?php print render($content['links']); ?>
   <?php print render($content);?>
