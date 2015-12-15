@@ -122,27 +122,20 @@ field_days
         <th><?php print t('Type') ?></th>
         <th><?php print t('Scope') ?></th>
         <th><?php print t('Rate') ?></th>
-        <th><?php print t('Houes') ?></th>
+        <th><?php print t('Hours') ?></th>
         <th><?php print t('Days') ?></th>
       </tr>
     </thead>
-    <tfoot>
-      <tr>
-        <td><?php print t('Sum') ?></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    </tfoot>
     <tbody>
-      <tr>
-        <td><?php print $field_issue_type ?></td>
-        <td><?php print $field_scope_time ?></td>
-        <td><?php print number_format($field_type_rate, 2) . ' $' ?></td>
-        <td><?php print number_format($field_hours, 0) . ' H' ?></td>
-        <td><?php print number_format($field_days, 0) . ' D' ?></td>
-      </tr>
+      <?php foreach($table_content as $value): ?>
+        <tr>
+          <td><?php print $value['field_issue_type'] ?></td>
+          <td><?php print $value['field_scope_time'] ?></td>
+          <td><?php print number_format($value['field_type_rate'], 2) . ' $' ?></td>
+          <td><?php print number_format($value['field_hours'], 0) . ' H' ?></td>
+          <td><?php print number_format($value['field_days'], 0) . ' D' ?></td>
+        </tr>
+      <?php endforeach; ?>
     </tbody>
   </table>
 </div>

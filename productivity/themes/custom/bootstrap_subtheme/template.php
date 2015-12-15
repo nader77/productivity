@@ -15,13 +15,20 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
   if (function_exists($preprocess_function)) {
     $preprocess_function($variables);
   }
+
   if ($node->type == 'project' && node_access('update', $node)) {
-    $tableRate = $node->field_table_rate['und']['0'];
-    $variables['field_days'] = $tableRate['field_days']['und']['0']['value'];
-    $variables['field_hours'] = $tableRate['field_hours']['und']['0']['value'];
-    $variables['field_issue_type'] = $tableRate['field_issue_type']['und']['0']['value'];
-    $variables['field_scope_time'] = $tableRate['field_scope']['und']['0']['interval'];
-    $variables['field_type_rate'] = $tableRate['field_type_rate']['und']['0']['amount'];
+
+    // Insert all the Table Rate multifield to an array by field
+    $table_arr = array();
+    foreach ($node->field_table_rate['und'] as $index=>$item) {
+      $table_arr[$index]['field_days'] = $item['field_days']['und']['0']['value'];
+      $table_arr[$index]['field_hours'] = $item['field_hours']['und']['0']['value'];
+      $table_arr[$index]['field_issue_type'] = $item['field_issue_type']['und']['0']['value'];
+      $table_arr[$index]['field_scope_time'] = $item['field_scope']['und']['0']['interval'];
+      $table_arr[$index]['field_type_rate'] = $item['field_type_rate']['und']['0']['amount'];
+    }
+
+    $variables['table_content'] = $table_arr;
     $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), url('recalculate-project-time/' . $node->nid, array('absolute' => TRUE)));
   }
 }
