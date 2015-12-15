@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * @file
+ */
+
+function entityrelationships_init() {
+  entityrelationships_get_entity_stucture();
+}
+
+function entityrelationships_get_entity_stucture() {
+  dpm(entity_get_info());
+ // $field = field_info_field($field_name);
+  dpm(_my_module_get_entityreferences_settings());
+}
+
+
+
+function _my_module_get_entityreferences_settings() {
+  $field_relation = array();
+
+  // Get all entityreference field names
+  $query = db_select('field_config', 'f');
+  $query->fields('f', array('field_name'));
+  $query->condition('f.type', 'entityreference');
+  $query->distinct();
+  $rows = $query->execute();
+
+  // Create an associative array:
+  // $ar[source_type][source_bundle][field_name][target_type][target_bundle]
+  foreach ($rows as $row) {
+    $field_name = $row->field_name;
+    $field = (field_info_field($row->field_name));
+    foreach($field['bundles'] as $type => $bundles) {
+      foreach($bundles as $bundle) {
+        foreach ($field['settings']['handler_settings']['target_bundles'] as $target) {
+          $field_relation[$type][$bundle][$field_name][$field['settings']['target_type']] = $target;
+        }
+      }
+    }
+  }
+
+  return  $field_relation;
+}
