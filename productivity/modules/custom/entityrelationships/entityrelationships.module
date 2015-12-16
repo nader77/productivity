@@ -40,6 +40,8 @@ function entityrelationships_menu_callback($entity_type = FALSE) {
 function entityrelationships_entitygraph($include_fields = FALSE, $single_entity_type = FALSE) {
   $graph = array();
 
+  // TODO: add field reference name when $include_fields=false.
+
   $entity_refs = entityrelationship_entitygraph_entityreference_connections();
   if ($single_entity_type) {
     $entities = array($single_entity_type => entity_get_info($single_entity_type));
@@ -93,7 +95,7 @@ function entityrelationships_entitygraph($include_fields = FALSE, $single_entity
       $has_bundles = !empty($entity_info['entity keys']['bundle']) && count($entity_info['bundles']) > 1;
       if ($has_bundles) {
         foreach ($entity_info['bundles'] as $bundle_name => $bundle_info) {
-          $graph['nodes']['cluster_entity_group_' . $entity_type]['entity_' . $entity_type . '__bundle_' . $bundle_name] = array(
+          $graph['nodes']['cluster_entity_group_' . $entity_type]['entity_' . $entity_type . '__bundle_' . str_replace('-', '_', $bundle_name)] = array(
             'title' => $bundle_info['label'],
           );
         }
