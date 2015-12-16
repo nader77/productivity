@@ -20,19 +20,15 @@ function entityrelationships_menu() {
  * Main function to create full graph of entities.
  */
 function entityrelationships_menu_callback() {
-  // Loading doT to HTML lib (http://olado.github.io/doT/index.html)
-  drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js', 'file');
-  drupal_add_js('http://cpettitt.github.io/project/dagre-d3/v0.1.5/dagre-d3.min.js', 'file');
-  drupal_add_js('http://cpettitt.github.io/project/graphlib-dot/v0.4.10/graphlib-dot.min.js', 'file');
-
   drupal_add_css(drupal_get_path('module', 'entityrelationships') . '/entityrelationships.css', 'file');
 
   $data = 'var dataSVG = `' . entityrelationship_entitygraph_generate(entityrelationships_entitygraph()) . '`;';
   drupal_add_js($data, 'inline');
 
 
+  drupal_add_js(drupal_get_path('module', 'entityrelationships') . '/viz.js', 'file');
   drupal_add_js(drupal_get_path('module', 'entityrelationships') . '/entityrelationships.js', 'file');
-  return '<svg id="graphContainer"><g/></svg>';
+  return '';
 }
 
 /**
@@ -322,7 +318,7 @@ function entityrelationship_entitygraph_generate_node($name, $node_info) {
     $property_info += array(
       'type' => '',
     );
-    $label .= $property_name . ' : ' . $property_info['type'] . '\l';
+    $label .= $property_name . ' </br> ' . $property_info['type'] . '\l';
   }
 
   $label .= '|';
