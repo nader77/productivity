@@ -232,7 +232,9 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       throw new \RestfulBadRequestException('At least one issue should be added.');
     }
 
-    $wrapper->field_work_date->set($request['date']);
+    // Convert day month and year to a Unix timestamp.
+    $date = strtotime($request['day'] . '-' . $request['month'] . '-' . $request['year'] . '12:00:00');
+    $wrapper->field_work_date->set($date);
     $wrapper->field_day_type->set($request['type']);
     $wrapper->field_employee->set(user_load_by_name($request['employee']));
 
