@@ -10,6 +10,7 @@ function entityrelationships_menu() {
   $items['admin/entity-relations'] = array(
     'title' => 'Entity relations',
     'page callback' => 'entityrelationships_menu_callback',
+    'page arguments' => array(2),
     'access arguments' => array('administer content'),
     'type' => MENU_CALLBACK,
   );
@@ -18,12 +19,15 @@ function entityrelationships_menu() {
 
 /**
  * Main function to create full graph of entities.
+ *
+ * @param
+ *  $entity_type - Pass on and anetity type to render only.
  */
-function entityrelationships_menu_callback() {
+function entityrelationships_menu_callback($entity_type = FALSE) {
   drupal_add_css(drupal_get_path('module', 'entityrelationships') . '/entityrelationships.css');
   drupal_add_js('http://mdaines.github.io/viz.js/bower_components/viz.js/viz.js', 'file');
 
-  $data = 'var dataSVG = `' . entityrelationship_entitygraph_generate(entityrelationships_entitygraph()) . '`;';
+  $data = 'var dataSVG = `' . entityrelationship_entitygraph_generate(entityrelationships_entitygraph(FALSE, $entity_type)) . '`;';
   drupal_add_js($data, 'inline');
 
   drupal_add_js(drupal_get_path('module', 'entityrelationships') . '/entityrelationships.js', 'file');
@@ -33,11 +37,18 @@ function entityrelationships_menu_callback() {
 /**
  * Main function to create full graph of entities.
  */
-function entityrelationships_entitygraph($include_fields = FALSE) {
+function entityrelationships_entitygraph($include_fields = FALSE, $single_entity_type = FALSE) {
   $graph = array();
 
   $entity_refs = entityrelationship_entitygraph_entityreference_connections();
-  foreach (entity_get_info() as $entity_type => $entity_info) {
+  if ($single_entity_type) {
+    $entities = array($single_entity_type => entity_get_info($single_entity_type));
+  }
+  else {
+    $entities = entity_get_info();
+  }
+
+  foreach ($entities as $entity_type => $entity_info) {
     $node_info = array();
     $node_info['title'] = $entity_info['label'];
 
