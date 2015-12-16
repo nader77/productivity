@@ -96,11 +96,6 @@ function entityrelationships_entitygraph($include_fields = FALSE, $single_entity
           $graph['nodes']['cluster_entity_group_' . $entity_type]['entity_' . $entity_type . '__bundle_' . $bundle_name] = array(
             'title' => $bundle_info['label'],
           );
-          $graph['edges']['entity_' . $entity_type . '__bundle_' . $bundle_name]['entity_' . $entity_type] = array(
-            'arrowhead' => 'empty',
-            'headlabel' => '',
-            'taillabel' => '',
-          );
         }
       }
 
@@ -168,12 +163,9 @@ function entityrelationships_entitygraph($include_fields = FALSE, $single_entity
       $group = &$graph['nodes']['cluster_entity_group_' . $entity_type];
       $group['label'] = $entity_info['label'];
       $group['group'] = TRUE;
-      $group['entity_' . $entity_type] = $node_info;
-    }
-    else {
-      $graph['nodes']['entity_' . $entity_type] = $node_info;
     }
 
+    // Entity reference edges.
     if (isset($entity_refs[$entity_type])) {
       foreach($entity_refs[$entity_type] as $bundle_name => $field_ref_info) {
         foreach ($field_ref_info as $field_name => $target) {
