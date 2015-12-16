@@ -64,7 +64,9 @@ function entityrelationships_entitygraph($include_fields = FALSE) {
 
         $foreign_entity_type = entityrelationship_entitygraph_get_entity_by_table($foreign_key_info['table']);
         if ($foreign_entity_type) {
-          $node_info['properties'][$local_column]['type'] = $foreign_entity_type;
+          if ($include_fields) {
+            $node_info['properties'][$local_column]['type'] = $foreign_entity_type;
+          }
           $graph['edges']['entity_' . $entity_type]['entity_' . $foreign_entity_type] = array(
             'arrowhead' => 'normal',
             'headlabel' => '',

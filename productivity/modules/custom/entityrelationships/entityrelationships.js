@@ -1,7 +1,6 @@
-window.onload = function() {
+Drupal.behaviors.renderDotSVG = {
+  attach: function (context, settings) {
   var result = Viz(dataSVG);
   document.body.innerHTML += result;
-
-  //var image = Viz(dataSVG, { format: "png-image-element" });
-  //document.body.appendChild(image);
-}
+  }
+};
