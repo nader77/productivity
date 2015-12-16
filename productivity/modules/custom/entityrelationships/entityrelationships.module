@@ -20,13 +20,12 @@ function entityrelationships_menu() {
  * Main function to create full graph of entities.
  */
 function entityrelationships_menu_callback() {
-  drupal_add_css(drupal_get_path('module', 'entityrelationships') . '/entityrelationships.css', 'file');
+  drupal_add_css(drupal_get_path('module', 'entityrelationships') . '/entityrelationships.css');
+  drupal_add_js('http://mdaines.github.io/viz.js/bower_components/viz.js/viz.js', 'file');
 
   $data = 'var dataSVG = `' . entityrelationship_entitygraph_generate(entityrelationships_entitygraph()) . '`;';
   drupal_add_js($data, 'inline');
 
-
-  drupal_add_js(drupal_get_path('module', 'entityrelationships') . '/viz.js', 'file');
   drupal_add_js(drupal_get_path('module', 'entityrelationships') . '/entityrelationships.js', 'file');
   return '';
 }
@@ -34,7 +33,7 @@ function entityrelationships_menu_callback() {
 /**
  * Main function to create full graph of entities.
  */
-function entityrelationships_entitygraph() {
+function entityrelationships_entitygraph($include_fields = FALSE) {
   $graph = array();
 
   $entity_refs = entityrelationship_entitygraph_entityreference_connections();
@@ -45,11 +44,15 @@ function entityrelationships_entitygraph() {
     if (!empty($entity_info['base table'])) {
       $table_schema = drupal_get_schema($entity_info['base table']);
       $table_schema += array('fields' => array(), 'foreign keys' => array());
-      foreach ($table_schema['fields'] as $field_name => $field_info) {
-        $node_info['properties'][$field_name] = array(
-          'type' => $field_info['type'],
-        );
+
+      if ($include_fields) {
+        foreach ($table_schema['fields'] as $field_name => $field_info) {
+          $node_info['properties'][$field_name] = array(
+            'type' => $field_info['type'],
+          );
+        }
       }
+
 
       foreach ($table_schema['foreign keys'] as $foreign_key_name => $foreign_key_info) {
         if (count($foreign_key_info['columns']) != 1) {
@@ -89,56 +92,59 @@ function entityrelationships_entitygraph() {
       }
 
       // Traverse the instances.
-      $fields = array();
-      foreach (field_info_instances($entity_type) as $bundle => $instances) {
-        foreach ($instances as $field_name => $instance_info) {
-          $fields[$field_name][] = $bundle;
-        }
-      }
+      if($include_fields) {
 
-      foreach ($fields as $field_name => $bundles) {
-        $field_info = field_info_field($field_name);
-        $field_property_info = array(
-          'label' => $field_name,
-          'type' => $field_info['type'],
-        );
-        if ($field_info['cardinality'] <> 1) {
-          $field_property_info['type'] = 'list<' . $field_property_info['type'] . '>';
-        }
-
-        // Build the relationships.
-        $relationships = array();
-        foreach ($field_info['foreign keys'] as $foreign_key_name => $foreign_key_info) {
-          if (count($foreign_key_info['columns']) != 1) {
-            // We cannot process multiple key foreign keys.
-            continue;
-          }
-          $remote_column = reset($foreign_key_info['columns']);
-          $local_column = key($foreign_key_info['columns']);
-
-          $foreign_entity_type = entityrelationship_entitygraph_get_entity_by_table($foreign_key_info['table']);
-          if ($foreign_entity_type) {
-            $relationships[] = $foreign_entity_type;
+        $fields = array();
+        foreach (field_info_instances($entity_type) as $bundle => $instances) {
+          foreach ($instances as $field_name => $instance_info) {
+            $fields[$field_name][] = $bundle;
           }
         }
 
-        $all_bundles = count($bundles) == count($entity_info['bundles']);
-
-        if ($all_bundles) {
-          // If the field is attached to all the bundles, attach it to the
-          // main entity.
-          $node_info['fields'][$field_name] = $field_property_info;
-          $instance_info = field_info_instance($entity_type, $field_name, key($entity_info['bundles']));
-          foreach ($relationships as $relationship) {
-            entityrelationship_entitygraph_relationship($graph, 'entity_' . $entity_type, 'entity_' . $relationship, $instance_info['required'], $field_info['cardinality']);
+        foreach ($fields as $field_name => $bundles) {
+          $field_info = field_info_field($field_name);
+          $field_property_info = array(
+            'label' => $field_name,
+            'type' => $field_info['type'],
+          );
+          if ($field_info['cardinality'] <> 1) {
+            $field_property_info['type'] = 'list<' . $field_property_info['type'] . '>';
           }
-        }
-        else {
-          foreach ($bundles as $bundle_name) {
-            $instance_info = field_info_instance($entity_type, $field_name, $bundle_name);
-            $graph['nodes']['cluster_entity_group_' . $entity_type]['entity_' . $entity_type . '__bundle_' . $bundle_name]['fields'][$field_name] = $field_property_info;
+
+          // Build the relationships.
+          $relationships = array();
+          foreach ($field_info['foreign keys'] as $foreign_key_name => $foreign_key_info) {
+            if (count($foreign_key_info['columns']) != 1) {
+              // We cannot process multiple key foreign keys.
+              continue;
+            }
+            $remote_column = reset($foreign_key_info['columns']);
+            $local_column = key($foreign_key_info['columns']);
+
+            $foreign_entity_type = entityrelationship_entitygraph_get_entity_by_table($foreign_key_info['table']);
+            if ($foreign_entity_type) {
+              $relationships[] = $foreign_entity_type;
+            }
+          }
+
+          $all_bundles = count($bundles) == count($entity_info['bundles']);
+
+          if ($all_bundles) {
+            // If the field is attached to all the bundles, attach it to the
+            // main entity.
+            $node_info['fields'][$field_name] = $field_property_info;
+            $instance_info = field_info_instance($entity_type, $field_name, key($entity_info['bundles']));
             foreach ($relationships as $relationship) {
-              entityrelationship_entitygraph_relationship($graph, 'entity_' . $entity_type . '__bundle_' . $bundle_name, 'entity_' . $relationship, $instance_info['required'], $field_info['cardinality']);
+              entityrelationship_entitygraph_relationship($graph, 'entity_' . $entity_type, 'entity_' . $relationship, $instance_info['required'], $field_info['cardinality']);
+            }
+          }
+          else {
+            foreach ($bundles as $bundle_name) {
+              $instance_info = field_info_instance($entity_type, $field_name, $bundle_name);
+              $graph['nodes']['cluster_entity_group_' . $entity_type]['entity_' . $entity_type . '__bundle_' . $bundle_name]['fields'][$field_name] = $field_property_info;
+              foreach ($relationships as $relationship) {
+                entityrelationship_entitygraph_relationship($graph, 'entity_' . $entity_type . '__bundle_' . $bundle_name, 'entity_' . $relationship, $instance_info['required'], $field_info['cardinality']);
+              }
             }
           }
         }
@@ -318,7 +324,7 @@ function entityrelationship_entitygraph_generate_node($name, $node_info) {
     $property_info += array(
       'type' => '',
     );
-    $label .= $property_name . ' </br> ' . $property_info['type'] . '\l';
+    $label .= $property_name . ' : ' . $property_info['type'] . '\l';
   }
 
   $label .= '|';

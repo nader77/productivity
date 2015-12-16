@@ -1,5 +1,7 @@
 window.onload = function() {
-  var result = Viz(dataSVG, { format: "png-image-element" });
-  document.body.appendChild(result);
-  //document.body.innerHTML += result;
+  var result = Viz(dataSVG);
+  document.body.innerHTML += result;
+
+  //var image = Viz(dataSVG, { format: "png-image-element" });
+  //document.body.appendChild(image);
 }

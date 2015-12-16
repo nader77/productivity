@@ -17,6 +17,6 @@ function entityrelationships_drush_command() {
 }
 
 function drush_entityrelationships_entitygraph() {
-  $graph =  entityrelationships_entitygraph();
+  $graph =  entityrelationships_entitygraph(TRUE);
   echo entityrelationship_entitygraph_generate($graph);
 }
