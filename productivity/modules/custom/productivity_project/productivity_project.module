@@ -169,17 +169,30 @@ function productivity_project_logged_hours_notify($node) {
       '@project_total_days' => $total_days,
     );
 
-    // Send mail to managers
+    // Create a message for owners.
     $values = array(
       'uid' => 1,
       'arguments' => $arguments,
     );
     $message = message_create('logged_project_hours', $values);
-    // Send the message to custom email.
+
+    // Send the message to the owners.
     $options = array(
       'mail' =>  variable_get('productivity_time_tracking_managers_email', 'info@gizra.com'),
     );
     message_notify_send_message($message, $options);
+
+    // Send notifications to all the team leads as well.
+    if ($wrapper->field_team_leads->value()) {
+      foreach ($wrapper->field_team_leads as $team_lead) {
+        // Create a new message specified to the team lead.
+        $values['uid'] = $team_lead->getIdentifier();
+        $message = message_create('logged_project_hours', $values);
+        // Send this message to the team lead.
+        $options['mail'] = $team_lead->mail->value();
+        message_notify_send_message($message, $options);
+      }
+    }
 
     // Save the percentage so it won't send the same
     // message again at this threshold.

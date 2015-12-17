@@ -93,7 +93,7 @@ function productivity_timewatch_permission() {
 /**
  * Implements hook_form_FORM_ID_alter().
  *
- * Filter inactive employees from the timewatch form.
+ * Remove inactive employees and irrelevant projects from the timewatch form.
  */
 function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form_state) {
   // Hide the title.
@@ -128,4 +128,32 @@ function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form
     $options[$account->uid] = $account->name;
   }
   $form['field_employee'][LANGUAGE_NONE]['#options'] = $options;
+
+  // Display only projects that are marked as "Referencable by work sessions".
+  $nids = array();
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node')
+    ->propertyCondition('status', NODE_PUBLISHED)
+    ->fieldCondition('field_allow_session_reference', 'value', TRUE)
+    ->propertyOrderBy('title')
+    ->execute();
+
+  if (!empty($result['node'])) {
+    $nids = array_keys($result['node']);
+  }
+
+  // Make sure the selected project is in the list, even if it's non-
+  // referencable.
+  if ($wrapper->field_project->value()) {
+    $nid = $wrapper->field_project->getIdentifier();
+    if (!in_array($nid, $nids)) {
+      array_unshift($nids, $nid);
+    }
+  }
+  $options = array('_none' => '- ' . t('None') . ' -');
+  foreach(node_load_multiple($nids) as $node) {
+    $options[$node->nid] = $node->title;
+  }
+  $form['field_project'][LANGUAGE_NONE]['#options'] = $options;
 }

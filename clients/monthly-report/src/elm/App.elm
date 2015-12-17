@@ -1,6 +1,6 @@
 module App where
 
-import Config exposing (backendUrl)
+import Config
 import Date exposing (..)
 import Date.Format exposing (format)
 import Debug
@@ -15,7 +15,8 @@ import Utils.Http exposing (getErrorMessageFromHttpResponse)
 
 -- MODEL
 type alias Model =
-  { path : String
+  { host : String
+  , path : String
   , status : Status
   , response : Response
   , employee : Employee
@@ -55,7 +56,8 @@ type alias Employee =
 
 initialModel : Model
 initialModel =
-  { path = "api/v1.0/work-sessions"
+  { host = ""
+  , path = "api/v1.0/work-sessions"
   , status = Init
   , response =
     { records = []
@@ -81,6 +83,7 @@ init =
 -- UPDATE
 type Action =
   GetData
+  | SetHost String
   | UpdateDataFromServer (Result Http.Error Response)
 
 
@@ -93,11 +96,14 @@ update action model =
         employee = "&filter[employee]=" ++ toString model.employee.id
         month = "&month=" ++ toString model.month
         year = "&year=" ++ toString model.year
-        url = backendUrl ++ model.path ++ sort ++ employee ++ month ++ year
+        url = model.host ++ "/" ++ model.path ++ sort ++ employee ++ month ++ year
       in
         ( { model | status = Fetching }
-        , getJson url Config.accessToken
+        , getJson url
         )
+
+    SetHost host ->
+      ( { model | host = host }, Effects.none )
 
     UpdateDataFromServer response ->
       case response of
@@ -222,11 +228,11 @@ view address model =
 
 
 -- EFFECTS
-getJson : String -> String -> Effects Action
-getJson url accessToken =
+getJson : String -> Effects Action
+getJson url =
   Http.send Http.defaultSettings
     { verb = "GET"
-    , headers = [ ("access-token", accessToken) ]
+    , headers = []
     , url = url
     , body = Http.empty
     }

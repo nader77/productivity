@@ -10,7 +10,8 @@ app =
     { init = init
     , update = update
     , view = view
-    , inputs = []
+    , inputs =
+      [ Signal.map App.SetHost host ]
     }
 
 
@@ -21,3 +22,5 @@ main =
 port tasks : Signal (Task.Task Never ())
 port tasks =
   app.tasks
+
+port host : Signal String

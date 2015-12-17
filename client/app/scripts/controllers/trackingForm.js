@@ -235,10 +235,10 @@ angular.module('clientApp')
         delete data.vacationType;
       }
 
-      // Convert date to timestamp,
-      // Need to add the hour to make a more accurate events.
-      var date = $stateParams.year + '.' + $stateParams.month + '.' +  $stateParams.day + ' 12:00:00';
-      data.date = new Date(date).getTime() / 1000;
+      // Add month and year to format the date in the backend.
+      data.day = $scope.day;
+      data.month = $scope.month;
+      data.year = $scope.year;
 
       // Check only regular time tracking.
       if (data.type == 'regular') {
@@ -259,7 +259,6 @@ angular.module('clientApp')
         console.log(data);
       }
 
-      // Convert date to timestamp.
       Tracking.save(data).then(function(newData) {
         $scope.creating = false;
 
