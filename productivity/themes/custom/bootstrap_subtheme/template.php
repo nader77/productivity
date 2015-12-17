@@ -22,12 +22,13 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
     // use node because wrapper don't work with multifield.
     $rows = array();
     foreach ($node->field_table_rate['und'] as $index=>$item) {
-      $rows[$index]['field_issue_type'] = $item['field_issue_type']['und']['0']['value'];
+      $rows[$index]['field_issue_type'] = strtoupper($item['field_issue_type']['und']['0']['value']);
       $rows[$index]['field_scope_time'] = $item['field_scope']['und']['0']['interval'];
-      $rows[$index]['field_type_rate'] = $item['field_type_rate']['und']['0']['amount'];
-      $rows[$index]['field_hours'] = $item['field_hours']['und']['0']['value'];
-      $rows[$index]['field_days'] = $item['field_days']['und']['0']['value'];
+      $rows[$index]['field_type_rate'] = number_format($item['field_type_rate']['und']['0']['amount'], 2);
+      $rows[$index]['field_hours'] = number_format($item['field_hours']['und']['0']['value'], 0);
+      $rows[$index]['field_days'] = number_format($item['field_days']['und']['0']['value'], 0);
     }
+
 
     $header = array('Type', 'Scope', 'Rate', 'Hours', 'Days');
     $table = theme('table', array('header' => $header, 'rows' => $rows ));
