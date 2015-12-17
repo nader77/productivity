@@ -1292,11 +1292,12 @@ global - fix amount.',
     'entity_type' => 'node',
     'field_name' => 'field_table_rate',
     'label' => 'Table Rate',
-    'required' => FALSE,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 0,
       'module' => 'multifield',
       'settings' => array(),
       'type' => 'multifield_default',

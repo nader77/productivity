@@ -29,7 +29,6 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
       $rows[$index]['field_days'] = number_format($item['field_days']['und']['0']['value'], 0);
     }
 
-
     $header = array('Type', 'Scope', 'Rate', 'Hours', 'Days');
     $table = theme('table', array('header' => $header, 'rows' => $rows ));
 

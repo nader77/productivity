@@ -44,12 +44,14 @@ while ($i < $count) {
   foreach ($nodes as $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
     try {
-      // Code here.
-      $node->field_table_rate['und']['field_days']['und']['0']['value'] = $wrapper->field_days->value();
-      $node->field_table_rate['und']['field_hours']['und']['0']['value'] = $wrapper->field_hours->value();
-      $node->field_table_rate['und']['field_issue_type']['und']['0']['value'] = '';
-      $node->field_table_rate['und']['field_scope']['und']['0']['interval'] = $wrapper->field_scope->value();
-      $node->field_table_rate['und']['field_type_rate']['und']['0']['amount'] = $wrapper->field_rate->value();
+      // Custom code here.
+      $node->field_table_rate[LANGUAGE_NONE][0]['field_days'][LANGUAGE_NONE][0]['value'] = number_format($wrapper->field_days->value(), 2);
+      $node->field_table_rate[LANGUAGE_NONE][0]['field_hours'][LANGUAGE_NONE][0]['value'] = number_format($wrapper->field_hours->value(), 2);
+      $node->field_table_rate[LANGUAGE_NONE][0]['field_issue_type'][LANGUAGE_NONE][0]['value'] = 'dev';
+      $node->field_table_rate[LANGUAGE_NONE][0]['field_scope'][LANGUAGE_NONE][0]['interval'] = floatval(str_replace(',', '', $wrapper->field_scope->value()['interval']));
+      $node->field_table_rate[LANGUAGE_NONE][0]['field_scope'][LANGUAGE_NONE][0]['period'] = $wrapper->field_scope->value()['period'];
+      $node->field_table_rate[LANGUAGE_NONE][0]['field_type_rate'][LANGUAGE_NONE][0]['amount'] = floatval(str_replace(',', '', $wrapper->field_rate->value()['amount']));
+      $node->field_table_rate[LANGUAGE_NONE][0]['field_type_rate'][LANGUAGE_NONE][0]['currency'] = $wrapper->field_rate->value()['currency'];
 
       node_save($node);
     } catch (Exception $e) {
