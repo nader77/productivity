@@ -20,16 +20,20 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
 
     // Insert all the Table Rate multifield to an array by field,
     // use node because wrapper don't work with multifield.
-    $table = array();
+    $rows = array();
     foreach ($node->field_table_rate['und'] as $index=>$item) {
-      $table[$index]['field_days'] = $item['field_days']['und']['0']['value'];
-      $table[$index]['field_hours'] = $item['field_hours']['und']['0']['value'];
-      $table[$index]['field_issue_type'] = $item['field_issue_type']['und']['0']['value'];
-      $table[$index]['field_scope_time'] = $item['field_scope']['und']['0']['interval'];
-      $table[$index]['field_type_rate'] = $item['field_type_rate']['und']['0']['amount'];
+      $rows[$index]['field_issue_type'] = $item['field_issue_type']['und']['0']['value'];
+      $rows[$index]['field_scope_time'] = $item['field_scope']['und']['0']['interval'];
+      $rows[$index]['field_type_rate'] = $item['field_type_rate']['und']['0']['amount'];
+      $rows[$index]['field_hours'] = $item['field_hours']['und']['0']['value'];
+      $rows[$index]['field_days'] = $item['field_days']['und']['0']['value'];
     }
 
-    $variables['table_content'] = $table;
+    $header = array('Type', 'Scope', 'Rate', 'Hours', 'Days');
+    $table = theme('table', array('header' => $header, 'rows' => $rows ));
+
+
+    $variables['table'] = $table;
     $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), url('recalculate-project-time/' . $node->nid, array('absolute' => TRUE)));
   }
 }
