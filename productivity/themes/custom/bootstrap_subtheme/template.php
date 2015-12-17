@@ -22,9 +22,10 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
     // use node because wrapper don't work with multifield.
     $rows = array();
     foreach ($node->field_table_rate['und'] as $index=>$item) {
-      $rows[$index]['field_issue_type'] = strtoupper($item['field_issue_type']['und']['0']['value']);
-      $rows[$index]['field_scope_time'] = $item['field_scope']['und']['0']['interval'];
-      $rows[$index]['field_type_rate'] = number_format($item['field_type_rate']['und']['0']['amount'], 2);
+      $issue_type_key = $item['field_issue_type']['und']['0']['value'];
+      $rows[$index]['field_issue_type'] = field_info_field('field_issue_type')['settings']['allowed_values'][$issue_type_key];
+      $rows[$index]['field_scope_time'] = $item['field_scope']['und']['0']['interval'] . ' ' . ucwords($item['field_scope']['und']['0']['period'] . 's');
+      $rows[$index]['field_type_rate'] = number_format($item['field_type_rate']['und']['0']['amount'], 2) . ' ' . $item['field_type_rate']['und']['0']['currency'];
       $rows[$index]['field_hours'] = number_format($item['field_hours']['und']['0']['value'], 0);
       $rows[$index]['field_days'] = number_format($item['field_days']['und']['0']['value'], 0);
     }
