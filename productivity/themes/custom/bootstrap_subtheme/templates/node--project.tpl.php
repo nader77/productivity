@@ -116,7 +116,7 @@ field_days
 </div
 <div class="col-xs-12">
   <div class="main-box infographic-box">
-      <?php print $table ?>
+      <?php print $table; ?>
   </div>
 </div>
 

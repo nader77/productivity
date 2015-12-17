@@ -32,7 +32,6 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
     $header = array('Type', 'Scope', 'Rate', 'Hours', 'Days');
     $table = theme('table', array('header' => $header, 'rows' => $rows ));
 
-
     $variables['table'] = $table;
     $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), url('recalculate-project-time/' . $node->nid, array('absolute' => TRUE)));
   }
