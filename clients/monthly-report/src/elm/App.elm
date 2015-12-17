@@ -16,7 +16,6 @@ import Utils.Http exposing (getErrorMessageFromHttpResponse)
 -- MODEL
 type alias Model =
   { host : String
-  , path : String
   , status : Status
   , response : Response
   , employee : Employee
@@ -57,7 +56,6 @@ type alias Employee =
 initialModel : Model
 initialModel =
   { host = ""
-  , path = "api/v1.0/work-sessions"
   , status = Init
   , response =
     { records = []
@@ -96,7 +94,7 @@ update action model =
         employee = "&filter[employee]=" ++ toString model.employee.id
         month = "&month=" ++ toString model.month
         year = "&year=" ++ toString model.year
-        url = model.host ++ "/" ++ model.path ++ sort ++ employee ++ month ++ year
+        url = model.host ++ "/" ++ Config.sessionsPath ++ sort ++ employee ++ month ++ year
       in
         ( { model | status = Fetching }
         , getJson url

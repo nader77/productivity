@@ -144,7 +144,7 @@ function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form
   }
 
   // Make sure the selected project is in the list, even if it's non-
-  // referencable.
+  // reference-able.
   if ($wrapper->field_project->value()) {
     $nid = $wrapper->field_project->getIdentifier();
     if (!in_array($nid, $nids)) {
