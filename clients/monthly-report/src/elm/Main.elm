@@ -1,19 +1,21 @@
 
 import Effects exposing (Never)
 import App exposing (init, update, view)
+import App.Model
+import App.Update
 import Html
 import StartApp
 import Task
 
-app : StartApp.App App.Model
+app : StartApp.App App.Model.Model
 app =
   StartApp.start
     { init = init
     , update = update
     , view = view
     , inputs =
-      [ Signal.map App.SetHost host
-      , Signal.map App.SetLoadTime loadTimestamp
+      [ Signal.map App.Update.SetHost host
+      , Signal.map App.Update.SetLoadTime loadTimestamp
       ]
     }
 
