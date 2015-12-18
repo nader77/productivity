@@ -1,5 +1,6 @@
-var elmApp = Elm.fullscreen(Elm.Main, {host: ""});
+var elmApp = Elm.fullscreen(Elm.Main, {host: "", loadTimestamp: 0});
 
+// Host
 // Extract the backend URL from the current URL. Assuming the app is one folder
 // above the backend.
 // Remove the last folder from the current URL; I.e. convert
@@ -10,3 +11,7 @@ urlParts.pop();
 urlParts.pop();
 backendUrl = urlParts.join("/");
 elmApp.ports.host.send(backendUrl);
+
+// Load time
+var date = new Date();
+elmApp.ports.loadTimestamp.send(date.getTime());

@@ -9,6 +9,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Http
 import Json.Decode exposing ((:=))
+import String
 import Task
 import Utils.Http exposing (getErrorMessageFromHttpResponse)
 
@@ -16,6 +17,7 @@ import Utils.Http exposing (getErrorMessageFromHttpResponse)
 -- MODEL
 type alias Model =
   { host : String
+  , loadTimestamp : Int
   , status : Status
   , response : Response
   , employee : Employee
@@ -56,6 +58,7 @@ type alias Employee =
 initialModel : Model
 initialModel =
   { host = ""
+  , loadTimestamp = 0
   , status = Init
   , response =
     { records = []
@@ -66,8 +69,8 @@ initialModel =
     { id = 10
     , name = "aya"
     }
-  , month = 12
-  , year = 2015
+  , month = 0
+  , year = 0
   }
 
 
@@ -82,6 +85,7 @@ init =
 type Action =
   GetData
   | SetHost String
+  | SetLoadTime Int
   | UpdateDataFromServer (Result Http.Error Response)
 
 
@@ -101,7 +105,25 @@ update action model =
         )
 
     SetHost host ->
-      ( { model | host = host }, Effects.none )
+      ( { model | host = host }
+      , Effects.none
+      )
+
+
+    SetLoadTime loadTimestamp ->
+      let
+        datePartToInt format =
+          case String.toInt <| Date.Format.format format <| Date.fromTime <| toFloat loadTimestamp of
+            Ok int -> int
+            _ -> 0
+      in
+        ( { model
+          | loadTimestamp = loadTimestamp
+          , year = datePartToInt "%Y"
+          , month = datePartToInt "%m"
+          }
+        , Effects.none
+        )
 
     UpdateDataFromServer response ->
       case response of
