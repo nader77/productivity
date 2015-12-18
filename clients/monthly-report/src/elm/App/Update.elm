@@ -1,7 +1,6 @@
 module App.Update where
 
 import App.Model exposing (..)
-import Config
 import Date exposing (..)
 import Date.Format exposing (format)
 import Debug
@@ -25,7 +24,7 @@ init =
   ( initialModel
   , Task.succeed GetData |> Effects.task
   )
-  
+
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
@@ -35,7 +34,7 @@ update action model =
         employee = "&filter[employee]=" ++ toString model.employee.id
         month = "&month=" ++ toString model.month
         year = "&year=" ++ toString model.year
-        url = model.host ++ "/" ++ Config.sessionsPath ++ sort ++ employee ++ month ++ year
+        url = model.host ++ "/api/v1.0/work-sessions" ++ sort ++ employee ++ month ++ year
       in
         ( { model | status = Fetching }
         , getJson url

@@ -1,18 +1,18 @@
-
-import Effects exposing (Never)
-import App exposing (init, update, view)
 import App.Model
 import App.Update
+import App.View
+import Effects exposing (Never)
 import Html
 import StartApp
 import Task
 
+
 app : StartApp.App App.Model.Model
 app =
   StartApp.start
-    { init = init
-    , update = update
-    , view = view
+    { init = App.Update.init
+    , update = App.Update.update
+    , view = App.View.view
     , inputs =
       [ Signal.map App.Update.SetHost host
       , Signal.map App.Update.SetLoadTime loadTimestamp
@@ -30,4 +30,5 @@ port tasks =
   app.tasks
 
 port host : Signal String
+
 port loadTimestamp : Signal Int
