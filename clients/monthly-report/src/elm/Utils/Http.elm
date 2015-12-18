@@ -2,6 +2,7 @@ module Utils.Http where
 
 import Http exposing (Error)
 
+
 getErrorMessageFromHttpResponse : Http.Error -> String
 getErrorMessageFromHttpResponse error =
   case error of

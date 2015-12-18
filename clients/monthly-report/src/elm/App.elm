@@ -12,12 +12,11 @@ init =
   App.Update.init
 
 
--- UPDATE
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   App.Update.update action model
 
--- VIEW
+
 view : Signal.Address Action -> Model -> Html
 view address model =
   App.View.view address model

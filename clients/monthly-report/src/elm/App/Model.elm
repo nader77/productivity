@@ -2,6 +2,7 @@ module App.Model where
 
 import Http
 
+
 type alias Model =
   { host : String
   , status : Status
@@ -11,13 +12,16 @@ type alias Model =
   , year : Int
   }
 
+
 type Status =
   Init
   | Fetching
   | Fetched
   | HttpError Http.Error
 
+
 type alias Source = String
+
 
 type alias Record =
   { id : Int
@@ -30,11 +34,13 @@ type alias Record =
   , source : Source
   }
 
+
 type alias Response =
   { records : List Record
   , count : Int
   , totalSessionsLength : Int
   }
+
 
 type alias Employee =
   { id : Int
