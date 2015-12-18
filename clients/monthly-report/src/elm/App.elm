@@ -17,7 +17,6 @@ import Utils.Http exposing (getErrorMessageFromHttpResponse)
 -- MODEL
 type alias Model =
   { host : String
-  , loadTimestamp : Int
   , status : Status
   , response : Response
   , employee : Employee
@@ -58,7 +57,6 @@ type alias Employee =
 initialModel : Model
 initialModel =
   { host = ""
-  , loadTimestamp = 0
   , status = Init
   , response =
     { records = []
@@ -118,8 +116,7 @@ update action model =
             _ -> 0
       in
         ( { model
-          | loadTimestamp = loadTimestamp
-          , year = datePartToInt "%Y"
+          | year = datePartToInt "%Y"
           , month = datePartToInt "%m"
           }
         , Effects.none
