@@ -251,7 +251,8 @@ function productivity_time_tracking_node_presave($node) {
     $days_count = productivity_time_tracking_total_days($project_wrapper->getIdentifier());
     // Update total hours and days just for certain issue types
     $issue_type = strtolower($wrapper->raw()->field_issues_logs[LANGUAGE_NONE]['0']['field_issue_type'][LANGUAGE_NONE]['0']['value']);
-    if($issue_type !== "management" && $issue_type !== "non billable"){
+    $not_billable = array("management", "non billable");
+    if(!in_array($issue_type, $not_billable)){
       $project_wrapper->field_hours->set($hours);
       $project_wrapper->field_days->set($days_count);
       $project_wrapper->save();

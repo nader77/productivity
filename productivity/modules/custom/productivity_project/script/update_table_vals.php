@@ -44,15 +44,20 @@ while ($i < $count) {
   foreach ($nodes as $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
     try {
-      // Custom code here.
+      // Update scope days from global days
       $node->field_table_rate[LANGUAGE_NONE][0]['field_days'][LANGUAGE_NONE][0]['value'] = number_format($wrapper->field_days->value(), 2);
+      // Update scope hours from global hours
       $node->field_table_rate[LANGUAGE_NONE][0]['field_hours'][LANGUAGE_NONE][0]['value'] = number_format($wrapper->field_hours->value(), 2);
+      // Update scope type to be hard coded dev
       $node->field_table_rate[LANGUAGE_NONE][0]['field_issue_type'][LANGUAGE_NONE][0]['value'] = 'dev';
+      // Update scope interval from global scope interval
       $node->field_table_rate[LANGUAGE_NONE][0]['field_scope'][LANGUAGE_NONE][0]['interval'] = floatval(str_replace(',', '', $wrapper->field_scope->value()['interval']));
+      // Update scope period from global scope period
       $node->field_table_rate[LANGUAGE_NONE][0]['field_scope'][LANGUAGE_NONE][0]['period'] = $wrapper->field_scope->value()['period'];
+      // Update scope rate amount from global rate amount
       $node->field_table_rate[LANGUAGE_NONE][0]['field_type_rate'][LANGUAGE_NONE][0]['amount'] = floatval(str_replace(',', '', $wrapper->field_rate->value()['amount']));
+      // Update scope rate currency from global rate currency
       $node->field_table_rate[LANGUAGE_NONE][0]['field_type_rate'][LANGUAGE_NONE][0]['currency'] = $wrapper->field_rate->value()['currency'];
-
       node_save($node);
     } catch (Exception $e) {
       $params = array(
