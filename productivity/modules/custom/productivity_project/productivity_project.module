@@ -300,18 +300,38 @@ function productivity_project_repository_autocomplete_need_invalidate() {
 function productivity_project_save_project_details($wrapper, $project_wrapper) {
   $hours = $wrapper->field_track_hours->value(); // issue hours
   $day_type = $wrapper->field_day_type->value(); // issue day type
-  $issue_type = $wrapper->raw()->field_issues_logs[LANGUAGE_NONE]['0']['field_issue_type'][LANGUAGE_NONE]['0']['value']; // issue type
+  $issue_type = $wrapper->value()->field_issues_logs[LANGUAGE_NONE]['0']['field_issue_type'][LANGUAGE_NONE]['0']['value']; // issue type
 
+
+  $issue_type = "dev";
   // Add the hours by issue type
   if($day_type === "regular") {
     $table_arr = $project_wrapper->field_table_rate->raw();
-    foreach($table_arr as $value) {
+    $field_table_rate = array();
+
+    foreach($table_arr as $index=>$value) {
       if($value['field_issue_type'][LANGUAGE_NONE]['0']['value'] === $issue_type) {
-        $value['field_hours'][LANGUAGE_NONE]['0']['value'] += $hours;
-        $value['field_days'][LANGUAGE_NONE]['0']['value'] = productivity_time_tracking_total_days($project_wrapper->getIdentifier());
+        // Cannot use the `wrapper` on the sub-fields of a multi-field.
+        $field_table_rate[LANGUAGE_NONE][$index] = array(
+            'id' => $value['id'],
+            'field_days' => array(LANGUAGE_NONE => array(array('value' => productivity_time_tracking_total_days($project_wrapper->getIdentifier())))),
+            'field_hours' => array(LANGUAGE_NONE => array(array('value' => ($value['field_hours'][LANGUAGE_NONE]['0']['value'] + $hours)))),
+            'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => ($value['field_issue_type'][LANGUAGE_NONE]['0']['value'])))),
+            'field_scope' => array(LANGUAGE_NONE => array(array(
+              'interval' => ($value['field_scope'][LANGUAGE_NONE]['0']['interval']),
+              'period' => ($value['field_scope'][LANGUAGE_NONE]['0']['period']),
+            ))),
+            'field_type_rate' => array(LANGUAGE_NONE => array(array(
+              'amount' => ($value['field_type_rate'][LANGUAGE_NONE]['0']['amount']),
+              'currency' => ($value['field_type_rate'][LANGUAGE_NONE]['0']['currency']),
+            ))),
+        );
+      } else {
+        $field_table_rate[LANGUAGE_NONE][$index] = $value;
       }
     }
   }
+  $project_wrapper->field_table_rate->set($field_table_rate);
   return $issue_type;
 }
 
