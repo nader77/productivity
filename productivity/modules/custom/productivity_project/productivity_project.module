@@ -319,7 +319,7 @@ function productivity_project_repository_autocomplete_need_invalidate() {
  */
 function productivity_project_save_project_details($wrapper, $project_wrapper) {
   $hours = $wrapper->field_track_hours->value(); // issue hours
-  $day_type = $wrapper->field_day_type->value(); // issue type
+  $day_type = $wrapper->field_day_type->value(); // issue day type
   $issue_type = $wrapper->raw()->field_issues_logs[LANGUAGE_NONE]['0']['field_issue_type'][LANGUAGE_NONE]['0']['value']; // issue type
 
   // Add the hours by issue type
