@@ -328,6 +328,7 @@ function productivity_project_save_project_details($wrapper, $project_wrapper) {
     foreach($table_arr as $value){
       if($value['field_issue_type'][LANGUAGE_NONE]['0']['value'] === $issue_type){
         $value['field_hours'][LANGUAGE_NONE]['0']['value'] += $hours;
+        $value['field_days'][LANGUAGE_NONE]['0']['value'] = productivity_time_tracking_total_days($project_wrapper->getIdentifier());
       };
     };
   }
