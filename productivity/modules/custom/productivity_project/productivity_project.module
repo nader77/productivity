@@ -313,3 +313,23 @@ function productivity_project_repository_autocomplete_invalidate() {
 function productivity_project_repository_autocomplete_need_invalidate() {
   return REQUEST_TIME - variable_get('productivity_project_repositories_defined') >= 86400;
 }
+
+/**
+ *
+ */
+function productivity_project_save_project_details($wrapper, $project_wrapper) {
+  $hours = $wrapper->field_track_hours->value(); // issue hours
+  $day_type = $wrapper->field_day_type->value(); // issue type
+  $issue_type = $wrapper->raw()->field_issues_logs[LANGUAGE_NONE]['0']['field_issue_type'][LANGUAGE_NONE]['0']['value']; // issue type
+
+  // Add the hours by issue type
+  if($day_type === "regular"){
+    $table_arr = $project_wrapper->field_table_rate->raw();
+    foreach($table_arr as $value){
+      if($value['field_issue_type'][LANGUAGE_NONE]['0']['value'] === $issue_type){
+        $value['field_hours'][LANGUAGE_NONE]['0']['value'] += $hours;
+      };
+    };
+  }
+
+}
