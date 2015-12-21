@@ -245,7 +245,13 @@ function productivity_time_tracking_node_presave($node) {
   $hours += $wrapper->field_track_hours->value();
 
   // Add hours to the project's relevant scope.
-  $detail_scope = productivity_project_save_project_details($wrapper, $project_wrapper);
+  $table_rate = productivity_project_save_project_details($wrapper, $project_wrapper);
+//  $project_wrapper->info()['bundle'] = 'project';
+//  $bla2 = $project_wrapper->getBundle();
+//  $bla = field_info_bundles('project');
+
+  $project_wrapper->field_table_rate->set($table_rate);
+
 
   if ($project_wrapper->value()) {
     $days_count = productivity_time_tracking_total_days($project_wrapper->getIdentifier());
