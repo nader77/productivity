@@ -322,14 +322,18 @@ function productivity_project_save_project_details($wrapper, $project_wrapper) {
             $period = $value['field_scope'][LANGUAGE_NONE][0]['period'];
             $amount = $value['field_type_rate'][LANGUAGE_NONE][0]['amount'];
             $currency = $value['field_type_rate'][LANGUAGE_NONE][0]['currency'];
-            $field_table_rate[$index] = createNodeArray($value['id'], $days, $time_spent, $issue_type, $interval, $period, $amount, $currency);
+
+            // Create element table rate and add it to array
+            $field_table_rate[$index] = check_existing_type($value['id'], $days, $time_spent, $issue_type, $interval, $period, $amount, $currency);
           } else {
             $field_table_rate[$index] = $value;
           }
         }
       } else {
-        // it's an existing issue, and need to be edit.
+        // it's an existing  issue, and need to be edit.
         // how to check if is an existing issue?
+
+
       }
     } else {
       // new type, insert all of the types and also this one
@@ -340,7 +344,7 @@ function productivity_project_save_project_details($wrapper, $project_wrapper) {
       // Add the new one at the end of the array
       $time_spent = strval($wrapper->value()->field_issues_logs[LANGUAGE_NONE][0]['field_time_spent'][LANGUAGE_NONE][0]['value']);
       $issue_type = $wrapper->value()->field_issues_logs[LANGUAGE_NONE][0]['field_issue_type'][LANGUAGE_NONE][0]['value'];
-      $field_table_rate[$index+1] = createNodeArray($value['id'], '1', $time_spent, $issue_type, '100', 'Hours', '10', 'USD');
+      $field_table_rate[$index+1] = check_existing_type($value['id'], '1', $time_spent, $issue_type, '100', 'Hours', '10', 'USD');
     }
   }
 
