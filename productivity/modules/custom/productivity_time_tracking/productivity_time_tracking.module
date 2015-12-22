@@ -245,11 +245,7 @@ function productivity_time_tracking_node_presave($node) {
   $hours += $wrapper->field_track_hours->value();
 
   // Add hours to the project's relevant scope.
-  $table_rate = productivity_project_save_project_details($wrapper, $project_wrapper);
-//  $project_wrapper->info()['bundle'] = 'project';
-//  $bla2 = $project_wrapper->getBundle();
-//  $bla = field_info_bundles('project');
-
+  $table_rate = productivity_project_save_project_details($node);
   $project_wrapper->field_table_rate->set($table_rate);
 
 
@@ -265,7 +261,7 @@ function productivity_time_tracking_node_presave($node) {
     }
     // Notification for major milestone meeting.
     // TODO: improve by sending an invite to calendar meeting.
-    productivity_project_logged_hours_notify($project_wrapper->value(), $detail_scope);
+    productivity_project_logged_hours_notify($project_wrapper->value(), '');
   }
 }
 
