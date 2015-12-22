@@ -301,11 +301,8 @@ function productivity_project_save_project_details($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
   $project_wrapper = $wrapper->field_project;
 
-  $hours =  // issue hours
   $day_type = $wrapper->field_day_type->value(); // day type
   $type = $wrapper->value()->field_issues_logs[LANGUAGE_NONE][0]['field_issue_type'][LANGUAGE_NONE][0]['value']; // type
-
-
 
   // Add the hours by issue type
   if($day_type === "regular") {
@@ -314,12 +311,10 @@ function productivity_project_save_project_details($node) {
 
     $issues = $wrapper->value()->field_issues_logs[LANGUAGE_NONE];
     foreach($issues as $index=>$issue) {
-      $old_label = $issue['field_issue_label'][LANGUAGE_NONE][0]['value'];
-      $new_label = $node->original->field_issues_logs[LANGUAGE_NONE][$index]['field_issue_label'][LANGUAGE_NONE][0]['value'];
       // check if issue exist.
-      if($node->is_new){
+      if($node->is_new) {
         // Check if type exist.
-        if(check_existing_type($existing_table, $type)){
+        if(check_existing_type($existing_table, $type)) {
           // new issue, existing type.
 
         } else {
@@ -338,7 +333,7 @@ function productivity_project_save_project_details($node) {
         }
       } else {
         // Check if type exist.
-        if(check_existing_type($existing_table, $type)){
+        if(check_existing_type($existing_table, $type)) {
           // existing issue, existing type.
           foreach($existing_table as $index=>$value) {
             if($value['field_issue_type'][LANGUAGE_NONE]['0']['value'] === $type) {
@@ -392,10 +387,10 @@ function productivity_project_save_project_details($node) {
  *  True | False
  */
 function check_existing_type($table_array, $issue_type) {
-  foreach($table_array as $index=>$value){
+  foreach($table_array as $index=>$value) {
     $existing_issues[] = $value['field_issue_type'][LANGUAGE_NONE][0]['value'];
   }
-  if(in_array($issue_type, $existing_issues)){
+  if(in_array($issue_type, $existing_issues)) {
     return true;
   } else {
     return false;
@@ -407,11 +402,11 @@ function check_existing_type($table_array, $issue_type) {
  * Create element array for table rate
  *
  * @param $id
- *  id
+ *  The node ID
  * @param $days
  *  days
  * @param $time_spent
- *  time_spent in the issue
+ *  time spent in the issue
  * @param $issue_type
  *  issue hours
  * @param $interval
@@ -473,7 +468,7 @@ function notify($thresholds, $wrapper, $percentage, $email_string, $percentage_n
     }
 
     // Add a message to the log messages.
-    if(isset($detail_scope)){
+    if(isset($detail_scope)) {
       $message_details = array('@scope' => $detail_scope);
     }
     $message_details['@project'] = $wrapper->label();
