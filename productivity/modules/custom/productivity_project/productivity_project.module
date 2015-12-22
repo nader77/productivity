@@ -122,7 +122,7 @@ function productivity_project_logged_hours_notify($node, $detail_scope) {
   $wrapper = entity_metadata_wrapper('node', $node);
   $total_scope = $wrapper->field_scope->value();
 
-  // scope hours
+  // Scope hours
   foreach($wrapper->field_table_rate->raw() as $value) {
     if($value['field_issue_type'][LANGUAGE_NONE]['0']['value'] === $detail_scope) {
       $hours = $value['field_hours'][LANGUAGE_NONE]['0']['value'];
@@ -301,66 +301,81 @@ function productivity_project_save_project_details($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
   $project_wrapper = $wrapper->field_project;
 
-  $hours = $wrapper->field_track_hours->value(); // issue hours
+  $hours =  // issue hours
   $day_type = $wrapper->field_day_type->value(); // day type
   $type = $wrapper->value()->field_issues_logs[LANGUAGE_NONE][0]['field_issue_type'][LANGUAGE_NONE][0]['value']; // type
 
+
+
   // Add the hours by issue type
   if($day_type === "regular") {
-    $table_arr = $project_wrapper->field_table_rate->raw();
-    $field_table_rate = array();
+    $existing_table = $project_wrapper->field_table_rate->raw();
+    $new_table = array();
 
-    if(check_existing_type($table_arr, $type)) {
-      // Check if it's an existing type
+    $issues = $wrapper->value()->field_issues_logs[LANGUAGE_NONE];
+    foreach($issues as $index=>$issue) {
+      $old_label = $issue['field_issue_label'][LANGUAGE_NONE][0]['value'];
+      $new_label = $node->original->field_issues_logs[LANGUAGE_NONE][$index]['field_issue_label'][LANGUAGE_NONE][0]['value'];
+      // check if issue exist.
       if($node->is_new){
-        // Check if it's new issue
-        foreach($table_arr as $index=>$value) {
-          if($value['field_issue_type'][LANGUAGE_NONE]['0']['value'] === $type) {
-            // Cannot use the `wrapper` on the sub-fields of a multi-field.
-            $days = strval(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
-            $time_spent = strval($value['field_hours'][LANGUAGE_NONE][0]['value'] + $hours);
-            $issue_type = $value['field_issue_type'][LANGUAGE_NONE][0]['value'];
-            $interval = $value['field_scope'][LANGUAGE_NONE][0]['interval'];
-            $period = $value['field_scope'][LANGUAGE_NONE][0]['period'];
-            $amount = $value['field_type_rate'][LANGUAGE_NONE][0]['amount'];
-            $currency = $value['field_type_rate'][LANGUAGE_NONE][0]['currency'];
+        // Check if type exist.
+        if(check_existing_type($existing_table, $type)){
+          // new issue, existing type.
 
-            // Create element table rate and add it to array
-            $field_table_rate[$index] = create_table_rate_elm($value['id'], $days, $time_spent, $issue_type, $interval, $period, $amount, $currency);
-          } else {
-            $field_table_rate[$index] = $value;
-          }
+        } else {
+          // new issue, new type.
+          $id = $wrapper->field_issues_logs->raw()[0]['id'];
+          $days = strval(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
+          $time_spent = $wrapper->field_issues_logs->raw()[0]['field_time_spent'][LANGUAGE_NONE][0]['value'];
+          $issue_type = $wrapper->field_issues_logs->raw()[0]['field_issue_type'][LANGUAGE_NONE][0]['value'];
+          $interval = '0';
+          $period = 'hour';
+          $amount = '0';
+          $currency = 'USD';
+
+          // Create element table rate and add it to array
+          $field_table_rate[$index] = create_table_rate_elm($id, $days, $time_spent, $issue_type, $interval, $period, $amount, $currency);
         }
       } else {
-        // it's an existing issue, need to be edit.
-        $id = $wrapper->value()->field_issues_logs[LANGUAGE_NONE][0]['id'];
-        //$old_hours =  $node->original->field_issues_logs[LANGUAGE_NONE][0]['field_time_spent'][LANGUAGE_NONE][0];
-        $new_hours = $node->field_issues_logs[LANGUAGE_NONE][0]['field_time_spent'][LANGUAGE_NONE][0];
-        $days = strval(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
-        $issue_type = $node->field_issues_logs[LANGUAGE_NONE][0]['field_issue_type'][LANGUAGE_NONE][0];
-        $interval = $project_wrapper->field_table_rate->value()[0]->field_scope[LANGUAGE_NONE][0]['interval'];
-        $period = $project_wrapper->field_table_rate->value()[0]->field_scope[LANGUAGE_NONE][0]['period'];
-        $amount = $project_wrapper->field_table_rate->value()[0]->field_type_rate[LANGUAGE_NONE][0]['amount'];
-        $currency = $project_wrapper->field_table_rate->value()[0]->field_type_rate[LANGUAGE_NONE][0]['currency'];
+        // Check if type exist.
+        if(check_existing_type($existing_table, $type)){
+          // existing issue, existing type.
+          foreach($existing_table as $index=>$value) {
+            if($value['field_issue_type'][LANGUAGE_NONE]['0']['value'] === $type) {
+              // Cannot use the `wrapper` on the sub-fields of a multi-field.
+              $days = strval(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
+              $time_spent = $wrapper->field_track_hours->value();
+              $issue_type = $value['field_issue_type'][LANGUAGE_NONE][0]['value'];
+              $interval = $value['field_scope'][LANGUAGE_NONE][0]['interval'];
+              $period = $value['field_scope'][LANGUAGE_NONE][0]['period'];
+              $amount = $value['field_type_rate'][LANGUAGE_NONE][0]['amount'];
+              $currency = $value['field_type_rate'][LANGUAGE_NONE][0]['currency'];
 
-        create_table_rate_elm($id, $days, $new_hours, $issue_type, $interval, $period, $amount, $currency);
-      }
-    } else {
-      // new type
-      foreach($table_arr as $index=>$value) {
-        // Add all existing ones to table array
-        $field_table_rate[$index] = $value;
-      }
+              // Create element table rate and add it to array
+              $field_table_rate[$index] = create_table_rate_elm($value['id'], $days, $time_spent, $issue_type, $interval, $period, $amount, $currency);
+            } else {
+              $field_table_rate[$index] = $value;
+            }
+          }
+        } else {
+          // existing issue, new type (just insert the new type).
+          $id = $wrapper->field_issues_logs->raw()[0]['id'];
+          $days = strval(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
+          $time_spent = $wrapper->field_issues_logs->raw()[0]['field_time_spent'][LANGUAGE_NONE][0]['value'];
+          $issue_type = $wrapper->field_issues_logs->raw()[0]['field_issue_type'][LANGUAGE_NONE][0]['value'];
+          $interval = '0';
+          $period = 'hour';
+          $amount = '0';
+          $currency = 'USD';
 
-      // Add the new one at the end of the array
-      $id = $wrapper->value()->field_issues_logs[LANGUAGE_NONE][0]['id'];
-      $time_spent = strval($wrapper->value()->field_issues_logs[LANGUAGE_NONE][0]['field_time_spent'][LANGUAGE_NONE][0]['value']);
-      $issue_type = $wrapper->value()->field_issues_logs[LANGUAGE_NONE][0]['field_issue_type'][LANGUAGE_NONE][0]['value'];
-      $field_table_rate[count($table_arr)] = create_table_rate_elm($id, '1', $time_spent, $issue_type, '10', 'Hours', '10', 'USD');
+          // Create element table rate and add it to array
+          $field_table_rate[$index] = create_table_rate_elm($id, $days, $time_spent, $issue_type, $interval, $period, $amount, $currency);
+        }
+      }
     }
   }
 
-  // Return the new array to be saved instead of `field_table_rate` in $project_wrapper
+  // Return the new array to be saved instead of `field_table_rate` in $project_wrapper.
   return $field_table_rate;
 }
 
@@ -368,7 +383,7 @@ function productivity_project_save_project_details($node) {
  *
  * Check if type is already exist in table rate
  *
- * @param $table_arr
+ * @param $table_array
  *  table rate
  * @param $issue_type
  *  type to check
@@ -376,8 +391,8 @@ function productivity_project_save_project_details($node) {
  * @return bool
  *  True | False
  */
-function check_existing_type($table_arr, $issue_type) {
-  foreach($table_arr as $index=>$value){
+function check_existing_type($table_array, $issue_type) {
+  foreach($table_array as $index=>$value){
     $existing_issues[] = $value['field_issue_type'][LANGUAGE_NONE][0]['value'];
   }
   if(in_array($issue_type, $existing_issues)){
