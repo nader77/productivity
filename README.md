@@ -1,4 +1,4 @@
-[![Build Status](https://magnum.travis-ci.com/Gizra/productivity.svg?token=p2M1EeCrd3dY32WxWj3X&branch=master)](https://magnum.travis-ci.com/Gizra/productivity)
+[![Build Status](https://travis-ci.org/Gizra/productivity.svg)](https://travis-ci.org/Gizra/productivity)
 
 
 # Gizra Productivity 
