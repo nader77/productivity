@@ -248,7 +248,6 @@ function productivity_time_tracking_node_presave($node) {
   $table_rate = productivity_project_save_project_details($node);
   $project_wrapper->field_table_rate->set($table_rate);
 
-
   if ($project_wrapper->value()) {
     $days_count = productivity_time_tracking_total_days($project_wrapper->getIdentifier());
     // Update total hours and days just for certain issue types
