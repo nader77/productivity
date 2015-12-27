@@ -304,12 +304,17 @@ function productivity_project_save_project_details($node) {
 
   // Add the hours by issue type
   if($day_type === "regular") {
-    $table = $project_wrapper->field_table_rate->raw();
+    // Check if `field_table_rate` field already exist.
+    if ($project_wrapper->__isset('field_table_rate')) {
+      $table = $project_wrapper->field_table_rate->raw();
+    } else {
+      $table = array();
+    }
+
     $new_issues = $node->field_issues_logs[LANGUAGE_NONE];
     $old_issues = $node->original->field_issues_logs[LANGUAGE_NONE];
-
-    if (!isset($table)) {
-      $table = array();
+    if (!$old_issues) {
+      $old_issues = array();
     }
 
     for ($index = count($old_issues); $index < count($new_issues); $index++) {
@@ -341,7 +346,6 @@ function productivity_project_save_project_details($node) {
     }
   }
 
-  // Return the new array to be saved instead of `field_table_rate` in $project_wrapper.
   return $table;
 }
 
