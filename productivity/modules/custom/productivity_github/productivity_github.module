@@ -72,12 +72,17 @@ function productivity_github_payload() {
     return;
   }
 
+  // Allow only company personnel's issues and PRs to be stored.
+  if (!$uid = productivity_github_get_uid_by_github_username(check_plain($payload->sender->login))) {
+    return;
+  }
+
   $action = $payload->action;
 
   // Handle the payload in a separate function.
   $function_name = 'productivity_gituhub_payload_handle_' . $event . '_' . $action;
   if (function_exists($function_name)) {
-    $function_name($payload);
+    $function_name($payload, $uid);
   }
 }
 
@@ -108,11 +113,6 @@ function productivity_github_get_uid_by_github_username($github_username) {
  *   Project node ID.
  */
 function productivity_github_get_project_by_repository($repository_info) {
-  // Look for one of the 3 supported name in the following order:
-  // $repository_info->name - Project name (ie. generator-hedley)
-  // $repository_info->owner->login - Account name (ie. Gizra)
-  // $repository_info->full_name - Project name + Account (ie. Gizra/generator-hedley)
-
   $values = array(
     $repository_info->name,
     $repository_info->owner->login,
@@ -159,16 +159,17 @@ function _productivity_github_get_entity_id_by_field_value($field, $bundle, $val
 /**
  * Handle a pull request synchronization.
  *
- * @param $payload
+ * @param object $payload
  *   GitHub payload.
+ * @param integer $uid
+ *  The employee ID.
  *
  * @see https://developer.github.com/v3/activity/events/types/#pullrequestevent
  */
-function productivity_gituhub_payload_handle_pull_request_synchronize($payload) {
+function productivity_gituhub_payload_handle_pull_request_synchronize($payload, $uid) {
   // We need to check if it's the same user an update the same entity, if it's
   // a different user then we need to create a new entity.
-
-  $nid = productivity_github_get_entity_id_by_push_info($payload);
+  $nid = productivity_github_get_entity_id_by_push_info($payload, $uid);
   if ($nid) {
     // Update push dates if the entity exists.
     $wrapper = entity_metadata_wrapper('node', $nid);
@@ -196,7 +197,7 @@ function productivity_gituhub_payload_handle_pull_request_synchronize($payload) 
   }
   else {
     // Create a new entity if a new user has pushed to the pull request.
-    productivity_gituhub_payload_handle_pull_request_opened($payload);
+    productivity_gituhub_payload_handle_pull_request_opened($payload, $uid);
   }
 }
 
@@ -205,17 +206,13 @@ function productivity_gituhub_payload_handle_pull_request_synchronize($payload) 
  *
  * @param $payload
  *   GitHub payload.
+ * @param integer $uid
+ *  The employee ID.
  *
  * @see https://developer.github.com/v3/activity/events/types/#pullrequestevent
  */
-function productivity_gituhub_payload_handle_pull_request_opened($payload) {
+function productivity_gituhub_payload_handle_pull_request_opened($payload, $uid) {
   // When a PR is opened we need to create a new entity.
-
-  // Create the node if there's a user ID.
-  $uid = productivity_github_get_uid_by_github_username(check_plain($payload->sender->login));
-  if (!$uid) {
-    return;
-  }
 
   $node = new stdClass();
   $node->title = check_plain($payload->pull_request->title);
@@ -266,10 +263,12 @@ function productivity_gituhub_payload_handle_pull_request_opened($payload) {
  *
  * @param $payload
  *  GitHub payload.
+ * @param integer $uid
+ *  The employee ID.
  *
  * @see https://developer.github.com/v3/activity/events/types/#issuesevent
  */
-function productivity_gituhub_payload_handle_issues_opened($payload) {
+function productivity_gituhub_payload_handle_issues_opened($payload, $uid) {
   // Simplify code.
   $data = $payload->issue;
 
@@ -281,7 +280,7 @@ function productivity_gituhub_payload_handle_issues_opened($payload) {
   node_object_prepare($node);
   $node->language = LANGUAGE_NONE;
   $node->status = NODE_PUBLISHED;
-  $node->uid = productivity_github_get_uid_by_github_username(check_plain($data->user->login));
+  $node->uid = $uid;
 
   $wrapper = entity_metadata_wrapper('node', $node);
   $wrapper->body->value->set($data->body);
@@ -318,12 +317,13 @@ function productivity_gituhub_payload_handle_issues_opened($payload) {
  *
  * @param $payload
  *  The push info from GitHub API.
+ * @param integer $uid
+ *  The employee ID.
  *
  * @return mixed
  *  The GitHub entity ID.
  */
-function productivity_github_get_entity_id_by_push_info($payload) {
-  $uid = productivity_github_get_uid_by_github_username(check_plain($payload->sender->login));
+function productivity_github_get_entity_id_by_push_info($payload, $uid) {
   $issue_id = (int)$payload->pull_request->number;
   $project_id = productivity_github_get_project_by_repository($payload->repository);
 
