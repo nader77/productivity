@@ -349,6 +349,10 @@ function productivity_project_save_project_details($node) {
 }
 
 /**
+ *
+ * Return the index of the type in the table,
+ * or the table length if it doesn't exist.
+ *
  * @param $table
  *  Table types array
  * @param $issue_type
