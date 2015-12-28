@@ -246,10 +246,7 @@ function productivity_time_tracking_node_presave($node) {
 
   // Add hours to the project's relevant scope.
   $table_rate = productivity_project_save_project_details($node);
-  if (!$project_wrapper->__isset('field_table_rate')) {
-    // Create `field_table_rate` field in $project_wrapper, becuase it's the first time.
-    //$project_wrapper->field_table_rate->set($table_rate);
-  }
+  $project_wrapper->field_table_rate->set($table_rate);
 
   if ($project_wrapper->value()) {
     $days_count = productivity_time_tracking_total_days($project_wrapper->getIdentifier());

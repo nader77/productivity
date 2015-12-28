@@ -304,12 +304,7 @@ function productivity_project_save_project_details($node) {
 
   // Add the hours by issue type
   if($day_type === "regular") {
-    // Check if `field_table_rate` field already exist.
-    if ($project_wrapper->__isset('field_table_rate')) {
-      $table = $project_wrapper->field_table_rate->raw();
-    } else {
-      $table = array();
-    }
+    $table = $project_wrapper->field_table_rate->raw();
 
     $new_issues = $node->field_issues_logs[LANGUAGE_NONE];
     $old_issues = $node->original->field_issues_logs[LANGUAGE_NONE];
@@ -324,12 +319,14 @@ function productivity_project_save_project_details($node) {
         foreach ($table as $table_index => $value) {
           // Check if the it's the same type.
           if ($value['field_issue_type'][LANGUAGE_NONE][0]['value'] === $type) {
+            // Get the index of the issue tape in the table
+            $next_index = get_table_next_index($table, $type);
+
             // Add the hours to the existing hours type.
-            $table[$index-1]['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issues[$index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
+            $table[$next_index]['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issues[$index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
           }
         }
-      }
-      else {
+      } else {
         // New type (just insert the new type).
         $id = $new_issues[$index]['id'];
         $days = strval(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
@@ -340,8 +337,10 @@ function productivity_project_save_project_details($node) {
         $amount = '0';
         $currency = 'USD';
 
-        // Create element table rate and add it to array
-        $table[$index-1] = create_table_rate_elm($id, $days, $time_spent, $issue_type, $interval, $period, $amount, $currency);
+        // Get the index of the issue tape in the table
+        $next_index = get_table_next_index($table, $type);
+
+        $table[$next_index] = create_table_rate_elm($id, $days, $time_spent, $issue_type, $interval, $period, $amount, $currency);
       }
     }
   }
@@ -350,13 +349,36 @@ function productivity_project_save_project_details($node) {
 }
 
 /**
+ * @param $table
+ *  Table types array
+ * @param $issue_type
+ *  Type to check in table
+ *
+ * @return int
+ *  The index of the type in table
+ */
+function get_table_next_index($table, $issue_type) {
+  foreach($table as $index => $value) {
+    if($value['field_issue_type'][LANGUAGE_NONE][0]['value'] === $issue_type){
+      $table_index = $index;
+    }
+  }
+
+  if(!isset($table_index)) {
+    $table_index = count($table);
+  }
+
+  return $table_index;
+}
+
+/**
  *
  * Check if type is already exist in table rate
  *
  * @param $table_array
- *  table rate
+ *  Table rate
  * @param $issue_type
- *  type to check
+ *  Type to check
  *
  * @return bool
  *  True | False
@@ -379,19 +401,19 @@ function check_existing_type($table_array, $issue_type) {
  * @param $id
  *  The node ID
  * @param $days
- *  days
+ *  Days
  * @param $time_spent
- *  time spent in the issue
+ *  Time spent in the issue
  * @param $issue_type
- *  issue hours
+ *  Issue hours
  * @param $interval
- *  time on issue
+ *  Time on issue
  * @param $period
- *  type of time (e.g. Hours)
+ *  Type of time (e.g. Hours)
  * @param $amount
- *  amount for this issue type
+ *  Amount for this issue type
  * @param $currency
- *  billing currency for this issue type
+ *  Billing currency for this issue type
  *
  * @return array
  *  array element for rate table
