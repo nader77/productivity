@@ -304,15 +304,10 @@ function productivity_project_save_project_details($node) {
 
   // Add the hours by issue type
   if($day_type === "regular") {
-    $table = $project_wrapper->field_table_rate->raw();
-
+    $table = array();
     $new_issues = $node->field_issues_logs[LANGUAGE_NONE];
-    $old_issues = $node->original->field_issues_logs[LANGUAGE_NONE];
-    if (!$old_issues) {
-      $old_issues = array();
-    }
 
-    for ($index = count($old_issues); $index < count($new_issues); $index++) {
+    foreach($new_issues as $index=>$issue) {
       $type = $new_issues[$index]['field_issue_type'][LANGUAGE_NONE][0]['value'];
       if (check_existing_type($table, $type)) {
         // Existing type, loop through the table types.
@@ -340,7 +335,20 @@ function productivity_project_save_project_details($node) {
         // Get the index of the issue tape in the table
         $next_index = get_table_next_index($table, $type);
 
-        $table[$next_index] = create_table_rate_elm($id, $days, $time_spent, $issue_type, $interval, $period, $amount, $currency);
+        $table[$next_index] = array(
+          'id' => $id,
+          'field_days' => array(LANGUAGE_NONE => array(array('value' => $days))),
+          'field_hours' => array(LANGUAGE_NONE => array(array('value' => $time_spent))),
+          'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $issue_type))),
+          'field_scope' => array(LANGUAGE_NONE => array(array(
+            'interval' => $interval,
+            'period' => $period,
+          ))),
+          'field_type_rate' => array(LANGUAGE_NONE => array(array(
+            'amount' => $amount,
+            'currency' => $currency,
+          ))),
+        );
       }
     }
   }
@@ -396,47 +404,6 @@ function check_existing_type($table_array, $issue_type) {
   } else {
     return false;
   }
-}
-
-/**
- *
- * Create element array for table rate
- *
- * @param $id
- *  The node ID
- * @param $days
- *  Days
- * @param $time_spent
- *  Time spent in the issue
- * @param $issue_type
- *  Issue hours
- * @param $interval
- *  Time on issue
- * @param $period
- *  Type of time (e.g. Hours)
- * @param $amount
- *  Amount for this issue type
- * @param $currency
- *  Billing currency for this issue type
- *
- * @return array
- *  array element for rate table
- */
-function create_table_rate_elm($id, $days, $time_spent, $issue_type, $interval, $period, $amount, $currency) {
-  return array(
-    'id' => $id,
-    'field_days' => array(LANGUAGE_NONE => array(array('value' => $days))),
-    'field_hours' => array(LANGUAGE_NONE => array(array('value' => $time_spent))),
-    'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $issue_type))),
-    'field_scope' => array(LANGUAGE_NONE => array(array(
-      'interval' => $interval,
-      'period' => $period,
-    ))),
-    'field_type_rate' => array(LANGUAGE_NONE => array(array(
-      'amount' => $amount,
-      'currency' => $currency,
-    ))),
-  );
 }
 
 /**
