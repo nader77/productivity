@@ -786,7 +786,7 @@ If your not sure use the third one.',
     'label' => 'Percentage notified',
     'required' => 0,
     'settings' => array(
-      'max' => 100,
+      'max' => 200,
       'min' => 0,
       'prefix' => '',
       'suffix' => '',
