@@ -90,6 +90,7 @@ function productivity_project_recalculate_hours($node) {
 function productivity_project_form_project_node_form_alter(&$form, &$form_state) {
   $form['field_hours']['#disabled'] = TRUE;
   $form['field_days']['#disabled'] = TRUE;
+  $form['field_scope']['#disabled'] = TRUE;
   $form['field_percentage_notification']['#disabled'] = TRUE;
 
   // Set the repo name as autocomplete.
