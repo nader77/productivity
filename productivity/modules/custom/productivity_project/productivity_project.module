@@ -118,17 +118,9 @@ function productivity_project_form_project_node_form_alter(&$form, &$form_state)
  *  Returns FALSE only if the scope is not relevant.
  *
  */
-function productivity_project_logged_hours_notify($node, $detail_scope) {
+function productivity_project_logged_hours_notify($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
   $total_scope = $wrapper->field_scope->value();
-
-  // Scope hours
-  foreach($wrapper->field_table_rate->raw() as $value) {
-    if($value['field_issue_type'][LANGUAGE_NONE]['0']['value'] === $detail_scope) {
-      $hours = $value['field_hours'][LANGUAGE_NONE]['0']['value'];
-      $scope = $value['field_scope'][LANGUAGE_NONE]['0'];
-    }
-  }
 
   // Notification thresholds.
   $thresholds = array(
@@ -150,7 +142,6 @@ function productivity_project_logged_hours_notify($node, $detail_scope) {
 
   // Calculate the project's percentage of logged hours.
   $total_percentage = productivity_project_calculate_percentage($total_scope, $total_hours);
-  $scope_percentage = productivity_project_calculate_percentage($scope, $hours);
 
   // Send only if the project reached a new threshold and
   // the managers were never notified about it.
@@ -163,16 +154,22 @@ function productivity_project_logged_hours_notify($node, $detail_scope) {
   );
   notify($thresholds, $wrapper, $total_percentage, 'The project @project has reached a new threshold: @threshold%', $percentage_notified, $arguments);
 
-  $arguments = array(
-    '@project_name' => $wrapper->label(),
-    '@logged_percentage' => $scope_percentage,
-    '@project_scope' => $scope['interval'] . ' ' . $scope['period'],
-    '@project_total_hours' => $hours,
-    '@project_total_days' => $value['field_days'][LANGUAGE_NONE]['0']['value'],
-  );
-  notify($thresholds, $wrapper, $scope_percentage, 'The @scope in @project project has reached a new threshold: @threshold%', $percentage_notified, $arguments);
+  // Check scope for each type
+  foreach($wrapper->field_table_rate->raw() as $value) {
+    $hours = $value['field_hours'][LANGUAGE_NONE]['0']['value'];
+    $scope = $value['field_scope'][LANGUAGE_NONE]['0'];
+    $scope_percentage = productivity_project_calculate_percentage($scope, $hours);
+    $detail_scope = $value['field_issue_type'][LANGUAGE_NONE]['0']['value'];
 
-
+    $arguments = array(
+      '@project_name' => $wrapper->label(),
+      '@logged_percentage' => $scope_percentage,
+      '@scope' => $scope['interval'] . ' ' . $scope['period'],
+      '@scope_total_hours' => $hours,
+      '@scope_total_days' => $value['field_days'][LANGUAGE_NONE][0]['value'],
+    );
+    notify($thresholds, $wrapper, $scope_percentage, 'The @scope in @project project has reached a new threshold: @threshold%', $percentage_notified, $arguments, $detail_scope);
+  }
 }
 
 /**
@@ -423,7 +420,7 @@ function check_existing_type($table_array, $issue_type) {
  * @param $arguments
  *  The email arguments
  */
-function notify($thresholds, $wrapper, $percentage, $email_string, $percentage_notified, $arguments) {
+function notify($thresholds, $wrapper, $percentage, $email_string, $percentage_notified, $arguments, $detail_scope) {
   foreach ($thresholds as $key => $threshold) {
     if ($percentage < $threshold || $percentage_notified >= $threshold) {
       // Didn't reach a threshold OR This threshold has been already notified.
