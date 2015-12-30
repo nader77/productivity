@@ -215,7 +215,7 @@ function productivity_gituhub_payload_handle_pull_request_opened($payload, $uid)
   // When a PR is opened we need to create a new entity.
 
   $node = new stdClass();
-  $node->title = check_plain($payload->pull_request->title);
+  $node->title = $payload->pull_request->title;
   $node->type = 'github_issue';
   node_object_prepare($node);
   $node->language = LANGUAGE_NONE;
