@@ -287,6 +287,9 @@ function productivity_project_repository_autocomplete_need_invalidate() {
 /**
  * Update scope days and scope hours if day type is regular.
  *
+ * Build the scope multi field table,
+ * Called every time new issue is create or update.
+ *
  * @param $wrapper
  *  The node wrapper.
  * @param $project_wrapper
@@ -305,7 +308,7 @@ function productivity_project_save_project_details($node) {
     $table = array();
     $new_issues = $node->field_issues_logs[LANGUAGE_NONE];
 
-    foreach($new_issues as $index=>$issue) {
+    foreach($new_issues as $index => $issue) {
       $type = $new_issues[$index]['field_issue_type'][LANGUAGE_NONE][0]['value'];
       if (check_existing_type($table, $type)) {
         // Existing type, loop through the table types.
@@ -355,9 +358,12 @@ function productivity_project_save_project_details($node) {
 }
 
 /**
+ * Get the table next index.
  *
- * Return the index of the type in the table,
- * or the table length if it doesn't exist.
+ * Find the index of the type in the table,
+ * And if it's not exist, return the table length.
+ * Needs to be called every time you need to find
+ * where to insert the type in the table rate.
  *
  * @param $table
  *  Table types array
@@ -369,7 +375,7 @@ function productivity_project_save_project_details($node) {
  */
 function get_table_next_index($table, $issue_type) {
   foreach($table as $index => $value) {
-    if($value['field_issue_type'][LANGUAGE_NONE][0]['value'] === $issue_type){
+    if($value['field_issue_type'][LANGUAGE_NONE][0]['value'] === $issue_type) {
       $table_index = $index;
     }
   }
@@ -382,8 +388,9 @@ function get_table_next_index($table, $issue_type) {
 }
 
 /**
+ * Check if the scope type is already exist in table rate.
  *
- * Check if type is already exist in table rate
+ * Find if the scope type row is already existing in the table rate.
  *
  * @param $table_array
  *  Table rate
@@ -391,22 +398,19 @@ function get_table_next_index($table, $issue_type) {
  *  Type to check
  *
  * @return bool
- *  True | False
  */
 function check_existing_type($table_array, $issue_type) {
   foreach($table_array as $index=>$value) {
     $existing_issues[] = $value['field_issue_type'][LANGUAGE_NONE][0]['value'];
   }
-  if(in_array($issue_type, $existing_issues)) {
-    return true;
-  } else {
-    return false;
-  }
+  return in_array($issue_type, $existing_issues) ? TRUE : FALSE;
 }
 
 /**
+ * Actual notify logged hours percentage in a project or a scope.
  *
- * Notify
+ * Checks if the project has reached a new threshold,
+ * and send a message with project or scope details.
  *
  * @param array $thresholds
  *  The notification thresholds.
