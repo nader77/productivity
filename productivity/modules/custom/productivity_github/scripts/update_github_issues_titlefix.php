@@ -21,8 +21,7 @@ $base_query
   ->entityCondition('entity_type', 'node')
   ->propertyCondition('type', 'github_issue')
   ->propertyCondition('status', NODE_PUBLISHED)
-  ->propertyOrderBy('nid', 'ASC')
-  ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT');
+  ->propertyOrderBy('nid', 'ASC');
 
 if ($nid) {
   $base_query->propertyCondition('nid', $nid, '>');
@@ -38,6 +37,7 @@ while ($i < $count) {
   $result = $query
     ->range(0, $batch)
     ->execute();
+
   if (empty($result['node'])) {
     return;
   }
@@ -47,16 +47,19 @@ while ($i < $count) {
   foreach ($nodes as $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
 
-    try {
-      $wrapper->field_github_content_type->set('pull_request');
-      $wrapper->save();
+    $params = array(
+      '@nid' => $node->nid,
+      '@title' => $node->title,
+    );
 
-    } catch (Exception $e) {
-      $params = array(
-        '@error' => $e->getMessage(),
-        '@nid' => $node->nid,
-        '@title' => $node->title,
-      );
+    $unstriped_title = str_replace('&quot;', '"', $node->title);
+
+    try {
+      $wrapper->title->set($unstriped_title);
+      $wrapper->save();
+    }
+    catch (Exception $e) {
+      $params['@error'] = $e->getMessage();
       drush_log(format_string('There was error updating the node(@nid) @title with the value @value. More info: @error', $params), 'error');
     }
   }
