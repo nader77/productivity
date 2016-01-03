@@ -28,7 +28,6 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
     return $public_fields;
   }
 
-
   /**
    * Overrides RestfulEntityBase::getQueryForList().
    */

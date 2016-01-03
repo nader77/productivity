@@ -22,7 +22,7 @@ angular.module('clientApp')
      * @returns {*}
      */
     this.get = function(year, month) {
-      return $q.when(cache.data || getDataFromBackend(year, month));
+      return $q.when(getCache(year, month) || getDataFromBackend(year, month));
     };
 
     /**
@@ -44,12 +44,13 @@ angular.module('clientApp')
         url: url
       }).success(function(response) {
         // Create header days.
-        setCache(response.data);
+        setCache(response.data, year, month);
         deferred.resolve(response.data);
       });
 
       return deferred.promise;
     };
+
 
     /**
      * Set the cache from the server.
@@ -57,9 +58,25 @@ angular.module('clientApp')
      * @param data
      *   The data to cache
      */
-    var setCache = function(data) {
+    var getCache = function(year, month) {
       // Cache data.
-      cache = {
+      if (cache[year + '_' + month] != undefined) {
+        return cache[year + '_' + month].data;
+      }
+      return false;
+    };
+
+
+    /**
+     * Set the cache from the server.
+     *
+     * @param data
+     *   The data to cache
+     */
+    var setCache = function(data, year, month) {
+      // Cache data.
+
+      cache[year + '_' + month] = {
         data: data,
         timestamp: new Date()
       };
@@ -67,7 +84,7 @@ angular.module('clientApp')
       // Clear cache in 60 seconds.
       $timeout(function() {
         cache = {};
-      }, 60000);
+      }, 900000);
 
       // Broadcast a change event.
       $rootScope.$broadcast(broadcastUpdateEventName);
