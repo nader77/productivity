@@ -40,6 +40,10 @@ projects[entityreference][patch][] = "https://www.drupal.org/files/issues/migrat
 projects[entityreference_filter][subdir] = "contrib"
 projects[entityreference_filter][version] = "1.5"
 
+projects[entityrelationships][subdir] = "contrib"
+projects[entityrelationships][download][type] = "git"
+projects[entityrelationships][download][url] = "git@github.com:Gizra/entityrelationships.git"
+
 projects[gravatar][subdir] = "contrib"
 projects[gravatar][version] = "1.x-dev"
 

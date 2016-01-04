@@ -29,6 +29,7 @@ dependencies[] = date
 dependencies[] = date_popup
 dependencies[] = entity
 dependencies[] = entity_token
+dependencies[] = entityrelationships
 dependencies[] = entityreference
 dependencies[] = gravatar
 dependencies[] = jquery_update
