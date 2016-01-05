@@ -245,7 +245,7 @@ function productivity_time_tracking_node_presave($node) {
   $hours += $wrapper->field_track_hours->value();
 
   // Add hours to the project's relevant scope.
-  $table_rate = productivity_project_save_project_details($node);
+  $table_rate = productivity_project_save_project_details($node, $project_wrapper);
   $project_wrapper->field_table_rate->set($table_rate);
 
   if ($project_wrapper->value()) {

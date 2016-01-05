@@ -298,63 +298,145 @@ function productivity_project_repository_autocomplete_need_invalidate() {
  * @return string $issue_type
  *  The issue type.
  */
-function productivity_project_save_project_details($node) {
+function productivity_project_save_project_details($node, $project_wrapper) {
   $wrapper = entity_metadata_wrapper('node', $node);
-  $project_wrapper = $wrapper->field_project;
   $day_type = $wrapper->field_day_type->value();
 
   // Add the hours by issue type
   if($day_type === "regular") {
-    $table = array();
+
+    // If it's new issue (new day, new issues length)
+        // if it's an existing type
+            // update this type [loop] (insert the new hour)
+        // else
+            // insert new type (insert the new hour)
+    // else
+        // (have to be an existing type)
+        // update (how? id) that type (remove the hour of the old issue, and update the hour of the new issue).
+
+
+//    if(!$node->original) {
+//      // when new one and when new day
+//      $old_table = $project_wrapper->field_table_rate->raw();
+//      if ($old_table != null) {
+//        // new day
+//        $table = $old_table;
+//      }
+//    } else {
+//      $table = array();
+//    }
+
     $new_issues = $node->field_issues_logs[LANGUAGE_NONE];
+    $table  = ($project_wrapper->field_table_rate->raw() != null) ? $project_wrapper->field_table_rate->raw() : array();
 
-    foreach($new_issues as $index => $issue) {
-      $type = $new_issues[$index]['field_issue_type'][LANGUAGE_NONE][0]['value'];
-      if (check_existing_type($table, $type)) {
-        // Existing type, loop through the table types.
-        foreach ($table as $table_index => $value) {
-          // Check if the it's the same type.
-          if ($value['field_issue_type'][LANGUAGE_NONE][0]['value'] === $type) {
-            // Get the index of the issue tape in the table
-            $next_index = get_table_next_index($table, $type);
+    foreach($new_issues as $new_issue_index => $new_issue) {
+      $type = $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value'];
+//      if ($node->original) {
+        if (check_existing_type($table, $type)) {
+          $old_hours = check_existing_issue($node->field_issues_logs[LANGUAGE_NONE], $new_issue);
+          if(!$old_hours) {
 
-            // Add the hours to the existing hours type.
-            $table[$next_index]['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issues[$index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
+            foreach($table as $issue) {
+              if($issue['field_issue_type'][LANGUAGE_NONE][0]['value'] === $type) {
+               $issue['field_hours'][LANGUAGE_NONE][0]['value'] -= $old['field_hours'][LANGUAGE_NONE][0]['value'];
+              }
+            }
+
           }
+          $issue['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issue['field_hours'][LANGUAGE_NONE][0]['value'];
+        } else {
+          create_new_type($table, $type, $new_issue);
         }
-      } else {
-        // New type (just insert the new type).
-        $id = $new_issues[$index]['id'];
-        $days = strval(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
-        $time_spent = $new_issues[$index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
-        $issue_type = $type;
-        $interval = '0';
-        $period = 'hour';
-        $amount = '0';
-        $currency = 'USD';
-
-        // Get the index of the issue tape in the table
-        $next_index = get_table_next_index($table, $type);
-
-        $table[$next_index] = array(
-          'id' => $id,
-          'field_days' => array(LANGUAGE_NONE => array(array('value' => $days))),
-          'field_hours' => array(LANGUAGE_NONE => array(array('value' => $time_spent))),
-          'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $issue_type))),
-          'field_scope' => array(LANGUAGE_NONE => array(array(
-            'interval' => $interval,
-            'period' => $period,
-          ))),
-          'field_type_rate' => array(LANGUAGE_NONE => array(array(
-            'amount' => $amount,
-            'currency' => $currency,
-          ))),
-        );
-      }
+//      } else {
+//        if (check_existing_type($table, $type)) {
+//
+//        } else {
+//          create_new_type($table, $type, $new_issue);
+//        }
+//      }
     }
+
+
+//    $new_issues = $node->field_issues_logs[LANGUAGE_NONE];
+//
+//    foreach($new_issues as $index => $issue) {
+//      $type = $new_issues[$index]['field_issue_type'][LANGUAGE_NONE][0]['value'];
+//      if (check_existing_type($table, $type)) {
+//        // Existing type, loop through the table types.
+//        foreach ($table as $table_index => $value) {
+//          // Check if the it's the same type.
+//          if ($value['field_issue_type'][LANGUAGE_NONE][0]['value'] === $type) {
+//            // Get the index of the issue tape in the table
+//            $next_index = get_table_next_index($table, $type);
+//
+//            // Add the hours to the existing hours type.
+//            $table[$next_index]['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issues[$index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
+//          }
+//        }
+//      } else {
+//        // New type (just insert the new type).
+//        $id = $new_issues[$index]['id'];
+//        $days = strval(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
+//        $time_spent = $new_issues[$index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
+//        $issue_type = $type;
+//        $interval = '0';
+//        $period = 'hour';
+//        $amount = '0';
+//        $currency = 'USD';
+//
+//        // Get the index of the issue tape in the table
+//        $next_index = get_table_next_index($table, $type);
+//
+//        $table[$next_index] = array(
+//          'id' => $id,
+//          'field_days' => array(LANGUAGE_NONE => array(array('value' => $days))),
+//          'field_hours' => array(LANGUAGE_NONE => array(array('value' => $time_spent))),
+//          'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $issue_type))),
+//          'field_scope' => array(LANGUAGE_NONE => array(array(
+//            'interval' => $interval,
+//            'period' => $period,
+//          ))),
+//          'field_type_rate' => array(LANGUAGE_NONE => array(array(
+//            'amount' => $amount,
+//            'currency' => $currency,
+//          ))),
+//        );
+//      }
+//    }
   }
 
   return $table;
+}
+
+function create_new_type($table, $type, $new_issue) {
+  // Get the index of the issue tape in the table
+  $next_index = get_table_next_index($table, $type);
+
+  $table[$next_index] = array(
+    'id' => $new_issue['id'],
+    'field_days' => array(LANGUAGE_NONE => array(array('value' => '0'))),
+    'field_hours' => array(LANGUAGE_NONE => array(array('value' => $new_issue['field_time_spent'][LANGUAGE_NONE][0]['value']))),
+    'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $type))),
+    'field_scope' => array(LANGUAGE_NONE => array(array(
+      'interval' => '0',
+      'period' => 'hour',
+    ))),
+    'field_type_rate' => array(LANGUAGE_NONE => array(array(
+      'amount' => '0',
+      'currency' => 'USD',
+    ))),
+  );
+}
+
+function check_existing_issue($table_issues, $new_issue) {
+//  $new_issue_number = explode(':', $new_issue['field_issue_label'][LANGUAGE_NONE][0]['value']);
+//  foreach($table_issues as $issue) {
+//    $issue_number = explode(':', $issue['field_issue_label'][LANGUAGE_NONE][0]['value']);
+//    if($issue_number[0] === $new_issue_number[0]) {
+//      return TRUE;
+//    }
+//  }
+  return FALSE;
 }
 
 /**
