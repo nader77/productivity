@@ -368,6 +368,18 @@ angular.module('clientApp')
       });
     };
 
+
+    /**
+     * Punch work session and get session ID
+     */
+    $scope.workSessionPunch = function() {
+      console.log('here');
+      Tracking.workSessionPunch().then(function(result) {
+        console.log(result);
+        // if session opened change link to "End work" end time session.
+      });
+    };
+
     /**
      * Update total hours.
      *

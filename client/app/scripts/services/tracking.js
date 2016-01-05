@@ -86,6 +86,21 @@ angular.module('clientApp')
       });
     };
 
+
+    /**
+     * Create a new session or update an open session.
+     */
+
+    this.workSessionPunch = function() {
+      return $http({
+        method: 'POST',
+        url: Config.backend + '/api/work-sessions',
+        params: {
+          projectId: 19
+        }
+      });
+    };
+
     /**
      * Check logged issues.
      *
