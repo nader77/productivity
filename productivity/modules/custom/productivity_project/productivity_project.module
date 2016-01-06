@@ -302,103 +302,49 @@ function productivity_project_save_project_details($node, $project_wrapper) {
   $wrapper = entity_metadata_wrapper('node', $node);
   $day_type = $wrapper->field_day_type->value();
 
-  // Add the hours by issue type
+  // Add the hours by issue type.
   if($day_type === "regular") {
-
-//    if(!$node->original) {
-//      // when new one and when new day
-//      $old_table = $project_wrapper->field_table_rate->raw();
-//      if ($old_table != null) {
-//        // new day
-//        $table = $old_table;
-//      }
-//    } else {
-//      $table = array();
-//    }
-
     $new_issues = $node->field_issues_logs[LANGUAGE_NONE];
     $table  = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate->raw() : array();
 
     foreach($new_issues as $new_issue_index => $new_issue) {
       $type = $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value'];
-//      if ($node->original) {
-        if (check_existing_type($table, $type)) {
-          // Search the right type and remove from it the old issue hours.
-          foreach($table as $table_issues_index => $issue) {
-            if($issue['field_issue_type'][LANGUAGE_NONE][0]['value'] === $type) {
-              $table[$table_issues_index]['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
-              // Check if it's existing issue, and decrease it's hours
-              if(check_existing_issue($node->original->field_issues_logs[LANGUAGE_NONE], $new_issue)) {
-                $table[$table_issues_index]['field_hours'][LANGUAGE_NONE][0]['value'] -= $node->original->field_issues_logs[LANGUAGE_NONE][$new_issue_index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
-              }
+      // Check if that issue type already exist in the table.
+      if (check_existing_type($table, $type)) {
+        // Search the right type at the table.
+        foreach($table as $table_issues_index => $issue) {
+          if($issue['field_issue_type'][LANGUAGE_NONE][0]['value'] === $type) {
+            // Add the new issue hours.
+            $table[$table_issues_index]['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
+            // Check if it's existing issue.
+            if(check_existing_issue($node->original->field_issues_logs[LANGUAGE_NONE], $new_issue)) {
+              // Decrease the old issue hours.
+              $table[$table_issues_index]['field_hours'][LANGUAGE_NONE][0]['value'] -= $node->original->field_issues_logs[LANGUAGE_NONE][$new_issue_index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
             }
           }
-        } else {
-          $table = create_new_type($table, $new_issue);
         }
-//      } else {
-//        if (check_existing_type($table, $type)) {
-//
-//        } else {
-//          create_new_type($table, $type, $new_issue);
-//        }
-//      }
+      } else {
+        // Create new row for the issue type at the table.
+        $table = create_new_type($table, $new_issue);
+      }
     }
-
-
-//    $new_issues = $node->field_issues_logs[LANGUAGE_NONE];
-//
-//    foreach($new_issues as $index => $issue) {
-//      $type = $new_issues[$index]['field_issue_type'][LANGUAGE_NONE][0]['value'];
-//      if (check_existing_type($table, $type)) {
-//        // Existing type, loop through the table types.
-//        foreach ($table as $table_index => $value) {
-//          // Check if the it's the same type.
-//          if ($value['field_issue_type'][LANGUAGE_NONE][0]['value'] === $type) {
-//            // Get the index of the issue tape in the table
-//            $next_index = get_table_next_index($table, $type);
-//
-//            // Add the hours to the existing hours type.
-//            $table[$next_index]['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issues[$index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
-//          }
-//        }
-//      } else {
-//        // New type (just insert the new type).
-//        $id = $new_issues[$index]['id'];
-//        $days = strval(productivity_time_tracking_total_days($project_wrapper->getIdentifier()));
-//        $time_spent = $new_issues[$index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
-//        $issue_type = $type;
-//        $interval = '0';
-//        $period = 'hour';
-//        $amount = '0';
-//        $currency = 'USD';
-//
-//        // Get the index of the issue tape in the table
-//        $next_index = get_table_next_index($table, $type);
-//
-//        $table[$next_index] = array(
-//          'id' => $id,
-//          'field_days' => array(LANGUAGE_NONE => array(array('value' => $days))),
-//          'field_hours' => array(LANGUAGE_NONE => array(array('value' => $time_spent))),
-//          'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $issue_type))),
-//          'field_scope' => array(LANGUAGE_NONE => array(array(
-//            'interval' => $interval,
-//            'period' => $period,
-//          ))),
-//          'field_type_rate' => array(LANGUAGE_NONE => array(array(
-//            'amount' => $amount,
-//            'currency' => $currency,
-//          ))),
-//        );
-//      }
-//    }
   }
-
   return $table;
 }
 
+/**
+ * Create a new row at the table for new issue type.
+ *
+ * @param $table
+ *  Table types array.
+ * @param $new_issue
+ *  The new issue to add.
+ *
+ * @return mixed
+ *  The table with the new issue.
+ */
 function create_new_type($table, $new_issue) {
-  // Get the index of the issue tape in the table
+  // Get the index of the issue tape in the table.
   $next_index = get_table_next_index($table, $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value']);
 
   $table[$next_index] = array(
@@ -419,10 +365,17 @@ function create_new_type($table, $new_issue) {
 }
 
 /**
- * Check if the new issue is in the existing tables issues
+ * Check if the new issue is in the existing (old) tables issues.
+ *
+ * Find if the new issue number (Pull Request number) is unique
+ * (exist or not) at this day.
+ * The numbers compares to each other are the strings before the colons.
  *
  * @param $table_issues
+ *  The old issues array.
  * @param $new_issue
+ *  The new issue to add.
+ *
  * @return bool
  */
 function check_existing_issue($table_issues, $new_issue) {
@@ -445,12 +398,12 @@ function check_existing_issue($table_issues, $new_issue) {
  * where to insert the type in the table rate.
  *
  * @param $table
- *  Table types array
+ *  Table types array.
  * @param $issue_type
- *  Type to check in table
+ *  Type to check in table.
  *
  * @return int
- *  The index of the type in table
+ *  The index of the type in table.
  */
 function get_table_next_index($table, $issue_type) {
   foreach($table as $index => $value) {
@@ -471,15 +424,15 @@ function get_table_next_index($table, $issue_type) {
  *
  * Find if the scope type row is already existing in the table rate.
  *
- * @param $table_array
- *  Table rate
+ * @param $table
+ *  Table types array.
  * @param $issue_type
- *  Type to check
+ *  Type to check.
  *
  * @return bool
  */
-function check_existing_type($table_array, $issue_type) {
-  foreach($table_array as $index=>$value) {
+function check_existing_type($table, $issue_type) {
+  foreach($table as $index=>$value) {
     $existing_issues[] = $value['field_issue_type'][LANGUAGE_NONE][0]['value'];
   }
   return in_array($issue_type, $existing_issues) ? TRUE : FALSE;
@@ -502,7 +455,7 @@ function check_existing_type($table_array, $issue_type) {
  * @param $percentage_notified
  *  The percentage notified before
  * @param $arguments
- *  The email arguments
+ *  The email arguments.
  */
 function notify($thresholds, $wrapper, $percentage, $email_string, $percentage_notified, $arguments, $detail_scope) {
   foreach ($thresholds as $key => $threshold) {
@@ -550,7 +503,7 @@ function notify($thresholds, $wrapper, $percentage, $email_string, $percentage_n
       }
     }
 
-    // Save the percentage so it won't send the same
+    // Save the percentage so it won't send the same.
     // message again at this threshold.
     $wrapper->field_percentage_notification->set($percentage);
     $wrapper->save();
