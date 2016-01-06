@@ -376,6 +376,12 @@ angular.module('clientApp')
       console.log('here');
       Tracking.workSessionPunch().then(function(result) {
         console.log(result);
+        if (!result.data.data.end) {
+          $scope.bunchSessionButton = 'End Work';
+        }
+        else {
+          $scope.bunchSessionButton = 'Start Work';
+        }
         // if session opened change link to "End work" end time session.
       });
     };
@@ -439,6 +445,23 @@ angular.module('clientApp')
           }
         });
     };
+
+    // Add button to start work session remotly
+    // Todo: input this in right place.
+    var today = new Date();
+    var currDay = today.getDate();
+    //January is 0!
+    var currMonth = today.getMonth()+1;
+    var currYear = today.getFullYear();
+    var dayIsToday = ($scope.$stateParams.day == currDay
+    && $scope.$stateParams.month == currMonth
+    && $scope.$stateParams.year == currYear );
+
+    // Todo: check if user has permission start session remotely
+    $scope.allowStartWorkSession = dayIsToday;
+    $scope.bunchSessionButton = 'Start Work';
+
+
   });
 
 
