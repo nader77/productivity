@@ -28,12 +28,13 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
 
   // Create tables for the template.
   $variables['tables'] = array();
-  $header = array('Label', 'Time');
+  $header = array('Label', 'Time', 'Amount');
   foreach($issues_table as $table_name => $table) {
     $variables['table_titles'][] = $table_name;
     foreach($table['label'] as $index => $type) {
       $rows[$index]['label'] = $type;
       $rows[$index]['time'] = $table['time'][$index];
+      $rows[$index]['amount'] = '100.00 USD';
     }
     $variables['tables'][] = theme('table', array('header' => $header, 'rows' => $rows));
   }
@@ -49,7 +50,7 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
  *  All the nodes return from the query.
  *
  * @return array
- *  Matrix of all the issues.
+ *  Matrix of all the issues,
  */
 function create_issues_table($nodes) {
   $issues_table = array();
@@ -62,12 +63,14 @@ function create_issues_table($nodes) {
       $type = $issue['field_issue_type'][LANGUAGE_NONE][0]['value'];
       if(!$issues_table[$type]) {
         $issues_table[$type] = array();
+        // TODO: query for currency of that type ($type - example: dev)
       }
       // Check if the time spent on the issue not 0.
       if(intval($issue['field_time_spent'][LANGUAGE_NONE][0]['value'])) {
         // push the issue details to the type table.
         $issues_table[$type]['label'][] = $issue['field_issue_label'][LANGUAGE_NONE][0]['value'];
         $issues_table[$type]['time'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
+        // TODO: calculate the total time
       }
     }
   }
