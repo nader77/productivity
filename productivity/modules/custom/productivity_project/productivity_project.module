@@ -90,6 +90,7 @@ function productivity_project_recalculate_hours($node) {
 function productivity_project_form_project_node_form_alter(&$form, &$form_state) {
   $form['field_hours']['#disabled'] = TRUE;
   $form['field_days']['#disabled'] = TRUE;
+  $form['field_scope']['#disabled'] = TRUE;
   $form['field_percentage_notification']['#disabled'] = TRUE;
 
   // Set the repo name as autocomplete.
@@ -120,11 +121,7 @@ function productivity_project_form_project_node_form_alter(&$form, &$form_state)
  */
 function productivity_project_logged_hours_notify($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
-  $scope = $wrapper->field_scope->value();
-  // Bypass if the scope period is in months or years.
-  if ($scope['period'] == 'month' || $scope['period'] == 'year') {
-    return FALSE;
-  }
+  $total_scope = $wrapper->field_scope->value();
 
   // Notification thresholds.
   $thresholds = array(
@@ -135,71 +132,44 @@ function productivity_project_logged_hours_notify($node) {
     '25',
   );
 
+  // Bypass if the scope period is in months or years.
+  if ($total_scope['period'] == 'month' || $total_scope['period'] == 'year') {
+    return FALSE;
+  }
 
   $total_hours = $wrapper->field_hours->value();
   $total_days = $wrapper->field_days->value();
   $percentage_notified = $wrapper->field_percentage_notification->value();
 
   // Calculate the project's percentage of logged hours.
-  $percentage = productivity_project_calculate_percentage($scope, $total_hours);
+  $total_percentage = productivity_project_calculate_percentage($total_scope, $total_hours);
 
   // Send only if the project reached a new threshold and
   // the managers were never notified about it.
-  foreach ($thresholds as $key => $threshold) {
-    if ($percentage < $threshold || $percentage_notified >= $threshold) {
-      // Didn't reach a threshold OR This threshold has been already notified.
-      continue;
-    }
-    if ($percentage < $percentage_notified) {
-      // The current percentage has been already notified.
-      continue;
-    }
-    // Add a message to the log messages.
-    watchdog('productivity_project', 'The project @project has reached a new threshold: @threshold%',
-      array(
-        '@project' => $wrapper->label(),
-        '@threshold' => $threshold,
-        )
-    );
+  $arguments = array(
+    '@project_name' => $wrapper->label(),
+    '@logged_percentage' => $total_percentage,
+    '@project_scope' => $total_scope['interval'] . ' ' . $total_scope['period'],
+    '@project_total_hours' => $total_hours,
+    '@project_total_days' => $total_days,
+  );
+  notify($thresholds, $wrapper, $total_percentage, 'The project @project has reached a new threshold: @threshold%', $percentage_notified, $arguments);
+
+  // Check scope for each type
+  foreach($wrapper->field_table_rate->raw() as $value) {
+    $hours = $value['field_hours'][LANGUAGE_NONE]['0']['value'];
+    $scope = $value['field_scope'][LANGUAGE_NONE]['0'];
+    $scope_percentage = productivity_project_calculate_percentage($scope, $hours);
+    $detail_scope = $value['field_issue_type'][LANGUAGE_NONE]['0']['value'];
+
     $arguments = array(
       '@project_name' => $wrapper->label(),
-      '@logged_percentage' => $percentage,
-      '@project_scope' => $scope['interval'] . ' ' . $scope['period'],
-      '@project_total_hours' => $total_hours,
-      '@project_total_days' => $total_days,
+      '@logged_percentage' => $scope_percentage,
+      '@scope' => $scope['interval'] . ' ' . $scope['period'],
+      '@scope_total_hours' => $hours,
+      '@scope_total_days' => $value['field_days'][LANGUAGE_NONE][0]['value'],
     );
-
-    // Create a message for owners.
-    $values = array(
-      'uid' => 1,
-      'arguments' => $arguments,
-    );
-    $message = message_create('logged_project_hours', $values);
-
-    // Send the message to the owners.
-    $options = array(
-      'mail' =>  variable_get('productivity_time_tracking_managers_email', 'info@gizra.com'),
-    );
-    message_notify_send_message($message, $options);
-
-    // Send notifications to all the team leads as well.
-    if ($wrapper->field_team_leads->value()) {
-      foreach ($wrapper->field_team_leads as $team_lead) {
-        // Create a new message specified to the team lead.
-        $values['uid'] = $team_lead->getIdentifier();
-        $message = message_create('logged_project_hours', $values);
-        // Send this message to the team lead.
-        $options['mail'] = $team_lead->mail->value();
-        message_notify_send_message($message, $options);
-      }
-    }
-
-    // Save the percentage so it won't send the same
-    // message again at this threshold.
-    $wrapper->field_percentage_notification->set($percentage);
-    $wrapper->save();
-    // Stop this loop when one notifications has been sent.
-    break;
+    notify($thresholds, $wrapper, $scope_percentage, 'The @scope in @project project has reached a new threshold: @threshold%', $percentage_notified, $arguments, $detail_scope);
   }
 }
 
@@ -312,4 +282,232 @@ function productivity_project_repository_autocomplete_invalidate() {
  */
 function productivity_project_repository_autocomplete_need_invalidate() {
   return REQUEST_TIME - variable_get('productivity_project_repositories_defined') >= 86400;
+}
+
+/**
+ * Update scope days and scope hours if day type is regular.
+ *
+ * Build the scope multi field table,
+ * Called every time new issue is create or update.
+ *
+ * @param $wrapper
+ *  The node wrapper.
+ * @param $project_wrapper
+ *  The original project wrapper.
+ *
+ * @return string $issue_type
+ *  The issue type.
+ */
+function productivity_project_save_project_details($node, $project_wrapper) {
+  $wrapper = entity_metadata_wrapper('node', $node);
+  $day_type = $wrapper->field_day_type->value();
+
+  // Add the hours by issue type.
+  if($day_type === "regular") {
+    $new_issues = $node->field_issues_logs[LANGUAGE_NONE];
+    $table  = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate->raw() : array();
+
+    foreach($new_issues as $new_issue_index => $new_issue) {
+      $type = $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value'];
+      // Check if that issue type already exist in the table.
+      if (check_existing_type($table, $type)) {
+        // Search the right type at the table.
+        foreach($table as $table_issues_index => $issue) {
+          if($issue['field_issue_type'][LANGUAGE_NONE][0]['value'] === $type) {
+            // Add the new issue hours.
+            $table[$table_issues_index]['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
+            // Check if it's existing issue.
+            if(check_existing_issue($node->original->field_issues_logs[LANGUAGE_NONE], $new_issue)) {
+              // Decrease the old issue hours.
+              $table[$table_issues_index]['field_hours'][LANGUAGE_NONE][0]['value'] -= $node->original->field_issues_logs[LANGUAGE_NONE][$new_issue_index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
+            }
+          }
+        }
+      } else {
+        // Create new row for the issue type at the table.
+        $table = create_new_type($table, $new_issue);
+      }
+    }
+  }
+  return $table;
+}
+
+/**
+ * Create a new row at the table for new issue type.
+ *
+ * @param $table
+ *  Table types array.
+ * @param $new_issue
+ *  The new issue to add.
+ *
+ * @return mixed
+ *  The table with the new issue.
+ */
+function create_new_type($table, $new_issue) {
+  // Get the index of the issue tape in the table.
+  $next_index = get_table_next_index($table, $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value']);
+
+  $table[$next_index] = array(
+    'id' => $new_issue['id'],
+    'field_days' => array(LANGUAGE_NONE => array(array('value' => '0'))),
+    'field_hours' => array(LANGUAGE_NONE => array(array('value' => $new_issue['field_time_spent'][LANGUAGE_NONE][0]['value']))),
+    'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value']))),
+    'field_scope' => array(LANGUAGE_NONE => array(array(
+      'interval' => '0',
+      'period' => 'hour',
+    ))),
+    'field_type_rate' => array(LANGUAGE_NONE => array(array(
+      'amount' => '0',
+      'currency' => 'USD',
+    ))),
+  );
+  return $table;
+}
+
+/**
+ * Check if the new issue is in the existing (old) tables issues.
+ *
+ * Find if the new issue number (Pull Request number) is unique
+ * (exist or not) at this day.
+ * The numbers compares to each other are the strings before the colons.
+ *
+ * @param $table_issues
+ *  The old issues array.
+ * @param $new_issue
+ *  The new issue to add.
+ *
+ * @return bool
+ */
+function check_existing_issue($table_issues, $new_issue) {
+  $new_issue_number = explode(':', $new_issue['field_issue_label'][LANGUAGE_NONE][0]['value']);
+  foreach($table_issues as $issue) {
+    $issue_number = explode(':', $issue['field_issue_label'][LANGUAGE_NONE][0]['value']);
+    if($issue_number[0] === $new_issue_number[0]) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * Get the table next index.
+ *
+ * Find the index of the type in the table,
+ * And if it's not exist, return the table length.
+ * Needs to be called every time you need to find
+ * where to insert the type in the table rate.
+ *
+ * @param $table
+ *  Table types array.
+ * @param $issue_type
+ *  Type to check in table.
+ *
+ * @return int
+ *  The index of the type in table.
+ */
+function get_table_next_index($table, $issue_type) {
+  foreach($table as $index => $value) {
+    if($value['field_issue_type'][LANGUAGE_NONE][0]['value'] === $issue_type) {
+      $table_index = $index;
+    }
+  }
+
+  if(!isset($table_index)) {
+    $table_index = count($table);
+  }
+
+  return $table_index;
+}
+
+/**
+ * Check if the scope type is already exist in table rate.
+ *
+ * Find if the scope type row is already existing in the table rate.
+ *
+ * @param $table
+ *  Table types array.
+ * @param $issue_type
+ *  Type to check.
+ *
+ * @return bool
+ */
+function check_existing_type($table, $issue_type) {
+  foreach($table as $index=>$value) {
+    $existing_issues[] = $value['field_issue_type'][LANGUAGE_NONE][0]['value'];
+  }
+  return in_array($issue_type, $existing_issues) ? TRUE : FALSE;
+}
+
+/**
+ * Actual notify logged hours percentage in a project or a scope.
+ *
+ * Checks if the project has reached a new threshold,
+ * and send a message with project or scope details.
+ *
+ * @param array $thresholds
+ *  The notification thresholds.
+ * @param $wrapper
+ *  The project wrapper.
+ * @param $percentage
+ *  The project's percentage of logged hours.
+ * @param $email_string
+ *  The string to be sent in the email.
+ * @param $percentage_notified
+ *  The percentage notified before
+ * @param $arguments
+ *  The email arguments.
+ */
+function notify($thresholds, $wrapper, $percentage, $email_string, $percentage_notified, $arguments, $detail_scope) {
+  foreach ($thresholds as $key => $threshold) {
+    if ($percentage < $threshold || $percentage_notified >= $threshold) {
+      // Didn't reach a threshold OR This threshold has been already notified.
+      continue;
+    }
+
+    if ($percentage < $percentage_notified) {
+      // The current percentage has been already notified.
+      continue;
+    }
+
+    // Add a message to the log messages.
+    if(isset($detail_scope)) {
+      $message_details = array('@scope' => $detail_scope);
+    }
+    $message_details['@project'] = $wrapper->label();
+    $message_details['@threshold'] = $threshold;
+    watchdog('productivity_project', $email_string, $message_details);
+
+
+    // Create a message for owners.
+    $values = array(
+      'uid' => 1,
+      'arguments' => $arguments,
+    );
+    $message = message_create('logged_scope_hours', $values);
+
+    // Send the message to the owners.
+    $options = array(
+      'mail' =>  variable_get('productivity_time_tracking_managers_email', 'info@gizra.com'),
+    );
+    message_notify_send_message($message, $options);
+
+    // Send notifications to all the team leads as well.
+    if ($wrapper->field_team_leads->value()) {
+      foreach ($wrapper->field_team_leads as $team_lead) {
+        // Create a new message specified to the team lead.
+        $values['uid'] = $team_lead->getIdentifier();
+        $message = message_create('logged_project_hours', $values);
+        // Send this message to the team lead.
+        $options['mail'] = $team_lead->mail->value();
+        message_notify_send_message($message, $options);
+      }
+    }
+
+    // Save the percentage so it won't send the same.
+    // message again at this threshold.
+    $wrapper->field_percentage_notification->set($percentage);
+    $wrapper->save();
+    // Stop this loop when one notifications has been sent.
+    break;
+  }
 }
