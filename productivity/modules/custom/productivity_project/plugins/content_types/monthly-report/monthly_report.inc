@@ -39,8 +39,9 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
       $rows[$index]['gitHub_issue_num'] = $issue['label'][0];
       $rows[$index]['date'] = $issue['date'][0];
       $rows[$index]['time'] = $issue['time'][0];
-      $rows[$index]['amount'] = $issue['issue_amount'][0] . " USD";
+      $rows[$index]['amount'] = $issue['issue_amount'][0] . ' ' . $issue['issue_currency'][0];
       $variables['total_per_types'][$table_name] += $issue['issue_amount'][0];
+      $variables['total_currency_per_types'][$table_name] = $issue['issue_currency'][0];
     }
     $variables['tables'][] = theme('table', array('header' => $header, 'rows' => $rows));
     $rows = array();
@@ -85,7 +86,8 @@ function create_issues_table($nodes) {
         $issues_table[$type][$table_legnth]['label'][] = substr($label, strpos($label, ':') + 2, strlen($label));
         $issues_table[$type][$table_legnth]['date'][] = $date;
         $issues_table[$type][$table_legnth]['time'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
-        $issues_table[$type][$table_legnth]['issue_amount'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'] * $scope_amount;
+        $issues_table[$type][$table_legnth]['issue_amount'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'] * $scope_amount[0];
+        $issues_table[$type][$table_legnth]['issue_currency'][] = $scope_amount[1];
       }
     }
   }
@@ -108,10 +110,10 @@ function get_the_scope_amount($table_rate, $scope_to_find) {
   foreach($table_rate as $scope) {
     $scope_type = $scope['field_issue_type'][LANGUAGE_NONE][0]['value'];
     if($scope_type === $scope_to_find) {
-      return $scope['field_type_rate'][LANGUAGE_NONE][0]['amount'];
+      return array($scope['field_type_rate'][LANGUAGE_NONE][0]['amount'], $scope['field_type_rate'][LANGUAGE_NONE][0]['currency']);
     }
   }
-  return 0;
+  return array(0, 'USD');
 }
 
 /**
