@@ -23,6 +23,7 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
   $block = new stdClass();
   $block->module = 'productivity_project';
+  $variables['current_project_id'] = $args[0];
 
   // Add JavaScript file with the base url of the page.
   drupal_add_js(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly-report.js');

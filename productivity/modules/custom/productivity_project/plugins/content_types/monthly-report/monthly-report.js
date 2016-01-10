@@ -34,15 +34,15 @@
       var url = '';
       set_date_input();
 
-      // Project select and date input handler
+      // Project select and date input handler.
       $('#project_filter, #date_filter').change(function() {
         url = create_new_url(settings['monthly_report']['base_url']);
       }).change();
 
+      // Apply filter button handler.
       $('.btn-primary[type=submit]').click(function() {
         window.location.href = url;
       });
-
     }
   };
 })(jQuery);

@@ -12,7 +12,7 @@
         <div class="col-sm-5 ">
           <select id="project_filter" class="form-control">
             <?php foreach($projects as $project): ?>
-              <option value="<?php print $project[1];?>"><?php print $project[0]; ?></option>
+              <option value="<?php print $project[1];?>"<?php print ($project[1] === $current_project_id) ? 'selected' : ''; ?>><?php print $project[0]; ?></option>
             <?php endforeach; ?>
           </select>
         </div>
