@@ -29,15 +29,17 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   // Create tables for the template.
   $variables['tables'] = array();
   $variables['total_types'] = array();
-  $header = array('Label', 'Time', 'Amount');
+  $header = array('GitHub Issue Num', 'Label', 'Time', 'Amount');
   foreach($issues_table as $table_name => $table) {
     $variables['table_titles'][] = $table_name;
     $variables['total_types'][$table_name] = 0;
+
     foreach($table['label'] as $index => $label) {
-      $rows[$index]['label'] = $label;
+      $rows[$index]['label'] = $table['issue_num'][$index];
+      $rows[$index]['gitHub_issue_num'] = $label;
       $rows[$index]['time'] = $table['time'][$index];
-      $rows[$index]['amount'] = '100.00 USD';
-      $variables['total_types'][$table_name] += $rows[$index]['amount'];
+      $rows[$index]['amount'] = $table['issue_amount'][$index] . " USD";
+      $variables['total_types'][$table_name] += $table['issue_amount'][$index];
     }
     $variables['tables'][] = theme('table', array('header' => $header, 'rows' => $rows));
   }
@@ -58,26 +60,51 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
 function create_issues_table($nodes) {
   $issues_table = array();
   foreach($nodes as $node) {
-    $project_wrapper = entity_metadata_wrapper('node', $node);
+    $wrapper = entity_metadata_wrapper('node', $node);
+    $project_wrapper = $wrapper->field_project->value();
+
     // Loop through all the issues in that day.
-    $issues = $project_wrapper->field_issues_logs->raw();
+    $issues = $wrapper->field_issues_logs->raw();
     foreach($issues as $issue) {
       // Check if there is already a table with that type.
       $type = $issue['field_issue_type'][LANGUAGE_NONE][0]['value'];
       if(!$issues_table[$type]) {
         $issues_table[$type] = array();
-        // TODO: query for currency of that type ($type - example: dev)
+        $scope_amount = get_the_scope_amount($project_wrapper->field_table_rate[LANGUAGE_NONE], $type);
       }
       // Check if the time spent on the issue not 0.
       if(intval($issue['field_time_spent'][LANGUAGE_NONE][0]['value'])) {
         // push the issue details to the type table.
+        $issues_table[$type]['issue_num'][] = $issue['field_github_issue'][LANGUAGE_NONE][0]['target_id'];
         $issues_table[$type]['label'][] = $issue['field_issue_label'][LANGUAGE_NONE][0]['value'];
         $issues_table[$type]['time'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
-        // TODO: calculate the total time
+        $issues_table[$type]['issue_amount'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'] * $scope_amount;
       }
     }
   }
   return $issues_table;
+}
+
+/**
+ * Find the amount of the scope in question.
+ *
+ * @param $table_rate
+ *  The $table_rate scopes.
+ * @param $scope_to_find
+ *  The string of the scope in question.
+ *
+ * @return int
+ *  return the scope amount or zero.
+ *
+ */
+function get_the_scope_amount($table_rate, $scope_to_find) {
+  foreach($table_rate as $scope) {
+    $scope_type = $scope['field_issue_type'][LANGUAGE_NONE][0]['value'];
+    if($scope_type === $scope_to_find) {
+      return $scope['field_type_rate'][LANGUAGE_NONE][0]['amount'];
+    }
+  }
+  return 0;
 }
 
 /**
