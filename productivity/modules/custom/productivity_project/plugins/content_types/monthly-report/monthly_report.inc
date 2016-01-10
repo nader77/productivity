@@ -29,7 +29,7 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   // Create tables for the template.
   $variables['tables'] = array();
   $variables['total_types'] = array();
-  $header = array('GitHub Issue Num', 'Label', 'Time', 'Amount');
+  $header = array('GitHub Issue Number', 'Label', 'Time', 'Amount');
   foreach($issues_table as $table_name => $table) {
     $variables['table_titles'][] = $table_name;
     $variables['total_types'][$table_name] = 0;
@@ -68,15 +68,16 @@ function create_issues_table($nodes) {
     foreach($issues as $issue) {
       // Check if there is already a table with that type.
       $type = $issue['field_issue_type'][LANGUAGE_NONE][0]['value'];
-      if(!$issues_table[$type]) {
+      if(empty($issues_table[$type])) {
         $issues_table[$type] = array();
         $scope_amount = get_the_scope_amount($project_wrapper->field_table_rate[LANGUAGE_NONE], $type);
       }
       // Check if the time spent on the issue not 0.
       if(intval($issue['field_time_spent'][LANGUAGE_NONE][0]['value'])) {
         // push the issue details to the type table.
-        $issues_table[$type]['issue_num'][] = $issue['field_github_issue'][LANGUAGE_NONE][0]['target_id'];
-        $issues_table[$type]['label'][] = $issue['field_issue_label'][LANGUAGE_NONE][0]['value'];
+        $label = $issue['field_issue_label'][LANGUAGE_NONE][0]['value'];
+        $issues_table[$type]['issue_num'][] = substr($label, 1, strpos($label, ':') - 1);
+        $issues_table[$type]['label'][] = substr($label, strpos($label, ':') + 2, strlen($label));
         $issues_table[$type]['time'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
         $issues_table[$type]['issue_amount'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'] * $scope_amount;
       }
@@ -123,8 +124,10 @@ function get_the_scope_amount($table_rate, $scope_to_find) {
  */
 function github_issues_query($project_id, $year, $month) {
   $project_start_month = format_string("@year-@month-01", array('@year' => $year, '@month' => $month));
-  //$project_end_month = (new DateTime($project_start_month))->format( 'Y-m-t' );
-  $project_end_month = (new DateTime(format_string("2015-11-01")))->format( 'Y-m-t' );
+  $project_end_month = (new DateTime($project_start_month))->format( 'Y-m-t' );
+
+  $project_start_month = (new DateTime(format_string("2015-12-01")))->format( 'Y-m-t' );
+  $project_end_month = (new DateTime(format_string("2016-01-20")))->format( 'Y-m-t' );
 
   $query = new EntityFieldQuery();
   $result = $query
