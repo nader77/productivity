@@ -24,12 +24,18 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   $block = new stdClass();
   $block->module = 'productivity_project';
 
+  // Add JavaScript file with the base url of the page.
   drupal_add_js(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly-report.js');
-  drupal_add_js(array('monthly_erpot' => array('base_url' => $base_url)), 'setting');
+  drupal_add_js(array('monthly_report' => array('base_url' => $base_url)), 'setting');
 
+  // Get the project title for the page title.
   $variables['project_title'] = $context->title;
+  // Get all the projects for project input
+  $variables['projects'] = get_all_projects();
+
   $nodes = github_issues_query($args[0], $args[1], $args[2]);
   $issues_table = create_issues_table($nodes);
+
 
   // Create tables for the template.
   $variables['tables'] = array();
@@ -51,8 +57,6 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
     $variables['tables'][] = theme('table', array('header' => $header, 'rows' => $rows));
     $rows = array();
   }
-
-  $variables['projects'] = get_all_projects();
 
   $block->content = theme('productivity_monthly_report', $variables);
   return $block;

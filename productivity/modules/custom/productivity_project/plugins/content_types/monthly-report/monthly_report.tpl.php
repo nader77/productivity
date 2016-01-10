@@ -10,14 +10,14 @@
       </div>
       <div class="col-sm-12">
         <div class="col-sm-5 ">
-          <select class="form-control">
+          <select id="project_filter" class="form-control">
             <?php foreach($projects as $project): ?>
               <option value="<?php print $project[1];?>"><?php print $project[0]; ?></option>
             <?php endforeach; ?>
           </select>
         </div>
         <div class="col-sm-3">
-          <input type="month" class="form-control" />
+          <input id="date_filter" type="month" class="form-control" />
         </div>
         <input class="btn btn-primary col-sm-1" type="submit" value="Apply" />
       </div>
