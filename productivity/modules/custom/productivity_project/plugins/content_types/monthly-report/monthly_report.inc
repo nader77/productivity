@@ -17,10 +17,15 @@ $plugin = array(
  * Render callback;  Bidder page.
  */
 function productivity_project_monthly_report_content_type_render($subtype, $conf, $args, $context) {
+  global $base_url;
+
   $variables = array();
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
   $block = new stdClass();
   $block->module = 'productivity_project';
+
+  drupal_add_js(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly-report.js');
+  drupal_add_js(array('monthly_erpot' => array('base_url' => $base_url)), 'setting');
 
   $variables['project_title'] = $context->title;
   $nodes = github_issues_query($args[0], $args[1], $args[2]);
@@ -47,8 +52,37 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
     $rows = array();
   }
 
+  $variables['projects'] = get_all_projects();
+
   $block->content = theme('productivity_monthly_report', $variables);
   return $block;
+}
+
+
+/**
+ * Get an array of all the projects title and nid.
+ *
+ * @return array|void
+ *  Array of projects arrays.
+ */
+function get_all_projects() {
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'project')
+    ->execute();
+
+  if(empty($result['node'])) {
+    return;
+  }
+
+  $projects = node_load_multiple(array_keys($result['node']));
+  $all_projects = array();
+  foreach($projects as $project) {
+    $all_projects[] = array($project->title, $project->nid);
+  }
+
+  return $all_projects;
 }
 
 /**
