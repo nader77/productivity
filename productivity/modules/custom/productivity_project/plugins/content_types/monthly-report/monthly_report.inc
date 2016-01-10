@@ -28,13 +28,16 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
 
   // Create tables for the template.
   $variables['tables'] = array();
+  $variables['total_types'] = array();
   $header = array('Label', 'Time', 'Amount');
   foreach($issues_table as $table_name => $table) {
     $variables['table_titles'][] = $table_name;
-    foreach($table['label'] as $index => $type) {
-      $rows[$index]['label'] = $type;
+    $variables['total_types'][$table_name] = 0;
+    foreach($table['label'] as $index => $label) {
+      $rows[$index]['label'] = $label;
       $rows[$index]['time'] = $table['time'][$index];
       $rows[$index]['amount'] = '100.00 USD';
+      $variables['total_types'][$table_name] += $rows[$index]['amount'];
     }
     $variables['tables'][] = theme('table', array('header' => $header, 'rows' => $rows));
   }
