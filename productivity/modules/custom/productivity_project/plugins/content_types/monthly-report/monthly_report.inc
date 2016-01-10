@@ -29,19 +29,21 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   // Create tables for the template.
   $variables['tables'] = array();
   $variables['total_types'] = array();
-  $header = array('GitHub Issue Number', 'Label', 'Time', 'Amount');
+  $header = array('GitHub Issue Number', 'Label', 'Date', 'Time', 'Amount');
   foreach($issues_table as $table_name => $table) {
     $variables['table_titles'][] = $table_name;
-    $variables['total_types'][$table_name] = 0;
+    $variables['total_per_types'][$table_name] = 0;
 
-    foreach($table['label'] as $index => $label) {
-      $rows[$index]['label'] = $table['issue_num'][$index];
-      $rows[$index]['gitHub_issue_num'] = $label;
-      $rows[$index]['time'] = $table['time'][$index];
-      $rows[$index]['amount'] = $table['issue_amount'][$index] . " USD";
-      $variables['total_types'][$table_name] += $table['issue_amount'][$index];
+    foreach($table as $index => $issue) {
+      $rows[$index]['label'] = $issue['issue_num'][0];
+      $rows[$index]['gitHub_issue_num'] = $issue['label'][0];
+      $rows[$index]['date'] = $issue['date'][0];
+      $rows[$index]['time'] = $issue['time'][0];
+      $rows[$index]['amount'] = $issue['issue_amount'][0] . " USD";
+      $variables['total_per_types'][$table_name] += $issue['issue_amount'][0];
     }
     $variables['tables'][] = theme('table', array('header' => $header, 'rows' => $rows));
+    $rows = array();
   }
 
   $block->content = theme('productivity_monthly_report', $variables);
@@ -62,6 +64,7 @@ function create_issues_table($nodes) {
   foreach($nodes as $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
     $project_wrapper = $wrapper->field_project->value();
+    $date = explode(' ', $node->field_work_date[LANGUAGE_NONE][0]['value'])[0];
 
     // Loop through all the issues in that day.
     $issues = $wrapper->field_issues_logs->raw();
@@ -70,16 +73,19 @@ function create_issues_table($nodes) {
       $type = $issue['field_issue_type'][LANGUAGE_NONE][0]['value'];
       if(empty($issues_table[$type])) {
         $issues_table[$type] = array();
-        $scope_amount = get_the_scope_amount($project_wrapper->field_table_rate[LANGUAGE_NONE], $type);
       }
       // Check if the time spent on the issue not 0.
       if(intval($issue['field_time_spent'][LANGUAGE_NONE][0]['value'])) {
         // push the issue details to the type table.
+        $scope_amount = get_the_scope_amount($project_wrapper->field_table_rate[LANGUAGE_NONE], $type);
         $label = $issue['field_issue_label'][LANGUAGE_NONE][0]['value'];
-        $issues_table[$type]['issue_num'][] = substr($label, 1, strpos($label, ':') - 1);
-        $issues_table[$type]['label'][] = substr($label, strpos($label, ':') + 2, strlen($label));
-        $issues_table[$type]['time'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
-        $issues_table[$type]['issue_amount'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'] * $scope_amount;
+        $table_legnth = count($issues_table[$type]);
+
+        $issues_table[$type][$table_legnth]['issue_num'][] = substr($label, 1, strpos($label, ':') - 1);
+        $issues_table[$type][$table_legnth]['label'][] = substr($label, strpos($label, ':') + 2, strlen($label));
+        $issues_table[$type][$table_legnth]['date'][] = $date;
+        $issues_table[$type][$table_legnth]['time'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
+        $issues_table[$type][$table_legnth]['issue_amount'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'] * $scope_amount;
       }
     }
   }

@@ -5,7 +5,7 @@
       <?php foreach($tables as $index => $table): ?>
         <h2><?php print strtoupper($table_titles[$index]); ?></h2>
         <?php print $table; ?>
-        <span class="pull-right">Total: <?php print $total_types[$table_titles[$index]]; ?></span>
+        <span class="pull-right">Total: <?php print $total_per_types[$table_titles[$index]]; ?></span>
       <?php endforeach; ?>
     </div>
   </div>
