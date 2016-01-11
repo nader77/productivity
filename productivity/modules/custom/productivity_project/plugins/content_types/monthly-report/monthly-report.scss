@@ -6,6 +6,21 @@
   #search-filter {
     margin: 25px 0;
   }
+
+  span.select2-selection--single {
+    border-radius: 3px;
+    background-clip: padding-box;
+    border-color: #e7ebee;
+    color: #555;
+    box-shadow: none;
+    font-size: 13px;
+    padding: 3px 12px;
+    height: 34px;
+
+    .select2-selection__arrow {
+      margin-top: 3px;
+    }
+  }
 }
 
 table.table-hover {
