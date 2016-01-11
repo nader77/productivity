@@ -34,7 +34,7 @@
         <?php $total_tables_amount += $total_per_types[$table_titles[$index]] ?>
       <?php endforeach; ?>
       <div class="col-sm-12 well">
-        <button type="button" class="btn btn-default">Download XLS</button>
+        <button type="button" class="btn btn-default">Download PDF</button>
         <span class="col-sm-2 pull-right">TOTAL: <?php print $total_tables_amount . ' ' . $total_currency_per_types[$table_titles[$index]]; ?></span>
       </div>
       <!-- END Tables -->

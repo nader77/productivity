@@ -26,9 +26,9 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   $variables['current_project_id'] = $args[0];
 
   // Add JavaScript file with the base url of the page.
-  drupal_add_js(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly-report.js');
+  drupal_add_js(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly_report.js');
   drupal_add_js(array('monthly_report' => array('base_url' => $base_url)), 'setting');
-  drupal_add_css(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly-report.css');
+  drupal_add_css(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly_report.css');
   drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
   drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
 
@@ -64,6 +64,17 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   }
 
   $block->content = theme('productivity_monthly_report', $variables);
+
+  require_once libraries_get_path('dompdf') . "/dompdf_config.inc.php";
+  $dompdf = new DOMPDF();
+  $dompdf->load_html($variables['tables'][0]);
+  $dompdf->render();
+
+
+  $pdf_content = $dompdf->output("test.pdf");
+  $file = file_save_data($pdf_content, 'public://test.pdf', FILE_EXISTS_REPLACE);
+  dpm(file_create_url($file->uri));
+
   return $block;
 }
 
