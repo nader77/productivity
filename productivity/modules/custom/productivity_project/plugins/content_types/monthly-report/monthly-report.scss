@@ -1,0 +1,22 @@
+.main-box-body {
+  h1, h2.table-header{
+    margin: 1%;
+  }
+
+  #search-filter {
+    margin: 25px 0;
+  }
+}
+
+table.table-hover {
+  td:nth-child(1),
+  td:nth-child(3),
+  td:nth-child(4),
+  td:nth-child(5) {
+    width: 15%;
+  }
+
+  td:nth-child(2) {
+    width: 40%;
+  }
+}

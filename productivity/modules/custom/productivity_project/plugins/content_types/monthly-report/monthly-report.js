@@ -33,6 +33,7 @@
     attach: function (context, settings) {
       var url = '';
       set_date_input();
+      $('#project_filter').select2();
 
       // Project select and date input handler.
       $('#project_filter, #date_filter').change(function() {

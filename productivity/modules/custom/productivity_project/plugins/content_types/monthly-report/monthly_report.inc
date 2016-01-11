@@ -28,6 +28,9 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   // Add JavaScript file with the base url of the page.
   drupal_add_js(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly-report.js');
   drupal_add_js(array('monthly_report' => array('base_url' => $base_url)), 'setting');
+  drupal_add_css(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly-report.css');
+  drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
+  drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
 
   // Get the project title for the page title.
   $variables['project_title'] = $context->title;
@@ -41,7 +44,7 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   // Create tables for the template.
   $variables['tables'] = array();
   $variables['total_types'] = array();
-  $header = array('GitHub Issue Number', 'Label', 'Date', 'Time', 'Amount');
+  $header = array('GitHub Issue Num', 'Label', 'Date', 'Time', 'Amount');
   foreach($issues_table as $table_name => $table) {
     $variables['table_titles'][] = $table_name;
     $variables['total_per_types'][$table_name] = 0;
