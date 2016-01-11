@@ -38,8 +38,9 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   $variables['projects'] = get_all_projects();
 
   $nodes = github_issues_query($args[0], $args[1], $args[2]);
-  $issues_table = create_issues_table($nodes);
-
+  $table = create_issues_table($nodes);
+  $issues_table = $table[0];
+  $project_url = create_project_url($table[1]);
 
   // Create tables for the template.
   $variables['tables'] = array();
@@ -50,7 +51,7 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
     $variables['total_per_types'][$table_name] = 0;
 
     foreach($table as $index => $issue) {
-      $rows[$index]['label'] = $issue['issue_num'][0];
+      $rows[$index]['label'] = '<a href="' . $project_url . $issue['issue_num'][0] . '">'. $issue['issue_num'][0] . '</a>';
       $rows[$index]['gitHub_issue_num'] = $issue['label'][0];
       $rows[$index]['date'] = $issue['date'][0];
       $rows[$index]['time'] = $issue['time'][0];
@@ -66,6 +67,39 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   return $block;
 }
 
+/**
+ * Create the pull URL based on the project name.
+ *
+ * @param $project_name
+ *
+ * @return string
+ *  The base pull URL of the project
+ */
+function create_project_url($project_name) {
+  switch($project_name) {
+    case 'openscholar':
+      return "https://github.com/openscholar/openscholar/" . $project_name . "/pull/";
+    case 'unfpa-global':
+    case 'eeca-shoov':
+    case 'ef-shoov':
+    case 'unfpa-global-shoov':
+    case 'wcaro':
+    case 'asiapacific':
+    case 'eeca':
+    case 'lac':
+    case 'esaro':
+    case 'ef':
+    case 'arabstates':
+    case 'malawi-shoov':
+    case 'lac-shoov':
+    case 'asiapacific-shoov':
+    case 'esaro-shoov':
+    case 'arabstates-shoov':
+      return "https://github.com/UNFPAHQ/" . $project_name . "/pull/";
+    default:
+      return "https://github.com/Gizra/" . $project_name . "/pull/";
+  }
+}
 
 /**
  * Get an array of all the projects title and nid.
@@ -94,13 +128,14 @@ function get_all_projects() {
 }
 
 /**
- *  Create a matrix of all the issues from GitHub nodes.
+ * Create a matrix of all the issues from GitHub nodes,
+ * And the url project.
  *
  * @param $nodes
  *  All the nodes return from the query.
  *
  * @return array
- *  Matrix of all the issues,
+ *  Matrix of all the issues, and the URL project
  */
 function create_issues_table($nodes) {
   $issues_table = array();
@@ -133,7 +168,7 @@ function create_issues_table($nodes) {
       }
     }
   }
-  return $issues_table;
+  return array($issues_table,  $project_wrapper->field_github_repository_name[LANGUAGE_NONE][0]['value']);
 }
 
 /**
