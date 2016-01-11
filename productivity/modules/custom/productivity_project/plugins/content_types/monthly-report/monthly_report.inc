@@ -45,7 +45,7 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   // Create tables for the template.
   $variables['tables'] = array();
   $variables['total_types'] = array();
-  $header = array('GitHub Issue Num', 'Label', 'Date', 'Time', 'Amount');
+  $header = array('Issue', 'Label', 'Date', 'Time', 'Amount');
   foreach($issues_table as $table_name => $table) {
     $variables['table_titles'][] = $table_name;
     $variables['total_per_types'][$table_name] = 0;
@@ -65,15 +65,17 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
 
   $block->content = theme('productivity_monthly_report', $variables);
 
+
+  // Create PDF file.
   require_once libraries_get_path('dompdf') . "/dompdf_config.inc.php";
   $dompdf = new DOMPDF();
-  $dompdf->load_html($variables['tables'][0]);
+  $dompdf->set_paper("A4");
+  $dompdf->load_html(theme('productivity_monthly_report_pdf', $variables));
   $dompdf->render();
-
-
   $pdf_content = $dompdf->output("test.pdf");
   $file = file_save_data($pdf_content, 'public://test.pdf', FILE_EXISTS_REPLACE);
   dpm(file_create_url($file->uri));
+
 
   return $block;
 }
@@ -251,4 +253,13 @@ function productivity_monthly_report_theme(&$theme, $plugin) {
     'path' => $plugin['path'],
     'template' => 'monthly_report',
   );
+
+  $theme['productivity_monthly_report_pdf'] = array(
+    'variables' => array(
+      'image_path' => NULL,
+    ),
+    'path' => $plugin['path'],
+    'template' => 'monthly_report_pdf',
+  );
 }
+
