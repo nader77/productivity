@@ -23,6 +23,7 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   drupal_add_js(array('monthly_report' => array('base_url' => $base_url)), 'setting');
   drupal_add_css(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly_report.css');
   drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
+  drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
   drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
 
   $project_id = $args[0];
