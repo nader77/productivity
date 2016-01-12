@@ -7,7 +7,11 @@
     margin: 20px 0;
   }
   #gizra-logo {
-    display: none;
+    visibility: hidden;
+    font-family: Abril Fatface;
+    margin: -20px 25px 0 0;
+    float: right;
+    font-size: 4.5em;
   }
   #project-title {
     display: inline;
@@ -60,12 +64,8 @@ table.table-hover {
     content: none !important;
   }
   #gizra-logo {
-    display: inline !important;
-    float: right;
-    font-family: Abril Fatface;
-    font-size: 4.5em;
+    visibility: visible !important;
     color: #e27058 !important;
-    margin: -20px 25px 0 0;
   }
   #header {
     position: relative;
