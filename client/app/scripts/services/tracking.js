@@ -86,17 +86,26 @@ angular.module('clientApp')
       });
     };
 
+    this.checkWorkSession = function(){
+      return $http({
+        method: 'GET',
+        url: Config.backend + '/api/work-sessions',
+        params: {
+        }
+      })
+    }
 
     /**
      * Create a new session or update an open session.
      */
 
-    this.workSessionPunch = function() {
+    this.workSessionPunch = function(projectId) {
+
       return $http({
         method: 'POST',
         url: Config.backend + '/api/work-sessions',
         params: {
-          projectId: 19
+          projectId: projectId
         }
       });
     };
