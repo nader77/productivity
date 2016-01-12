@@ -6,7 +6,6 @@ core = 7.x
 
 ; Core ------------------------------------------------------------------------
 dependencies[] = block
-dependencies[] = comment
 dependencies[] = contextual
 dependencies[] = help
 dependencies[] = image
@@ -29,6 +28,7 @@ dependencies[] = date
 dependencies[] = date_popup
 dependencies[] = entity
 dependencies[] = entity_token
+dependencies[] = entityrelationships
 dependencies[] = entityreference
 dependencies[] = gravatar
 dependencies[] = jquery_update
