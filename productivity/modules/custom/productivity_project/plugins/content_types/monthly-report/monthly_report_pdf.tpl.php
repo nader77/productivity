@@ -67,7 +67,6 @@
       right: 0;
     }
     .total-pull-right {
-      margin-top: 20px;
       position: absolute;
       right: 0;
     }
@@ -89,6 +88,7 @@
     </div>
     <?php $total_tables_amount += $total_per_types[$table_titles[$index]] ?>
   <?php endforeach; ?>
+  <br /><br /><hr />
   <div class="col-sm-12">
     <span class="total-pull-right">TOTAL: <?php print $total_tables_amount . ' ' . $total_currency_per_types[$table_titles[$index]]; ?></span>
   </div>

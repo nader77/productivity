@@ -73,9 +73,9 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   $dompdf->load_html(theme('productivity_monthly_report_pdf', $variables));
   $dompdf->render();
   $pdf_content = $dompdf->output("test.pdf");
-  $file = file_save_data($pdf_content, 'public://test.pdf', FILE_EXISTS_REPLACE);
-  dpm(file_create_url($file->uri));
+  $file = file_save_data($pdf_content, 'public://monthly-report.pdf', FILE_EXISTS_REPLACE);
 
+  $variables['pdf_download_path'] = file_create_url($file->uri);
 
   return $block;
 }
