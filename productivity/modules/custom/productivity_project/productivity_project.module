@@ -550,12 +550,12 @@ function productivity_project_get_all_projects() {
  *  return the scope amount or zero.
  *
  */
-function get_the_scope_amount($table_rate, $scope_to_find) {
-  foreach($table_rate as $scope) {
-    $scope_type = $scope['field_issue_type'][LANGUAGE_NONE][0]['value'];
-    if($scope_type === $scope_to_find) {
-      return array($scope['field_type_rate'][LANGUAGE_NONE][0]['amount'], $scope['field_type_rate'][LANGUAGE_NONE][0]['currency']);
-    }
-  }
-  return array(0, 'USD');
+function get_the_scope_amount($project_id, $scope_to_find) {
+  return db_select('field_data_field_table_rate', 'table_rate')
+    ->condition('bundle', 'project')
+    ->condition('entity_id', $project_id)
+    ->condition('field_table_rate_field_issue_type_value', $scope_to_find)
+    ->fields('table_rate', array('field_table_rate_field_type_rate_amount', 'field_table_rate_field_type_rate_currency'))
+    ->execute()
+    ->fetchAssoc();
 }

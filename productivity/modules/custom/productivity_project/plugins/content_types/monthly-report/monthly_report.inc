@@ -109,16 +109,16 @@ function _productivity_project_create_issues_table($nodes) {
       // Check if the time spent on the issue is not 0.
       if(intval($issue_log_wrapper->field_time_spent->value())) {
         // push the issue details to the type table.
-        $scope_amount = get_the_scope_amount($project_wrapper->field_table_rate[LANGUAGE_NONE], $type);
-        $label = $issue_log_wrapper->field_issue_label->value();
+        //$scope_amount = get_the_scope_amount($project_wrapper->field_table_rate[LANGUAGE_NONE], $type);
+        $scope_amount = get_the_scope_amount($project_wrapper->vid, $type);
         $table_legnth = count($issues_table[$type]);
 
         $issues_table[$type][$table_legnth]['issue_num'][] = $issue_log_wrapper->field_github_issue->raw();
         $issues_table[$type][$table_legnth]['label'][] = $issue_log_wrapper->field_issue_label->value();
         $issues_table[$type][$table_legnth]['date'][] = $date;
         $issues_table[$type][$table_legnth]['time'][] = $issue_log_wrapper->field_time_spent->value();
-        $issues_table[$type][$table_legnth]['issue_amount'][] = $issue_log_wrapper->field_time_spent->value() * $scope_amount[0];
-        $issues_table[$type][$table_legnth]['issue_currency'][] = $scope_amount[1];
+        $issues_table[$type][$table_legnth]['issue_amount'][] = $issue_log_wrapper->field_time_spent->value() * $scope_amount['field_table_rate_field_type_rate_amount'];
+        $issues_table[$type][$table_legnth]['issue_currency'][] = $scope_amount['field_table_rate_field_type_rate_currency'];
       }
     }
   }
