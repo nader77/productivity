@@ -28,12 +28,6 @@ function productivity_project_menu() {
     'access callback' => TRUE,
   );
 
-  $items['generate_pdf/%node/%/%'] = array(
-    'page callback' => 'productivity_project_pdf_generate',
-    'page arguments' => array(1,2,3),
-    'access callback' => TRUE,
-  );
-
   return $items;
 }
 
@@ -70,18 +64,6 @@ function productivity_project_recalculate_access($node) {
     return FALSE;
   }
   return TRUE;
-}
-
-/**
- * Page callback; Generate the pdf report for a project on a month and year.
- */
-function productivity_project_pdf_generate($project_id, $month, $year) {
-  $file = create_pdf_file($project_id, $year, $month);
-
-  header("Content-Type: text/plain");
-//  header("Content-Disposition: attachment; filename="$name";" );
-
-  return 'a';
 }
 
 /**

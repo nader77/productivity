@@ -37,8 +37,6 @@
         <?php $total_tables_amount += $total_per_types[$table_titles[$index]] ?>
       <?php endforeach; ?>
       <div class="col-sm-12 well">
-<!--        <button type="button" id="download-pdf" class="btn btn-default">Download PDF</button>-->
-<!--        <a href="../../../../sites/default/files/monthly-report.pdf" download="Monthly Report --><?php //print $project_title; ?><!--"><button type="button" class="btn btn-default">Download PDF</button></a>-->
         <span class="col-sm-2 pull-right">TOTAL: <?php print $total_tables_amount . ' ' . $total_currency_per_types[$table_titles[$index]]; ?></span>
       </div>
       <!-- END Tables -->
