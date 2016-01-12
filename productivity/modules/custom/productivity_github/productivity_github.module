@@ -418,3 +418,35 @@ function productivity_github_sum_issue_hours($node_id) {
 
   return $sum;
 }
+
+/**
+ * Query DB for every GitHub issue linked to the project id from the URL,
+ * that in the URL month and year.
+ *
+ * @param $project_id
+ *  The project id number.
+ * @param $year
+ *  The year to filter the issues.
+ * @param $month
+ *  The month to filter the issues.
+ *
+ * @return $node
+ *  All the nodes return from the query.
+ */
+function get_project_github_issues_query($project_id, $year, $month) {
+  $project_start_month = format_string("@year-@month-01", array('@year' => $year, '@month' => $month));
+  $project_end_month = (new DateTime($project_start_month))->format( 'Y-m-t' );
+
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'time_tracking')
+    ->fieldCondition('field_project', 'target_id', $project_id)
+    ->fieldCondition('field_work_date', 'value', $project_start_month, '>=')
+    ->fieldCondition('field_work_date', 'value', $project_end_month, '<=')
+    ->execute();
+  if(empty($result['node'])) {
+    return;
+  }
+  return node_load_multiple(array_keys($result['node']));
+}

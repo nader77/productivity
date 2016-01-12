@@ -511,3 +511,51 @@ function notify($thresholds, $wrapper, $percentage, $email_string, $percentage_n
     break;
   }
 }
+
+/**
+ * Get an array of all the projects title and nid.
+ *
+ * @return array|void
+ *  Array of projects arrays.
+ */
+function productivity_project_get_all_projects() {
+  $query = new EntityFieldQuery();
+  $result = $query
+    ->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'project')
+    ->execute();
+
+  if(empty($result['node'])) {
+    return;
+  }
+
+  $projects = node_load_multiple(array_keys($result['node']));
+  $all_projects = array();
+  foreach($projects as $project) {
+    $all_projects[] = array($project->title, $project->nid);
+  }
+
+  return $all_projects;
+}
+
+/**
+ * Find the amount of the scope in question.
+ *
+ * @param $table_rate
+ *  The $table_rate scopes.
+ * @param $scope_to_find
+ *  The string of the scope in question.
+ *
+ * @return int
+ *  return the scope amount or zero.
+ *
+ */
+function get_the_scope_amount($table_rate, $scope_to_find) {
+  foreach($table_rate as $scope) {
+    $scope_type = $scope['field_issue_type'][LANGUAGE_NONE][0]['value'];
+    if($scope_type === $scope_to_find) {
+      return array($scope['field_type_rate'][LANGUAGE_NONE][0]['amount'], $scope['field_type_rate'][LANGUAGE_NONE][0]['currency']);
+    }
+  }
+  return array(0, 'USD');
+}

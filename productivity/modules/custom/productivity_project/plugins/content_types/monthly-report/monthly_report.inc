@@ -18,13 +18,6 @@ $plugin = array(
  */
 function productivity_project_monthly_report_content_type_render($subtype, $conf, $args, $context) {
   global $base_url;
-
-  $variables = array();
-  $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
-  $block = new stdClass();
-  $block->module = 'productivity_project';
-  $variables['current_project_id'] = $args[0];
-
   // Add JavaScript file with the base url of the page.
   drupal_add_js(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly_report.js');
   drupal_add_js(array('monthly_report' => array('base_url' => $base_url)), 'setting');
@@ -32,15 +25,22 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
   drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
 
+  $project_id = $args[0];
+  $year = $args[1];
+  $month = $args[2];
+  $nodes = get_project_github_issues_query($project_id, $year, $month);
+  $table = _productivity_project_create_issues_table($nodes);
+  $issues_table = $table[0];
+  $project_url = "https://github.com/" . $table[1] . "/pull/";;
+
+  $variables = array();
+  $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
+  $variables['current_project_id'] = $args[0];
+
   // Get the project title for the page title.
   $variables['project_title'] = $context->title;
   // Get all the projects for project input
-  $variables['projects'] = get_all_projects();
-
-  $nodes = github_issues_query($args[0], $args[1], $args[2]);
-  $table = create_issues_table($nodes);
-  $issues_table = $table[0];
-  $project_url = create_project_url($table[1]);
+  $variables['projects'] = productivity_project_get_all_projects();
 
   // Create tables for the template.
   $variables['tables'] = array();
@@ -63,8 +63,9 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
     $rows = array();
   }
 
+  $block = new stdClass();
+  $block->module = 'productivity_project';
   $block->content = theme('productivity_monthly_report', $variables);
-
 
   // Create PDF file.
   require_once libraries_get_path('dompdf') . "/dompdf_config.inc.php";
@@ -81,66 +82,6 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
 }
 
 /**
- * Create the pull URL based on the project name.
- *
- * @param $project_name
- *
- * @return string
- *  The base pull URL of the project
- */
-function create_project_url($project_name) {
-  switch($project_name) {
-    case 'openscholar':
-      return "https://github.com/openscholar/openscholar/" . $project_name . "/pull/";
-    case 'unfpa-global':
-    case 'eeca-shoov':
-    case 'ef-shoov':
-    case 'unfpa-global-shoov':
-    case 'wcaro':
-    case 'asiapacific':
-    case 'eeca':
-    case 'lac':
-    case 'esaro':
-    case 'ef':
-    case 'arabstates':
-    case 'malawi-shoov':
-    case 'lac-shoov':
-    case 'asiapacific-shoov':
-    case 'esaro-shoov':
-    case 'arabstates-shoov':
-      return "https://github.com/UNFPAHQ/" . $project_name . "/pull/";
-    default:
-      return "https://github.com/Gizra/" . $project_name . "/pull/";
-  }
-}
-
-/**
- * Get an array of all the projects title and nid.
- *
- * @return array|void
- *  Array of projects arrays.
- */
-function get_all_projects() {
-  $query = new EntityFieldQuery();
-  $result = $query
-    ->entityCondition('entity_type', 'node')
-    ->propertyCondition('type', 'project')
-    ->execute();
-
-  if(empty($result['node'])) {
-    return;
-  }
-
-  $projects = node_load_multiple(array_keys($result['node']));
-  $all_projects = array();
-  foreach($projects as $project) {
-    $all_projects[] = array($project->title, $project->nid);
-  }
-
-  return $all_projects;
-}
-
-/**
  * Create a matrix of all the issues from GitHub nodes,
  * And the url project.
  *
@@ -150,94 +91,38 @@ function get_all_projects() {
  * @return array
  *  Matrix of all the issues, and the URL project
  */
-function create_issues_table($nodes) {
+function _productivity_project_create_issues_table($nodes) {
   $issues_table = array();
   foreach($nodes as $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
     $project_wrapper = $wrapper->field_project->value();
-    $date = explode(' ', $node->field_work_date[LANGUAGE_NONE][0]['value'])[0];
+    $date = date('Y/m/d', $wrapper->field_work_date->value());
 
     // Loop through all the issues in that day.
     $issues = $wrapper->field_issues_logs->raw();
-    foreach($issues as $issue) {
+    foreach($wrapper->field_issues_logs as $issue_log_wrapper) {
       // Check if there is already a table with that type.
-      $type = $issue['field_issue_type'][LANGUAGE_NONE][0]['value'];
+      $type = $issue_log_wrapper->field_issue_type->value();
       if(empty($issues_table[$type])) {
         $issues_table[$type] = array();
       }
-      // Check if the time spent on the issue not 0.
-      if(intval($issue['field_time_spent'][LANGUAGE_NONE][0]['value'])) {
+      // Check if the time spent on the issue is not 0.
+      if(intval($issue_log_wrapper->field_time_spent->value())) {
         // push the issue details to the type table.
         $scope_amount = get_the_scope_amount($project_wrapper->field_table_rate[LANGUAGE_NONE], $type);
-        $label = $issue['field_issue_label'][LANGUAGE_NONE][0]['value'];
+        $label = $issue_log_wrapper->field_issue_label->value();
         $table_legnth = count($issues_table[$type]);
 
-        $issues_table[$type][$table_legnth]['issue_num'][] = substr($label, 1, strpos($label, ':') - 1);
-        $issues_table[$type][$table_legnth]['label'][] = substr($label, strpos($label, ':') + 2, strlen($label));
+        $issues_table[$type][$table_legnth]['issue_num'][] = $issue_log_wrapper->field_github_issue->raw();
+        $issues_table[$type][$table_legnth]['label'][] = $issue_log_wrapper->field_issue_label->value();
         $issues_table[$type][$table_legnth]['date'][] = $date;
-        $issues_table[$type][$table_legnth]['time'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
-        $issues_table[$type][$table_legnth]['issue_amount'][] = $issue['field_time_spent'][LANGUAGE_NONE][0]['value'] * $scope_amount[0];
+        $issues_table[$type][$table_legnth]['time'][] = $issue_log_wrapper->field_time_spent->value();
+        $issues_table[$type][$table_legnth]['issue_amount'][] = $issue_log_wrapper->field_time_spent->value() * $scope_amount[0];
         $issues_table[$type][$table_legnth]['issue_currency'][] = $scope_amount[1];
       }
     }
   }
   return array($issues_table,  $project_wrapper->field_github_repository_name[LANGUAGE_NONE][0]['value']);
-}
-
-/**
- * Find the amount of the scope in question.
- *
- * @param $table_rate
- *  The $table_rate scopes.
- * @param $scope_to_find
- *  The string of the scope in question.
- *
- * @return int
- *  return the scope amount or zero.
- *
- */
-function get_the_scope_amount($table_rate, $scope_to_find) {
-  foreach($table_rate as $scope) {
-    $scope_type = $scope['field_issue_type'][LANGUAGE_NONE][0]['value'];
-    if($scope_type === $scope_to_find) {
-      return array($scope['field_type_rate'][LANGUAGE_NONE][0]['amount'], $scope['field_type_rate'][LANGUAGE_NONE][0]['currency']);
-    }
-  }
-  return array(0, 'USD');
-}
-
-/**
- * Query DB for every GitHub issue linked to the project id from the URL,
- * that in the URL month and year.
- *
- * @param $project_id
- *  The project id number.
- * @param $year
- *  The year to filter the issues.
- * @param $month
- *  The month to filter the issues.
- *
- * @return $node
- *  All the nodes return from the query.
- */
-function github_issues_query($project_id, $year, $month) {
-  $project_start_month = format_string("@year-@month-01", array('@year' => $year, '@month' => $month));
-  $project_end_month = (new DateTime($project_start_month))->format( 'Y-m-t' );
-
-  $project_start_month = (new DateTime(format_string("2015-12-01")))->format( 'Y-m-t' );
-  $project_end_month = (new DateTime(format_string("2016-01-20")))->format( 'Y-m-t' );
-
-  $query = new EntityFieldQuery();
-  $result = $query
-    ->entityCondition('entity_type', 'node')
-    ->fieldCondition('field_project', 'target_id', $project_id)
-    ->fieldCondition('field_work_date', 'value', $project_start_month, '>=')
-    ->fieldCondition('field_work_date', 'value', $project_end_month, '<=')
-    ->execute();
-  if(empty($result['node'])) {
-    return;
-  }
-  return node_load_multiple(array_keys($result['node']));
 }
 
 /**
