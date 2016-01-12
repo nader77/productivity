@@ -44,6 +44,10 @@
       $('.btn-primary[type=submit]').click(function() {
         window.location.href = url;
       });
+
+      $('#download-pdf').click(function() {
+        window.location.href = settings['monthly_report']['base_url'] + 'generate_pdf/52/2016/01';
+      });
     }
   };
 })(jQuery);

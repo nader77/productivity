@@ -28,17 +28,45 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   $project_id = $args[0];
   $year = $args[1];
   $month = $args[2];
+
+  $variables = array();
+  // Get the project title for the page title.
+  $variables['project_title'] = $context->title;
+  $variables = _generate_table($project_id, $year, $month, $variables);
+
+  //create_pdf_file($project_id, $year, $month);
+
+  $block = new stdClass();
+  $block->module = 'productivity_project';
+  $block->content = theme('productivity_monthly_report', $variables);
+
+  return $block;
+}
+
+/**
+ *  Create The tables and insert them to variables variable.
+ *
+ * @param $project_id
+ *  The project nid.
+ * @param $year
+ *  The year to search the issues by.
+ * @param $month
+ *  The month to search the issue by.
+ * @param $variables
+ *  An empty array.
+ *
+ * @return $variables
+ *  The array with all the tables info.
+ */
+function _generate_table($project_id, $year, $month, $variables) {
   $nodes = get_project_github_issues_query($project_id, $year, $month);
   $table = _productivity_project_create_issues_table($nodes);
   $issues_table = $table[0];
   $project_url = "https://github.com/" . $table[1] . "/pull/";;
 
-  $variables = array();
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
-  $variables['current_project_id'] = $args[0];
+  $variables['current_project_id'] = $project_id;
 
-  // Get the project title for the page title.
-  $variables['project_title'] = $context->title;
   // Get all the projects for project input
   $variables['projects'] = productivity_project_get_all_projects();
 
@@ -62,23 +90,39 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
     $variables['tables'][] = theme('table', array('header' => $header, 'rows' => $rows));
     $rows = array();
   }
+  return $variables;
+}
 
-  $block = new stdClass();
-  $block->module = 'productivity_project';
-  $block->content = theme('productivity_monthly_report', $variables);
+/**
+ * Create PDF file of all the tables scopes.
+ *
+ * @param $project_id
+ *  The project nid.
+ * @param $year
+ *  The year to search the issues by.
+ * @param $month
+ *  The month to search the issue by.
+ *
+ * @return bool|stdClass
+ *
+ */
+function create_pdf_file($project_id, $year, $month) {
+  $variables = array();
+  $variables['project_title'] = 'Some Title';
+  $variables = _generate_table($project_id, $year, $month, $variables);
+  $html = theme('productivity_monthly_report_pdf', $variables);
 
   // Create PDF file.
   require_once libraries_get_path('dompdf') . "/dompdf_config.inc.php";
   $dompdf = new DOMPDF();
   $dompdf->set_paper("A4");
-  $dompdf->load_html(theme('productivity_monthly_report_pdf', $variables));
+  $dompdf->load_html($html);
   $dompdf->render();
   $pdf_content = $dompdf->output("test.pdf");
   $file = file_save_data($pdf_content, 'public://monthly-report.pdf', FILE_EXISTS_REPLACE);
 
   $variables['pdf_download_path'] = file_create_url($file->uri);
-
-  return $block;
+  return $file;
 }
 
 /**
@@ -109,7 +153,6 @@ function _productivity_project_create_issues_table($nodes) {
       // Check if the time spent on the issue is not 0.
       if(intval($issue_log_wrapper->field_time_spent->value())) {
         // push the issue details to the type table.
-        //$scope_amount = get_the_scope_amount($project_wrapper->field_table_rate[LANGUAGE_NONE], $type);
         $scope_amount = get_the_scope_amount($project_wrapper->vid, $type);
         $table_legnth = count($issues_table[$type]);
 
