@@ -1,8 +1,9 @@
 <div class="col-sm-12">
   <div class="main-box clearfix project-box emerald-box">
     <div class="main-box-body clearfix">
+      <p class="show-only-on-print"><?php print DateTime::createFromFormat('!m', $month)->format('F') . " " . $year; ?></p>
       <div id="header" class="col-sm-12">
-        <h1 id="project-title">Monthly Report<small> - <?php print $project_title; ?></small></h1>
+        <h1 id="project-title">Monthly Report<small><?php print ' - ' . $account . ' - ' . $project_title; ?></small></h1>
         <h1 id="gizra-logo">gizra</h1>
       </div>
 
@@ -37,7 +38,7 @@
         <?php $total_tables_amount += $total_per_types[$table_titles[$index]] ?>
       <?php endforeach; ?>
       <div class="col-sm-12 well">
-        <span class="col-sm-2 pull-right">TOTAL: <?php print $total_tables_amount . ' ' . $total_currency_per_types[$table_titles[$index]]; ?></span>
+        <span><strong>GRAND TOTAL: <?php print $total_tables_amount . ' ' . $total_currency_per_types[$table_titles[$index]]; ?></strong></span>
       </div>
       <!-- END Tables -->
     </div>

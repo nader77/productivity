@@ -31,11 +31,14 @@ function productivity_time_tracking_monthly_report_content_type_render($subtype,
   $month = $args[2];
 
   $variables = array();
+  $variables['year'] = $year;
+  $variables['month'] = $month;
   // Get the project title for the page title.
   $variables['project_title'] = $context->title;
   $nodes = get_project_github_issues_query($project_id, $year, $month);
   $table = _productivity_time_tracking_create_issues_table($nodes);
   $issues_table = $table[0];
+  $variables['account'] = $table[2];
   $project_url = "https://github.com/" . $table[1] . "/pull/";;
 
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
@@ -90,7 +93,6 @@ function _productivity_time_tracking_create_issues_table($nodes) {
     $date = date('Y/m/d', $wrapper->field_work_date->value());
 
     // Loop through all the issues in that day.
-    $issues = $wrapper->field_issues_logs->raw();
     foreach($wrapper->field_issues_logs as $issue_log_wrapper) {
       // Check if there is already a table with that type.
       $type = $issue_log_wrapper->field_issue_type->value();
@@ -112,7 +114,7 @@ function _productivity_time_tracking_create_issues_table($nodes) {
       }
     }
   }
-  return array($issues_table,  $project_wrapper->field_github_repository_name[LANGUAGE_NONE][0]['value']);
+  return array($issues_table,  $wrapper->field_project->field_github_repository_name->value()[0], $wrapper->field_project->field_account->title->value());
 }
 
 /**
