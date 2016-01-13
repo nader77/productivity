@@ -26,6 +26,15 @@ function productivity_time_tracking_form_system_site_information_settings_alter(
 }
 
 /**
+ * Implements hook_ctools_plugin_directory().
+ */
+function productivity_time_tracking_ctools_plugin_directory($module, $plugin) {
+  if ($module == 'ctools') {
+    return 'plugins/' . $plugin;
+  }
+}
+
+/**
  * Get general days in a given month.
  */
 function productivity_time_tracking_get_global_days($month, $year) {

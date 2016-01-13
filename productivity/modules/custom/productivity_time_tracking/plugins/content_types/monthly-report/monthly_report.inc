@@ -16,12 +16,12 @@ $plugin = array(
 /**
  * Render callback;  Bidder page.
  */
-function productivity_project_monthly_report_content_type_render($subtype, $conf, $args, $context) {
+function productivity_time_tracking_monthly_report_content_type_render($subtype, $conf, $args, $context) {
   global $base_url;
   // Add JavaScript file with the base url of the page.
-  drupal_add_js(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly_report.js');
+  drupal_add_js(drupal_get_path('module', 'productivity_time_tracking') . '/plugins/content_types/monthly-report/monthly_report.js');
   drupal_add_js(array('monthly_report' => array('base_url' => $base_url)), 'setting');
-  drupal_add_css(drupal_get_path('module', 'productivity_project') . '/plugins/content_types/monthly-report/monthly_report.css');
+  drupal_add_css(drupal_get_path('module', 'productivity_time_tracking') . '/plugins/content_types/monthly-report/monthly_report.css');
   drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
   drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
   drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
@@ -34,7 +34,7 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   // Get the project title for the page title.
   $variables['project_title'] = $context->title;
   $nodes = get_project_github_issues_query($project_id, $year, $month);
-  $table = _productivity_project_create_issues_table($nodes);
+  $table = _productivity_time_tracking_create_issues_table($nodes);
   $issues_table = $table[0];
   $project_url = "https://github.com/" . $table[1] . "/pull/";;
 
@@ -66,7 +66,7 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
   }
 
   $block = new stdClass();
-  $block->module = 'productivity_project';
+  $block->module = 'productivity_time_tracking';
   $block->content = theme('productivity_monthly_report', $variables);
 
   return $block;
@@ -82,7 +82,7 @@ function productivity_project_monthly_report_content_type_render($subtype, $conf
  * @return array
  *  Matrix of all the issues, and the URL project
  */
-function _productivity_project_create_issues_table($nodes) {
+function _productivity_time_tracking_create_issues_table($nodes) {
   $issues_table = array();
   foreach($nodes as $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
