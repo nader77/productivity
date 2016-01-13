@@ -20,7 +20,7 @@ projects[ctools][subdir] = "contrib"
 projects[ctools][version] = "1.9"
 
 projects[currency][subdir] = "contrib"
-projects[currency][version] = "2.5"
+projects[currency][version] = "2.6"
 
 projects[date][subdir] = "contrib"
 projects[date][version] = "2.9"
@@ -29,7 +29,7 @@ projects[diff][subdir] = "contrib"
 projects[diff][version] = "3.2"
 
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.5"
+projects[entity][version] = "1.6"
 projects[entity][patch][] = "https://www.drupal.org/files/issues/2264079-entity-wrapper-access-single-entity-reference-2.patch"
 projects[entity][patch][] = "https://www.drupal.org/files/issues/2086225-entity-access-check-node-create-3.patch"
 
@@ -69,7 +69,7 @@ projects[mailsystem][subdir] = "contrib"
 projects[mailsystem][version] = "3.x-dev"
 
 projects[message][subdir] = "contrib"
-projects[message][version] = "1.10"
+projects[message][version] = "1.11"
 
 projects[message_ui][subdir] = "contrib"
 projects[message_ui][version] = "1.4"
@@ -106,7 +106,7 @@ projects[restful][download][branch] = "7.x-1.x"
 projects[restful][subdir] = "contrib"
 
 projects[smtp][subdir] = "contrib"
-projects[smtp][version] = "1.2"
+projects[smtp][version] = "1.3"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
