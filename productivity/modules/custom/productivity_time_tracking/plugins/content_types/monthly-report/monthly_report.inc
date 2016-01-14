@@ -41,8 +41,7 @@ function productivity_time_tracking_monthly_report_content_type_render($subtype,
   // Get the project title for the page title.
 
   $nodes = get_project_github_issues_query($project_id, $year, $month);
-  $table = _productivity_time_tracking_create_issues_table($nodes);
-  $issues_table = $table['table'];
+  $issues_table = _productivity_time_tracking_create_issues_table($nodes);
 
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
   $variables['current_project_id'] = $project_id;
@@ -119,7 +118,7 @@ function _productivity_time_tracking_create_issues_table($nodes) {
       }
     }
   }
-  return array('table' => $issues_table);
+  return $issues_table;
 }
 
 /**
