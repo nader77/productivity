@@ -532,7 +532,7 @@ function productivity_project_get_all_projects() {
   $projects = node_load_multiple(array_keys($result['node']));
   $all_projects = array();
   foreach($projects as $project) {
-    $all_projects[] = array($project->title, $project->nid);
+    $all_projects[$project->nid] = $project->title;
   }
 
   return $all_projects;
@@ -550,7 +550,7 @@ function productivity_project_get_all_projects() {
  *  return the scope amount or zero.
  *
  */
-function get_the_scope_amount($project_id, $scope_to_find) {
+function productivity_project_get_rate($project_id, $scope_to_find) {
   return db_select('field_data_field_table_rate', 'table_rate')
     ->condition('bundle', 'project')
     ->condition('entity_id', $project_id)
