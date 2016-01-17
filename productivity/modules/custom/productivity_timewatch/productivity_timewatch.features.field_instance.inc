@@ -152,9 +152,9 @@ function productivity_timewatch_field_default_field_instances() {
     'display' => array(
       'default' => array(
         'label' => 'above',
-        'module' => 'list',
+        'module' => 'taxonomy',
         'settings' => array(),
-        'type' => 'list_default',
+        'type' => 'taxonomy_term_reference_link',
         'weight' => 3,
       ),
       'teaser' => array(
@@ -166,12 +166,13 @@ function productivity_timewatch_field_default_field_instances() {
     ),
     'entity_type' => 'node',
     'field_name' => 'field_session_type',
-    'label' => 'Type',
-    'required' => FALSE,
+    'label' => 'Session type',
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
@@ -257,7 +258,7 @@ function productivity_timewatch_field_default_field_instances() {
   t('Pincode');
   t('Project');
   t('Session date');
-  t('Type');
+  t('Session type');
   t('When type is set as "Full day", don\'t ask for start and end time.');
 
   return $field_instances;

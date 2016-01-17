@@ -17,4 +17,13 @@ class ProductivityMigrateSessionTypes extends ProductivityMigrate {
 
     $this->addFieldMapping('field_full_day', 'full_day');
   }
+
+  /**
+   * Set the regular session type as the default one.
+   */
+  public function complete($term) {
+    if ($term->name == 'Regular') {
+      variable_set('productivity_timewatch_default_session_type_tid', $term->tid);
+    }
+  }
 }

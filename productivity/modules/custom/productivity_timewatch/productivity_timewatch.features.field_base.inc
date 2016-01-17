@@ -93,18 +93,22 @@ function productivity_timewatch_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_session_type',
     'indexes' => array(
-      'value' => array(
-        0 => 'value',
+      'tid' => array(
+        0 => 'tid',
       ),
     ),
     'locked' => 0,
-    'module' => 'list',
+    'module' => 'taxonomy',
     'settings' => array(
-      'allowed_values' => array(),
-      'allowed_values_function' => '',
+      'allowed_values' => array(
+        0 => array(
+          'vocabulary' => 'session_types',
+          'parent' => 0,
+        ),
+      ),
     ),
     'translatable' => 0,
-    'type' => 'list_text',
+    'type' => 'taxonomy_term_reference',
   );
 
   return $field_bases;
