@@ -304,20 +304,21 @@ function productivity_project_save_project_details($node, $project_wrapper) {
 
   // Add the hours by issue type.
   if($day_type === "regular") {
-    $new_issues = $node->field_issues_logs[LANGUAGE_NONE];
+    $new_issues = $wrapper->field_issues_logs->raw();
+
     $table  = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate->raw() : array();
 
     foreach($new_issues as $new_issue_index => $new_issue) {
       $type = $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value'];
       // Check if that issue type already exist in the table.
-      if (check_existing_type($table, $type)) {
+      if (productivity_project_check_existing_type($table, $type)) {
         // Search the right type at the table.
         foreach($table as $table_issues_index => $issue) {
           if($issue['field_issue_type'][LANGUAGE_NONE][0]['value'] === $type) {
             // Add the new issue hours.
             $table[$table_issues_index]['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
             // Check if it's existing issue.
-            if(check_existing_issue($node->original->field_issues_logs[LANGUAGE_NONE], $new_issue)) {
+            if(productivity_project_check_existing_issue($node->original->field_issues_logs[LANGUAGE_NONE], $new_issue)) {
               // Decrease the old issue hours.
               $table[$table_issues_index]['field_hours'][LANGUAGE_NONE][0]['value'] -= $node->original->field_issues_logs[LANGUAGE_NONE][$new_issue_index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
             }
@@ -325,7 +326,7 @@ function productivity_project_save_project_details($node, $project_wrapper) {
         }
       } else {
         // Create new row for the issue type at the table.
-        $table = create_new_type($table, $new_issue);
+        $table = productivity_project_create_new_type($table, $new_issue);
       }
     }
   }
@@ -343,8 +344,8 @@ function productivity_project_save_project_details($node, $project_wrapper) {
  * @return mixed
  *  The table with the new issue.
  */
-function create_new_type($table, $new_issue) {
-  // Get the index of the issue tape in the table.
+function productivity_project_create_new_type($table, $new_issue) {
+  // Get the index of the issue type in the table.
   $next_index = get_table_next_index($table, $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value']);
 
   $table[$next_index] = array(
@@ -378,7 +379,7 @@ function create_new_type($table, $new_issue) {
  *
  * @return bool
  */
-function check_existing_issue($table_issues, $new_issue) {
+function productivity_project_check_existing_issue($table_issues, $new_issue) {
   $new_issue_number = explode(':', $new_issue['field_issue_label'][LANGUAGE_NONE][0]['value']);
   foreach($table_issues as $issue) {
     $issue_number = explode(':', $issue['field_issue_label'][LANGUAGE_NONE][0]['value']);
@@ -405,7 +406,7 @@ function check_existing_issue($table_issues, $new_issue) {
  * @return int
  *  The index of the type in table.
  */
-function get_table_next_index($table, $issue_type) {
+function productivity_project_get_table_next_index($table, $issue_type) {
   foreach($table as $index => $value) {
     if($value['field_issue_type'][LANGUAGE_NONE][0]['value'] === $issue_type) {
       $table_index = $index;
@@ -431,7 +432,7 @@ function get_table_next_index($table, $issue_type) {
  *
  * @return bool
  */
-function check_existing_type($table, $issue_type) {
+function productivity_project_check_existing_type($table, $issue_type) {
   foreach($table as $index=>$value) {
     $existing_issues[] = $value['field_issue_type'][LANGUAGE_NONE][0]['value'];
   }
