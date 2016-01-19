@@ -39,6 +39,7 @@ projects[entityreference][patch][] = "https://www.drupal.org/files/issues/migrat
 projects[entityreference_filter][subdir] = "contrib"
 projects[entityreference_filter][version] = "1.5"
 
+projects[entityrelationships][type] = "module"
 projects[entityrelationships][subdir] = "contrib"
 projects[entityrelationships][download][type] = "git"
 projects[entityrelationships][download][url] = "git@github.com:Gizra/entityrelationships.git"
@@ -141,7 +142,7 @@ projects[migrate_extras][version] = "2.5"
 ; Libraries
 libraries[dompdf][type] = "libraries"
 libraries[dompdf][download][type] = "get"
-libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/releases/download/v0.6.1/dompdf-0.6.1.zip"
+libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/archive/v0.6.1.zip"
 
 ; Themes
 projects[bootstrap][subdir] = "contrib"
