@@ -124,12 +124,15 @@ class RestfulFormatterTrackingCalendar extends \RestfulFormatterBase implements 
       }
     }
 
+    // Get vacation types.
+    $vacation_types_info = field_info_field('field_vacation_type');
+
     // Save regular (non global) tracking days.
     foreach ($data as $day) {
       // Non regular days, display special info.
       if ($day['type'] != 'regular') {
-        // Don't change Global days.
-        $day['projectName'] = $day['type'];
+        // Add vacation type to event name.
+        $day['projectName'] = $day['type'] == 'vacation' && $day['vacationType'] ? $vacation_types_info['settings']['allowed_values'][$day['vacationType']] . ' ' . t('vacation') : $day['type'];
         $day['length'] = strtoupper(substr($day['type'], 0, 1));
       }
       $key = $day['day'];

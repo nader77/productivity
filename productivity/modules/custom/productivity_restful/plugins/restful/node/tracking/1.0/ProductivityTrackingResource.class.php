@@ -47,6 +47,10 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       'property' => 'field_track_hours',
     );
 
+    $public_fields['vacationType'] = array(
+      'property' => 'field_vacation_type',
+    );
+
     $public_fields['type'] = array(
       'property' => 'field_day_type',
     );
@@ -228,7 +232,9 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       throw new \RestfulBadRequestException('At least one issue should be added.');
     }
 
-    $wrapper->field_work_date->set($request['date']);
+    // Convert day month and year to a Unix timestamp.
+    $date = strtotime($request['day'] . '-' . $request['month'] . '-' . $request['year'] . '12:00:00');
+    $wrapper->field_work_date->set($date);
     $wrapper->field_day_type->set($request['type']);
     $wrapper->field_employee->set(user_load_by_name($request['employee']));
 
@@ -264,6 +270,10 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
       }
 
       $wrapper->field_issues_logs->set($field_issues);
+    }
+
+    if ($request['type'] == 'vacation') {
+      $wrapper->field_vacation_type->set($request['vacationType']);
     }
 
     // Change status if it's sent with the request.

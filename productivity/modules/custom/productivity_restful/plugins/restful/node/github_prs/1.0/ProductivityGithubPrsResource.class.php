@@ -28,7 +28,6 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
     return $public_fields;
   }
 
-
   /**
    * Overrides RestfulEntityBase::getQueryForList().
    */
@@ -50,7 +49,7 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
     $query = parent::getQueryForList();
 
     // Filter day.
-    $this->setPushDateTimeSpan($query, '+1 day');
+    $this->setPushDateTime($query);
 
     // Filter employee.
     if (!$account = user_load_by_name($request['employee'])) {
@@ -66,21 +65,20 @@ class ProductivityGithubPrsResource extends \ProductivityEntityBaseNode {
   }
 
   /**
-   * Limit the work date to a certain time span, based on the day or month given
-   * in the request.
+   * Limit the push date to a certain day.
    *
    * @param $query
    *   An entity field query object to add the work date constraint to.
-   * @param $interval
-   *   The span length. E.g. "+1 day" or "+1 month".
-   *
-   * @return array
-   *   A start timestamp and an end timestamp.
    */
-  protected function setPushDateTimeSpan($query, $interval) {
-    list($start_time, $end_time) = $this->getTimeSpan($interval);
+  protected function setPushDateTime($query) {
+    $request = $this->getRequest();
 
-    $query->fieldCondition('field_push_date', 'value', $start_time, '>=');
-    $query->fieldCondition('field_push_date', 'value', $end_time, '<');
+    // Set the work day from 00:00:00 to 23:59:59 to get all PRs in between.
+    $work_day = array(
+      $request['year'] . '-' . $request['month'] . '-' . $request['day'] . ' 00:00:00',
+      $request['year'] . '-' . $request['month'] . '-' . $request['day'] . ' 23:59:59',
+    );
+
+    $query->fieldCondition('field_push_date', 'value', $work_day, 'BETWEEN');
   }
 }

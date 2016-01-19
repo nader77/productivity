@@ -64,23 +64,23 @@
                 <label class="col-md-2 control-label">Day type</label>
                 <div class="col-md-10">
                   <label class="radio-inline" for="daytype-0">
-                    <input type="radio" ng-model="data.type" name="daytype" id="daytype-0" value="regular" checked="checked">
+                    <input type="radio" ng-model="data.type" name="daytype" id="daytype-0" value="regular" checked="checked" ng-disabled="owner(data)">
                     Regular
                   </label>
                   <label class="radio-inline" for="daytype-1">
-                    <input type="radio" ng-model="data.type" name="daytype" id="daytype-1" value="sick">
+                    <input type="radio" ng-model="data.type" name="daytype" id="daytype-1" value="sick" ng-disabled="owner(data)">
                     Sick
                   </label>
                   <label class="radio-inline" for="daytype-2">
-                    <input type="radio" ng-model="data.type"  name="daytype" id="daytype-2" value="vacation">
+                    <input type="radio" ng-model="data.type"  name="daytype" id="daytype-2" value="vacation" ng-disabled="owner(data)">
                     Vacation
                   </label>
                   <label class="radio-inline" for="daytype-3">
-                    <input type="radio" ng-model="data.type"  name="daytype" id="daytype-3" value="miluim">
+                    <input type="radio" ng-model="data.type"  name="daytype" id="daytype-3" value="miluim" ng-disabled="owner(data)">
                     Miluim
                   </label>
                   <label class="radio-inline" for="daytype-4">
-                    <input type="radio" ng-model="data.type"  name="daytype" id="daytype-4" value="convention">
+                    <input type="radio" ng-model="data.type"  name="daytype" id="daytype-4" value="convention" ng-disabled="owner(data)">
                     Convention
                   </label>
                 </div>
@@ -121,6 +121,17 @@
                         <i ng-if="$last && !newIssues.length" ng-click="addNewIssue()" class="fa fa-plus-circle fa-2x"></i>
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="vacation-day-wrapper" ng-if="data.type == 'vacation'">
+                <div class="form-group">
+                  <label class="col-md-2 col-xs-12 control-label" for="project">Vacation type</label>
+                  <div class="col-md-8 col-xs-10">
+                    <select id="vacation-type" ng-model="data.vacationType" name="vacation-type" ng-required="true" class="control-form"
+                            ng-options="key as value for (key, value) in vacationTypes">
+                    </select>
                   </div>
                 </div>
               </div>

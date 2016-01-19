@@ -68,6 +68,12 @@ angular.module('clientApp')
       label: 'Support'
     }];
 
+    // Set vacation object.
+    $scope.vacationTypes = {
+      fullday: 'Full day',
+      halfday: 'Half a day'
+    };
+
     $scope.month = $stateParams.month;
     $scope.monthString = monthNames[$scope.month-1];
     $scope.year = $stateParams.year;
@@ -104,6 +110,7 @@ angular.module('clientApp')
       $scope.data = {};
       $scope.data.period = 'hour';
       $scope.data.type = 'regular';
+      $scope.data.vacationType = 'fullday';
       $scope.data.length = 0;
       $scope.data.issues = [{
         issue: 0,
@@ -223,10 +230,15 @@ angular.module('clientApp')
       // Indicate we are in the middle of creation.
       $scope.creating = true;
 
-      // Convert date to timestamp,
-      // Need to add the hour to make a more accurate events.
-      var date = $stateParams.year + '.' + $stateParams.month + '.' +  $stateParams.day + ' 12:00:00';
-      data.date = new Date(date).getTime() / 1000;
+      // Remove vacation type if event is not a vacation.
+      if (data.type != 'vacation') {
+        delete data.vacationType;
+      }
+
+      // Add month and year to format the date in the backend.
+      data.day = $scope.day;
+      data.month = $scope.month;
+      data.year = $scope.year;
 
       // Check only regular time tracking.
       if (data.type == 'regular') {
@@ -247,7 +259,6 @@ angular.module('clientApp')
         console.log(data);
       }
 
-      // Convert date to timestamp.
       Tracking.save(data).then(function(newData) {
         $scope.creating = false;
 

@@ -219,6 +219,10 @@ body {
           color: white;
           @include border-radius(0);
 
+          .fc-event-title {
+            text-transform: capitalize;
+          }
+
           &.empty-event {
             background-color: transparent;
             color: black;
