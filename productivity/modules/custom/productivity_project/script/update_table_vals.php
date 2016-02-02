@@ -19,26 +19,31 @@ $base_query
   ->propertyCondition('status', NODE_PUBLISHED)
   ->propertyOrderBy('nid', 'ASC')
   ->addTag('DANGEROUS_ACCESS_CHECK_OPT_OUT');
+
 if ($nid) {
   $base_query->propertyCondition('nid', $nid, '>');
 }
+
 $query_count = clone $base_query;
 $count = $query_count->count()->execute();
 
+drush_print('Item to process:' . $count);
+
 while ($i < $count) {
-// Free up memory.
-  drupal_static_reset();
   $query = clone $base_query;
   if ($nid) {
     $query
       ->propertyCondition('nid', $nid, '>');
   }
+
   $result = $query
     ->range(0, $batch)
     ->execute();
+
   if (empty($result['node'])) {
     return;
   }
+
   $ids = array_keys($result['node']);
   $nodes = node_load_multiple($ids);
   foreach ($nodes as $node) {
@@ -55,18 +60,24 @@ while ($i < $count) {
       // Update scope period from global scope period
       $node->field_table_rate[LANGUAGE_NONE][0]['field_scope'][LANGUAGE_NONE][0]['period'] = $wrapper->field_scope->value()['period'];
       // Update scope rate amount from global rate amount
-      $node->field_table_rate[LANGUAGE_NONE][0]['field_type_rate'][LANGUAGE_NONE][0]['amount'] = floatval(str_replace(',', '', $wrapper->field_rate->value()['amount']));
+      $node->field_table_rate[LANGUAGE_NONE][0]['field_rate'][LANGUAGE_NONE][0]['amount'] = floatval(str_replace(',', '', $wrapper->field_rate->value()['amount']));
       // Update scope rate currency from global rate currency
-      $node->field_table_rate[LANGUAGE_NONE][0]['field_type_rate'][LANGUAGE_NONE][0]['currency'] = $wrapper->field_rate->value()['currency'];
+      $currency = $wrapper->field_rate->value()['currency'] ? $wrapper->field_rate->value()['currency'] : 'USD';
+      $node->field_table_rate[LANGUAGE_NONE][0]['field_rate'][LANGUAGE_NONE][0]['currency'] = $currency;
+      // Rate type. (hours/month/global)
+      $node->field_table_rate[LANGUAGE_NONE][0]['field_rate_type'][LANGUAGE_NONE][0]['value'] = $wrapper->field_rate_type->value();
+
       node_save($node);
-    } catch (Exception $e) {
+      drush_print('Save node:' . $node->nid);
+    }
+    catch (Exception $e) {
       $params = array(
         '@error' => $e->getMessage(),
         '@nid' => $node->nid,
         '@title' => $node->title,
         '@value' => $description,
       );
-      drush_log(format_string('There was error updating the node(@nid) @title with the value @value. More info: @error', $params), 'error');
+      drush_print(format_string('There was error updating the node(@nid) @title with the value @value. More info: @error', $params), 'error');
     }
   }
   $i += count($nodes);
@@ -78,12 +89,13 @@ while ($i < $count) {
     '@max' => $count,
   );
   drush_print(dt('Process entities from id @start to id @end. Batch state: @iterator/@max', $params));
+
   if (round(memory_get_usage()/1048576) >= $memory_limit) {
     $params = array(
       '@memory' => round(memory_get_usage()/1048576),
       '@max_memory' => memory_get_usage(TRUE)/1048576,
     );
-    drush_log(dt('Stopped before out of memory. Start process from the node ID @nid', array('@nid' => end($ids))), 'error');
+    drush_print(dt('Stopped before out of memory. Start process from the node ID @nid', array('@nid' => end($ids))), 'error');
     return;
   }
 }

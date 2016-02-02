@@ -84,21 +84,10 @@
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-hand-o-up red-bg"></i>
-      <span class="headline"><?php print t('Total Hours') ?></span>
+      <span class="headline"><?php print t('Total Hours Done') ?></span>
       <span class="value"><?php print render($content['field_hours']);?></span>
     </div>
   </div>
-<!--
-field_scope
-field_account
-field_date
-field_type
-field_rate_type
-field_rate
-field_status
-field_github_repository_name
-field_days
--->
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-shopping-cart emerald-bg"></i>
@@ -119,10 +108,9 @@ field_days
       <?php print $table; ?>
   </div>
 </div>
+<?php if (isset($recalculate_hours_days_link)) : ?>
+  <?php print $recalculate_hours_days_link; ?>
+<?php endif; ?>
 
 
-  <?php print render($content['links']); ?>
-  <?php print render($content);?>
-  <?php if (isset($recalculate_hours_days_link)) : ?>
-    <?php print $recalculate_hours_days_link; ?>
-  <?php endif; ?>
+

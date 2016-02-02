@@ -15,29 +15,34 @@ function bootstrap_subtheme_preprocess_node(&$variables) {
   if (function_exists($preprocess_function)) {
     $preprocess_function($variables);
   }
+}
 
-  if ($node->type == 'project' && node_access('update', $node)) {
+/**
+ * Preprocess Project node.
+ */
+function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
+  // use node because wrapper don't work with multifield.
+  $node = $variables['node'];
+  $rows = array();
+  if (!empty($node->field_table_rate['und'])) {
 
     // Insert all the Table Rate multifield to an array by field,
-    // use node because wrapper don't work with multifield.
-    $rows = array();
-    if (!empty($node->field_table_rate['und'])) {
-      foreach ($node->field_table_rate['und'] as $index => $item) {
-        $issue_type_key = $item['field_issue_type']['und']['0']['value'];
-        $rows[$index]['field_issue_type'] = field_info_field('field_issue_type')['settings']['allowed_values'][$issue_type_key];
-        $rows[$index]['field_scope_time'] = $item['field_scope']['und']['0']['interval'] . ' ' . ucwords($item['field_scope']['und']['0']['period'] . 's');
-        $rows[$index]['field_type_rate'] = number_format($item['field_type_rate']['und']['0']['amount'], 2) . ' ' . $item['field_type_rate']['und']['0']['currency'];
-        $rows[$index]['field_hours'] = number_format($item['field_hours']['und']['0']['value'], 0);
-        $rows[$index]['field_days'] = number_format($item['field_days']['und']['0']['value'], 0);
-      }
+    foreach ($node->field_table_rate['und'] as $index => $item) {
+      $issue_type_key = $item['field_issue_type']['und']['0']['value'];
+      $rows[$index]['field_issue_type'] = field_info_field('field_issue_type')['settings']['allowed_values'][$issue_type_key];
+      $rows[$index]['field_scope_time'] = $item['field_scope']['und']['0']['interval'] . ' ' . ucwords($item['field_scope']['und']['0']['period'] . 's');
+      $rows[$index]['field_rate'] = number_format($item['field_rate']['und']['0']['amount'], 2) . ' ' . $item['field_rate']['und']['0']['currency'];
+      $rows[$index]['field_rate_type'] = $item['field_rate_type']['und']['0']['value'];
+      $rows[$index]['field_hours'] = number_format($item['field_hours']['und']['0']['value'], 0);
+      $rows[$index]['field_days'] = number_format($item['field_days']['und']['0']['value'], 0);
     }
-
-    $header = array('Type', 'Scope', 'Rate', 'Hours', 'Days');
-    $table = theme('table', array('header' => $header, 'rows' => $rows ));
-
-    $variables['table'] = $table;
-    $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), url('recalculate-project-time/' . $node->nid, array('absolute' => TRUE)));
   }
+
+  $header = array('Type', 'Total Scope', 'Rate', 'Rate Type', 'Hours', 'Days');
+  $table = theme('table', array('header' => $header, 'rows' => $rows ));
+
+  $variables['table'] = $table;
+  $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), url('recalculate-project-time/' . $node->nid, array('absolute' => TRUE)));
 }
 
 /**

@@ -90,7 +90,8 @@ function productivity_project_recalculate_hours($node) {
 function productivity_project_form_project_node_form_alter(&$form, &$form_state) {
   $form['field_hours']['#disabled'] = TRUE;
   $form['field_days']['#disabled'] = TRUE;
-  $form['field_scope']['#disabled'] = TRUE;
+  $form['field_table_rate']['und'][0]['field_hours']['#disabled'] = TRUE;
+  $form['field_table_rate']['und'][0]['field_days']['#disabled'] = TRUE;
   $form['field_percentage_notification']['#disabled'] = TRUE;
 
   // Set the repo name as autocomplete.
@@ -357,10 +358,11 @@ function productivity_project_create_new_type($table, $new_issue) {
       'interval' => '0',
       'period' => 'hour',
     ))),
-    'field_type_rate' => array(LANGUAGE_NONE => array(array(
+    'field_rate' => array(LANGUAGE_NONE => array(array(
       'amount' => '0',
       'currency' => 'USD',
     ))),
+    'field_rate_type' => array(LANGUAGE_NONE => array(array('value' => $new_issue['field_rate_type'][LANGUAGE_NONE][0]['value']))),
   );
   return $table;
 }

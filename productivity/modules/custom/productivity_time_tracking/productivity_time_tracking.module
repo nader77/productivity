@@ -458,7 +458,6 @@ function productivity_time_tracking_bulk_update($month, $year, $employee, $proje
   }
 }
 
-
 /**
  * Implements hook_node_update().
  */
@@ -545,5 +544,4 @@ function _productivity_time_tracking_update_issue($node) {
     }
   }
 }
-
 

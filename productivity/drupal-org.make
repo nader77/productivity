@@ -50,6 +50,9 @@ projects[gravatar][version] = "1.x-dev"
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "3.7"
 
+projects[field_group][subdir] = "contrib"
+projects[field_group][version] = "1.5"
+
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.7"
 
