@@ -11,6 +11,7 @@ dependencies[] = interval
 dependencies[] = list
 dependencies[] = message
 dependencies[] = money
+dependencies[] = multifield
 dependencies[] = number
 dependencies[] = options
 dependencies[] = page_manager

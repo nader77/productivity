@@ -325,7 +325,8 @@ function productivity_project_save_project_details($node, $project_wrapper) {
             }
           }
         }
-      } else {
+      }
+      else {
         // Create new row for the issue type at the table.
         $table = productivity_project_create_new_type($table, $new_issue);
       }
