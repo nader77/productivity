@@ -80,6 +80,8 @@
  * @ingroup themeable
  */
 ?>
+
+<h1><?php print $title;?></h1>
 <div class="row">
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
@@ -108,9 +110,11 @@
       <?php print $table; ?>
   </div>
 </div>
-<?php if (isset($recalculate_hours_days_link)) : ?>
-  <?php print $recalculate_hours_days_link; ?>
-<?php endif; ?>
+<div class="col-xs-12">
+  <?php if (isset($recalculate_hours_days_link)) : ?>
+    <?php print $recalculate_hours_days_link; ?>
+  <?php endif; ?>
+</div>
 
 
 
