@@ -18,7 +18,7 @@ function productivity_project_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'number',
         'settings' => array(
           'decimal_separator' => '.',
@@ -57,7 +57,7 @@ function productivity_project_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'number',
         'settings' => array(
           'decimal_separator' => '.',
@@ -96,7 +96,7 @@ function productivity_project_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
@@ -127,7 +127,7 @@ function productivity_project_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'money',
         'settings' => array(),
         'type' => 'money_default',
@@ -456,7 +456,7 @@ function productivity_project_field_default_field_instances() {
     'description' => 'Refer to the unit of the budget amount. hours - per hour price. days - per day price. month - monthly retainer. global - fix amount.',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'list',
         'settings' => array(),
         'type' => 'list_default',
@@ -487,7 +487,7 @@ function productivity_project_field_default_field_instances() {
     'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'above',
+        'label' => 'hidden',
         'module' => 'interval',
         'settings' => array(),
         'type' => 'interval_default',
