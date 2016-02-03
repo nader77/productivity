@@ -122,6 +122,7 @@ function productivity_project_form_project_node_form_alter(&$form, &$form_state)
  */
 function productivity_project_logged_hours_notify($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
+  // TODO: Replace this with calculated total scope, this field is deprecated.
   $total_scope = $wrapper->field_scope->value();
 
   // Notification thresholds.
