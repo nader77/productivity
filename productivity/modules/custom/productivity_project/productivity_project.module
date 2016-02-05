@@ -123,7 +123,7 @@ function productivity_project_form_project_node_form_alter(&$form, &$form_state)
 function productivity_project_logged_hours_notify($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
   // TODO: Replace this with calculated total scope, this field is deprecated.
-  $total_scope = $wrapper->field_scope->value();
+  $total_scope = productivity_project_get_total_scope($wrapper);
 
   // Notification thresholds.
   $thresholds = array(
@@ -135,7 +135,7 @@ function productivity_project_logged_hours_notify($node) {
   );
 
   // Bypass if the scope period is in months or years.
-  if ($total_scope['period'] == 'month' || $total_scope['period'] == 'year') {
+  if ($total_scope && ($total_scope['period'] == 'month' || $total_scope['period'] == 'year')) {
     return FALSE;
   }
 
@@ -146,8 +146,8 @@ function productivity_project_logged_hours_notify($node) {
   // Calculate the project's percentage of logged hours.
   $total_percentage = productivity_project_calculate_percentage($total_scope, $total_hours);
 
-  // Send only if the project reached a new threshold and
-  // the managers were never notified about it.
+  // Send only if the project reached a new threshold and the managers were
+  // never notified about it.
   $arguments = array(
     '@project_name' => $wrapper->label(),
     '@logged_percentage' => $total_percentage,
@@ -155,24 +155,48 @@ function productivity_project_logged_hours_notify($node) {
     '@project_total_hours' => $total_hours,
     '@project_total_days' => $total_days,
   );
-  notify($thresholds, $wrapper, $total_percentage, 'The project @project has reached a new threshold: @threshold%', $percentage_notified, $arguments);
+  productivity_project_notify($thresholds, $wrapper, $total_percentage, 'The project @project has reached a new threshold: @threshold%', $percentage_notified, $arguments);
 
   // Check scope for each type
-  foreach($wrapper->field_table_rate->raw() as $value) {
-    $hours = $value['field_hours'][LANGUAGE_NONE]['0']['value'];
-    $scope = $value['field_scope'][LANGUAGE_NONE]['0'];
+  foreach($wrapper->field_table_rate as $rate) {
+    $hours = $rate->field_hours->value();
+    $scope = $rate->field_scope->value();
     $scope_percentage = productivity_project_calculate_percentage($scope, $hours);
-    $detail_scope = $value['field_issue_type'][LANGUAGE_NONE]['0']['value'];
+    $detail_scope = $rate->field_issue_type->value();
 
     $arguments = array(
       '@project_name' => $wrapper->label(),
       '@logged_percentage' => $scope_percentage,
       '@scope' => $scope['interval'] . ' ' . $scope['period'],
       '@scope_total_hours' => $hours,
-      '@scope_total_days' => $value['field_days'][LANGUAGE_NONE][0]['value'],
+      '@scope_total_days' => $rate->field_days->value(),
     );
-    notify($thresholds, $wrapper, $scope_percentage, 'The @scope in @project project has reached a new threshold: @threshold%', $percentage_notified, $arguments, $detail_scope);
+
+    productivity_project_notify($thresholds, $wrapper, $scope_percentage, 'The @scope in @project project has reached a new threshold: @threshold%', $percentage_notified, $arguments, $detail_scope);
   }
+}
+
+/**
+ * Get the Total project scope.
+ *
+ * @param $project_wrapper
+ *  The project node wrapper.
+ *
+ * @return
+ *  Scope normalized to hours
+ */
+function productivity_project_get_total_scope($project_wrapper) {
+  $total = 0;
+  foreach($project_wrapper->field_table_rate as $rate) {
+    // TODO: Maybe don't count non-billable scope here ?
+    $hours_per_day = 1;
+    if ($rate->field_scope->period == 'day') {
+      // Calculate the scope as hours, when saved as days.
+      $hours_per_day = variable_get('productivity_time_tracking_hours_count_as_day', 8);
+    }
+    $total += ($rate->field_scope->interval->value() * $hours_per_day);
+  }
+  return $total;
 }
 
 /**
@@ -187,10 +211,7 @@ function productivity_project_logged_hours_notify($node) {
  *  The calculated percentage of logged hours.
  */
 function productivity_project_calculate_percentage($scope, $hours) {
-  // Calculate the scope as hours.
-  $hours_as_day = variable_get('productivity_time_tracking_hours_count_as_day', 8);
-  $scope_in_hours = $scope['period'] == 'hour' ? $scope['interval'] : $scope['interval'] * $hours_as_day;
-  return number_format(($hours / $scope_in_hours) * 100, 2);
+  return number_format(($hours / $scope) * 100, 2);
 }
 
 /**
@@ -292,103 +313,92 @@ function productivity_project_repository_autocomplete_need_invalidate() {
  * Build the scope multi field table,
  * Called every time new issue is create or update.
  *
- * @param $wrapper
- *  The node wrapper.
+ * @param $node
+ *  Time tracking node.
  * @param $project_wrapper
- *  The original project wrapper.
+ *  The originael project wrapper.
  *
  * @return string $issue_type
  *  The issue type.
  */
-function productivity_project_save_project_details($node, $project_wrapper) {
-  $wrapper = entity_metadata_wrapper('node', $node);
-  $day_type = $wrapper->field_day_type->value();
+function productivity_project_update_project_total_hours($node, $project_wrapper) {
+  $wrapper_time_tracking = entity_metadata_wrapper('node', $node);
+  $wrapper_time_tracking_original = entity_metadata_wrapper('node', $node->original);
 
   // Add the hours by issue type.
-  if($day_type === "regular") {
-    $new_issues = $wrapper->field_issues_logs->raw();
+  if($wrapper_time_tracking->field_day_type->value() == "regular") {
+    $rates = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate : array();
 
-    $table  = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate->raw() : array();
+    foreach($wrapper_time_tracking->field_issues_logs as $issue_log) {
+      $type = $issue_log->field_issue_type->value();
 
-    foreach($new_issues as $new_issue_index => $new_issue) {
-      $type = $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value'];
       // Check if that issue type already exist in the table.
-      if (productivity_project_check_existing_type($table, $type)) {
-        // Search the right type at the table.
-        foreach($table as $table_issues_index => $issue) {
-          if($issue['field_issue_type'][LANGUAGE_NONE][0]['value'] === $type) {
-            // Add the new issue hours.
-            $table[$table_issues_index]['field_hours'][LANGUAGE_NONE][0]['value'] += $new_issue['field_time_spent'][LANGUAGE_NONE][0]['value'];
-            // Check if it's existing issue.
-            if(productivity_project_check_existing_issue($node->original->field_issues_logs[LANGUAGE_NONE], $new_issue)) {
-              // Decrease the old issue hours.
-              $table[$table_issues_index]['field_hours'][LANGUAGE_NONE][0]['value'] -= $node->original->field_issues_logs[LANGUAGE_NONE][$new_issue_index]['field_time_spent'][LANGUAGE_NONE][0]['value'];
-            }
-          }
-        }
-      }
-      else {
+      if (!$rate = productivity_project_check_existing_type($rates, $type)) {
         // Create new row for the issue type at the table.
-        $table = productivity_project_create_new_type($table, $new_issue);
+        $rate = productivity_project_create_new_type($rates, $type);
+        //$project_wrapper->field_table_rate->set($rates);
+      }
+      // Add the new issue hours.
+      $rate->field_hours->set($rate->field_hours->value() + $issue_log->field_time_spent->value());
+      // Check if it's existing issue.
+      $existing_issue = productivity_project_check_existing_issue($wrapper_time_tracking_original->field_issues_logs, $issue_log->field_github_issue->field_issue_id->value());
+      if($existing_issue) {
+        // Decrease the old issue hours.
+        $reduced_total = $rate->field_hours->value() - $existing_issue->field_time_spent->value();
+        $rate->field_hours->set($reduced_total);
       }
     }
   }
-  return $table;
+  return $rates;
 }
 
 /**
  * Create a new row at the table for new issue type.
  *
- * @param $table
+ * @param $rates
  *  Table types array.
  * @param $new_issue
- *  The new issue to add.
+ *  The new issue wrapper to add.
  *
  * @return mixed
  *  The table with the new issue.
  */
-function productivity_project_create_new_type($table, $new_issue) {
+function productivity_project_create_new_type($rates, $new_type) {
   // Get the index of the issue type in the table.
-  $next_index = get_table_next_index($table, $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value']);
+  $next_index = productivity_project_get_table_next_index($rates, $new_type);
 
-  $table[$next_index] = array(
-    'id' => $new_issue['id'],
-    'field_days' => array(LANGUAGE_NONE => array(array('value' => '0'))),
-    'field_hours' => array(LANGUAGE_NONE => array(array('value' => $new_issue['field_time_spent'][LANGUAGE_NONE][0]['value']))),
-    'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $new_issue['field_issue_type'][LANGUAGE_NONE][0]['value']))),
-    'field_scope' => array(LANGUAGE_NONE => array(array(
-      'interval' => '0',
-      'period' => 'hour',
-    ))),
-    'field_rate' => array(LANGUAGE_NONE => array(array(
-      'amount' => '0',
-      'currency' => 'USD',
-    ))),
-    'field_rate_type' => array(LANGUAGE_NONE => array(array('value' => $new_issue['field_rate_type'][LANGUAGE_NONE][0]['value']))),
-  );
-  return $table;
+  $rates[$next_index]->field_days->set(0);
+  $rates[$next_index]->field_hours->set(0);
+  $rates[$next_index]->field_issue_type->set($new_type);
+  $rates[$next_index]->field_scope->interval->set(0);
+  $rates[$next_index]->field_scope->period->set('hour');
+  $rates[$next_index]->field_rate->amount->set(0);
+  $rates[$next_index]->field_rate->currency->set('USD');
+  $rates[$next_index]->field_rate_type->set('global');
+  return $rates[$next_index];
 }
 
 /**
- * Check if the new issue is in the existing (old) tables issues.
+ * Check if the new issue is in the existing (old) node issues.
  *
  * Find if the new issue number (Pull Request number) is unique
  * (exist or not) at this day.
  * The numbers compares to each other are the strings before the colons.
  *
- * @param $table_issues
- *  The old issues array.
- * @param $new_issue
- *  The new issue to add.
+ * @param $issues_logged_original
+ *  The existing issues wrapper.
+ * @param $issue_id
+ *  The new issue to check.
  *
- * @return bool
+ * @return
+ *  The issue found or false if not found.
+ *
  */
-function productivity_project_check_existing_issue($table_issues, $new_issue) {
-  $new_issue_number = explode(':', $new_issue['field_issue_label'][LANGUAGE_NONE][0]['value']);
-  foreach($table_issues as $issue) {
-    $issue_number = explode(':', $issue['field_issue_label'][LANGUAGE_NONE][0]['value']);
-    if($issue_number[0] === $new_issue_number[0]) {
-      return TRUE;
+function productivity_project_check_existing_issue($issues_logged_original, $issue_id) {
+  foreach($issues_logged_original as $issue) {
+    if($issue->field_github_issue->field_issue_id->value() == $issue_id) {
+      // This is the issue before it was save aka original.
+      return $issue;
     }
   }
   return FALSE;
@@ -402,45 +412,50 @@ function productivity_project_check_existing_issue($table_issues, $new_issue) {
  * Needs to be called every time you need to find
  * where to insert the type in the table rate.
  *
- * @param $table
- *  Table types array.
+ * @param $rates
+ *  Rates multifield  wrapper.
  * @param $issue_type
  *  Type to check in table.
  *
  * @return int
  *  The index of the type in table.
  */
-function productivity_project_get_table_next_index($table, $issue_type) {
-  foreach($table as $index => $value) {
-    if($value['field_issue_type'][LANGUAGE_NONE][0]['value'] === $issue_type) {
-      $table_index = $index;
+function productivity_project_get_table_next_index($rates, $issue_type) {
+  foreach($rates as $index => $rate) {
+    if($rate->field_issue_type->value() == $issue_type) {
+      $rate_index = $index;
     }
   }
 
-  if(!isset($table_index)) {
-    $table_index = count($table);
+  if(!isset($rate_index)) {
+    $table_index = count($rates);
   }
+  return count($rates->value()) + 1;
+
 
   return $table_index;
 }
 
 /**
- * Check if the scope type is already exist in table rate.
+ * Check if the rate type already exist in the table rate.
  *
  * Find if the scope type row is already existing in the table rate.
  *
- * @param $table
- *  Table types array.
+ * @param $rates_wrapper
+ *  Multifield types array.
  * @param $issue_type
  *  Type to check.
  *
- * @return bool
+ * @return
+ *  The rate wrapper, or flase if not found.
  */
-function productivity_project_check_existing_type($table, $issue_type) {
-  foreach($table as $index=>$value) {
-    $existing_issues[] = $value['field_issue_type'][LANGUAGE_NONE][0]['value'];
+function productivity_project_check_existing_type($rates_wrapper, $issue_type) {
+  foreach($rates_wrapper as $rate) {
+    if ($issue_type == $rate->field_issue_type->value()) {
+      return $rate;
+    }
   }
-  return in_array($issue_type, $existing_issues) ? TRUE : FALSE;
+  return FALSE;
 }
 
 /**
@@ -462,7 +477,7 @@ function productivity_project_check_existing_type($table, $issue_type) {
  * @param $arguments
  *  The email arguments.
  */
-function notify($thresholds, $wrapper, $percentage, $email_string, $percentage_notified, $arguments, $detail_scope) {
+function productivity_project_notify($thresholds, $wrapper, $percentage, $email_string, $percentage_notified, $arguments, $detail_scope) {
   foreach ($thresholds as $key => $threshold) {
     if ($percentage < $threshold || $percentage_notified >= $threshold) {
       // Didn't reach a threshold OR This threshold has been already notified.
