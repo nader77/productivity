@@ -125,18 +125,8 @@ function productivity_project_logged_hours_notify($node) {
   // Get the total scope (normalized as hours) , including all rate types.
   $total_scope = productivity_project_get_total_scope($wrapper);
 
-  // Notification thresholds.
-  $thresholds = array(
-    '100',
-    '95',
-    '75',
-    '50',
-    '25',
-  );
-
   $total_hours = $wrapper->field_hours->value();
   $total_days = $wrapper->field_days->value();
-  $percentage_notified = $wrapper->field_percentage_notification->value();
 
   // Calculate the project's percentage of logged hours.
   $total_percentage = number_format(($total_hours / $total_scope) * 100, 2);
@@ -151,14 +141,13 @@ function productivity_project_logged_hours_notify($node) {
     '@project_total_days' => $total_days,
     '@work_type' => 'Total Scope',
   );
-  productivity_project_notify($thresholds, $wrapper, $total_percentage, 'The project @project has reached a new threshold: @threshold%', $percentage_notified, $arguments);
+  productivity_project_notify($wrapper, $arguments);
 
   // Check scope for each type
   foreach($wrapper->field_table_rate as $rate) {
     $hours = $rate->field_hours->value();
     $scope = $rate->field_scope->value();
     $scope_percentage =  number_format(($hours / $scope) * 100, 2);
-    $detail_scope = $rate->field_issue_type->value();
 
     $arguments = array(
       '@project_name' => $wrapper->label(),
@@ -169,7 +158,72 @@ function productivity_project_logged_hours_notify($node) {
       '@work_type' => $rate->field_issue_type->label(),
     );
 
-    productivity_project_notify($thresholds, $wrapper, $scope_percentage, 'The @scope in @project project has reached a new threshold: @threshold%', $percentage_notified, $arguments, $detail_scope);
+    productivity_project_notify($wrapper, $arguments);
+  }
+}
+
+/**
+ * Actual notify logged hours percentage in a project or a scope.
+ *
+ * Checks if the project has reached a new threshold,
+ * and send a message with project or scope details.
+ *
+ * @param $wrapper_project
+ *  The project wrapper.
+ * @param $arguments
+ *  The email arguments.
+ */
+function productivity_project_notify($wrapper_project, $arguments) {
+  // Notification thresholds.
+  $thresholds = array(
+    '100',
+    '95',
+    '75',
+    '50',
+    '25',
+  );
+
+  $percentage = $arguments['@logged_percentage'];
+  $percentage_notified = $wrapper_project->field_percentage_notification->value();
+
+  foreach ($thresholds as $threshold) {
+    if ($percentage < $threshold || $percentage_notified >= $threshold || $percentage < $percentage_notified) {
+      // Didn't reach a threshold OR This threshold has been already notified or
+      // The current percentage has been already notified.
+      continue;
+    }
+
+    // Create a message for owners.
+    $values = array(
+      'uid' => 1,
+      'arguments' => $arguments,
+    );
+    $message = message_create('logged_scope_hours', $values);
+
+    // Send the message to the owners.
+    $options = array(
+      'mail' =>  variable_get('productivity_time_tracking_managers_email', 'info@gizra.com'),
+    );
+    message_notify_send_message($message, $options);
+
+    // Send notifications to all the team leads as well.
+    if ($wrapper_project->field_team_leads->value()) {
+      foreach ($wrapper_project->field_team_leads as $team_lead) {
+        // Create a new message specified to the team lead.
+        $values['uid'] = $team_lead->getIdentifier();
+        $message = message_create('logged_project_hours', $values);
+        // Send this message to the team lead.
+        $options['mail'] = $team_lead->mail->value();
+        message_notify_send_message($message, $options);
+      }
+    }
+
+    // Save the percentage so it won't send the same.
+    // message again at this threshold.
+    $wrapper_project->field_percentage_notification->set($percentage);
+    $wrapper_project->save();
+    // Stop this loop when one notifications has been sent.
+    break;
   }
 }
 
@@ -438,78 +492,4 @@ function productivity_project_check_existing_type($rates_wrapper, $issue_type) {
     }
   }
   return FALSE;
-}
-
-/**
- * Actual notify logged hours percentage in a project or a scope.
- *
- * Checks if the project has reached a new threshold,
- * and send a message with project or scope details.
- *
- * @param array $thresholds
- *  The notification thresholds.
- * @param $wrapper
- *  The project wrapper.
- * @param $percentage
- *  The project's percentage of logged hours.
- * @param $email_string
- *  The string to be sent in the email.
- * @param $percentage_notified
- *  The percentage notified before
- * @param $arguments
- *  The email arguments.
- */
-function productivity_project_notify($thresholds, $wrapper, $percentage, $email_string, $percentage_notified, $arguments, $detail_scope) {
-  foreach ($thresholds as $key => $threshold) {
-    if ($percentage < $threshold || $percentage_notified >= $threshold) {
-      // Didn't reach a threshold OR This threshold has been already notified.
-      continue;
-    }
-
-    if ($percentage < $percentage_notified) {
-      // The current percentage has been already notified.
-      continue;
-    }
-
-    // Add a message to the log messages.
-    if(isset($detail_scope)) {
-      $message_details = array('@scope' => $detail_scope);
-    }
-    $message_details['@project'] = $wrapper->label();
-    $message_details['@threshold'] = $threshold;
-    watchdog('productivity_project', $email_string, $message_details);
-
-
-    // Create a message for owners.
-    $values = array(
-      'uid' => 1,
-      'arguments' => $arguments,
-    );
-    $message = message_create('logged_scope_hours', $values);
-
-    // Send the message to the owners.
-    $options = array(
-      'mail' =>  variable_get('productivity_time_tracking_managers_email', 'info@gizra.com'),
-    );
-    message_notify_send_message($message, $options);
-
-    // Send notifications to all the team leads as well.
-    if ($wrapper->field_team_leads->value()) {
-      foreach ($wrapper->field_team_leads as $team_lead) {
-        // Create a new message specified to the team lead.
-        $values['uid'] = $team_lead->getIdentifier();
-        $message = message_create('logged_project_hours', $values);
-        // Send this message to the team lead.
-        $options['mail'] = $team_lead->mail->value();
-        message_notify_send_message($message, $options);
-      }
-    }
-
-    // Save the percentage so it won't send the same.
-    // message again at this threshold.
-    $wrapper->field_percentage_notification->set($percentage);
-    $wrapper->save();
-    // Stop this loop when one notifications has been sent.
-    break;
-  }
 }
