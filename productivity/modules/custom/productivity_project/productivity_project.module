@@ -198,7 +198,7 @@ function productivity_project_notify($wrapper_project, $arguments) {
       'uid' => 1,
       'arguments' => $arguments,
     );
-    $message = message_create('logged_scope_hours', $values);
+    $message = message_create('logged_project_hours', $values);
 
     // Send the message to the owners.
     $options = array(
@@ -357,31 +357,40 @@ function productivity_project_repository_autocomplete_need_invalidate() {
  * @return string $issue_type
  *  The issue type.
  */
-function productivity_project_update_project_total_hours($node, $project_wrapper) {
-  $wrapper_time_tracking = entity_metadata_wrapper('node', $node);
-  $wrapper_time_tracking_original = entity_metadata_wrapper('node', $node->original);
+function productivity_project_update_project_total_hours($wrapper_time_tracking, $project_wrapper) {
+//  $wrapper_time_tracking = entity_metadata_wrapper('node', $node);
+  $wrapper_time_tracking_original = entity_metadata_wrapper('node', $wrapper_time_tracking->value()->original);
 
   // Add the hours by issue type.
   if($wrapper_time_tracking->field_day_type->value() == "regular") {
     $rates = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate : array();
 
-    foreach($wrapper_time_tracking->field_issues_logs as $issue_log) {
-      $type = $issue_log->field_issue_type->value();
+    foreach($wrapper_time_tracking->field_issues_logs as $key => $issue_log) {
+      // If it's a new type we can get it only from the $node, the wrapper don't
+      // have it yet, in the presave scope.
+      $node = $wrapper_time_tracking->value();
+      $type = $node->field_issues_logs['und'][$key]['field_issue_type']['und'][0]['value'];
+      $github_issue = $node->field_issues_logs['und'][$key]['field_github_issue']['und'][0]['value'];
+      if ($github_issue) {
+        $github_issue_wrapper = entity_metadata_wrapper('node', $github_issue);
+      }
+      $time_spent = $node->field_issues_logs['und'][$key]['field_time_spent']['und'][0]['value'];
 
       // Check if that issue type already exist in the table.
       if (!$rate = productivity_project_check_existing_type($rates, $type)) {
         // Create new row for the issue type at the table.
         $rate = productivity_project_create_new_type($rates, $type);
-        //$project_wrapper->field_table_rate->set($rates);
       }
       // Add the new issue hours.
-      $rate->field_hours->set($rate->field_hours->value() + $issue_log->field_time_spent->value());
+      $rate->field_hours->set($rate->field_hours->value() + $time_spent);
       // Check if it's existing issue.
-      $existing_issue = productivity_project_check_existing_issue($wrapper_time_tracking_original->field_issues_logs, $issue_log->field_github_issue->field_issue_id->value());
-      if($existing_issue) {
-        // Decrease the old issue hours.
-        $reduced_total = $rate->field_hours->value() - $existing_issue->field_time_spent->value();
-        $rate->field_hours->set($reduced_total);
+      if ($github_issue) {
+        $existing_issue = productivity_project_check_existing_issue($wrapper_time_tracking_original->field_issues_logs, $github_issue_wrapper->field_issue_id->value());
+        if ($existing_issue) {
+          // Decrease the old issue hours.
+          $reduced_total = $rate->field_hours->value() - $existing_issue->field_time_spent->value();
+          $rate->field_hours->set($reduced_total);
+        }
       }
     }
   }
@@ -401,17 +410,17 @@ function productivity_project_update_project_total_hours($node, $project_wrapper
  */
 function productivity_project_create_new_type($rates, $new_type) {
   // Get the index of the issue type in the table.
-  $next_index = productivity_project_get_table_next_index($rates, $new_type);
-
-  $rates[$next_index]->field_days->set(0);
-  $rates[$next_index]->field_hours->set(0);
-  $rates[$next_index]->field_issue_type->set($new_type);
-  $rates[$next_index]->field_scope->interval->set(0);
-  $rates[$next_index]->field_scope->period->set('hour');
-  $rates[$next_index]->field_rate->amount->set(0);
-  $rates[$next_index]->field_rate->currency->set('USD');
-  $rates[$next_index]->field_rate_type->set('global');
-  return $rates[$next_index];
+  $next_index = count($rates);
+  
+//  $rates[$next_index]->field_days->set(0);
+//  $rates[$next_index]->field_hours->set(0);
+//  $rates[$next_index]->field_issue_type->set($new_type);
+//  $rates[$next_index]->field_scope->interval->set(0);
+//  $rates[$next_index]->field_scope->period->set('hour');
+//  $rates[$next_index]->field_rate->amount->set(0);
+//  $rates[$next_index]->field_rate->currency->set('USD');
+//  $rates[$next_index]->field_rate_type->set('global');
+//  return $rates[$next_index];
 }
 
 /**
@@ -438,38 +447,6 @@ function productivity_project_check_existing_issue($issues_logged_original, $iss
     }
   }
   return FALSE;
-}
-
-/**
- * Get the table next index.
- *
- * Find the index of the type in the table,
- * And if it's not exist, return the table length.
- * Needs to be called every time you need to find
- * where to insert the type in the table rate.
- *
- * @param $rates
- *  Rates multifield  wrapper.
- * @param $issue_type
- *  Type to check in table.
- *
- * @return int
- *  The index of the type in table.
- */
-function productivity_project_get_table_next_index($rates, $issue_type) {
-  foreach($rates as $index => $rate) {
-    if($rate->field_issue_type->value() == $issue_type) {
-      $rate_index = $index;
-    }
-  }
-
-  if(!isset($rate_index)) {
-    $table_index = count($rates);
-  }
-  return count($rates->value()) + 1;
-
-
-  return $table_index;
 }
 
 /**
