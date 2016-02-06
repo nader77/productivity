@@ -122,7 +122,7 @@ function productivity_project_form_project_node_form_alter(&$form, &$form_state)
  */
 function productivity_project_logged_hours_notify($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
-  // TODO: Replace this with calculated total scope, this field is deprecated.
+  // Get the total scope (normalized as hours) , including all rate types.
   $total_scope = productivity_project_get_total_scope($wrapper);
 
   // Notification thresholds.
@@ -134,17 +134,12 @@ function productivity_project_logged_hours_notify($node) {
     '25',
   );
 
-  // Bypass if the scope period is in months or years.
-  if ($total_scope && ($total_scope['period'] == 'month' || $total_scope['period'] == 'year')) {
-    return FALSE;
-  }
-
   $total_hours = $wrapper->field_hours->value();
   $total_days = $wrapper->field_days->value();
   $percentage_notified = $wrapper->field_percentage_notification->value();
 
   // Calculate the project's percentage of logged hours.
-  $total_percentage = productivity_project_calculate_percentage($total_scope, $total_hours);
+  $total_percentage = number_format(($total_hours / $total_scope) * 100, 2);
 
   // Send only if the project reached a new threshold and the managers were
   // never notified about it.
@@ -154,6 +149,7 @@ function productivity_project_logged_hours_notify($node) {
     '@project_scope' => $total_scope['interval'] . ' ' . $total_scope['period'],
     '@project_total_hours' => $total_hours,
     '@project_total_days' => $total_days,
+    '@work_type' => 'Total Scope',
   );
   productivity_project_notify($thresholds, $wrapper, $total_percentage, 'The project @project has reached a new threshold: @threshold%', $percentage_notified, $arguments);
 
@@ -161,7 +157,7 @@ function productivity_project_logged_hours_notify($node) {
   foreach($wrapper->field_table_rate as $rate) {
     $hours = $rate->field_hours->value();
     $scope = $rate->field_scope->value();
-    $scope_percentage = productivity_project_calculate_percentage($scope, $hours);
+    $scope_percentage =  number_format(($hours / $scope) * 100, 2);
     $detail_scope = $rate->field_issue_type->value();
 
     $arguments = array(
@@ -170,6 +166,7 @@ function productivity_project_logged_hours_notify($node) {
       '@scope' => $scope['interval'] . ' ' . $scope['period'],
       '@scope_total_hours' => $hours,
       '@scope_total_days' => $rate->field_days->value(),
+      '@work_type' => $rate->field_issue_type->label(),
     );
 
     productivity_project_notify($thresholds, $wrapper, $scope_percentage, 'The @scope in @project project has reached a new threshold: @threshold%', $percentage_notified, $arguments, $detail_scope);
@@ -197,21 +194,6 @@ function productivity_project_get_total_scope($project_wrapper) {
     $total += ($rate->field_scope->interval->value() * $hours_per_day);
   }
   return $total;
-}
-
-/**
- * Helper function; Calculates the percentage of logged hours on a given project.
- *
- * @param array $scope
- *  The project's scope with a period.
- * @param int $hours
- *  The total hours logged in a given project.
- *
- * @return int
- *  The calculated percentage of logged hours.
- */
-function productivity_project_calculate_percentage($scope, $hours) {
-  return number_format(($hours / $scope) * 100, 2);
 }
 
 /**
