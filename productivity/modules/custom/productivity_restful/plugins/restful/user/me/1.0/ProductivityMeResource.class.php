@@ -24,7 +24,6 @@ class ProductivityMeResource extends \RestfulEntityBaseUser {
 
     unset($public_fields['self']);
 
-
     if (field_info_field('og_user_node')) {
       $public_fields['tracking'] = array(
         'property' => 'og_user_node',
@@ -33,6 +32,13 @@ class ProductivityMeResource extends \RestfulEntityBaseUser {
         ),
       );
     }
+
+    $public_fields['roles'] = array(
+      'property' => 'roles',
+      'process_callbacks' => array(
+        array($this, 'rolesProcess'),
+      ),
+    );
 
     return $public_fields;
   }
@@ -45,5 +51,19 @@ class ProductivityMeResource extends \RestfulEntityBaseUser {
   public function viewEntity($entity_id) {
     $account = $this->getAccount();
     return array(parent::viewEntity($account->uid));
+  }
+
+  /**
+   * Process callback, get titles for user's roles.
+   */
+  public function rolesProcess($rolesID) {
+    global $user;
+
+    $roles = array();
+    foreach ($rolesID as $roleID) {
+      $roles[$roleID] = $user->roles[$roleID];
+    }
+
+    return $roles;
   }
 }

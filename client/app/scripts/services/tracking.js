@@ -86,6 +86,11 @@ angular.module('clientApp')
       });
     };
 
+    /**
+     * Check opened work session.
+     *
+     * @returns {*}
+     */
     this.checkWorkSession = function(){
       return $http({
         method: 'GET',
@@ -109,6 +114,22 @@ angular.module('clientApp')
         }
       });
     };
+
+    /**
+     * Check tracking date is today.
+     */
+    this.isToday = function (day, month, year ) {
+      var today = new Date();
+      var currDay = today.getDate();
+      //January is 0!
+      var currMonth = today.getMonth()+1;
+      var currYear = today.getFullYear();
+      var dayIsToday = (day == currDay
+      && month == currMonth
+      && year == currYear);
+
+      return dayIsToday;
+    }
 
     /**
      * Check logged issues.

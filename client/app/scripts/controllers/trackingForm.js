@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('TrackingFormCtrl', function ($scope, $stateParams, $state, $log, projects, Tracking, tracking, Config, Preferences) {
+  .controller('TrackingFormCtrl', function ($scope, $stateParams, $state, $log, projects, Tracking, tracking, Config, Preferences, Account, account) {
 
     $scope.tracking = tracking;
     if (Config.debug) {
@@ -38,28 +38,23 @@ angular.module('clientApp')
     // Todo: Get worksession state if opened
 
 
-      Tracking.checkWorkSession().then(function(result) {
-        if (result.data.data.existOpenedWorkSession) {
-          $scope.bunchSessionButton = 'End Work';
-        }
-        else {
-          $scope.bunchSessionButton = 'Start Work';
-        }
-      })
+    Tracking.checkWorkSession().then(function(result) {
+      if (result.data.data.existOpenedWorkSession) {
+        $scope.bunchSessionButton = 'End Work';
+        $scope.workStarted = result.data.data.startTime
+      }
+      else {
+        $scope.bunchSessionButton = 'Start Work';
+      }
+    })
+
+
     // Add button to start work session remotly
-    // Todo: input this in right place.
-
-
-    var today = new Date();
-    var currDay = today.getDate();
-    //January is 0!
-    var currMonth = today.getMonth()+1;
-    var currYear = today.getFullYear();
-    var dayIsToday = ($scope.$stateParams.day == currDay
-    && $scope.$stateParams.month == currMonth
-    && $scope.$stateParams.year == currYear );
-    // Todo: check if user has permission start session remotely
-    $scope.allowStartWorkSession = dayIsToday;
+    Account.allowedToWorkRemotely().then(function (isAllowed) {
+      $scope.allowedWorksRemotely = isAllowed;
+      var isToday = Tracking.isToday($scope.$stateParams.day, $scope.$stateParams.month, $scope.$stateParams.year);
+      $scope.allowStartWorkSession = isToday && isAllowed;
+    });
 
     // Prepare header for table.
     var endDay = new Date($stateParams.year, $stateParams.month, 0).getDate();
@@ -395,16 +390,18 @@ angular.module('clientApp')
       });
     };
 
-
+    /**
+     * Check opened session.
+     */
     $scope.checkWorkSession = function() {
       Tracking.checkWorkSession().then(function(result) {
-        console.log(result.data.data);
+        //console.log(result.data.data);
       })
     }
 
 
     /**
-     * Punch work session and get session ID
+     * Punch work session and get session ID.
      */
     $scope.workSessionPunch = function() {
       Tracking.workSessionPunch().then(function(result) {

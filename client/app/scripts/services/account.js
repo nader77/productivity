@@ -10,11 +10,39 @@
 angular.module('clientApp')
   .service('Account', function ($q, $http, $timeout, Config, $rootScope) {
 
+    var self = this;
+
     // A private cache key.
     var cache = {};
 
     // Update event broadcast name.
     var broadcastUpdateEventName = 'ProductivityAccountChange';
+
+    /**
+     * Detect if current user has permission to work remotely
+     *
+     * @returns {*}
+     */
+    this.allowedToWorkRemotely = function() {
+      var deferred = $q.defer();
+
+      var allowedRole = 'works remotely';
+
+      self.get().then(function (account) {
+        var allowed = false;
+
+        angular.forEach(account['roles'], function (role) {
+          if (role == allowedRole) {
+            allowed = true;
+          }
+        });
+
+        deferred.resolve(allowed);
+
+      });
+
+      return deferred.promise;
+    };
 
     /**
      * Return the promise with the events list, from cache or the server.

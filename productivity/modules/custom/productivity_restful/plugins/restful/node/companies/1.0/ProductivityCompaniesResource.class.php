@@ -18,7 +18,7 @@ class ProductivityCompaniesResource extends \ProductivityEntityBaseNode {
       'property' => 'field_company_logo',
       // This will add 3 image variants in the output.
       'image_styles' => array('thumbnail', 'medium', 'large'),
-      'process_callbacks  ' => array(
+      'process_callbacks' => array(
         array($this, 'imageProcess'),
       ),
     );

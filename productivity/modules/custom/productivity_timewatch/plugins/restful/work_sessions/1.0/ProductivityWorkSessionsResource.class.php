@@ -122,8 +122,16 @@ class ProductivityWorkSessionsResource extends \ProductivityEntityBaseNode {
     $uid = $account->uid;
 
     $result = $this->getOpenedWorkSession($uid);
-
-    return empty($result['node']) ? array('existOpenedWorkSession' => FALSE) : array('existOpenedWorkSession' => TRUE);
+    if (empty($result['node'])) {
+      return array('existOpenedWorkSession' => FALSE);
+    }
+    else {
+      $wrapper = entity_metadata_wrapper('node', key($result['node']));
+      return array(
+        'existOpenedWorkSession' => TRUE,
+        'startTime' => $wrapper->field_session_date->value->value()
+      );
+    }
   }
 
   /**
