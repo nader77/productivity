@@ -32,8 +32,8 @@ function productivity_project_field_default_field_instances() {
     ),
     'entity_type' => 'multifield',
     'field_name' => 'field_days',
-    'label' => 'Total days',
-    'required' => FALSE,
+    'label' => 'Total days (deprecated)',
+    'required' => 0,
     'settings' => array(
       'max' => '',
       'min' => '',
@@ -42,6 +42,7 @@ function productivity_project_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 0,
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
@@ -702,7 +703,7 @@ Setting an end date, will make project invisible in some forms after the end dat
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 11,
+      'weight' => 15,
     ),
   );
 
@@ -1178,7 +1179,7 @@ If your not sure use the third one.',
         'decimals_display_mode' => 'field',
       ),
       'type' => 'money_widget',
-      'weight' => 7,
+      'weight' => 13,
     ),
   );
 
@@ -1219,7 +1220,7 @@ global - fix amount.',
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 6,
+      'weight' => 12,
     ),
   );
 
@@ -1267,7 +1268,7 @@ global - fix amount.',
       'module' => 'interval',
       'settings' => array(),
       'type' => 'interval_default',
-      'weight' => 8,
+      'weight' => 14,
     ),
   );
 
@@ -1505,6 +1506,7 @@ Setting an end date, will make project invisible in some forms after the end dat
   t('This means it\'s a Madaan project.
 Whether this project should be allowed as the project reference of a work session.');
   t('Total days');
+  t('Total days (deprecated)');
   t('Total hours');
   t('Type');
   t('Work type');

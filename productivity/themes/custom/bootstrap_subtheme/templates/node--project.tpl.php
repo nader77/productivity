@@ -101,7 +101,7 @@
     <div class="main-box infographic-box">
       <i class="fa fa-money yellow-bg"></i>
       <span class="headline"><?php print t('Days') ?></span>
-      <span class="value"><?php print render($content['field_days']);?></span>
+      <span class="value"><?php print $days;?></span>
     </div>
   </div>
 </div

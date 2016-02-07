@@ -26,6 +26,7 @@ function productivity_project_field_group_info() {
       0 => 'field_rate',
       1 => 'field_rate_type',
       2 => 'field_scope',
+      3 => 'field_days',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(

@@ -229,40 +229,14 @@ function productivity_time_tracking_node_presave($node) {
     // Done.
     return;
   }
-  $hours = 0;
 
-  $project_wrapper = $wrapper->field_project;
 
-  if ($project_wrapper->value() && isset($project_wrapper->field_hours)) {
-    $hours = $project_wrapper->field_hours->value();
-  }
-
-  if (empty($node->is_new)) {
-    $original_wrapper = entity_metadata_wrapper('node', $node->original);
-    $hours -= $original_wrapper->field_track_hours->value();
-  }
-
-  $hours += $wrapper->field_track_hours->value();
-
-  // Add hours to the project's relevant scope.
-  productivity_project_update_project_total_hours($wrapper, $project_wrapper);
-
-  if ($project_wrapper->value()) {
-    $days_count = productivity_time_tracking_total_days($project_wrapper->getIdentifier());
-    // Update total hours and days just for certain issue types
-    $issue_type = $wrapper->field_issues_logs->field_issue_type->value();
-    $not_billable = array(
-      "management",
-      "non billable",
-    );
-    if(!in_array($issue_type, $not_billable)) {
-      $project_wrapper->field_hours->set($hours);
-      $project_wrapper->field_days->set($days_count);
-      $project_wrapper->save();
-    }
+  if ($wrapper->field_project->value()) {
+    // Add hours to the project's relevant scope.
+    productivity_project_update_project_total_hours($wrapper);
     // Notification for major milestone meeting.
     // TODO: improve by sending an invite to calendar meeting.
-    productivity_project_logged_hours_notify($project_wrapper->value());
+    productivity_project_logged_hours_notify($wrapper->field_project->value());
   }
 }
 

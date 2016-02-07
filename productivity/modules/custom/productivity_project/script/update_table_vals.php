@@ -49,8 +49,6 @@ while ($i < $count) {
   foreach ($nodes as $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
     try {
-      // Update scope days from global days
-      $node->field_table_rate[LANGUAGE_NONE][0]['field_days'][LANGUAGE_NONE][0]['value'] = number_format($wrapper->field_days->value(), 2);
       // Update scope hours from global hours
       $node->field_table_rate[LANGUAGE_NONE][0]['field_hours'][LANGUAGE_NONE][0]['value'] = number_format($wrapper->field_hours->value(), 2);
       // Update scope type to be hard coded dev

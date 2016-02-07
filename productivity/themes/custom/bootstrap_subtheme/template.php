@@ -24,6 +24,7 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
   // use node because wrapper don't work with multifield.
   $node = $variables['node'];
   $wrapper = entity_metadata_wrapper('node', $node);
+  $variables['days'] = productivity_project_get_total_days($wrapper->field_hours->value());
   $rows = array();
   if (!empty($node->field_table_rate['und'])) {
 
@@ -36,7 +37,6 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
         'field_rate',
         'field_rate_type',
         'field_hours',
-        'field_days',
       );
 
       foreach ($fields as $field_name) {

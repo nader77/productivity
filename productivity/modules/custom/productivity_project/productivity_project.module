@@ -77,7 +77,6 @@ function productivity_project_recalculate_hours($node) {
 
   $total = productivity_time_tracking_total_hours($wrapper->getIdentifier());
   $wrapper->field_hours->set($total['hour']);
-  $wrapper->field_days->set($total['day']);
   $wrapper->save();
   drupal_goto('node/' . $node->nid);
 }
@@ -89,9 +88,7 @@ function productivity_project_recalculate_hours($node) {
  */
 function productivity_project_form_project_node_form_alter(&$form, &$form_state) {
   $form['field_hours']['#disabled'] = TRUE;
-  $form['field_days']['#disabled'] = TRUE;
   $form['field_table_rate']['und'][0]['field_hours']['#disabled'] = TRUE;
-  $form['field_table_rate']['und'][0]['field_days']['#disabled'] = TRUE;
   $form['field_percentage_notification']['#disabled'] = TRUE;
 
   // Set the repo name as autocomplete.
@@ -126,7 +123,6 @@ function productivity_project_logged_hours_notify($node) {
   $total_scope = productivity_project_get_total_scope($wrapper);
 
   $total_hours = $wrapper->field_hours->value();
-  $total_days = $wrapper->field_days->value();
 
   // Calculate the project's percentage of logged hours.
   $total_percentage = number_format(($total_hours / $total_scope) * 100, 2);
@@ -138,7 +134,7 @@ function productivity_project_logged_hours_notify($node) {
     '@logged_percentage' => $total_percentage,
     '@project_scope' => $total_scope['interval'] . ' ' . $total_scope['period'],
     '@project_total_hours' => $total_hours,
-    '@project_total_days' => $total_days,
+    '@project_total_days' => productivity_project_get_total_days($total_hours),
     '@work_type' => 'Total Scope',
   );
   productivity_project_notify($wrapper, $arguments);
@@ -154,7 +150,7 @@ function productivity_project_logged_hours_notify($node) {
       '@logged_percentage' => $scope_percentage,
       '@scope' => $scope['interval'] . ' ' . $scope['period'],
       '@scope_total_hours' => $hours,
-      '@scope_total_days' => $rate->field_days->value(),
+      '@scope_total_days' => productivity_project_get_total_days($hours),
       '@work_type' => $rate->field_issue_type->label(),
     );
 
@@ -349,19 +345,24 @@ function productivity_project_repository_autocomplete_need_invalidate() {
  * Build the scope multi field table,
  * Called every time new issue is create or update.
  *
- * @param $node
- *  Time tracking node.
- * @param $project_wrapper
- *  The originael project wrapper.
+ * @param $wrapper_time_tracking
+ *  Time tracking node wrapper.
  *
  * @return string $issue_type
  *  The issue type.
  */
-function productivity_project_update_project_total_hours($wrapper_time_tracking, $project_wrapper) {
-//  $wrapper_time_tracking = entity_metadata_wrapper('node', $node);
+function productivity_project_update_project_total_hours($wrapper_time_tracking) {
   $wrapper_time_tracking_original = entity_metadata_wrapper('node', $wrapper_time_tracking->value()->original);
+  $project_wrapper = $wrapper_time_tracking->field_project;
 
-  // Add the hours by issue type.
+  $total_hours = 0;
+  // TODO: Replace the this total hours with a functions.
+  if (isset($project_wrapper->field_hours)) {
+    // Get total hours done for all types.
+    $total_hours = $project_wrapper->field_hours->value();
+  }
+
+  // Add the hours by work type (qa, dev, management..).
   if($wrapper_time_tracking->field_day_type->value() == "regular") {
     $rates = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate : array();
 
@@ -371,30 +372,47 @@ function productivity_project_update_project_total_hours($wrapper_time_tracking,
       $node = $wrapper_time_tracking->value();
       $type = $node->field_issues_logs['und'][$key]['field_issue_type']['und'][0]['value'];
       $github_issue = $node->field_issues_logs['und'][$key]['field_github_issue']['und'][0]['value'];
+
+      // If the GH issue is set.
       if ($github_issue) {
         $github_issue_wrapper = entity_metadata_wrapper('node', $github_issue);
       }
+
+      // Need to net use wrapper here because of missing support of multifield.
       $time_spent = $node->field_issues_logs['und'][$key]['field_time_spent']['und'][0]['value'];
 
+      // TODO: Handle case where an existing rate type is changed.
       // Check if that issue type already exist in the table.
       if (!$rate = productivity_project_check_existing_type($rates, $type)) {
         // Create new row for the issue type at the table.
-        $rate = productivity_project_create_new_type($rates, $type);
+        $new_rate_structure = productivity_project_create_new_type($rates, $issue_log);
+        $node_project = $project_wrapper->value();
+        $node_project->field_table_rate['und'] += $new_rate_structure;
       }
-      // Add the new issue hours.
-      $rate->field_hours->set($rate->field_hours->value() + $time_spent);
-      // Check if it's existing issue.
-      if ($github_issue) {
-        $existing_issue = productivity_project_check_existing_issue($wrapper_time_tracking_original->field_issues_logs, $github_issue_wrapper->field_issue_id->value());
-        if ($existing_issue) {
-          // Decrease the old issue hours.
-          $reduced_total = $rate->field_hours->value() - $existing_issue->field_time_spent->value();
-          $rate->field_hours->set($reduced_total);
+      else {
+        // Add the new issue hours.
+        $rate->field_hours->set($rate->field_hours->value() + $time_spent);
+
+        // Check if it's existing issue.
+        if ($github_issue) {
+          $existing_issue = productivity_project_check_existing_issue($wrapper_time_tracking_original->field_issues_logs, $github_issue_wrapper->field_issue_id->value());
+          if ($existing_issue) {
+            // Decrease the old issue hours.
+            $reduced_total = $rate->field_hours->value() - $existing_issue->field_time_spent->value();
+            $rate->field_hours->set($reduced_total);
+
+            // do the same for the total hours.
+            $project_wrapper->field_hours->set($total_hours - $existing_issue->field_time_spent->value());
+          }
         }
       }
+      $project_wrapper->field_hours->set($total_hours + $time_spent);
     }
   }
-  return $rates;
+
+  $project_wrapper->save();
+
+  return $project_wrapper;
 }
 
 /**
@@ -402,25 +420,40 @@ function productivity_project_update_project_total_hours($wrapper_time_tracking,
  *
  * @param $rates
  *  Table types array.
- * @param $new_issue
- *  The new issue wrapper to add.
+ * @param $issue_log
+ *  The new type machine name to add.
  *
  * @return mixed
- *  The table with the new issue.
+ *  The element with the new rate.
  */
-function productivity_project_create_new_type($rates, $new_type) {
+function productivity_project_create_new_type($rates, $issue_log) {
   // Get the index of the issue type in the table.
   $next_index = count($rates);
-  
-//  $rates[$next_index]->field_days->set(0);
-//  $rates[$next_index]->field_hours->set(0);
-//  $rates[$next_index]->field_issue_type->set($new_type);
-//  $rates[$next_index]->field_scope->interval->set(0);
-//  $rates[$next_index]->field_scope->period->set('hour');
-//  $rates[$next_index]->field_rate->amount->set(0);
-//  $rates[$next_index]->field_rate->currency->set('USD');
-//  $rates[$next_index]->field_rate_type->set('global');
-//  return $rates[$next_index];
+
+  $rate = array();
+  $rate[$next_index] = array(
+    'field_hours' => array(LANGUAGE_NONE => array(array('value' => $issue_log->field_time_spent->value()))),
+    'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $issue_log->field_issue_type->value()))),
+    'field_scope' => array(
+      LANGUAGE_NONE => array(
+        array(
+          'interval' => '0',
+          'period' => 'hour',
+        )
+      )
+    ),
+    'field_type_rate' => array(
+      LANGUAGE_NONE => array(
+        array(
+          'amount' => '0',
+          'currency' => 'USD',
+        )
+      )
+    ),
+    'field_rate_type' => array(LANGUAGE_NONE => array(array('value' => 'global'))),
+  );
+
+  return $rate;
 }
 
 /**
@@ -469,4 +502,11 @@ function productivity_project_check_existing_type($rates_wrapper, $issue_type) {
     }
   }
   return FALSE;
+}
+
+/**
+ * Get the total days, for a project.
+ */
+function productivity_project_get_total_days($hours) {
+  return  number_format($hours /  variable_get('productivity_time_tracking_hours_count_as_day', 8), 2);
 }
