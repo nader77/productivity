@@ -29,7 +29,7 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
   if (!empty($node->field_table_rate['und'])) {
 
     // Insert all the Table Rate multifield to an array by field,
-    foreach ($wrapper->field_table_rate->value() as $key => $rate) {
+    foreach ($wrapper->field_table_rate as $key => $rate) {
 
       $fields = array(
         'field_issue_type',
@@ -40,9 +40,11 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
       );
 
       foreach ($fields as $field_name) {
-        $rows[$key][$field_name] = field_view_field('multifield', $rate, $field_name, 'full');
-        $rows[$key][$field_name] = render( $rows[$key][$field_name]);
+        $rows[$key][$field_name] = field_view_field('multifield', $rate->value(), $field_name, 'full');
+        $rows[$key][$field_name] = render($rows[$key][$field_name]);
       }
+      // Add days.
+      $rows[$key]['days'] = productivity_project_get_total_days($rate->field_hours->value());
     }
   }
 
@@ -50,7 +52,11 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
   $table = theme('table', array('header' => $header, 'rows' => $rows ));
 
   $variables['table'] = $table;
-  $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), url('recalculate-project-time/' . $node->nid, array('absolute' => TRUE)));
+  $variables['recalculate_hours_days_link'] = l(
+    t('Recalculate project\'s hours & days.'),
+    'recalculate-project-time/' . $node->nid,
+    array('absolute' => TRUE)
+  );
 }
 
 /**

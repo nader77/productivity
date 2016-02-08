@@ -142,8 +142,11 @@ function productivity_project_logged_hours_notify($node) {
   // Check scope for each type
   foreach($wrapper->field_table_rate as $rate) {
     $hours = $rate->field_hours->value();
-    $scope = $rate->field_scope->value();
-    $scope_percentage =  number_format(($hours / $scope) * 100, 2);
+    $scope = productivity_project_normalize_scope($rate);
+    $scope_percentage = 0;
+    if ($scope != 0) {
+      $scope_percentage = number_format(($hours / $scope) * 100, 2);
+    }
 
     $arguments = array(
       '@project_name' => $wrapper->label(),
@@ -229,21 +232,39 @@ function productivity_project_notify($wrapper_project, $arguments) {
  * @param $project_wrapper
  *  The project node wrapper.
  *
+ * @param $work_type
+ *  Get normalized scope for the specific work typ only.
+ *
  * @return
  *  Scope normalized to hours
  */
-function productivity_project_get_total_scope($project_wrapper) {
+function productivity_project_get_total_scope($project_wrapper, $work_type = FALSE) {
   $total = 0;
   foreach($project_wrapper->field_table_rate as $rate) {
-    // TODO: Maybe don't count non-billable scope here ?
-    $hours_per_day = 1;
-    if ($rate->field_scope->period == 'day') {
-      // Calculate the scope as hours, when saved as days.
-      $hours_per_day = variable_get('productivity_time_tracking_hours_count_as_day', 8);
+    if ($work_type && $rate->field_issue_type->value() != $work_type) {
+      continue;
     }
-    $total += ($rate->field_scope->interval->value() * $hours_per_day);
+    // TODO: Maybe don't count non-billable scope here ?
+    $total += productivity_project_normalize_scope($rate);
   }
   return $total;
+}
+
+/**
+ * Convert the rate scope to hours.
+ *
+ * @param $rate
+ *  The rate wrapper.
+ * @return
+ *  Totol scope in hours.
+ */
+function productivity_project_normalize_scope($rate) {
+  $hours_per_day = 1;
+  if ($rate->field_scope->period == 'day') {
+    // Calculate the scope as hours, when saved as days.
+    $hours_per_day = variable_get('productivity_time_tracking_hours_count_as_day', 8);
+  }
+  return ($rate->field_scope->interval->value() * $hours_per_day);
 }
 
 /**
@@ -371,7 +392,7 @@ function productivity_project_update_project_total_hours($wrapper_time_tracking)
       // have it yet, in the presave scope.
       $node = $wrapper_time_tracking->value();
       $type = $node->field_issues_logs['und'][$key]['field_issue_type']['und'][0]['value'];
-      $github_issue = $node->field_issues_logs['und'][$key]['field_github_issue']['und'][0]['value'];
+      $github_issue = $node->field_issues_logs['und'][$key]['field_github_issue']['und'][0]['target_id'];
 
       // If the GH issue is set.
       if ($github_issue) {

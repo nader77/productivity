@@ -164,7 +164,7 @@ function productivity_time_tracking_total_days($project_nid, $date = array(),  $
  *
  * @return array
  */
-function productivity_time_tracking_total_hours($project_nid, $date = array(),  $account = FALSE) {
+function productivity_time_tracking_total_hours($project_nid, $date = array(), $account = FALSE) {
   if (!$account) {
     global $user;
     $account = $user;
@@ -230,6 +230,12 @@ function productivity_time_tracking_node_presave($node) {
     return;
   }
 
+  // Update field_track_hours from total all multi field.
+  $total = 0;
+  foreach($wrapper->field_issues_logs as $field_wrapper) {
+    $total += $field_wrapper->field_time_spent->value();
+  }
+  $wrapper->field_track_hours->set($total);
 
   if ($wrapper->field_project->value()) {
     // Add hours to the project's relevant scope.
@@ -404,7 +410,6 @@ function productivity_time_tracking_tokens($type, $tokens, array $data = array()
 function productivity_time_tracking_bulk_update($month, $year, $employee, $project_nid) {
   $globals = productivity_time_tracking_get_global_days($month, $year);
   $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));
-  dpm(print_r($globals));
   // Save all days that are empty.
   for ($i = 1; $i <= $last_day_this_month; $i++) {
 
@@ -412,18 +417,15 @@ function productivity_time_tracking_bulk_update($month, $year, $employee, $proje
     $week_day = date( "w", $timestamp);
     // Bypass Friday or Saturday.
     if (in_array($week_day, array(5, 6))) {
-      dpm('Bypass WE:' . $i);
       continue;
     }
     // Bypass Globals.
     if (isset($globals[str_pad($i, 2, '0', STR_PAD_LEFT)])) {
-      dpm('Bypass Global:' . $i);
       continue;
     }
     $strtime =  "$year-$month-$i 00:00:00";
     if (!productivity_time_tracking_get_employee_tracking_count($strtime, $employee)) {
       productivity_time_tracking_save($timestamp, $employee, $project_nid);
-      dpm('Saved day for ' . $i);
     }
     else {
       dpm('Bypass saving for ' . $i);
