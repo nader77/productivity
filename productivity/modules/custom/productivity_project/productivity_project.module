@@ -108,20 +108,38 @@ function productivity_project_recalculate_hours($node, $type = FALSE) {
  *
  * Disables the hours and days fields in Project's node edit form.
  */
-function productivity_project_form_project_node_form_alter(&$form, &$form_state) {
+function productivity_project_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'project_node_form') {
+    $mf_field_name = 'field_table_rate';
+  }
+  elseif ($form_id == 'time_tracking_form') {
+    $mf_field_name = 'field_issues_logs';
+  }
+  else {
+    return;
+  }
+  // Disable auto generated fields
   $form['field_hours']['#disabled'] = TRUE;
-  $form['field_table_rate']['und'][0]['field_hours']['#disabled'] = TRUE;
-  $form['field_percentage_notification']['#disabled'] = TRUE;
-
-  // Set the repo name as autocomplete.
-  foreach ($form['field_github_repository_name'][LANGUAGE_NONE] as &$element) {
-    if (empty($element['value'])) {
-      continue;
+  foreach($form[$mf_field_name]['und'] as &$field_hours){
+    if (isset($field_hours['#field_name'])) {
+      $field_hours['field_hours']['#disabled'] = TRUE;
     }
-    $element['value']['#autocomplete_path'] = 'repository_autocomplete';
   }
 
-  $form['field_github_repository_name']['#prefix'] = l(t('Invalidate list of repositories'), 'repository_autocomplete_invalidate', array('query' => array('destination' => $_GET['q'])));
+  if ($form_id == 'project_node_form') {
+
+    $form['field_percentage_notification']['#disabled'] = TRUE;
+
+    // Set the repo name as autocomplete.
+    foreach ($form['field_github_repository_name'][LANGUAGE_NONE] as &$element) {
+      if (empty($element['value'])) {
+        continue;
+      }
+      $element['value']['#autocomplete_path'] = 'repository_autocomplete';
+    }
+
+    $form['field_github_repository_name']['#prefix'] = l(t('Invalidate list of repositories'), 'repository_autocomplete_invalidate', array('query' => array('destination' => $_GET['q'])));
+  }
 }
 
 /**
@@ -399,55 +417,47 @@ function productivity_project_update_project_total_hours($wrapper_time_tracking)
 
   // Add the hours by work type (qa, dev, management..).
   if($wrapper_time_tracking->field_day_type->value() == "regular") {
-    $project_rates = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate : array();
-    $node = $wrapper_time_tracking->value();
-    $node_original = $node->original;
+
     $node_project = $project_wrapper->value();
 
     // Summarize all total here.
-    $total_works = array();
-    $total_works['original'] = array();
-    $total_works['new'] = array();
+    $node = $wrapper_time_tracking->value();
+    $total_work_new = productivity_time_tracking_node_total_hours($node);
+    $types = $total_work_new['types'];
 
-
-    // Get original sum by type.
-    foreach($node_original->field_issues_logs['und'] as $issue_log) {
-      // If it's a new type we can get it only from the $node, the wrapper don't
-      // have it yet, in the presave scope.
-      $type = $issue_log['field_issue_type']['und'][0]['value'];
-
-      // Need to not use wrapper here because of missing support of multifield.
-      $time_spent = $issue_log['field_time_spent']['und'][0]['value'];
-      $total_works['original'][$type] = isset($total_works['original'][$type]) ? ($total_works['original'][$type] + $time_spent) : $time_spent;
-    }
-
-    // Go over all issues reported and summarize the total hours.
-    foreach($node->field_issues_logs['und'] as $issue_log) {
-      // If it's a new type we can get it only from the $node, the wrapper don't
-      // have it yet, in the presave scope.
-      $type = $issue_log['field_issue_type']['und'][0]['value'];
-
-      // Need to not use wrapper here because of missing support of multifield.
-      $time_spent = $issue_log['field_time_spent']['und'][0]['value'];
-      $total_works['new'][$type] = isset($total_works['new'][$type]) ? ($total_works['new'][$type] + $time_spent) : $time_spent;
-
-      // Create rate type on the project if does not exist yet.
-      if (!productivity_project_check_existing_type($project_rates, $type)) {
-        // Create new row for the issue type at the table.
-        $new_rate_structure = productivity_project_create_new_type($project_rates, $issue_log);
-        $node_project->field_table_rate['und'] += $new_rate_structure;
-      }
+    if (!isset($node->is_new)) {
+      $node_original = $node->original;
+      $total_work_original = productivity_time_tracking_node_total_hours($node_original);
+      $types += $total_work_original['types'];
     }
 
     // Save totals on project node.
     $total_diff = 0;
-    foreach ($node_project->field_table_rate['und'] as &$rate) {
-      $original_hours = isset($total_works['original'][$rate['field_issue_type']['und'][0]['value']]) ? $total_works['original'][$rate['field_issue_type']['und'][0]['value']] : 0;
-      $hours = isset($total_works['new'][$rate['field_issue_type']['und'][0]['value']]) ? $total_works['new'][$rate['field_issue_type']['und'][0]['value']] : 0;
+    $project_rates = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate : array();
+    // Count new types add in this node save.
+    $new_types_count = 0;
+    // Go over all types, original and new.
+    foreach ($types as $type) {
+      $original_hours = isset($total_work_original['total'][$type]) ? $total_work_original['total'][$type] : 0;
+      $hours = isset($total_work_new['total'][$type]) ? $total_work_new['total'][$type] : 0;
       $diff = $hours - $original_hours;
-      $rate['field_hours']['und'][0]['value'] += $diff;
+
+      // Create rate type on the project if does not exist yet.
+      if (!$rate = productivity_project_check_existing_type($project_rates, $type)) {
+        // Create new row for the issue type at the table.
+        $index = count($project_rates) + $new_types_count;
+        $new_rate_structure = productivity_project_create_new_type($index, $hours, $type);
+        $node_project->field_table_rate['und'] += $new_rate_structure;
+        $new_types_count++;
+      }
+      else {
+        // Save diff to existing type.
+        $node_project->field_table_rate['und'][$rate['key']]['field_hours']['und'][0]['value'] += $diff;
+      }
+
       $total_diff += $diff;
     }
+
     $total_original_hours = $project_wrapper->field_hours->value();
     $project_wrapper->field_hours->set($total_original_hours + $total_diff);
     $project_wrapper->save();
@@ -498,14 +508,12 @@ function productivity_project_recalcualte_rate_total_hours($project_id, $rate_ty
  * @return mixed
  *  The element with the new rate.
  */
-function productivity_project_create_new_type($rates, $issue_log) {
+function productivity_project_create_new_type($index, $hours, $type) {
   // Get the index of the issue type in the table.
-  $next_index = count($rates);
-
   $rate = array();
-  $rate[$next_index] = array(
-    'field_hours' => array(LANGUAGE_NONE => array(array('value' => $issue_log['field_time_spent']['und'][0]['value']))),
-    'field_issue_type' => array(LANGUAGE_NONE => array(array('value' =>  $issue_log['field_issue_type']['und'][0]['value']))),
+  $rate[$index] = array(
+    'field_hours' => array(LANGUAGE_NONE => array(array('value' => $hours))),
+    'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => $type))),
     'field_scope' => array(
       LANGUAGE_NONE => array(
         array(

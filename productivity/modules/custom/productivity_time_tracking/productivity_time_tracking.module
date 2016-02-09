@@ -205,6 +205,33 @@ function productivity_time_tracking_total_hours($project_nid, $date = array(), $
 }
 
 /**
+ * Get the total hours for each rate type in a single tracking node.
+ *
+ * @param $node
+ *  The tracking node.
+ */
+function productivity_time_tracking_node_total_hours($node) {
+  $types = array();
+  $total_works = array();
+  foreach ($node->field_issues_logs['und'] as $issue_log) {
+    // If it's a new type we can get it only from the $node, the wrapper don't
+    // have it yet, in the presave scope.
+    $type = $issue_log['field_issue_type']['und'][0]['value'];
+    // Gather all types that are involved.
+    $types[$type] = $type;
+
+    // Need to not use wrapper here because of missing support of multifield.
+    $time_spent = $issue_log['field_time_spent']['und'][0]['value'];
+    $total_works[$type] = isset($total_works[$type]) ? ($total_works[$type] + $time_spent) : $time_spent;
+  }
+
+  return array(
+    'types' => $types,
+    'total' => $total_works,
+  );
+}
+
+/**
  * Implements hook_node_presave().
  *
  * Set the node title automatically.
