@@ -171,6 +171,7 @@ function productivity_time_tracking_total_hours($project_nid, $date = array(), $
   }
   $query = new EntityFieldQuery();
 
+  // Get all time tracking nodes for the project.
   $query->entityCondition('entity_type', 'node')
     ->entityCondition('bundle', 'time_tracking')
     ->propertyCondition('status', NODE_PUBLISHED)
@@ -232,8 +233,8 @@ function productivity_time_tracking_node_presave($node) {
 
   // Update field_track_hours from total all multi field.
   $total = 0;
-  foreach($wrapper->field_issues_logs as $field_wrapper) {
-    $total += $field_wrapper->field_time_spent->value();
+  foreach($node->field_issues_logs['und'] as $issue) {
+    $total += $issue['field_time_spent']['und'][0]['value'];
   }
   $wrapper->field_track_hours->set($total);
 

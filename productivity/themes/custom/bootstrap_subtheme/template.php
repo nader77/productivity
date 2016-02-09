@@ -45,18 +45,15 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
       }
       // Add days.
       $rows[$key]['days'] = productivity_project_get_total_days($rate->field_hours->value());
+      $rows[$key]['recalculate'] = l(t('Recalculate'), 'recalculate-project-time/' . $node->nid . '/' . $rate->field_issue_type->value());
     }
   }
 
-  $header = array('Type', 'Total Scope', 'Rate', 'Rate Type', 'Hours', 'Days');
+  $header = array('Type', 'Total Scope', 'Rate', 'Rate Type', 'Hours', 'Days', 'actions');
   $table = theme('table', array('header' => $header, 'rows' => $rows ));
 
   $variables['table'] = $table;
-  $variables['recalculate_hours_days_link'] = l(
-    t('Recalculate project\'s hours & days.'),
-    'recalculate-project-time/' . $node->nid,
-    array('absolute' => TRUE)
-  );
+  $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), 'recalculate-project-time/' . $node->nid);
 }
 
 /**
