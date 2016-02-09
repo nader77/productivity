@@ -5,7 +5,7 @@
  * spent time in the issues in case the total hours does not match.
  */
 
-function productivity_update_7000() {
+function productivity_project_update_7000() {
   // Get the last node id.
   $nid = 0;
   // Get the number of nodes to be processed.
@@ -27,7 +27,6 @@ function productivity_update_7000() {
   $query_count = clone $base_query;
   $count = $query_count->count()->execute();
 
-  print 'Item to process:' . $count;
 
   while ($i < $count) {
     $query = clone $base_query;
@@ -73,7 +72,7 @@ function productivity_update_7000() {
       $node->field_table_rate['und'] += $new_rate_structure;
 
       node_save($node);
-      echo 'Save node:' . $node->nid . ' ';
+      watchdog('productivity', 'Save node:' . $node->nid);
     }
     $i += count($nodes);
     $nid = end($ids);
@@ -83,7 +82,7 @@ function productivity_update_7000() {
       '@iterator' => $i,
       '@max' => $count,
     );
-    print t('Process entities from id @start to id @end. Batch state: @iterator/@max', $params);
+    watchdog('productivity', 'Process entities from id @start to id @end. Batch state: @iterator/@max', $params);
 
   }
 }
