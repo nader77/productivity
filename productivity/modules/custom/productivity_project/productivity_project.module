@@ -108,38 +108,26 @@ function productivity_project_recalculate_hours($node, $type = FALSE) {
  *
  * Disables the hours and days fields in Project's node edit form.
  */
-function productivity_project_form_alter(&$form, &$form_state, $form_id) {
-  if ($form_id == 'project_node_form') {
-    $mf_field_name = 'field_table_rate';
-  }
-  elseif ($form_id == 'time_tracking_form') {
-    $mf_field_name = 'field_issues_logs';
-  }
-  else {
-    return;
-  }
+function productivity_project_form_project_node_form_alter(&$form, &$form_state) {
   // Disable auto generated fields
   $form['field_hours']['#disabled'] = TRUE;
-  foreach($form[$mf_field_name]['und'] as &$field_hours){
+  foreach($form['project_node_form']['und'] as &$field_hours){
     if (isset($field_hours['#field_name'])) {
       $field_hours['field_hours']['#disabled'] = TRUE;
     }
   }
 
-  if ($form_id == 'project_node_form') {
+  $form['field_percentage_notification']['#disabled'] = TRUE;
 
-    $form['field_percentage_notification']['#disabled'] = TRUE;
-
-    // Set the repo name as autocomplete.
-    foreach ($form['field_github_repository_name'][LANGUAGE_NONE] as &$element) {
-      if (empty($element['value'])) {
-        continue;
-      }
-      $element['value']['#autocomplete_path'] = 'repository_autocomplete';
+  // Set the repo name as autocomplete.
+  foreach ($form['field_github_repository_name'][LANGUAGE_NONE] as &$element) {
+    if (empty($element['value'])) {
+      continue;
     }
-
-    $form['field_github_repository_name']['#prefix'] = l(t('Invalidate list of repositories'), 'repository_autocomplete_invalidate', array('query' => array('destination' => $_GET['q'])));
+    $element['value']['#autocomplete_path'] = 'repository_autocomplete';
   }
+
+  $form['field_github_repository_name']['#prefix'] = l(t('Invalidate list of repositories'), 'repository_autocomplete_invalidate', array('query' => array('destination' => $_GET['q'])));
 }
 
 /**
