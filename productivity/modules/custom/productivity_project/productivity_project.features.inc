@@ -8,6 +8,9 @@
  * Implements hook_ctools_plugin_api().
  */
 function productivity_project_ctools_plugin_api($module = NULL, $api = NULL) {
+  if ($module == "field_group" && $api == "field_group") {
+    return array("version" => "1");
+  }
   if ($module == "page_manager" && $api == "pages_default") {
     return array("version" => "1");
   }
@@ -35,14 +38,14 @@ function productivity_project_default_message_type() {
     "arguments" : null,
     "message_text" : { "und" : [
         {
-          "value" : "Logged hours in @project_name",
+          "value" : "Logged hours in @project_name -  @work_type",
           "format" : "filtered_html",
-          "safe_value" : "\\u003Cp\\u003ELogged hours in @project_name\\u003C\\/p\\u003E\\n"
+          "safe_value" : "\\u003Cp\\u003ELogged hours in @project_name -  @work_type\\u003C\\/p\\u003E\\n"
         },
         {
-          "value" : "Hi Managers,\\r\\nThe project \\u0022@project_name\\u0022 has reached @logged_percentage% of the estimated scope logged on [current-date:medium].\\r\\nThe scope: @project_scope.\\r\\nTotal hours logged:  @project_total_hours.\\r\\nTotal days logged:  @project_total_days.\\r\\n",
+          "value" : "Hi Managers,\\r\\nThe project \\u0022@project_name\\u0022 has reached @logged_percentage% of the estimated scope logged on [current-date:medium].\\r\\nWork type: @work_type.\\r\\nThe scope: @project_scope.\\r\\nTotal hours logged:  @project_total_hours.\\r\\nTotal days logged:  @project_total_days.\\r\\n\\r\\n",
           "format" : "full_html",
-          "safe_value" : "\\u003Cp\\u003EHi Managers,\\u003Cbr \\/\\u003E\\nThe project \\u0022@project_name\\u0022 has reached @logged_percentage% of the estimated scope logged on [current-date:medium].\\u003Cbr \\/\\u003E\\nThe scope: @project_scope.\\u003Cbr \\/\\u003E\\nTotal hours logged:  @project_total_hours.\\u003Cbr \\/\\u003E\\nTotal days logged:  @project_total_days.\\u003C\\/p\\u003E\\n"
+          "safe_value" : "\\u003Cp\\u003EHi Managers,\\u003Cbr \\/\\u003E\\nThe project \\u0022@project_name\\u0022 has reached @logged_percentage% of the estimated scope logged on [current-date:medium].\\u003Cbr \\/\\u003E\\nWork type: @work_type.\\u003Cbr \\/\\u003E\\nThe scope: @project_scope.\\u003Cbr \\/\\u003E\\nTotal hours logged:  @project_total_hours.\\u003Cbr \\/\\u003E\\nTotal days logged:  @project_total_days.\\u003C\\/p\\u003E\\n"
         }
       ]
     }

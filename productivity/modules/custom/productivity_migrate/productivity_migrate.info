@@ -1,5 +1,5 @@
-name = Productivity_Title demo module
-description = "Demonstrates the functionality of the Productivity_Title profile"
+name = Productivity migrate module
+description = "Module to migrate Productivity demo content."
 package = Productivity - Demo
 core = 7.x
 version = "7.x-1.x-dev"

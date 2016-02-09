@@ -42,13 +42,17 @@ projects[entityreference_filter][version] = "1.5"
 projects[entityrelationships][type] = "module"
 projects[entityrelationships][subdir] = "contrib"
 projects[entityrelationships][download][type] = "git"
-projects[entityrelationships][download][url] = "git@github.com:Gizra/entityrelationships.git"
+projects[restful][download][branch] = "master"
+projects[entityrelationships][download][url] = "https://github.com/Gizra/entityrelationships.git"
 
 projects[gravatar][subdir] = "contrib"
 projects[gravatar][version] = "1.x-dev"
 
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "3.7"
+
+projects[field_group][subdir] = "contrib"
+projects[field_group][version] = "1.5"
 
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.7"
