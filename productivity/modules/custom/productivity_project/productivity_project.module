@@ -111,7 +111,7 @@ function productivity_project_recalculate_hours($node, $type = FALSE) {
 function productivity_project_form_project_node_form_alter(&$form, &$form_state) {
   // Disable auto generated fields
   $form['field_hours']['#disabled'] = TRUE;
-  foreach($form['project_node_form']['und'] as &$field_hours){
+  foreach($form['field_table_rate']['und'] as &$field_hours){
     if (isset($field_hours['#field_name'])) {
       $field_hours['field_hours']['#disabled'] = TRUE;
     }

@@ -14,7 +14,7 @@ include_once 'productivity_time_tracking.features.inc';
 function productivity_project_form_time_tracking_node_form_alter(&$form, &$form_state) {
   // Disable auto generated fields
   $form['field_track_hours']['#disabled'] = TRUE;
-  foreach($form['time_tracking_node_form']['und'] as &$field_hours){
+  foreach($form['field_issues_logs']['und'] as &$field_hours){
     if (isset($field_hours['#field_name'])) {
       $field_hours['field_time_spent']['#disabled'] = TRUE;
     }
