@@ -10,46 +10,6 @@
 function productivity_project_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'multifield-field_table_rate-field_days'.
-  $field_instances['multifield-field_table_rate-field_days'] = array(
-    'bundle' => 'field_table_rate',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'hidden',
-        'module' => 'number',
-        'settings' => array(
-          'decimal_separator' => '.',
-          'prefix_suffix' => TRUE,
-          'scale' => 2,
-          'thousand_separator' => '',
-        ),
-        'type' => 'number_decimal',
-        'weight' => 5,
-      ),
-    ),
-    'entity_type' => 'multifield',
-    'field_name' => 'field_days',
-    'label' => 'Total days (deprecated)',
-    'required' => 0,
-    'settings' => array(
-      'max' => '',
-      'min' => '',
-      'prefix' => '',
-      'suffix' => '',
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 0,
-      'module' => 'number',
-      'settings' => array(),
-      'type' => 'number',
-      'weight' => 5,
-    ),
-  );
-
   // Exported field_instance: 'multifield-field_table_rate-field_hours'.
   $field_instances['multifield-field_table_rate-field_hours'] = array(
     'bundle' => 'field_table_rate',
@@ -1506,7 +1466,6 @@ Setting an end date, will make project invisible in some forms after the end dat
   t('This means it\'s a Madaan project.
 Whether this project should be allowed as the project reference of a work session.');
   t('Total days');
-  t('Total days (deprecated)');
   t('Total hours');
   t('Type');
   t('Work type');
