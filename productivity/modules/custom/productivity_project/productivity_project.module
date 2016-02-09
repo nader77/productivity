@@ -442,11 +442,11 @@ function productivity_project_update_project_total_hours($wrapper_time_tracking)
     // Save totals on project node.
     $total_diff = 0;
     foreach ($node_project->field_table_rate['und'] as &$rate) {
-      if (isset($total_works['new'][$rate['field_issue_type']['und'][0]['value']])) {
-        $diff = $total_works['new'][$rate['field_issue_type']['und'][0]['value']] - $total_works['original'][$rate['field_issue_type']['und'][0]['value']];
-        $rate['field_hours']['und'][0]['value'] += $diff;
-        $total_diff += $diff;
-      }
+      $original_hours = isset($total_works['original'][$rate['field_issue_type']['und'][0]['value']]) ? $total_works['original'][$rate['field_issue_type']['und'][0]['value']] : 0;
+      $hours = isset($total_works['new'][$rate['field_issue_type']['und'][0]['value']]) ? $total_works['new'][$rate['field_issue_type']['und'][0]['value']] : 0;
+      $diff = $hours - $original_hours;
+      $rate['field_hours']['und'][0]['value'] += $diff;
+      $total_diff += $diff;
     }
     $total_original_hours = $project_wrapper->field_hours->value();
     $project_wrapper->field_hours->set($total_original_hours + $total_diff);
