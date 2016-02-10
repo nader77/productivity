@@ -43,7 +43,6 @@ class ProductivityMigrateProject extends ProductivityMigrate {
 
     $field_names = array(
       'field_type',
-      'field_rate_type',
       'field_status',
     );
     $this->addSimpleMappings($field_names);
@@ -57,18 +56,18 @@ class ProductivityMigrateProject extends ProductivityMigrate {
     $this
       ->addFieldMapping('field_account', 'account')
       ->sourceMigration('ProductivityMigrateAccount');
-
-//    $this->addFieldMapping('field_rate:amount', 'rate');
-//    $this->addFieldMapping('field_rate:currency', 'rate_currency');
-
-    $this->addFieldMapping('field_scope', 'scope');
-    $this->addFieldMapping('field_scope:period', 'scope_unit');
   }
 
-
-  public function prepare($entity, $current_row) {
-    $wrapper = entity_metadata_wrapper('node', $entity);
-    $wrapper->field_rate->amount->set($current_row->rate);
-    $wrapper->field_rate->currency->set($current_row->rate_currency);
+  /**
+   * Save the multifield data.
+   */
+  public function prepare($node, $current_row) {
+    // Save multifield.
+    $node->field_table_rate[LANGUAGE_NONE][0]['field_issue_type'][LANGUAGE_NONE][0]['value'] = 'dev';
+    $node->field_table_rate[LANGUAGE_NONE][0]['field_scope'][LANGUAGE_NONE][0]['interval'] = $current_row->scope;
+    $node->field_table_rate[LANGUAGE_NONE][0]['field_scope'][LANGUAGE_NONE][0]['period'] = $current_row->scope_unit;
+    $node->field_table_rate[LANGUAGE_NONE][0]['field_rate'][LANGUAGE_NONE][0]['amount'] = $current_row->rate;
+    $node->field_table_rate[LANGUAGE_NONE][0]['field_rate'][LANGUAGE_NONE][0]['currency'] = $current_row->rate_currency;
+    $node->field_table_rate[LANGUAGE_NONE][0]['field_rate_type'][LANGUAGE_NONE][0]['value'] = $current_row->field_rate_type;
   }
 }

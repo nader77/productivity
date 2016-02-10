@@ -13,6 +13,7 @@ dependencies[] = multifield
 dependencies[] = number
 dependencies[] = options
 dependencies[] = page_manager
+dependencies[] = productivity_project
 dependencies[] = productivity_salary
 dependencies[] = strongarm
 dependencies[] = text

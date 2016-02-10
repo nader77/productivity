@@ -20,7 +20,7 @@ projects[ctools][subdir] = "contrib"
 projects[ctools][version] = "1.9"
 
 projects[currency][subdir] = "contrib"
-projects[currency][version] = "2.5"
+projects[currency][version] = "2.6"
 
 projects[date][subdir] = "contrib"
 projects[date][version] = "2.9"
@@ -29,8 +29,7 @@ projects[diff][subdir] = "contrib"
 projects[diff][version] = "3.2"
 
 projects[entity][subdir] = "contrib"
-projects[entity][version] = "1.5"
-projects[entity][patch][] = "https://www.drupal.org/files/issues/2264079-entity-wrapper-access-single-entity-reference-2.patch"
+projects[entity][version] = "1.6"
 projects[entity][patch][] = "https://www.drupal.org/files/issues/2086225-entity-access-check-node-create-3.patch"
 
 projects[entityreference][subdir] = "contrib"
@@ -40,15 +39,20 @@ projects[entityreference][patch][] = "https://www.drupal.org/files/issues/migrat
 projects[entityreference_filter][subdir] = "contrib"
 projects[entityreference_filter][version] = "1.5"
 
+projects[entityrelationships][type] = "module"
 projects[entityrelationships][subdir] = "contrib"
 projects[entityrelationships][download][type] = "git"
-projects[entityrelationships][download][url] = "git@github.com:Gizra/entityrelationships.git"
+projects[restful][download][branch] = "master"
+projects[entityrelationships][download][url] = "https://github.com/Gizra/entityrelationships.git"
 
 projects[gravatar][subdir] = "contrib"
 projects[gravatar][version] = "1.x-dev"
 
 projects[flag][subdir] = "contrib"
 projects[flag][version] = "3.7"
+
+projects[field_group][subdir] = "contrib"
+projects[field_group][version] = "1.5"
 
 projects[features][subdir] = "contrib"
 projects[features][version] = "2.7"
@@ -72,7 +76,7 @@ projects[mailsystem][subdir] = "contrib"
 projects[mailsystem][version] = "3.x-dev"
 
 projects[message][subdir] = "contrib"
-projects[message][version] = "1.10"
+projects[message][version] = "1.11"
 
 projects[message_ui][subdir] = "contrib"
 projects[message_ui][version] = "1.4"
@@ -109,7 +113,7 @@ projects[restful][download][branch] = "7.x-1.x"
 projects[restful][subdir] = "contrib"
 
 projects[smtp][subdir] = "contrib"
-projects[smtp][version] = "1.2"
+projects[smtp][version] = "1.3"
 
 projects[strongarm][subdir] = "contrib"
 projects[strongarm][version] = "2.0"
@@ -145,7 +149,7 @@ projects[migrate_extras][version] = "2.5"
 ; Libraries
 libraries[dompdf][type] = "libraries"
 libraries[dompdf][download][type] = "get"
-libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/releases/download/v0.6.1/dompdf-0.6.1.zip"
+libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/archive/v0.6.1.zip"
 
 ; Themes
 projects[bootstrap][subdir] = "contrib"
