@@ -26,25 +26,43 @@ function productivity_time_tracking_monthly_report_content_type_render($subtype,
   drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
   drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
 
-  $variables = array();
-  $context_wrapper = entity_metadata_wrapper('node', $context->data);
-  $variables['project_title'] = $context_wrapper->title->value();
-  $variables['account'] = $context_wrapper->field_account->title->value();
-  $project_url = "https://github.com/" . $context_wrapper->field_github_repository_name->value()[0] . "/pull/";;
+  $node = $context->data;
+  if ($node->type != 'project') {
+    return;
+  }
+  $wrapper = entity_metadata_wrapper('node', $node);
 
-  $project_id = $context_wrapper->getIdentifier();
-  $year = $args[1];
-  $month = $args[2];
+  $variables = array();
+  $variables['project_title'] = $wrapper->label();
+  $variables['account'] = $wrapper->field_account->label();
+
+  // TODO: Deal better with project URL.
+  $project_url = '';
+  if (isset($wrapper->field_github_repository_name)) {
+    $first_repo_name = $wrapper->field_github_repository_name[0]->value();
+    $project_url = "https://github.com/$first_repo_name/pull/";
+  }
+
+  $year = isset($args[1]) ? $args[1] : date('Y');
+  $month = isset($args[2]) ? $args[2] : date('m', strtotime("-1 month"));
 
   $variables['year'] = $year;
   $variables['month'] = $month;
   // Get the project title for the page title.
 
-  $nodes = get_project_github_issues_query($project_id, $year, $month);
-  $issues_table = _productivity_time_tracking_create_issues_table($nodes);
+  $nodes = productivity_github_get_project_github_issues_query($node->nid, $year, $month);
+  $issues_table = array();
+  $variables['no_result'] = FALSE;
+  if ($nodes) {
+    $issues_table = _productivity_time_tracking_create_issues_table($nodes);
+  }
+  else {
+    $variables['no_result'] = TRUE;
+    $variables['message'] = t('No work done this month.');
+  }
 
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
-  $variables['current_project_id'] = $project_id;
+  $variables['current_project_id'] = $node->nid;
 
   // Get all the projects for project input
   $variables['projects'] = productivity_project_get_all_projects();
@@ -52,13 +70,14 @@ function productivity_time_tracking_monthly_report_content_type_render($subtype,
   // Create tables for the template.
   $variables['tables'] = array();
   $variables['total_types'] = array();
+  $variables['grand_total'] = 0;
   $header = array('Issue', 'Label', 'Date', 'Time', 'Amount');
-  foreach($issues_table as $table_name => $table) {
+  foreach ($issues_table as $table_name => $table) {
     $variables['table_titles'][] = $table_name;
     $variables['total_per_types'][$table_name] = 0;
 
-    foreach($table as $index => $issue) {
-      $rows[$index]['label'] = l($issue['issue_num'][0], $project_url . $issue['issue_num'][0], array('absolute' => true));
+    foreach ($table as $index => $issue) {
+      $rows[$index]['label'] = l($issue['issue_num'][0], $project_url . $issue['issue_num'][0], array('absolute' => TRUE));
       $rows[$index]['gitHub_issue_num'] = $issue['label'][0];
       $rows[$index]['date'] = $issue['date'][0];
       $rows[$index]['time'] = $issue['time'][0];
@@ -67,7 +86,10 @@ function productivity_time_tracking_monthly_report_content_type_render($subtype,
       $variables['total_currency_per_types'][$table_name] = $issue['issue_currency'][0];
       $variables['grand_total'] += $issue['issue_amount'][0];
     }
-    $variables['tables'][] = theme('table', array('header' => $header, 'rows' => $rows));
+    $variables['tables'][] = theme('table', array(
+      'header' => $header,
+      'rows' => $rows
+    ));
     $rows = array();
   }
 
@@ -107,14 +129,14 @@ function _productivity_time_tracking_create_issues_table($nodes) {
         // push the issue details to the type table.
         $scope_amount = productivity_project_get_rate($project_wrapper->vid, $type);
         /// The table length of every type.
-        $table_legnth = count($issues_table[$type]);
+        $table_length = count($issues_table[$type]);
 
-        $issues_table[$type][$table_legnth]['issue_num'][] = $issue_log_wrapper->field_github_issue->raw();
-        $issues_table[$type][$table_legnth]['label'][] = $issue_log_wrapper->field_issue_label->value();
-        $issues_table[$type][$table_legnth]['date'][] = $date;
-        $issues_table[$type][$table_legnth]['time'][] = $issue_log_wrapper->field_time_spent->value();
-        $issues_table[$type][$table_legnth]['issue_amount'][] = $issue_log_wrapper->field_time_spent->value() * $scope_amount['field_table_rate_field_type_rate_amount'];
-        $issues_table[$type][$table_legnth]['issue_currency'][] = $scope_amount['field_table_rate_field_type_rate_currency'];
+        $issues_table[$type][$table_length]['issue_num'][] = $issue_log_wrapper->field_github_issue->raw();
+        $issues_table[$type][$table_length]['label'][] = $issue_log_wrapper->field_issue_label->value();
+        $issues_table[$type][$table_length]['date'][] = $date;
+        $issues_table[$type][$table_length]['time'][] = $issue_log_wrapper->field_time_spent->value();
+        $issues_table[$type][$table_length]['issue_amount'][] = $issue_log_wrapper->field_time_spent->value() * $scope_amount['field_table_rate_field_type_rate_amount'];
+        $issues_table[$type][$table_length]['issue_currency'][] = $scope_amount['field_table_rate_field_type_rate_currency'];
       }
     }
   }
