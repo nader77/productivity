@@ -65,6 +65,13 @@ while ($i < $count) {
       // Rate type. (hours/month/global)
       $node->field_table_rate[LANGUAGE_NONE][0]['field_rate_type'][LANGUAGE_NONE][0]['value'] = $wrapper->field_rate_type->value();
 
+      $new_rate_structure = productivity_project_create_new_type('1', 0, 'qa');
+      $node->field_table_rate['und'] += $new_rate_structure;
+      $new_rate_structure = productivity_project_create_new_type('2', 0, 'management');
+      $node->field_table_rate['und'] += $new_rate_structure;
+      $new_rate_structure = productivity_project_create_new_type('3', 0, 'support');
+      $node->field_table_rate['und'] += $new_rate_structure;
+
       node_save($node);
       drush_print('Save node:' . $node->nid);
     }
