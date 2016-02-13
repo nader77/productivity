@@ -15,7 +15,7 @@
     var project_id = $('#project_filter').val();
     var date = $('#date_filter').val().split('-');
 
-    return base_url + "/admin/monthly-report/" + project_id + "/" + date[0] + "/" + date[1];
+    return base_url + "/monthly-report/" + project_id + "/" + date[0] + "/" + date[1];
   }
 
   /**

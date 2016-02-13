@@ -54,6 +54,11 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
 
   $variables['table'] = $table;
   $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), 'recalculate-project-time/' . $node->nid);
+
+  $year = date('Y');
+  $month = date('m', strtotime("-1 month"));
+  $project_id = $node->nid;
+  $variables['monthly_report_link'] = l(t('Monthly report'), "/monthly-report/$project_id/$year/$month");
 }
 
 /**

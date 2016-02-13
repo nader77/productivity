@@ -111,9 +111,14 @@
   </div>
 </div>
 <div class="col-xs-12">
-  <?php if (isset($recalculate_hours_days_link)) : ?>
-    <?php print $recalculate_hours_days_link; ?>
-  <?php endif; ?>
+  <ul>
+    <li>
+      <?php print $recalculate_hours_days_link; ?>
+    </li>
+    <li>
+      <?php print $monthly_report_link; ?>
+    </li>
+  </ul>
 </div>
 
 

@@ -560,33 +560,18 @@ function productivity_project_get_total_days($hours) {
  * Get list name of all project
  */
 function productivity_project_get_all_projects() {
-  $query = new EntityFieldQuery();
-  $result = $query
-    ->entityCondition('entity_type', 'node')
-    ->propertyCondition('type', 'project')
-    ->execute();
-
   $project_titles = db_select('node', 'n')
-    ->fields('n', array('title'))
     ->fields('n', array('nid'))
-    ->fields('n', array('type'))
-    ->condition('n.type', 'page')
+    ->fields('n', array('title'))
+    ->condition('n.type', 'project')
     ->execute()
-    ->fetchCol(); // returns an indexed array
+    ->fetchAllKeyed(); // returns an indexed array
 
-  dpm($project_titles);
-
-  if(empty($result['node'])) {
+  if(empty($project_titles)) {
     return;
   }
 
-  $projects = node_load_multiple(array_keys($result['node']));
-  $all_projects = array();
-  foreach($projects as $project) {
-    $all_projects[$project->nid] = $project->title;
-  }
-
-  return $all_projects;
+  return $project_titles;
 }
 
 /**
@@ -601,12 +586,17 @@ function productivity_project_get_all_projects() {
  *  return the scope amount or zero.
  *
  */
-function productivity_project_get_rate($project_id, $scope_to_find) {
-  return db_select('field_data_field_table_rate', 'table_rate')
+function productivity_project_get_rate($project_nid, $scope_to_find) {
+  $rate = db_select('field_data_field_table_rate', 'table_rate')
     ->condition('bundle', 'project')
-    ->condition('entity_id', $project_id)
+    ->condition('entity_id', $project_nid)
     ->condition('field_table_rate_field_issue_type_value', $scope_to_find)
-    ->fields('table_rate', array('field_table_rate_field_type_rate_amount', 'field_table_rate_field_type_rate_currency'))
+    ->fields('table_rate', array('field_table_rate_field_rate_amount', 'field_table_rate_field_rate_currency'))
     ->execute()
     ->fetchAssoc();
+
+  return array(
+    'amount' => $rate['field_table_rate_field_rate_amount'],
+    'currency' => $rate['field_table_rate_field_rate_currency'],
+  );
 }
