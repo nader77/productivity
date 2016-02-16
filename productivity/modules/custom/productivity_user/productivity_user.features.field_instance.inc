@@ -10,7 +10,7 @@
 function productivity_user_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'user-user-field_date'
+  // Exported field_instance: 'user-user-field_date'.
   $field_instances['user-user-field_date'] = array(
     'bundle' => 'user',
     'deleted' => 0,
@@ -25,6 +25,7 @@ function productivity_user_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
         'weight' => 1,
@@ -57,7 +58,7 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'user-user-field_employment_status'
+  // Exported field_instance: 'user-user-field_employment_status'.
   $field_instances['user-user-field_employment_status'] = array(
     'bundle' => 'user',
     'default_value' => NULL,
@@ -88,7 +89,7 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'user-user-field_github_username'
+  // Exported field_instance: 'user-user-field_github_username'.
   $field_instances['user-user-field_github_username'] = array(
     'bundle' => 'user',
     'default_value' => NULL,
@@ -122,7 +123,7 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'user-user-field_job_type'
+  // Exported field_instance: 'user-user-field_job_type'.
   $field_instances['user-user-field_job_type'] = array(
     'bundle' => 'user',
     'default_value' => NULL,
@@ -153,7 +154,7 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'user-user-field_last_notification'
+  // Exported field_instance: 'user-user-field_last_notification'.
   $field_instances['user-user-field_last_notification'] = array(
     'bundle' => 'user',
     'deleted' => 0,
@@ -168,6 +169,7 @@ function productivity_user_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
         'weight' => 4,

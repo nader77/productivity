@@ -31,14 +31,13 @@ function productivity_github_field_default_field_bases() {
     'type' => 'text_with_summary',
   );
 
-  // Exported field_base: 'field_actual_hours'
+  // Exported field_base: 'field_actual_hours'.
   $field_bases['field_actual_hours'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_actual_hours',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'number',
@@ -49,7 +48,7 @@ function productivity_github_field_default_field_bases() {
     'type' => 'number_float',
   );
 
-  // Exported field_base: 'field_github_content_type'
+  // Exported field_base: 'field_github_content_type'.
   $field_bases['field_github_content_type'] = array(
     'active' => 1,
     'cardinality' => 1,

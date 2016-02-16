@@ -265,20 +265,6 @@ function productivity_admin_views_default_views() {
       ),
       'postpone_processing' => 0,
     ),
-    'action::system_message_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
-    'action::views_bulk_operations_script_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
     'action::node_make_sticky_action' => array(
       'selected' => 1,
       'skip_confirmation' => 1,
@@ -292,15 +278,6 @@ function productivity_admin_views_default_views() {
       'override_label' => 1,
       'label' => 'Unstick',
       'postpone_processing' => 0,
-    ),
-    'action::views_bulk_operations_argument_selector_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'settings' => array(
-        'url' => '',
-      ),
     ),
     'action::node_promote_action' => array(
       'selected' => 1,
@@ -316,13 +293,6 @@ function productivity_admin_views_default_views() {
       'label' => 'Publish',
       'postpone_processing' => 0,
     ),
-    'action::system_goto_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
     'action::node_unpromote_action' => array(
       'selected' => 1,
       'skip_confirmation' => 1,
@@ -330,32 +300,11 @@ function productivity_admin_views_default_views() {
       'label' => 'Demote from front page',
       'postpone_processing' => 0,
     ),
-    'action::node_save_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
-    'action::system_send_email_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
     'action::node_unpublish_action' => array(
       'selected' => 1,
       'skip_confirmation' => 1,
       'override_label' => 1,
       'label' => 'Unpublish',
-      'postpone_processing' => 0,
-    ),
-    'action::node_unpublish_by_keyword_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
       'postpone_processing' => 0,
     ),
   );
@@ -509,25 +458,40 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['access']['perm'] = 'administer nodes';
   $handler->display->display_options['cache']['type'] = 'none';
   $handler->display->display_options['query']['type'] = 'views_query';
+  $handler->display->display_options['query']['options']['distinct'] = TRUE;
   $handler->display->display_options['exposed_form']['type'] = 'basic';
   $handler->display->display_options['pager']['type'] = 'none';
   $handler->display->display_options['pager']['options']['offset'] = '0';
-  $handler->display->display_options['style_plugin'] = 'views_calc';
+  $handler->display->display_options['style_plugin'] = 'table';
   $handler->display->display_options['style_options']['columns'] = array(
+    'views_bulk_operations' => 'views_bulk_operations',
+    'nid' => 'nid',
     'field_work_date' => 'field_work_date',
     'field_track_hours' => 'field_track_hours',
     'field_description' => 'field_description',
+    'field_issues_logs' => 'field_issues_logs',
+    'field_employee' => 'field_employee',
   );
   $handler->display->display_options['style_options']['default'] = 'field_work_date';
   $handler->display->display_options['style_options']['info'] = array(
+    'views_bulk_operations' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'nid' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
     'field_work_date' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
-      'has_calc' => 0,
-      'calc' => array(),
     ),
     'field_track_hours' => array(
       'sortable' => 1,
@@ -535,10 +499,6 @@ function productivity_admin_views_default_views() {
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
-      'has_calc' => 1,
-      'calc' => array(
-        'SUM' => 'SUM',
-      ),
     ),
     'field_description' => array(
       'sortable' => 1,
@@ -546,22 +506,38 @@ function productivity_admin_views_default_views() {
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
-      'has_calc' => 0,
-      'calc' => array(),
+    ),
+    'field_issues_logs' => array(
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_employee' => array(
+      'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
     ),
   );
-  $handler->display->display_options['style_options']['detailed_values'] = '0';
-  $handler->display->display_options['style_options']['precision'] = '0';
+  /* Field: Content: Nid */
+  $handler->display->display_options['fields']['nid']['id'] = 'nid';
+  $handler->display->display_options['fields']['nid']['table'] = 'node';
+  $handler->display->display_options['fields']['nid']['field'] = 'nid';
+  $handler->display->display_options['fields']['nid']['exclude'] = TRUE;
   /* Field: Content: Work date */
   $handler->display->display_options['fields']['field_work_date']['id'] = 'field_work_date';
   $handler->display->display_options['fields']['field_work_date']['table'] = 'field_data_field_work_date';
   $handler->display->display_options['fields']['field_work_date']['field'] = 'field_work_date';
+  $handler->display->display_options['fields']['field_work_date']['alter']['make_link'] = TRUE;
+  $handler->display->display_options['fields']['field_work_date']['alter']['path'] = 'node/[nid]';
   $handler->display->display_options['fields']['field_work_date']['settings'] = array(
     'format_type' => 'short',
     'fromto' => 'both',
     'multiple_number' => '',
     'multiple_from' => '',
     'multiple_to' => '',
+    'show_remaining_days' => 0,
   );
   /* Field: Content: Hours */
   $handler->display->display_options['fields']['field_track_hours']['id'] = 'field_track_hours';
@@ -577,6 +553,54 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['fields']['field_description']['id'] = 'field_description';
   $handler->display->display_options['fields']['field_description']['table'] = 'field_data_field_description';
   $handler->display->display_options['fields']['field_description']['field'] = 'field_description';
+  /* Field: Content: Issues logs */
+  $handler->display->display_options['fields']['field_issues_logs']['id'] = 'field_issues_logs';
+  $handler->display->display_options['fields']['field_issues_logs']['table'] = 'field_data_field_issues_logs';
+  $handler->display->display_options['fields']['field_issues_logs']['field'] = 'field_issues_logs';
+  $handler->display->display_options['fields']['field_issues_logs']['click_sort_column'] = 'field_github_issue_target_id';
+  $handler->display->display_options['fields']['field_issues_logs']['settings'] = array(
+    'view_mode' => 'default',
+  );
+  $handler->display->display_options['fields']['field_issues_logs']['delta_offset'] = '0';
+  /* Field: Bulk operations: Content */
+  $handler->display->display_options['fields']['views_bulk_operations']['id'] = 'views_bulk_operations';
+  $handler->display->display_options['fields']['views_bulk_operations']['table'] = 'node';
+  $handler->display->display_options['fields']['views_bulk_operations']['field'] = 'views_bulk_operations';
+  $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['display_type'] = '0';
+  $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['enable_select_all_pages'] = 1;
+  $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['row_clickable'] = 1;
+  $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['force_single'] = 0;
+  $handler->display->display_options['fields']['views_bulk_operations']['vbo_settings']['entity_load_capacity'] = '10';
+  $handler->display->display_options['fields']['views_bulk_operations']['vbo_operations'] = array(
+    'action::views_bulk_operations_delete_item' => array(
+      'selected' => 1,
+      'postpone_processing' => 0,
+      'skip_confirmation' => 1,
+      'override_label' => 0,
+      'label' => '',
+    ),
+    'action::views_bulk_operations_modify_action' => array(
+      'selected' => 1,
+      'postpone_processing' => 0,
+      'skip_confirmation' => 1,
+      'override_label' => 0,
+      'label' => '',
+      'settings' => array(
+        'show_all_tokens' => 1,
+        'display_values' => array(
+          'time_tracking::field_employee' => 'time_tracking::field_employee',
+        ),
+      ),
+    ),
+  );
+  /* Field: Content: Employee */
+  $handler->display->display_options['fields']['field_employee']['id'] = 'field_employee';
+  $handler->display->display_options['fields']['field_employee']['table'] = 'field_data_field_employee';
+  $handler->display->display_options['fields']['field_employee']['field'] = 'field_employee';
+  $handler->display->display_options['fields']['field_employee']['label'] = 'Developer';
+  $handler->display->display_options['fields']['field_employee']['settings'] = array(
+    'link' => 0,
+  );
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -606,10 +630,12 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['operator'] = 'field_project_target_id_entityreference_filter_op';
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['identifier'] = 'field_project_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['required'] = TRUE;
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['remember'] = TRUE;
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
     3 => 0,
+    4 => 0,
   );
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['hide_empty_filter'] = FALSE;
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['reference_display'] = 'entity_ref_list:entityreference_1';
@@ -635,8 +661,25 @@ function productivity_admin_views_default_views() {
     2 => '2',
     3 => '3',
     1 => 0,
+    4 => 0,
   );
   $handler->display->display_options['filters']['field_work_date_value']['granularity'] = 'month';
+  /* Filter criterion: Content: Issues logs (field_issues_logs:field_issue_type_value) */
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['id'] = 'field_issues_logs_field_issue_type_value';
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['table'] = 'field_data_field_issues_logs';
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['field'] = 'field_issues_logs_field_issue_type_value';
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['operator'] = 'contains';
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['expose']['operator_id'] = 'field_issues_logs_field_issue_type_value_op';
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['expose']['label'] = 'Issue type';
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['expose']['description'] = 'dev, qa, management, designer, non_billable, review';
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['expose']['operator'] = 'field_issues_logs_field_issue_type_value_op';
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['expose']['identifier'] = 'field_issues_logs_field_issue_type_value';
+  $handler->display->display_options['filters']['field_issues_logs_field_issue_type_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+  );
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');
@@ -862,20 +905,6 @@ function productivity_admin_views_default_views() {
       ),
       'postpone_processing' => 0,
     ),
-    'action::system_message_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
-    'action::views_bulk_operations_script_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
     'action::node_make_sticky_action' => array(
       'selected' => 1,
       'skip_confirmation' => 1,
@@ -889,15 +918,6 @@ function productivity_admin_views_default_views() {
       'override_label' => 1,
       'label' => 'Unstick',
       'postpone_processing' => 0,
-    ),
-    'action::views_bulk_operations_argument_selector_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'settings' => array(
-        'url' => '',
-      ),
     ),
     'action::node_promote_action' => array(
       'selected' => 1,
@@ -913,13 +933,6 @@ function productivity_admin_views_default_views() {
       'label' => 'Publish',
       'postpone_processing' => 0,
     ),
-    'action::system_goto_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
     'action::node_unpromote_action' => array(
       'selected' => 1,
       'skip_confirmation' => 1,
@@ -927,32 +940,11 @@ function productivity_admin_views_default_views() {
       'label' => 'Demote from front page',
       'postpone_processing' => 0,
     ),
-    'action::node_save_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
-    'action::system_send_email_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
     'action::node_unpublish_action' => array(
       'selected' => 1,
       'skip_confirmation' => 1,
       'override_label' => 1,
       'label' => 'Unpublish',
-      'postpone_processing' => 0,
-    ),
-    'action::node_unpublish_by_keyword_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
       'postpone_processing' => 0,
     ),
   );
@@ -990,16 +982,16 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['fields']['field_project']['settings'] = array(
     'link' => 0,
   );
-  /* Field: Content: Rate */
+  /* Field: Field: Rate */
   $handler->display->display_options['fields']['field_rate']['id'] = 'field_rate';
   $handler->display->display_options['fields']['field_rate']['table'] = 'field_data_field_rate';
   $handler->display->display_options['fields']['field_rate']['field'] = 'field_rate';
   $handler->display->display_options['fields']['field_rate']['click_sort_column'] = 'amount';
-  /* Field: Content: Rate type */
+  /* Field: Field: Rate type */
   $handler->display->display_options['fields']['field_rate_type']['id'] = 'field_rate_type';
   $handler->display->display_options['fields']['field_rate_type']['table'] = 'field_data_field_rate_type';
   $handler->display->display_options['fields']['field_rate_type']['field'] = 'field_rate_type';
-  /* Field: Content: Scope */
+  /* Field: Field: Scope */
   $handler->display->display_options['fields']['field_scope']['id'] = 'field_scope';
   $handler->display->display_options['fields']['field_scope']['table'] = 'field_data_field_scope';
   $handler->display->display_options['fields']['field_scope']['field'] = 'field_scope';
@@ -1023,7 +1015,7 @@ function productivity_admin_views_default_views() {
     'multiple_from' => '',
     'multiple_to' => '',
   );
-  /* Field: Content: Total hours */
+  /* Field: Field: Total hours */
   $handler->display->display_options['fields']['field_hours']['id'] = 'field_hours';
   $handler->display->display_options['fields']['field_hours']['table'] = 'field_data_field_hours';
   $handler->display->display_options['fields']['field_hours']['field'] = 'field_hours';
@@ -1033,7 +1025,6 @@ function productivity_admin_views_default_views() {
     'scale' => '2',
     'prefix_suffix' => 1,
   );
-
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';
@@ -1234,6 +1225,12 @@ function productivity_admin_views_default_views() {
   );
   $handler->display->display_options['style_options']['sticky'] = TRUE;
   $handler->display->display_options['style_options']['empty_table'] = TRUE;
+  /* Header: Global: Text area */
+  $handler->display->display_options['header']['area']['id'] = 'area';
+  $handler->display->display_options['header']['area']['table'] = 'views';
+  $handler->display->display_options['header']['area']['field'] = 'area';
+  $handler->display->display_options['header']['area']['content'] = '<a href="/node/add/time-tracking">Add time tracking</a>';
+  $handler->display->display_options['header']['area']['format'] = 'filtered_html';
   /* No results behavior: Global: Unfiltered text */
   $handler->display->display_options['empty']['area_text_custom']['id'] = 'area_text_custom';
   $handler->display->display_options['empty']['area_text_custom']['table'] = 'views';
@@ -1291,20 +1288,6 @@ function productivity_admin_views_default_views() {
       ),
       'postpone_processing' => 0,
     ),
-    'action::system_message_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
-    'action::views_bulk_operations_script_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
     'action::node_make_sticky_action' => array(
       'selected' => 1,
       'skip_confirmation' => 1,
@@ -1318,15 +1301,6 @@ function productivity_admin_views_default_views() {
       'override_label' => 1,
       'label' => 'Unstick',
       'postpone_processing' => 0,
-    ),
-    'action::views_bulk_operations_argument_selector_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'settings' => array(
-        'url' => '',
-      ),
     ),
     'action::node_promote_action' => array(
       'selected' => 1,
@@ -1342,13 +1316,6 @@ function productivity_admin_views_default_views() {
       'label' => 'Publish',
       'postpone_processing' => 0,
     ),
-    'action::system_goto_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
     'action::node_unpromote_action' => array(
       'selected' => 1,
       'skip_confirmation' => 1,
@@ -1356,32 +1323,11 @@ function productivity_admin_views_default_views() {
       'label' => 'Demote from front page',
       'postpone_processing' => 0,
     ),
-    'action::node_save_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
-    'action::system_send_email_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
-      'postpone_processing' => 0,
-    ),
     'action::node_unpublish_action' => array(
       'selected' => 1,
       'skip_confirmation' => 1,
       'override_label' => 1,
       'label' => 'Unpublish',
-      'postpone_processing' => 0,
-    ),
-    'action::node_unpublish_by_keyword_action' => array(
-      'selected' => 0,
-      'skip_confirmation' => 0,
-      'override_label' => 0,
-      'label' => '',
       'postpone_processing' => 0,
     ),
   );
@@ -1450,10 +1396,6 @@ function productivity_admin_views_default_views() {
     'scale' => '2',
     'prefix_suffix' => 1,
   );
-  /* Field: Broken/missing handler */
-  $handler->display->display_options['fields']['field_work_length']['id'] = 'field_work_length';
-  $handler->display->display_options['fields']['field_work_length']['table'] = 'field_data_field_work_length';
-  $handler->display->display_options['fields']['field_work_length']['field'] = 'field_work_length';
   /* Filter criterion: Content: Title */
   $handler->display->display_options['filters']['title']['id'] = 'title';
   $handler->display->display_options['filters']['title']['table'] = 'node';
@@ -1519,19 +1461,77 @@ function productivity_admin_views_default_views() {
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page_1');
+  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
+  $handler->display->display_options['defaults']['filters'] = FALSE;
+  /* Filter criterion: Content: Title */
+  $handler->display->display_options['filters']['title']['id'] = 'title';
+  $handler->display->display_options['filters']['title']['table'] = 'node';
+  $handler->display->display_options['filters']['title']['field'] = 'title';
+  $handler->display->display_options['filters']['title']['operator'] = 'contains';
+  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['label'] = 'Title';
+  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
+  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
+  $handler->display->display_options['filters']['title']['expose']['remember'] = TRUE;
+  /* Filter criterion: Content: Type */
+  $handler->display->display_options['filters']['type']['id'] = 'type';
+  $handler->display->display_options['filters']['type']['table'] = 'node';
+  $handler->display->display_options['filters']['type']['field'] = 'type';
+  $handler->display->display_options['filters']['type']['value'] = array(
+    'time_tracking' => 'time_tracking',
+  );
+  $handler->display->display_options['filters']['type']['expose']['operator_id'] = 'type_op';
+  $handler->display->display_options['filters']['type']['expose']['label'] = 'Type';
+  $handler->display->display_options['filters']['type']['expose']['operator'] = 'type_op';
+  $handler->display->display_options['filters']['type']['expose']['identifier'] = 'type';
+  $handler->display->display_options['filters']['type']['expose']['remember'] = TRUE;
+  /* Filter criterion: Content: Published */
+  $handler->display->display_options['filters']['status']['id'] = 'status';
+  $handler->display->display_options['filters']['status']['table'] = 'node';
+  $handler->display->display_options['filters']['status']['field'] = 'status';
+  $handler->display->display_options['filters']['status']['value'] = 'All';
+  $handler->display->display_options['filters']['status']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['status']['expose']['operator_id'] = '';
+  $handler->display->display_options['filters']['status']['expose']['label'] = 'Published';
+  $handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
+  $handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
+  $handler->display->display_options['filters']['status']['expose']['remember'] = TRUE;
+  /* Filter criterion: Content: Day type (field_day_type) */
+  $handler->display->display_options['filters']['field_day_type_value']['id'] = 'field_day_type_value';
+  $handler->display->display_options['filters']['field_day_type_value']['table'] = 'field_data_field_day_type';
+  $handler->display->display_options['filters']['field_day_type_value']['field'] = 'field_day_type_value';
+  $handler->display->display_options['filters']['field_day_type_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_day_type_value']['expose']['operator_id'] = 'field_day_type_value_op';
+  $handler->display->display_options['filters']['field_day_type_value']['expose']['label'] = 'Day type';
+  $handler->display->display_options['filters']['field_day_type_value']['expose']['operator'] = 'field_day_type_value_op';
+  $handler->display->display_options['filters']['field_day_type_value']['expose']['identifier'] = 'field_day_type_value';
+  $handler->display->display_options['filters']['field_day_type_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+  );
+  /* Filter criterion: Content: Project (field_project) (reference filter) */
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['id'] = 'field_project_target_id_entityreference_filter';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['table'] = 'field_data_field_project';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['field'] = 'field_project_target_id_entityreference_filter';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['operator_id'] = 'field_project_target_id_entityreference_filter_op';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['label'] = 'Project';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['operator'] = 'field_project_target_id_entityreference_filter_op';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['identifier'] = 'field_project_target_id_entityreference_filter';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+  );
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['reference_display'] = 'entity_ref_list:entityreference_1';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['reference_arguments'] = 'project';
   $handler->display->display_options['path'] = 'admin/content/tracking';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'Tracking';
-  $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'management';
-  $handler->display->display_options['menu']['context'] = 0;
-  $handler->display->display_options['menu']['context_only_inline'] = 0;
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page_2');
-  $handler->display->display_options['path'] = 'admin/content/projects';
-  $handler->display->display_options['menu']['type'] = 'tab';
-  $handler->display->display_options['menu']['title'] = 'Projects';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['name'] = 'management';
   $handler->display->display_options['menu']['context'] = 0;
