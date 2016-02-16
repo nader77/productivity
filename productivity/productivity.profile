@@ -148,7 +148,6 @@ function productivity_setup_set_variables() {
     'jquery_update_jquery_admin_version' => '1.5',
     'productivity_time_tracking_hours_count_as_day' => 7,
     'site_frontpage' => 'dashboard',
-    'restful_skip_basic_auth' => TRUE,
   );
 
   foreach ($variables as $key => $value) {
