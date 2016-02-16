@@ -1,39 +1,36 @@
 <?php
+/**
+ * @file
+ * Code for the Productivity time tracking feature.
+ */
+define('PRODUCTIVITY_GITHUB_ISSUE_OPEN_STATUS', 'WIP');
+define('PRODUCTIVITY_GITHUB_ISSUE_CLOSED_STATUS', 'Done');
 
 /**
- * Plugin definition.
- *
- * Display the Monthly Report.
+ * Menu callback; display tracking table for issues.
  */
-$plugin = array(
-  'title' => t('Monthly Report'),
-  'description' => t('Display monthly_report'),
-  'category' => t('Productivity'),
-  'hook theme' => 'productivity_monthly_report_theme',
-  'required context' => new ctools_context_required(t('Node'), 'node'),
-);
+function productivity_time_tracking_issue_table_callback($project_node, $year, $month) {
+  return productivity_time_tracking_issue_table($project_node, $year, $month);
+}
 
 /**
  * Render callback;  Bidder page.
  */
-function productivity_time_tracking_monthly_report_content_type_render($subtype, $conf, $args, $context) {
+function productivity_time_tracking_issue_table($node, $year, $month) {
   global $base_url;
   // Add JavaScript file with the base url of the page.
-  drupal_add_js(drupal_get_path('module', 'productivity_time_tracking') . '/plugins/content_types/monthly-report/monthly_report.js');
-  drupal_add_css(drupal_get_path('module', 'productivity_time_tracking') . '/plugins/content_types/monthly-report/monthly_report.css');
+  drupal_add_js(drupal_get_path('module', 'productivity_time_tracking') . '/monthly-report/monthly_report.js');
+  drupal_add_css(drupal_get_path('module', 'productivity_time_tracking') . '/monthly-report/monthly_report.css');
   drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
   drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
   drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
 
-  $node = $context->data;
-  if ($node->type != 'project') {
-    return;
-  }
   drupal_add_js(array('monthly_report' => array(
     'base_url' => $base_url,
     'project_id' => $node->nid,
     )
   ), 'setting');
+
   $wrapper = entity_metadata_wrapper('node', $node);
 
   $variables = array();
@@ -55,7 +52,7 @@ function productivity_time_tracking_monthly_report_content_type_render($subtype,
   $variables['no_result'] = FALSE;
   $variables['message'] = '';
   if ($nodes) {
-    $issues_table = _productivity_time_tracking_create_issues_table($nodes);
+    $issues_table = productivity_time_tracking_create_issues_table($nodes);
   }
   else {
     $variables['no_result'] = TRUE;
@@ -94,11 +91,7 @@ function productivity_time_tracking_monthly_report_content_type_render($subtype,
   $variables['projects'] = productivity_project_get_all_projects();
   $variables['current_project_id'] = $node->nid;
 
-  $block = new stdClass();
-  $block->module = 'productivity_time_tracking';
-  $block->content = theme('productivity_monthly_report', $variables);
-
-  return $block;
+  return theme('productivity_monthly_report', $variables);
 }
 
 /**
@@ -111,7 +104,7 @@ function productivity_time_tracking_monthly_report_content_type_render($subtype,
  * @return array
  *  Matrix of all the issues, and the URL project
  */
-function _productivity_time_tracking_create_issues_table($nodes) {
+function productivity_time_tracking_create_issues_table($nodes) {
   $issues_table = array();
   foreach($nodes as $node) {
     $wrapper = entity_metadata_wrapper('node', $node);
@@ -147,27 +140,3 @@ function _productivity_time_tracking_create_issues_table($nodes) {
   }
   return $issues_table;
 }
-
-/**
- * Delegated hook_theme().
- */
-function productivity_monthly_report_theme(&$theme, $plugin) {
-  $theme['productivity_monthly_report'] = array(
-    'variables' => array(
-      'project_title' => NULL,
-      'table' => NULL,
-      'table_titles' => NULL,
-    ),
-    'path' => $plugin['path'],
-    'template' => 'monthly_report',
-  );
-
-  $theme['productivity_monthly_report_pdf'] = array(
-    'variables' => array(
-      'image_path' => NULL,
-    ),
-    'path' => $plugin['path'],
-    'template' => 'monthly_report_pdf',
-  );
-}
-

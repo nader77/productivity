@@ -7,11 +7,54 @@
 include_once 'productivity_time_tracking.features.inc';
 
 /**
+ * Implements hook_menu().
+ */
+function productivity_time_tracking_menu() {
+  $items['monthly-report/%node/%/%'] = array(
+    'title' => 'Issue tracking table',
+    'access arguments' => array('access admin panel'),
+    'page callback' => 'productivity_time_tracking_issue_table_callback',
+    'page arguments' => array(1, 2, 3),
+    'type' => MENU_CALLBACK,
+    'file' => 'monthly_report/productivity_time_tracking.table.inc'
+  );
+
+  $items['mailgun/get-tracking'] = array(
+    'title' => 'Create time tracking',
+    'access arguments' => array('access content'),
+    'page callback' => 'productivity_time_tracking_mail_create',
+    'access callback' => 'user_is_anonymous',
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function productivity_time_tracking_theme() {
+  return array(
+    'productivity_time_tracking_monthly_report' => array(
+      'variables' => array(
+        'project_title' => NULL,
+        'table' => NULL,
+        'table_titles' => NULL,
+      ),
+      'path' => drupal_get_path('module', 'productivity_time_tracking') . '/monthly-report',
+      'template' => 'monthly_report',
+    ),
+  );
+}
+
+
+
+/**
  * Implements hook_form_FORM_ID_alter().
  *
  * Disables the hours and days fields in tracking's node edit form.
  */
-function productivity_project_form_time_tracking_node_form_alter(&$form, &$form_state) {
+function productivity_time_tracking_form_time_tracking_node_form_alter(&$form, &$form_state) {
   // Disable auto generated fields
   $form['field_track_hours']['#disabled'] = TRUE;
   foreach($form['field_issues_logs']['und'] as &$field_hours){
@@ -296,24 +339,6 @@ function productivity_time_tracking_node_presave($node) {
     // TODO: improve by sending an invite to calendar meeting.
     productivity_project_logged_hours_notify($wrapper->field_project->value());
   }
-}
-
-/**
- * Implements hook_menu().
- *
- * Callback for mailgun.
- */
-function productivity_time_tracking_menu() {
-  $items = array();
-  // Create a time tracking node(s) from mailGun JSON.
-  $items['mailgun/get-tracking'] = array(
-    'title' => 'Create time tracking',
-    'access arguments' => array('access content'),
-    'page callback' => 'productivity_time_tracking_mail_create',
-    'access callback' => 'user_is_anonymous',
-    'type' => MENU_CALLBACK,
-  );
-  return $items;
 }
 
 /**
