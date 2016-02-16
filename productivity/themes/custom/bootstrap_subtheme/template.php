@@ -93,7 +93,15 @@ function bootstrap_subtheme_element_info_alter(&$elements) {
   }
 }
 
-
+/**
+ * Get a chart render array from the calculated rows when displaying a project.
+ *
+ * @param $rows
+ *   Rows from the "Hours by type" table.
+ *
+ * @return Array
+ *   Pre-rendered array for a pie chart.
+ */
 function _bootstrap_subtheme_get_hours_type_chart($rows) {
   $types = array();
   $hours = array();
