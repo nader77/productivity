@@ -609,8 +609,8 @@ function productivity_project_get_developer_chart($node = NULL) {
   $chart['pie_data'] = array(
     '#type' => 'chart_data',
     '#title' => t('Developer'),
-    '#labels' => $developers, //array('Male', 'Female'),
-    '#data' => $developer_hours, // array(10, 25),
+    '#labels' => $developers,
+    '#data' => $developer_hours,
   );
 
   $chart_container['chart'] = $chart;
