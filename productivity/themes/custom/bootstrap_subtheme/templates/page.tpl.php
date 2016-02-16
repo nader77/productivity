@@ -304,7 +304,7 @@
                   </a>
                   <ul class="submenu reports collapse">
                     <li>
-                      <a href="<?php print $base_path;?>admin/content/project-monthly-report">Monthly report</a>
+                      <a href="<?php print $base_path;?>monthly-report">Monthly report</a>
                     </li>
                     <li>
                       <a href="<?php print $base_path;?>admin/content/projects">Projects</a>

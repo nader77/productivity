@@ -10,6 +10,14 @@ include_once 'productivity_time_tracking.features.inc';
  * Implements hook_menu().
  */
 function productivity_time_tracking_menu() {
+  $items['monthly-report'] = array(
+    'title' => 'Issue tracking table',
+    'access arguments' => array('access admin panel'),
+    'page callback' => 'productivity_time_tracking_issue_table_callback',
+    'type' => MENU_CALLBACK,
+    'file' => 'monthly_report/productivity_time_tracking.table.inc'
+  );
+
   $items['monthly-report/%node/%/%'] = array(
     'title' => 'Issue tracking table',
     'access arguments' => array('access admin panel'),
@@ -43,6 +51,15 @@ function productivity_time_tracking_theme() {
       ),
       'path' => drupal_get_path('module', 'productivity_time_tracking') . '/monthly_report',
       'template' => 'monthly_report',
+    ),
+    'productivity_time_tracking_monthly_report_table' => array(
+      'variables' => array(
+        'project_title' => NULL,
+        'table' => NULL,
+        'table_titles' => NULL,
+      ),
+      'path' => drupal_get_path('module', 'productivity_time_tracking') . '/monthly_report',
+      'template' => 'monthly_report_table',
     ),
   );
 }

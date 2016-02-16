@@ -9,14 +9,14 @@ define('PRODUCTIVITY_GITHUB_ISSUE_CLOSED_STATUS', 'Done');
 /**
  * Menu callback; display tracking table for issues.
  */
-function productivity_time_tracking_issue_table_callback($project_node, $year, $month) {
-  return productivity_time_tracking_issue_table($project_node, $year, $month);
+function productivity_time_tracking_issue_table_callback($node = FALSE, $year = FALSE, $month = FALSE) {
+  return productivity_time_tracking_issue_table($node, $year, $month);
 }
 
 /**
  * Render callback;  Bidder page.
  */
-function productivity_time_tracking_issue_table($node, $year, $month) {
+function productivity_time_tracking_issue_table($node = FALSE, $year = FALSE, $month = FALSE) {
   global $base_url;
   // Add JavaScript file with the base url of the page.
   drupal_add_js(drupal_get_path('module', 'productivity_time_tracking') . '/monthly_report/monthly_report.js');
@@ -25,17 +25,36 @@ function productivity_time_tracking_issue_table($node, $year, $month) {
   drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
   drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
 
+
+  $variables = array();
+  $variables['year'] = !empty($year) ? $year : date('Y');
+  $variables['month']= !empty($month) ? $month : date('m', strtotime("-1 month"));
+  $variables['projects'] = productivity_project_get_all_projects();
+  $variables['current_project_id'] = 0;
+  $variables['project_title'] = 'Select a project';
+  $variables['account'] = '';
+  $variables['no_result'] = FALSE;
+  $variables['message'] = '';
+
   drupal_add_js(array('monthly_report' => array(
     'base_url' => $base_url,
+    'year' => $variables['year'],
+    'month' => $variables['month'],
+    )
+  ), 'setting');
+
+  // No project given.
+  if (!$node) {
+    return theme('productivity_time_tracking_monthly_report', $variables);
+  }
+
+  drupal_add_js(array('monthly_report' => array(
     'project_id' => $node->nid,
-    'year' => $year,
-    'month' => $month,
     )
   ), 'setting');
 
   $wrapper = entity_metadata_wrapper('node', $node);
 
-  $variables = array();
   $variables['project_title'] = $wrapper->label();
   $variables['account'] = $wrapper->field_account->label();
 
@@ -46,13 +65,10 @@ function productivity_time_tracking_issue_table($node, $year, $month) {
     $project_url = "https://github.com/$first_repo_name";
   }
 
-  $variables['year'] = isset($year) ? $year : date('Y');
-  $variables['month']= isset($month) ? $month : date('m', strtotime("-1 month"));
-
   $nodes = productivity_github_get_project_github_issues_query($node->nid, $variables['year'], $variables['month']);
   $issues_table = array();
-  $variables['no_result'] = FALSE;
-  $variables['message'] = '';
+
+  // Get all issues for the project.
   if ($nodes) {
     $issues_table = productivity_time_tracking_create_issues_table($nodes);
   }
@@ -90,8 +106,9 @@ function productivity_time_tracking_issue_table($node, $year, $month) {
   }
 
   // Get all the projects for project input
-  $variables['projects'] = productivity_project_get_all_projects();
   $variables['current_project_id'] = $node->nid;
+
+  $variables['table'] = theme('productivity_time_tracking_monthly_report_table', $variables);
 
   return theme('productivity_time_tracking_monthly_report', $variables);
 }
@@ -119,26 +136,23 @@ function productivity_time_tracking_create_issues_table($nodes) {
       if(empty($issues_table[$type])) {
         $issues_table[$type] = array();
       }
-      // Check if the time spent on the issue is not 0.
-      if(intval($issue_log_wrapper->field_time_spent->value())) {
-        // push the issue details to the type table.
-        $rate = productivity_project_get_rate($wrapper->field_project->getIdentifier(), $type);
-        /// The table length of every type.
-        $issue_id = '#';
-        if (isset($issue_log_wrapper->field_github_issue->field_issue_id)) {
-          $issue_id = $issue_log_wrapper->field_github_issue->field_issue_id->value();
-        }
-
-        $issues_table[$type]['label'] = $issue_log_wrapper->field_issue_type->label();
-        $issues_table[$type]['issues'][] = array(
-          'issue_num' => $issue_id,
-          'label' => $issue_log_wrapper->field_issue_label->value(),
-          'date' => $date,
-          'time' => $issue_log_wrapper->field_time_spent->value(),
-          'issue_amount' => $issue_log_wrapper->field_time_spent->value() * $rate['amount'],
-          'issue_currency' => $rate['currency']
-        );
+      // push the issue details to the type table.
+      $rate = productivity_project_get_rate($wrapper->field_project->getIdentifier(), $type);
+      /// The table length of every type.
+      $issue_id = '#';
+      if (isset($issue_log_wrapper->field_github_issue->field_issue_id)) {
+        $issue_id = $issue_log_wrapper->field_github_issue->field_issue_id->value();
       }
+
+      $issues_table[$type]['label'] = $issue_log_wrapper->field_issue_type->label();
+      $issues_table[$type]['issues'][] = array(
+        'issue_num' => $issue_id,
+        'label' => $issue_log_wrapper->field_issue_label->value(),
+        'date' => $date,
+        'time' => $issue_log_wrapper->field_time_spent->value(),
+        'issue_amount' => $issue_log_wrapper->field_time_spent->value() * $rate['amount'],
+        'issue_currency' => $rate['currency']
+      );
     }
   }
   return $issues_table;
