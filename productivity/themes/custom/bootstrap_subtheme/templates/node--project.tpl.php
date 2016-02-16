@@ -83,20 +83,6 @@
 
 <h1><?php print $title;?></h1>
 <div class="row">
-  <?php if (!empty($developer_chart)): ?>
-    <div class="col-lg-4 col-sm-6 col-xs-12">
-      <div class="main-box infographic-box">
-        <?php print $developer_chart; ?>
-      </div>
-    </div>
-  <?php endif; ?>
-  <?php if (!empty($hours_chart)): ?>
-    <div class="col-lg-4 col-sm-6 col-xs-12">
-      <div class="main-box infographic-box">
-        <?php print $hours_chart; ?>
-      </div>
-    </div>
-  <?php endif; ?>
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-hand-o-up red-bg"></i>
@@ -111,8 +97,6 @@
       <span class="value"><?php print render($content['field_type']);?></span>
     </div>
   </div>
-</div>
-<div class="row">
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-money yellow-bg"></i>
@@ -120,6 +104,20 @@
       <span class="value"><?php print $days;?></span>
     </div>
   </div>
+  <?php if (!empty($developer_chart)): ?>
+    <div class="col-lg-4 col-sm-6 col-xs-12">
+      <div class="main-box infographic-box">
+        <?php print $developer_chart; ?>
+      </div>
+    </div>
+  <?php endif; ?>
+  <?php if (!empty($hours_chart)): ?>
+    <div class="col-lg-4 col-sm-6 col-xs-12">
+      <div class="main-box infographic-box">
+        <?php print $hours_chart; ?>
+      </div>
+    </div>
+  <?php endif; ?>
   <div class="col-xs-12">
     <div class="main-box infographic-box">
       <?php print $table; ?>
