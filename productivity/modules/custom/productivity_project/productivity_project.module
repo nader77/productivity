@@ -598,7 +598,7 @@ function productivity_project_get_developer_chart($node = NULL) {
 
   $chart = array(
     '#type' => 'chart',
-    '#title' => t('Developers'),
+    '#title' => t('Hours by developers'),
     '#chart_type' => 'pie',
     '#chart_library' => 'highcharts',
     '#legend_position' => 'right',
