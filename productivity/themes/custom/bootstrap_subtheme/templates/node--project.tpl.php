@@ -85,6 +85,11 @@
 <div class="row">
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
+      <?php print $developer_chart; ?>
+    </div>
+  </div>
+  <div class="col-lg-4 col-sm-6 col-xs-12">
+    <div class="main-box infographic-box">
       <i class="fa fa-hand-o-up red-bg"></i>
       <span class="headline"><?php print t('Total Hours Done') ?></span>
       <span class="value"><?php print render($content['field_hours']);?></span>
@@ -102,11 +107,6 @@
       <i class="fa fa-money yellow-bg"></i>
       <span class="headline"><?php print t('Days') ?></span>
       <span class="value"><?php print $days;?></span>
-    </div>
-  </div>
-  <div class="col-lg-4 col-sm-6 col-xs-12">
-    <div class="main-box infographic-box">
-      <?php print $developer_chart; ?>
     </div>
   </div>
   <div class="col-xs-12">
