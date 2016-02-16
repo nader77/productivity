@@ -19,7 +19,6 @@ function productivity_github_time_tracking_issue_table($project_nid) {
       t('Overtime'),
       t('Status'),
     ),
-    'data' => array(),
     'attributes' => array('class' => array('per-issue-table')),
   );
 
@@ -108,10 +107,12 @@ function productivity_github_time_tracking_issue_table($project_nid) {
  *
  * @param int $project_node_id
  *   Project to process.
- * @return string
- *   Rendered HTML.
+ * @param bool $show_link
+ *  Whether to show or hide the link to the tracking list.
+ * @return string Rendered HTML.
+ * Rendered HTML.
  */
-function productivity_github_time_display_tracking_issue_table($project_node_id = 0) {
+function productivity_github_time_display_tracking_issue_table($project_node_id = 0, $show_link = TRUE) {
   if (!$project_node_id) {
 
     return theme('item_list', array('items' => productivity_time_tracking_issue_table_get_list()));
@@ -127,7 +128,7 @@ function productivity_github_time_display_tracking_issue_table($project_node_id 
   }
 
   // Add a link to go to the project selection.
-  $go_back_link = '<div class="back-link">' . l(t('Back to project list'), 'tracking/per-issue') . '</div>';
+  $go_back_link = $show_link ? '<div class="back-link">' . l(t('Back to project list'), 'tracking/per-issue') . '</div>' : '';
 
   return  $go_back_link . theme('table', $table);
 }

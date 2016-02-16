@@ -10,6 +10,9 @@ projects[admin_menu][patch] = "https://www.drupal.org/files/issues/admin_menu-is
 projects[admin_views][subdir] = "contrib"
 projects[admin_views][version] = "1.5"
 
+projects[charts][subdir] = "contrib"
+projects[charts][version] = "2.x-dev"
+
 projects[ckeditor][subdir] = "contrib"
 projects[ckeditor][version] = "1.x-dev"
 

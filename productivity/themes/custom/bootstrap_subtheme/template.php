@@ -54,6 +54,15 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
 
   $variables['table'] = $table;
   $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), 'recalculate-project-time/' . $node->nid);
+
+  module_load_include('inc','productivity_github', 'productivity_github.table');
+  $variables['per_issue_table'] = productivity_github_time_display_tracking_issue_table($variables['nid'], FALSE);
+
+  $chart = productivity_project_get_developer_chart($node);
+  $variables['developer_chart'] = drupal_render($chart);
+
+  $chart = _bootstrap_subtheme_get_hours_type_chart($rows);
+  $variables['hours_chart'] = drupal_render($chart);
 }
 
 /**
@@ -82,4 +91,43 @@ function bootstrap_subtheme_element_info_alter(&$elements) {
       unset($elements['textfield']['#process'][$delta]);
     }
   }
+}
+
+/**
+ * Get a chart render array from the calculated rows when displaying a project.
+ *
+ * @param $rows
+ *   Rows from the "Hours by type" table.
+ *
+ * @return Array
+ *   Pre-rendered array for a pie chart.
+ */
+function _bootstrap_subtheme_get_hours_type_chart($rows) {
+  $types = array();
+  $hours = array();
+  foreach($rows as $row) {
+    $types[] = strip_tags($row['field_issue_type']);
+    $hours[] = floatval(strip_tags($row['field_hours']));
+  }
+
+  $chart = array(
+    '#type' => 'chart',
+    '#title' => t('Hours by type'),
+    '#chart_type' => 'pie',
+    '#chart_library' => 'highcharts',
+    '#legend_position' => 'right',
+    '#data_labels' => FALSE,
+    '#tooltips' => TRUE,
+  );
+
+  $chart['pie_data'] = array(
+    '#type' => 'chart_data',
+    '#title' => t('type'),
+    '#labels' => $types,
+    '#data' => $hours,
+  );
+
+  $chart_container['chart'] = $chart;
+
+  return $chart_container;
 }
