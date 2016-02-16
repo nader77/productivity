@@ -21,10 +21,10 @@
   /**
    * Set the current year and month on date input.
    */
-  function set_date_input() {
+  function set_date_input(settings) {
     // get the current month and year.
     var date = new Date();
-    var input_date = date.getFullYear() + '-' + date.getMonth() + 1;
+    var input_date = settings['monthly_report']['year'] + '-' + settings['monthly_report']['month'];
     // Set the month and year in the input month
     $('input[type=month]').val(input_date);
   }
@@ -32,7 +32,7 @@
   Drupal.behaviors.monthlyReports = {
     attach: function (context, settings) {
       var url = '';
-      set_date_input();
+      set_date_input(settings);
       $('#project_filter').select2();
 
       // Project select and date input handler.

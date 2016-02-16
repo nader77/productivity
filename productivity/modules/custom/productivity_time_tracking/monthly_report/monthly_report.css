@@ -1,3 +1,6 @@
+h1 {
+    display: none;
+}
 .main-box-body #project-title, .main-box-body h2.table-header {
   margin: 1%; }
 .main-box-body #header {

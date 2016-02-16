@@ -41,7 +41,7 @@ function productivity_time_tracking_theme() {
         'table' => NULL,
         'table_titles' => NULL,
       ),
-      'path' => drupal_get_path('module', 'productivity_time_tracking') . '/monthly-report',
+      'path' => drupal_get_path('module', 'productivity_time_tracking') . '/monthly_report',
       'template' => 'monthly_report',
     ),
   );
@@ -81,15 +81,6 @@ function productivity_time_tracking_form_system_site_information_settings_alter(
     '#title' => t('Managers email'),
     '#default_value' => variable_get('productivity_time_tracking_managers_email'),
   );
-}
-
-/**
- * Implements hook_ctools_plugin_directory().
- */
-function productivity_time_tracking_ctools_plugin_directory($module, $plugin) {
-  if ($module == 'ctools') {
-    return 'plugins/' . $plugin;
-  }
 }
 
 /**

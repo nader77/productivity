@@ -19,8 +19,8 @@ function productivity_time_tracking_issue_table_callback($project_node, $year, $
 function productivity_time_tracking_issue_table($node, $year, $month) {
   global $base_url;
   // Add JavaScript file with the base url of the page.
-  drupal_add_js(drupal_get_path('module', 'productivity_time_tracking') . '/monthly-report/monthly_report.js');
-  drupal_add_css(drupal_get_path('module', 'productivity_time_tracking') . '/monthly-report/monthly_report.css');
+  drupal_add_js(drupal_get_path('module', 'productivity_time_tracking') . '/monthly_report/monthly_report.js');
+  drupal_add_css(drupal_get_path('module', 'productivity_time_tracking') . '/monthly_report/monthly_report.css');
   drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
   drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
   drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
@@ -28,6 +28,8 @@ function productivity_time_tracking_issue_table($node, $year, $month) {
   drupal_add_js(array('monthly_report' => array(
     'base_url' => $base_url,
     'project_id' => $node->nid,
+    'year' => $year,
+    'month' => $month,
     )
   ), 'setting');
 
@@ -44,8 +46,8 @@ function productivity_time_tracking_issue_table($node, $year, $month) {
     $project_url = "https://github.com/$first_repo_name";
   }
 
-  $variables['year'] = isset($args[1]) ? $args[1] : date('Y');
-  $variables['month']= isset($args[2]) ? $args[2] : date('m', strtotime("-1 month"));
+  $variables['year'] = isset($year) ? $year : date('Y');
+  $variables['month']= isset($month) ? $month : date('m', strtotime("-1 month"));
 
   $nodes = productivity_github_get_project_github_issues_query($node->nid, $variables['year'], $variables['month']);
   $issues_table = array();
@@ -67,20 +69,20 @@ function productivity_time_tracking_issue_table($node, $year, $month) {
   $variables['grand_total'] = 0;
   $header = array('Issue', 'Label', 'Date', 'Time', 'Amount');
   foreach ($issues_table as $table_name => $table) {
-    $variables['table_titles'][] = $table_name;
+    $variables['table_titles'][$table_name] = $table['label'];
     $variables['total_per_types'][$table_name] = 0;
 
-    foreach ($table as $index => $issue) {
-      $rows[$index]['label'] = l($issue['issue_num'][0], $project_url . $issue['issue_num'][0], array('absolute' => TRUE));
-      $rows[$index]['gitHub_issue_num'] = $issue['label'][0];
-      $rows[$index]['date'] = $issue['date'][0];
-      $rows[$index]['time'] = $issue['time'][0];
-      $rows[$index]['amount'] = $issue['issue_amount'][0] . ' ' . $issue['issue_currency'][0];
-      $variables['total_per_types'][$table_name] += $issue['issue_amount'][0];
-      $variables['total_currency_per_types'][$table_name] = $issue['issue_currency'][0];
-      $variables['grand_total'] += $issue['issue_amount'][0];
+    foreach ($table['issues'] as $index => $issue) {
+      $rows[$index]['label'] = l($issue['issue_num'], $project_url . $issue['issue_num'], array('absolute' => TRUE));
+      $rows[$index]['gitHub_issue_num'] = $issue['label'];
+      $rows[$index]['date'] = $issue['date'];
+      $rows[$index]['time'] = $issue['time'];
+      $rows[$index]['amount'] = $issue['issue_amount'] . ' ' . $issue['issue_currency'];
+      $variables['total_per_types'][$table_name] += $issue['issue_amount'];
+      $variables['total_currency_per_types'][$table_name] = $issue['issue_currency'];
+      $variables['grand_total'] += $issue['issue_amount'];
     }
-    $variables['tables'][] = theme('table', array(
+    $variables['tables'][$table_name] = theme('table', array(
       'header' => $header,
       'rows' => $rows
     ));
@@ -91,7 +93,7 @@ function productivity_time_tracking_issue_table($node, $year, $month) {
   $variables['projects'] = productivity_project_get_all_projects();
   $variables['current_project_id'] = $node->nid;
 
-  return theme('productivity_monthly_report', $variables);
+  return theme('productivity_time_tracking_monthly_report', $variables);
 }
 
 /**
@@ -122,19 +124,20 @@ function productivity_time_tracking_create_issues_table($nodes) {
         // push the issue details to the type table.
         $rate = productivity_project_get_rate($wrapper->field_project->getIdentifier(), $type);
         /// The table length of every type.
-        $table_length = count($issues_table[$type]);
-
         $issue_id = '#';
         if (isset($issue_log_wrapper->field_github_issue->field_issue_id)) {
           $issue_id = $issue_log_wrapper->field_github_issue->field_issue_id->value();
         }
 
-        $issues_table[$type][$table_length]['issue_num'][] = $issue_id;
-        $issues_table[$type][$table_length]['label'][] = $issue_log_wrapper->field_issue_label->value();
-        $issues_table[$type][$table_length]['date'][] = $date;
-        $issues_table[$type][$table_length]['time'][] = $issue_log_wrapper->field_time_spent->value();
-        $issues_table[$type][$table_length]['issue_amount'][] = $issue_log_wrapper->field_time_spent->value() * $rate['amount'];
-        $issues_table[$type][$table_length]['issue_currency'][] = $rate['currency'];
+        $issues_table[$type]['label'] = $issue_log_wrapper->field_issue_type->label();
+        $issues_table[$type]['issues'][] = array(
+          'issue_num' => $issue_id,
+          'label' => $issue_log_wrapper->field_issue_label->value(),
+          'date' => $date,
+          'time' => $issue_log_wrapper->field_time_spent->value(),
+          'issue_amount' => $issue_log_wrapper->field_time_spent->value() * $rate['amount'],
+          'issue_currency' => $rate['currency']
+        );
       }
     }
   }

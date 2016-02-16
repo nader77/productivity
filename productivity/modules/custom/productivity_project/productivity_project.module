@@ -587,11 +587,11 @@ function productivity_project_get_all_projects() {
  *  return the scope amount or zero.
  *
  */
-function productivity_project_get_rate($project_nid, $scope_to_find) {
+function productivity_project_get_rate($project_nid, $work_type) {
   $rate = db_select('field_data_field_table_rate', 'table_rate')
     ->condition('bundle', 'project')
     ->condition('entity_id', $project_nid)
-    ->condition('field_table_rate_field_issue_type_value', $scope_to_find)
+    ->condition('field_table_rate_field_issue_type_value', $work_type)
     ->fields('table_rate', array('field_table_rate_field_rate_amount', 'field_table_rate_field_rate_currency'))
     ->execute()
     ->fetchAssoc();

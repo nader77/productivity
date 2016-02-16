@@ -45,7 +45,6 @@ features[field_instance][] = node-time_tracking-field_vacation_type
 features[field_instance][] = node-time_tracking-field_work_date
 features[message_type][] = mail_reminder
 features[node][] = time_tracking
-features[page_manager_pages][] = monthly_report_per_project
 features[variable][] = comment_anonymous_time_tracking
 features[variable][] = comment_default_mode_time_tracking
 features[variable][] = comment_default_per_page_time_tracking
