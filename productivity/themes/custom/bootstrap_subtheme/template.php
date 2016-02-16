@@ -59,6 +59,16 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
   $month = date('m', strtotime("-1 month"));
   $project_id = $node->nid;
   $variables['monthly_report_link'] = l(t('Monthly report'), "/monthly-report/$project_id/$year/$month");
+
+  // Add charts.
+  module_load_include('inc','productivity_github', 'productivity_github.table');
+  $variables['per_issue_table'] = productivity_github_time_display_tracking_issue_table($project_id, FALSE);
+
+  $chart = productivity_project_get_developer_chart($node);
+  $variables['developer_chart'] = drupal_render($chart);
+
+  $chart = _bootstrap_subtheme_get_hours_type_chart($rows);
+  $variables['hours_chart'] = drupal_render($chart);
 }
 
 /**
@@ -75,6 +85,7 @@ function bootstrap_subtheme_preprocess_html(&$variables) {
 function bootstrap_subtheme_preprocess_page(&$variables) {
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
 }
+
 /**
  * Implements hook_element_info_alter().
  *
@@ -87,4 +98,43 @@ function bootstrap_subtheme_element_info_alter(&$elements) {
       unset($elements['textfield']['#process'][$delta]);
     }
   }
+}
+
+/**
+ * Get a chart render array from the calculated rows when displaying a project.
+ *
+ * @param $rows
+ *   Rows from the "Hours by type" table.
+ *
+ * @return Array
+ *   Pre-rendered array for a pie chart.
+ */
+function _bootstrap_subtheme_get_hours_type_chart($rows) {
+  $types = array();
+  $hours = array();
+  foreach($rows as $row) {
+    $types[] = strip_tags($row['field_issue_type']);
+    $hours[] = floatval(strip_tags($row['field_hours']));
+  }
+
+  $chart = array(
+    '#type' => 'chart',
+    '#title' => t('Hours by type'),
+    '#chart_type' => 'pie',
+    '#chart_library' => 'highcharts',
+    '#legend_position' => 'right',
+    '#data_labels' => FALSE,
+    '#tooltips' => TRUE,
+  );
+
+  $chart['pie_data'] = array(
+    '#type' => 'chart_data',
+    '#title' => t('type'),
+    '#labels' => $types,
+    '#data' => $hours,
+  );
+
+  $chart_container['chart'] = $chart;
+
+  return $chart_container;
 }

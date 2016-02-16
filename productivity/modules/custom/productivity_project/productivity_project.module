@@ -557,6 +557,7 @@ function productivity_project_get_total_days($hours) {
 }
 
 /**
+<<<<<<< HEAD
  * Get list name of all project
  */
 function productivity_project_get_all_projects() {
@@ -599,4 +600,66 @@ function productivity_project_get_rate($project_nid, $scope_to_find) {
     'amount' => $rate['field_table_rate_field_rate_amount'],
     'currency' => $rate['field_table_rate_field_rate_currency'],
   );
+}
+
+/**
+ * Get chart for project hours by developers.
+ * @param $node
+ *  Project node.
+ */
+function productivity_project_get_developer_chart($node = NULL) {
+  if (!$node || !$node->nid) {
+    return;
+  }
+  $project_id = $node->nid;
+
+  // Get all work done in a project and specific type.
+  $query = db_select('node', 'n');
+  $query->join('field_data_field_project', 'p', 'n.nid = p.entity_id');
+  $query->join('field_data_field_track_hours', 'h', 'n.nid = h.entity_id');
+
+  $query->fields('n', array('uid'))
+    ->condition('p.field_project_target_id', $project_id)
+    ->condition('n.type', 'time_tracking');
+  $query->fields('h', array('field_track_hours_value'));
+  $query->addExpression('SUM(h.field_track_hours_value)');
+
+  $query->groupBy('n.uid');
+
+  $result = $query->execute()->fetchAll();
+
+
+  if (empty($result)) {
+    return array();
+  }
+
+  $developers = array();
+  $developer_hours = array();
+
+  foreach($result as $developer_data) {
+    $wrapper = entity_metadata_wrapper('user', $developer_data->uid);
+    $developers[] = $wrapper->label();
+    $developer_hours[] = floatval($developer_data->expression);
+  }
+
+  $chart = array(
+    '#type' => 'chart',
+    '#title' => t('Hours by developers'),
+    '#chart_type' => 'pie',
+    '#chart_library' => 'highcharts',
+    '#legend_position' => 'right',
+    '#data_labels' => FALSE,
+    '#tooltips' => TRUE,
+  );
+
+  $chart['pie_data'] = array(
+    '#type' => 'chart_data',
+    '#title' => t('Developer'),
+    '#labels' => $developers,
+    '#data' => $developer_hours,
+  );
+
+  $chart_container['chart'] = $chart;
+
+  return $chart_container;
 }
