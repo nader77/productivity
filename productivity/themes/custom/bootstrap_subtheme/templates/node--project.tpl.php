@@ -104,6 +104,7 @@
       <span class="value"><?php print $days;?></span>
     </div>
   </div>
+
   <?php if (!empty($developer_chart)): ?>
     <div class="col-lg-4 col-sm-6 col-xs-12">
       <div class="main-box infographic-box">
@@ -111,6 +112,7 @@
       </div>
     </div>
   <?php endif; ?>
+
   <?php if (!empty($hours_chart)): ?>
     <div class="col-lg-4 col-sm-6 col-xs-12">
       <div class="main-box infographic-box">
@@ -124,9 +126,16 @@
     </div>
   </div>
   <div class="col-xs-12">
-    <?php if (isset($recalculate_hours_days_link)) : ?>
-      <?php print $recalculate_hours_days_link; ?>
-    <?php endif; ?>
+  </div>
+  <div class="col-xs-12">
+    <ul>
+      <li>
+        <?php print $recalculate_hours_days_link; ?>
+      </li>
+      <li>
+        <?php print $monthly_report_link; ?>
+      </li>
+    </ul>
   </div>
   <div class="col-lg-12 col-sm-12 col-xs-12">
     <div class="main-box infographic-box">

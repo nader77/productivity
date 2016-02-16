@@ -55,8 +55,14 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
   $variables['table'] = $table;
   $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), 'recalculate-project-time/' . $node->nid);
 
+  $year = date('Y');
+  $month = date('m', strtotime("-1 month"));
+  $project_id = $node->nid;
+  $variables['monthly_report_link'] = l(t('Monthly report'), "/monthly-report/$project_id/$year/$month");
+
+  // Add charts.
   module_load_include('inc','productivity_github', 'productivity_github.table');
-  $variables['per_issue_table'] = productivity_github_time_display_tracking_issue_table($variables['nid'], FALSE);
+  $variables['per_issue_table'] = productivity_github_time_display_tracking_issue_table($project_id, FALSE);
 
   $chart = productivity_project_get_developer_chart($node);
   $variables['developer_chart'] = drupal_render($chart);
@@ -79,6 +85,7 @@ function bootstrap_subtheme_preprocess_html(&$variables) {
 function bootstrap_subtheme_preprocess_page(&$variables) {
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
 }
+
 /**
  * Implements hook_element_info_alter().
  *

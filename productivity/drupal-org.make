@@ -69,6 +69,9 @@ projects[interval][version] = "1.0"
 projects[jquery_update][subdir] = "contrib"
 projects[jquery_update][version] = "2.7"
 
+projects[libraries][subdir] = "contrib"
+projects[libraries][version] = "2.2"
+
 projects[logs_http][subdir] = "contrib"
 projects[logs_http][version] = "1.1"
 

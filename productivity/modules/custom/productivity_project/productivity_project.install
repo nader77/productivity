@@ -91,5 +91,5 @@ function productivity_project_update_7000() {
  * Enable charts module.
  */
 function productivity_project_update_7001() {
-  module_enable(array('charts'));
+  module_enable(array('charts', 'charts_google'));
 }

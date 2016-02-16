@@ -474,7 +474,7 @@ function productivity_project_recalcualte_rate_total_hours($project_id, $rate_ty
       ->condition('p.field_project_target_id', $project_id)
       ->condition('il.bundle', 'time_tracking')
       ->condition('il.field_issues_logs_field_issue_type_value', $type)
-      ;
+    ;
     $result = $query->execute();
 
     while($record = $result->fetchAssoc()) {
@@ -554,6 +554,52 @@ function productivity_project_check_existing_type($rates_wrapper, $issue_type) {
  */
 function productivity_project_get_total_days($hours) {
   return  number_format($hours /  variable_get('productivity_time_tracking_hours_count_as_day', 8), 2);
+}
+
+/**
+<<<<<<< HEAD
+ * Get list name of all project
+ */
+function productivity_project_get_all_projects() {
+  $project_titles = db_select('node', 'n')
+    ->fields('n', array('nid'))
+    ->fields('n', array('title'))
+    ->condition('n.type', 'project')
+    ->execute()
+    ->fetchAllKeyed(); // returns an indexed array
+
+  if(empty($project_titles)) {
+    return;
+  }
+
+  return $project_titles;
+}
+
+/**
+ * Find the amount of the scope in question.
+ *
+ * @param $table_rate
+ *  The $table_rate scopes.
+ * @param $scope_to_find
+ *  The string of the scope in question.
+ *
+ * @return int
+ *  return the scope amount or zero.
+ *
+ */
+function productivity_project_get_rate($project_nid, $work_type) {
+  $rate = db_select('field_data_field_table_rate', 'table_rate')
+    ->condition('bundle', 'project')
+    ->condition('entity_id', $project_nid)
+    ->condition('field_table_rate_field_issue_type_value', $work_type)
+    ->fields('table_rate', array('field_table_rate_field_rate_amount', 'field_table_rate_field_rate_currency'))
+    ->execute()
+    ->fetchAssoc();
+
+  return array(
+    'amount' => $rate['field_table_rate_field_rate_amount'],
+    'currency' => $rate['field_table_rate_field_rate_currency'],
+  );
 }
 
 /**
