@@ -1497,33 +1497,20 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
   $handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
   $handler->display->display_options['filters']['status']['expose']['remember'] = TRUE;
-  /* Filter criterion: Content: Project (field_project) */
-  $handler->display->display_options['filters']['field_project_target_id']['id'] = 'field_project_target_id';
-  $handler->display->display_options['filters']['field_project_target_id']['table'] = 'field_data_field_project';
-  $handler->display->display_options['filters']['field_project_target_id']['field'] = 'field_project_target_id';
-  $handler->display->display_options['filters']['field_project_target_id']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_project_target_id']['expose']['operator_id'] = 'field_project_target_id_op';
-  $handler->display->display_options['filters']['field_project_target_id']['expose']['label'] = 'Project (field_project)';
-  $handler->display->display_options['filters']['field_project_target_id']['expose']['operator'] = 'field_project_target_id_op';
-  $handler->display->display_options['filters']['field_project_target_id']['expose']['identifier'] = 'field_project_target_id';
-  $handler->display->display_options['filters']['field_project_target_id']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    3 => 0,
-  );
   /* Filter criterion: Content: Day type (field_day_type) */
   $handler->display->display_options['filters']['field_day_type_value']['id'] = 'field_day_type_value';
   $handler->display->display_options['filters']['field_day_type_value']['table'] = 'field_data_field_day_type';
   $handler->display->display_options['filters']['field_day_type_value']['field'] = 'field_day_type_value';
   $handler->display->display_options['filters']['field_day_type_value']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_day_type_value']['expose']['operator_id'] = 'field_day_type_value_op';
-  $handler->display->display_options['filters']['field_day_type_value']['expose']['label'] = 'Day type (field_day_type)';
+  $handler->display->display_options['filters']['field_day_type_value']['expose']['label'] = 'Day type';
   $handler->display->display_options['filters']['field_day_type_value']['expose']['operator'] = 'field_day_type_value_op';
   $handler->display->display_options['filters']['field_day_type_value']['expose']['identifier'] = 'field_day_type_value';
   $handler->display->display_options['filters']['field_day_type_value']['expose']['remember_roles'] = array(
     2 => '2',
     1 => 0,
     3 => 0,
+    4 => 0,
   );
   /* Filter criterion: Content: Project (field_project) (reference filter) */
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['id'] = 'field_project_target_id_entityreference_filter';
@@ -1531,7 +1518,7 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['field'] = 'field_project_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['exposed'] = TRUE;
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['operator_id'] = 'field_project_target_id_entityreference_filter_op';
-  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['label'] = 'Project (field_project) (reference filter)';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['label'] = 'Project';
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['operator'] = 'field_project_target_id_entityreference_filter_op';
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['identifier'] = 'field_project_target_id_entityreference_filter';
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['remember_roles'] = array(
@@ -1545,80 +1532,6 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['path'] = 'admin/content/tracking';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'Tracking';
-  $handler->display->display_options['menu']['weight'] = '0';
-  $handler->display->display_options['menu']['name'] = 'management';
-  $handler->display->display_options['menu']['context'] = 0;
-  $handler->display->display_options['menu']['context_only_inline'] = 0;
-
-  /* Display: Page */
-  $handler = $view->new_display('page', 'Page', 'page_2');
-  $handler->display->display_options['defaults']['filter_groups'] = FALSE;
-  $handler->display->display_options['defaults']['filters'] = FALSE;
-  /* Filter criterion: Content: Title */
-  $handler->display->display_options['filters']['title']['id'] = 'title';
-  $handler->display->display_options['filters']['title']['table'] = 'node';
-  $handler->display->display_options['filters']['title']['field'] = 'title';
-  $handler->display->display_options['filters']['title']['operator'] = 'contains';
-  $handler->display->display_options['filters']['title']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
-  $handler->display->display_options['filters']['title']['expose']['label'] = 'Title';
-  $handler->display->display_options['filters']['title']['expose']['operator'] = 'title_op';
-  $handler->display->display_options['filters']['title']['expose']['identifier'] = 'title';
-  $handler->display->display_options['filters']['title']['expose']['remember'] = TRUE;
-  /* Filter criterion: Content: Type */
-  $handler->display->display_options['filters']['type']['id'] = 'type';
-  $handler->display->display_options['filters']['type']['table'] = 'node';
-  $handler->display->display_options['filters']['type']['field'] = 'type';
-  $handler->display->display_options['filters']['type']['value'] = array(
-    'project' => 'project',
-  );
-  $handler->display->display_options['filters']['type']['expose']['operator_id'] = 'type_op';
-  $handler->display->display_options['filters']['type']['expose']['label'] = 'Type';
-  $handler->display->display_options['filters']['type']['expose']['operator'] = 'type_op';
-  $handler->display->display_options['filters']['type']['expose']['identifier'] = 'type';
-  $handler->display->display_options['filters']['type']['expose']['remember'] = TRUE;
-  /* Filter criterion: Content: Published */
-  $handler->display->display_options['filters']['status']['id'] = 'status';
-  $handler->display->display_options['filters']['status']['table'] = 'node';
-  $handler->display->display_options['filters']['status']['field'] = 'status';
-  $handler->display->display_options['filters']['status']['value'] = 'All';
-  $handler->display->display_options['filters']['status']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['status']['expose']['operator_id'] = '';
-  $handler->display->display_options['filters']['status']['expose']['label'] = 'Published';
-  $handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
-  $handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
-  $handler->display->display_options['filters']['status']['expose']['remember'] = TRUE;
-  /* Filter criterion: Content: Project (field_project) */
-  $handler->display->display_options['filters']['field_project_target_id']['id'] = 'field_project_target_id';
-  $handler->display->display_options['filters']['field_project_target_id']['table'] = 'field_data_field_project';
-  $handler->display->display_options['filters']['field_project_target_id']['field'] = 'field_project_target_id';
-  $handler->display->display_options['filters']['field_project_target_id']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_project_target_id']['expose']['operator_id'] = 'field_project_target_id_op';
-  $handler->display->display_options['filters']['field_project_target_id']['expose']['label'] = 'Project (field_project)';
-  $handler->display->display_options['filters']['field_project_target_id']['expose']['operator'] = 'field_project_target_id_op';
-  $handler->display->display_options['filters']['field_project_target_id']['expose']['identifier'] = 'field_project_target_id';
-  $handler->display->display_options['filters']['field_project_target_id']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    3 => 0,
-  );
-  /* Filter criterion: Content: Day type (field_day_type) */
-  $handler->display->display_options['filters']['field_day_type_value']['id'] = 'field_day_type_value';
-  $handler->display->display_options['filters']['field_day_type_value']['table'] = 'field_data_field_day_type';
-  $handler->display->display_options['filters']['field_day_type_value']['field'] = 'field_day_type_value';
-  $handler->display->display_options['filters']['field_day_type_value']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['field_day_type_value']['expose']['operator_id'] = 'field_day_type_value_op';
-  $handler->display->display_options['filters']['field_day_type_value']['expose']['label'] = 'Day type (field_day_type)';
-  $handler->display->display_options['filters']['field_day_type_value']['expose']['operator'] = 'field_day_type_value_op';
-  $handler->display->display_options['filters']['field_day_type_value']['expose']['identifier'] = 'field_day_type_value';
-  $handler->display->display_options['filters']['field_day_type_value']['expose']['remember_roles'] = array(
-    2 => '2',
-    1 => 0,
-    3 => 0,
-  );
-  $handler->display->display_options['path'] = 'admin/content/projects';
-  $handler->display->display_options['menu']['type'] = 'tab';
-  $handler->display->display_options['menu']['title'] = 'Projects';
   $handler->display->display_options['menu']['weight'] = '0';
   $handler->display->display_options['menu']['name'] = 'management';
   $handler->display->display_options['menu']['context'] = 0;
