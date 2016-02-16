@@ -1033,16 +1033,7 @@ function productivity_admin_views_default_views() {
     'scale' => '2',
     'prefix_suffix' => 1,
   );
-  /* Field: Content: Total days */
-  $handler->display->display_options['fields']['field_days']['id'] = 'field_days';
-  $handler->display->display_options['fields']['field_days']['table'] = 'field_data_field_days';
-  $handler->display->display_options['fields']['field_days']['field'] = 'field_days';
-  $handler->display->display_options['fields']['field_days']['settings'] = array(
-    'thousand_separator' => ',',
-    'decimal_separator' => '.',
-    'scale' => '2',
-    'prefix_suffix' => 1,
-  );
+
   /* Field: Content: Edit link */
   $handler->display->display_options['fields']['edit_node']['id'] = 'edit_node';
   $handler->display->display_options['fields']['edit_node']['table'] = 'views_entity_node';

@@ -12,6 +12,7 @@ dependencies[] = message
 dependencies[] = multifield
 dependencies[] = number
 dependencies[] = options
+dependencies[] = productivity_project
 dependencies[] = productivity_salary
 dependencies[] = strongarm
 dependencies[] = text
