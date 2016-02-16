@@ -296,23 +296,17 @@
                     <span class="label label-danger label-circle pull-right">05</span>
                   </a>
                 </li>
-                <li class="">
-                  <a class="dropdown-toggle" data-target=".submenu.reports" data-toggle="collapse">
-                    <i class="fa fa-bar-chart-o"></i>
-                    <span>Reports</span>
-                    <i class="fa fa-chevron-circle-right drop-icon"></i>
-                  </a>
-                  <ul class="submenu reports collapse">
-                    <li>
-                      <a href="<?php print $base_path;?>monthly-report">Monthly report</a>
-                    </li>
-                    <li>
-                      <a href="<?php print $base_path;?>admin/content/projects">Projects</a>
-                    </li>
-                    <li>
-                      <a href="<?php print $base_path;?>admin/content/github">Github</a>
-                    </li>
-                  </ul>
+                <li>
+                  <i class="fa fa-bar-chart-o"></i>
+                  <a href="<?php print $base_path;?>monthly-report">Monthly report</a>
+                </li>
+                <li>
+                  <i class="fa fa-bar-chart-o"></i>
+                  <a href="<?php print $base_path;?>admin/content/projects">Projects</a>
+                </li>
+                <li>
+                  <i class="fa fa-bar-chart-o"></i>
+                  <a href="<?php print $base_path;?>admin/content/github">Github</a>
                 </li>
               </ul>
             </div>
