@@ -10,7 +10,7 @@
 function productivity_payment_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-payment-field_amount'
+  // Exported field_instance: 'node-payment-field_amount'.
   $field_instances['node-payment-field_amount'] = array(
     'bundle' => 'payment',
     'default_value' => NULL,
@@ -345,7 +345,7 @@ function productivity_payment_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-payment-field_date_actual'
+  // Exported field_instance: 'node-payment-field_date_actual'.
   $field_instances['node-payment-field_date_actual'] = array(
     'bundle' => 'payment',
     'deleted' => 0,
@@ -360,6 +360,7 @@ function productivity_payment_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
         'weight' => 3,
@@ -398,7 +399,7 @@ function productivity_payment_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-payment-field_date_expected'
+  // Exported field_instance: 'node-payment-field_date_expected'.
   $field_instances['node-payment-field_date_expected'] = array(
     'bundle' => 'payment',
     'deleted' => 0,
@@ -413,6 +414,7 @@ function productivity_payment_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
         'weight' => 2,
@@ -451,7 +453,7 @@ function productivity_payment_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-payment-field_project'
+  // Exported field_instance: 'node-payment-field_project'.
   $field_instances['node-payment-field_project'] = array(
     'bundle' => 'payment',
     'default_value' => NULL,

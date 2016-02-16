@@ -1171,7 +1171,7 @@ global - fix amount.',
     'entity_type' => 'node',
     'field_name' => 'field_rate_type',
     'label' => 'Rate type',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -1278,13 +1278,6 @@ global - fix amount.',
     'bundle' => 'project',
     'default_value' => array(
       0 => array(
-        'field_days' => array(
-          'und' => array(
-            0 => array(
-              'value' => 0,
-            ),
-          ),
-        ),
         'field_hours' => array(
           'und' => array(
             0 => array(
@@ -1299,19 +1292,26 @@ global - fix amount.',
             ),
           ),
         ),
+        'field_rate' => array(
+          'und' => array(
+            0 => array(
+              'amount' => 0,
+              'currency' => 'USD',
+            ),
+          ),
+        ),
+        'field_rate_type' => array(
+          'und' => array(
+            0 => array(
+              'value' => 'hours',
+            ),
+          ),
+        ),
         'field_scope' => array(
           'und' => array(
             0 => array(
               'interval' => 0,
-              'period' => 'second',
-            ),
-          ),
-        ),
-        'field_type_rate' => array(
-          'und' => array(
-            0 => array(
-              'amount' => '',
-              'currency' => 'USD',
+              'period' => 'hour',
             ),
           ),
         ),
@@ -1343,7 +1343,7 @@ global - fix amount.',
     'entity_type' => 'node',
     'field_name' => 'field_table_rate',
     'label' => 'Rates',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),

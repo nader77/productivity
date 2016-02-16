@@ -17,7 +17,6 @@ dependencies[] = productivity_project
 dependencies[] = productivity_salary
 dependencies[] = strongarm
 dependencies[] = text
-features[ctools][] = page_manager:pages_default:1
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[field_base][] = field_day_type
