@@ -22,6 +22,7 @@ dependencies[] = file
 ; Contrib modules -------------------------------------------------------------
 dependencies[] = admin_menu_toolbar
 dependencies[] = admin_views
+dependencies[] = charts
 dependencies[] = ctools
 dependencies[] = content_access
 dependencies[] = date
