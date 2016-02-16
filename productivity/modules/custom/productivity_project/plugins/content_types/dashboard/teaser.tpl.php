@@ -3,23 +3,22 @@
     <div class="main-box-body clearfix">
       <div class="project-box-header emerald-bg">
         <div class="name">
-          <a href="#">
-            Nike site | T&M
+          <a href="<?php print $url; ?>">
+            <?php print $title; ?>
           </a>
         </div>
       </div>
 
       <div class="project-box-footer clearfix">
         <a href="#">
-          <span class="value">2000 Hours</span>
+          <span class="value"><?php print $scope; ?>Hours</span>
           <span class="label">Project Scope</span>
         </a>
         <a href="#">
-          <span class="value">180 Hours</span>
-          <span class="label">This month</span>
+          <span class="value"><?php print $total_done; ?> Hours</span>
+          <span class="label">Total Done</span>
         </a>
       </div>
-
       <div class="project-box-content">
         <span class="chart" data-percent="39">
             <span class="percent"></span>%<br/>
