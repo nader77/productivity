@@ -280,35 +280,34 @@
                 <span class="name">Welcome<br><?php if($user->uid) { print $user->name; } ?></span>
               </div>
             </div>
-            Menu
             <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
               <ul class="nav nav-pills nav-stacked">
-                <li class="active">
+                <li class="<?php print ($path == 'dashboard') ? 'active' : '';?>">
                   <a href="<?php print $base_path;?>">
                     <i class="fa fa-dashboard"></i>
                     <span>Dashboard</span>
                   </a>
                 </li>
-                <li class="">
+                <li class="<?php print ($path == 'payments') ? 'active' : '';?>">
                   <a href="<?php print $base_path;?>payments">
                     <i class="fa fa-money"></i>
                     <span>Payments</span>
                     <span class="label label-danger label-circle pull-right">05</span>
                   </a>
                 </li>
-                <li>
+                <li class="<?php print ($path == 'monthly-report') ? 'active' : '';?>">
                   <a href="<?php print $base_path;?>monthly-report">
                     <i class="fa fa-bar-chart-o"></i>
                     <span>Monthly report</span>
                   </a>
                 </li>
-                <li>
+                <li class="<?php print ($path == 'admin/content/projects') ? 'active' : '';?>">
                   <a href="<?php print $base_path;?>admin/content/projects">
                     <i class="fa fa-rocket"></i>
                     <span>Projects</span>
                   </a>
                 </li>
-                <li>
+                <li class="<?php print ($path == 'admin/content/github') ? 'active' : '';?>">
                   <a href="<?php print $base_path;?>admin/content/github">
                     <i class="fa fa-github"></i>
                     <span>Github</span>
