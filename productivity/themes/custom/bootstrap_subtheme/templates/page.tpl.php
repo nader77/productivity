@@ -297,16 +297,22 @@
                   </a>
                 </li>
                 <li>
-                  <i class="fa fa-bar-chart-o"></i>
-                  <a href="<?php print $base_path;?>monthly-report">Monthly report</a>
+                  <a href="<?php print $base_path;?>monthly-report">
+                    <i class="fa fa-bar-chart-o"></i>
+                    <span>Monthly report</span>
+                  </a>
                 </li>
                 <li>
-                  <i class="fa fa-bar-chart-o"></i>
-                  <a href="<?php print $base_path;?>admin/content/projects">Projects</a>
+                  <a href="<?php print $base_path;?>admin/content/projects">
+                    <i class="fa fa-rocket"></i>
+                    <span>Projects</span>
+                  </a>
                 </li>
                 <li>
-                  <i class="fa fa-bar-chart-o"></i>
-                  <a href="<?php print $base_path;?>admin/content/github">Github</a>
+                  <a href="<?php print $base_path;?>admin/content/github">
+                    <i class="fa fa-github"></i>
+                    <span>Github</span>
+                  </a>
                 </li>
               </ul>
             </div>
