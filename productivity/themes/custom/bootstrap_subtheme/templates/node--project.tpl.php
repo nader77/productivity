@@ -104,6 +104,11 @@
       <span class="value"><?php print $days;?></span>
     </div>
   </div>
+  <div class="col-lg-4 col-sm-6 col-xs-12">
+    <div class="main-box infographic-box">
+      <?php print $developer_chart; ?>
+    </div>
+  </div>
   <div class="col-xs-12">
     <div class="main-box infographic-box">
       <?php print $table; ?>

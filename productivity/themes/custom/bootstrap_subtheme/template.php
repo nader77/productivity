@@ -57,6 +57,8 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
 
   module_load_include('inc','productivity_github', 'productivity_github.table');
   $variables['per_issue_table'] = productivity_github_time_display_tracking_issue_table($variables['nid'], FALSE);
+
+  $variables['developer_chart'] = drupal_render(productivity_project_get_developer_chart($node));
 }
 
 /**
