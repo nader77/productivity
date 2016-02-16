@@ -104,21 +104,21 @@
       <span class="value"><?php print $days;?></span>
     </div>
   </div>
+  <div class="col-xs-12">
+    <div class="main-box infographic-box">
+      <?php print $table; ?>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <?php if (isset($recalculate_hours_days_link)) : ?>
+      <?php print $recalculate_hours_days_link; ?>
+    <?php endif; ?>
+  </div>
   <div class="col-lg-12 col-sm-12 col-xs-12">
     <div class="main-box infographic-box">
       <?php print $per_issue_table; ?>
     </div>
   </div>
-</div
-<div class="col-xs-12">
-  <div class="main-box infographic-box">
-      <?php print $table; ?>
-  </div>
-</div>
-<div class="col-xs-12">
-  <?php if (isset($recalculate_hours_days_link)) : ?>
-    <?php print $recalculate_hours_days_link; ?>
-  <?php endif; ?>
 </div>
 
 

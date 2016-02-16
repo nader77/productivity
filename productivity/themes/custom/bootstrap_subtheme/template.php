@@ -54,6 +54,9 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
 
   $variables['table'] = $table;
   $variables['recalculate_hours_days_link'] = l(t('Recalculate project\'s hours & days.'), 'recalculate-project-time/' . $node->nid);
+
+  module_load_include('inc','productivity_github', 'productivity_github.table');
+  $variables['per_issue_table'] = productivity_github_time_display_tracking_issue_table($variables['nid'], FALSE);
 }
 
 /**
@@ -84,7 +87,3 @@ function bootstrap_subtheme_element_info_alter(&$elements) {
   }
 }
 
-function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
-  module_load_include('inc','productivity_github', 'productivity_github.table');
-  $variables['per_issue_table'] = productivity_github_time_display_tracking_issue_table($variables['nid'], FALSE);
-}
