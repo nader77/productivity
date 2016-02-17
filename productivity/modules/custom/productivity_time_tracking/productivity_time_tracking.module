@@ -12,7 +12,7 @@ include_once 'productivity_time_tracking.features.inc';
 function productivity_time_tracking_menu() {
   $items['monthly-report'] = array(
     'title' => 'Issue tracking table',
-    'access arguments' => array('access admin panel'),
+    'access arguments' => array('access content'),
     'page callback' => 'productivity_time_tracking_issue_table_callback',
     'type' => MENU_CALLBACK,
     'file' => 'monthly_report/productivity_time_tracking.table.inc'
@@ -20,7 +20,7 @@ function productivity_time_tracking_menu() {
 
   $items['monthly-report/%node/%/%'] = array(
     'title' => 'Issue tracking table',
-    'access arguments' => array('access admin panel'),
+    'access arguments' => array('access content'),
     'page callback' => 'productivity_time_tracking_issue_table_callback',
     'page arguments' => array(1, 2, 3),
     'type' => MENU_CALLBACK,
