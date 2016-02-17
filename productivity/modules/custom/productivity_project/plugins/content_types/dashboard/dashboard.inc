@@ -13,7 +13,7 @@ $plugin = array(
 );
 
 /**
- * Render callback;  Bidder page.
+ * Render callback.
  */
 function productivity_project_dashboard_content_type_render($subtype, $conf, $args, $context) {
 
