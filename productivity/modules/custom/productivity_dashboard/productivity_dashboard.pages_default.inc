@@ -72,15 +72,16 @@ function productivity_dashboard_default_page_manager_pages() {
   $display->content = array();
   $display->panels = array();
     $pane = new stdClass();
-    $pane->pid = 'new-917fe274-1d55-41b1-8d5d-073025699b00';
+    $pane->pid = 'new-64f875b6-a2ad-4a99-8b6e-be66fc213639';
     $pane->panel = 'top';
-    $pane->type = 'teaser';
-    $pane->subtype = 'teaser';
+    $pane->type = 'dashboard';
+    $pane->subtype = 'dashboard';
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
       'override_title' => 0,
       'override_title_text' => '',
+      'override_title_heading' => 'h2',
     );
     $pane->cache = array();
     $pane->style = array(
@@ -90,9 +91,9 @@ function productivity_dashboard_default_page_manager_pages() {
     $pane->extras = array();
     $pane->position = 0;
     $pane->locks = array();
-    $pane->uuid = '917fe274-1d55-41b1-8d5d-073025699b00';
-    $display->content['new-917fe274-1d55-41b1-8d5d-073025699b00'] = $pane;
-    $display->panels['top'][0] = 'new-917fe274-1d55-41b1-8d5d-073025699b00';
+    $pane->uuid = '64f875b6-a2ad-4a99-8b6e-be66fc213639';
+    $display->content['new-64f875b6-a2ad-4a99-8b6e-be66fc213639'] = $pane;
+    $display->panels['top'][0] = 'new-64f875b6-a2ad-4a99-8b6e-be66fc213639';
   $display->hide_title = PANELS_TITLE_FIXED;
   $display->title_pane = '0';
   $handler->conf['display'] = $display;
