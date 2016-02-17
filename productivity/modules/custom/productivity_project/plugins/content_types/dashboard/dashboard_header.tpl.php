@@ -6,8 +6,8 @@
           <i class="fa fa-money red-bg"></i>
           <span class="headline">Due amount</span>
               <span class="value">
-                 &#36;<span class="timer" data-from="120" data-to="450000" data-speed="1000" data-refresh-interval="50">
-                  $450000
+                 &#36;<span class="timer" data-from="0" data-to="0" data-speed="1000" data-refresh-interval="50">
+                  TBD
                 </span>
               </span>
         </div>
@@ -17,8 +17,8 @@
           <i class="fa fa-money green-bg"></i>
           <span class="headline">Monthly Billable</span>
             <span class="value">
-                &#36;<span class="timer" data-from="83" data-to="84000" data-speed="900" data-refresh-interval="60">
-                    84000
+                &#36;<span class="timer" data-from="0" data-to="0" data-speed="900" data-refresh-interval="60">
+                    TBD
                 </span>
             </span>
         </div>
@@ -28,8 +28,8 @@
           <i class="fa fa-suitcase emerald-bg"></i>
           <span class="headline">Active Projects</span>
               <span class="value">
-                <span class="timer" data-from="0" data-to="5" data-speed="800" data-refresh-interval="30">
-                    5
+                <span class="timer" data-from="0" data-to="0" data-speed="800" data-refresh-interval="30">
+                    TBD
                 </span>
               </span>
         </div>
@@ -39,8 +39,8 @@
           <i class="fa fa-shopping-cart yellow-bg"></i>
           <span class="headline">Avr Charged/H</span>
               <span class="value">
-                 &#36;<span class="timer" data-from="0" data-to="80" data-speed="1100">
-                    80
+                 &#36;<span class="timer" data-from="0" data-to="0" data-speed="1100">
+                    TBD
                 </span>
               </span>
         </div>

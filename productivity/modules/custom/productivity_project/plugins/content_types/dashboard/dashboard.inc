@@ -27,9 +27,23 @@ function productivity_project_dashboard_content_type_render($subtype, $conf, $ar
     $node_variables = array();
     $node_variables['title'] = $title;
     $wrapper = entity_metadata_wrapper('node', $nid);
-    $node_variables['url'] = l($title, 'node/' . $nid);
+    $node_variables['link'] = l($title, 'node/' . $nid);
+    $node_variables['url'] = url('node/' . $nid);
     $node_variables['scope'] = productivity_project_get_total_scope($wrapper);
     $node_variables['total_done'] = $wrapper->field_hours->value();
+    // TODO: Make this more accurate removing non-billable and so.
+    $node_variables['percent_done'] = 0;
+    if ($node_variables['scope'] != 0) {
+      $node_variables['percent_done'] = 100 / $node_variables['scope'] * $node_variables['total_done'];
+    }
+
+    $project_teams = $wrapper->field_team_leads->value();
+    $node_variables['teams'] = array();
+    foreach($project_teams as $team_user) {
+      $node_variables['teams'][$team_user->uid] = array();
+      $node_variables['teams'][$team_user->uid]['name'] = $team_user->name;
+      $node_variables['teams'][$team_user->uid]['pic'] = 'http://www.gravatar.com/avatar/' . md5(strtolower(trim($team_user->mail))) . '.jpg';
+    }
 
     $variables['rendered_nodes'][] = theme('productivity_project_teaser', $node_variables);
   }

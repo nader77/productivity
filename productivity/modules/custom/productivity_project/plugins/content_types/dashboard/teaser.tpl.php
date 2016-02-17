@@ -1,52 +1,47 @@
-<div class="col-lg-4 col-md-6 col-sm-6">
-  <div class="main-box clearfix project-box emerald-box">
-    <div class="main-box-body clearfix">
-      <div class="project-box-header emerald-bg">
-        <div class="name">
-          <a href="<?php print $url; ?>">
-            <?php print $title; ?>
-          </a>
-        </div>
+<div class="main-box clearfix project-box emerald-box">
+  <div class="main-box-body clearfix">
+    <div class="project-box-header emerald-bg">
+      <div class="name">
+        <?php print $link; ?>
       </div>
+    </div>
 
-      <div class="project-box-footer clearfix">
-        <a href="#">
-          <span class="value"><?php print $scope; ?>Hours</span>
-          <span class="label">Project Scope</span>
-        </a>
-        <a href="#">
-          <span class="value"><?php print $total_done; ?> Hours</span>
-          <span class="label">Total Done</span>
-        </a>
-      </div>
-      <div class="project-box-content">
-        <span class="chart" data-percent="39">
-            <span class="percent"></span>%<br/>
-            <span class="lbl">completed</span>
-        </span>
-      </div>
+    <div class="project-box-footer clearfix">
+      <a href="#">
+        <span class="value"><?php print $scope; ?>Hours</span>
+        <span class="label">Project Scope</span>
+      </a>
+      <a href="#">
+        <span class="value"><?php print $total_done; ?> Hours</span>
+        <span class="label">Total Done</span>
+      </a>
+    </div>
+    <div class="project-box-content">
+      <span class="chart" data-percent="<?php print $percent_done; ?>">
+          <span class="percent"></span>%<br/>
+          <span class="lbl">completed</span>
+      </span>
+    </div>
 
-      <div class="project-box-footer clearfix">
-        <a href="#">
-          <span class="value">$200</span>
-          <span class="label">Due Amount</span>
-        </a>
-        <a href="#">
-          <span class="value">$100000</span>
-          <span class="label">Paid amount</span>
-        </a>
-      </div>
+    <div class="project-box-footer clearfix">
+      <a href="#">
+        <span class="value">TBD</span>
+        <span class="label">Due Amount</span>
+      </a>
+      <a href="#">
+        <span class="value">TBD</span>
+        <span class="label">Paid amount</span>
+      </a>
+    </div>
 
-      <div class="project-box-ultrafooter clearfix">
-        <img class="project-img-owner" alt="" src="<?php print $theme_path;?>/images/samples/scarlet-159.png" data-toggle="tooltip" title="Scarlett Johansson"/>
-        <img class="project-img-owner" alt="" src="<?php print $theme_path;?>/images/samples/lima-300.jpg" data-toggle="tooltip" title="Adriana Lima"/>
-        <img class="project-img-owner" alt="" src="<?php print $theme_path;?>/images/samples/emma-300.jpg" data-toggle="tooltip" title="Emma Watson"/>
-        <img class="project-img-owner" alt="" src="<?php print $theme_path;?>/images/samples/angelina-300.jpg" data-toggle="tooltip" title="Angelina Jolie"/>
+    <div class="project-box-ultrafooter clearfix">
+      <?php foreach($teams as $team): ?>
+       <img class="project-img-owner" alt="" src="<?php print $team['pic']; ?>" data-toggle="tooltip" title="<?php print $team['name']; ?>"/>
+      <?php endforeach; ?>
 
-        <a href="#" class="link pull-right">
-          <i class="fa fa-arrow-circle-right fa-lg"></i>
-        </a>
-      </div>
+      <a href="<?php print $url; ?>" class="link pull-right">
+        <i class="fa fa-arrow-circle-right fa-lg"></i>
+      </a>
     </div>
   </div>
 </div>
