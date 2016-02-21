@@ -23,7 +23,6 @@
    */
   function set_date_input(settings) {
     // get the current month and year.
-    var date = new Date();
     var input_date = settings['monthly_report']['year'] + '-' + settings['monthly_report']['month'];
     // Set the month and year in the input month
     $('input[type=month]').val(input_date);

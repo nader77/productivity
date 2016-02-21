@@ -3389,6 +3389,7 @@ label {
     font-weight: 300;
     color: #344644; }
 .project-box .project-box-ultrafooter {
+  min-height: 50px;
   background: #f7fafa;
   border-top: 1px solid #e9eef0;
   padding: 8px 15px;

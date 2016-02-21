@@ -557,22 +557,26 @@ function productivity_project_get_total_days($hours) {
 }
 
 /**
-<<<<<<< HEAD
  * Get list name of all project
  */
-function productivity_project_get_all_projects() {
-  $project_titles = db_select('node', 'n')
+function productivity_project_get_all_projects($limit = 0) {
+  $query = db_select('node', 'n')
     ->fields('n', array('nid'))
     ->fields('n', array('title'))
     ->condition('n.type', 'project')
-    ->execute()
-    ->fetchAllKeyed(); // returns an indexed array
+    ->orderBy('changed', 'DESC');
 
-  if(empty($project_titles)) {
+    if ($limit) {
+      $query->range(0, $limit);
+    }
+
+    $result = $query->execute()
+      ->fetchAllKeyed(); // returns an indexed array
+
+  if(empty($result)) {
     return;
   }
-
-  return $project_titles;
+  return $result;
 }
 
 /**
