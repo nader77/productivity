@@ -84,6 +84,8 @@ function bootstrap_subtheme_preprocess_html(&$variables) {
 
 function bootstrap_subtheme_preprocess_page(&$variables) {
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
+  $menu = menu_get_item();
+  $variables['path'] = $menu['path'];
 }
 
 /**
