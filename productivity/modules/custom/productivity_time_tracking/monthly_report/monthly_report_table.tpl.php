@@ -8,6 +8,9 @@
       <span class="col-sm-2 pull-right"><?php print t('Total:'); ?>
         <?php print $total_per_types[$index] . ' ' . $total_currency_per_types[$index]; ?>
       </span>
+      <span class="col-sm-2 pull-right"><?php print t('Total:'); ?>
+        <?php print $total_per_hours_types[$index] . t(' Hours'); ?>
+      </span>
     </div>
   <?php endforeach; ?>
   <div class="col-sm-12 well">

@@ -433,17 +433,35 @@ function productivity_github_sum_issue_hours($node_id) {
  */
 function productivity_github_get_project_github_issues_query($project_id, $year, $month) {
 
-  $project_start_month = format_string("@year-@month-01", array('@year' => $year, '@month' => $month));
-  $project_end_month = (new DateTime($project_start_month))->format( 'Y-m-t' );
+  if ($month == 'all') {
+    $project_start_month = format_string("@year-01-01", array('@year' => $year));
+    $project_end_month = format_string("@year-12-31", array('@year' => $year));
+  }
+  else {
+    $project_start_month = format_string("@year-@month-01", array(
+      '@year' => $year,
+      '@month' => $month
+    ));
+    $project_end_month = format_string("@year-@month-01", array(
+      '@year' => $year,
+      '@month' => ($month == 12) ? 1 : ($month + 1),
+    ));
+  }
 
   $query = new EntityFieldQuery();
-  $result = $query
+  $query
     ->entityCondition('entity_type', 'node')
     ->propertyCondition('type', 'time_tracking')
-    ->fieldCondition('field_project', 'target_id', $project_id)
-    ->fieldCondition('field_work_date', 'value', $project_start_month, '>=')
-    ->fieldCondition('field_work_date', 'value', $project_end_month, '<=')
-    ->execute();
+    ->fieldCondition('field_project', 'target_id', $project_id);
+
+  // Return all time.
+  if ($year != 'all') {
+    $query
+      ->fieldCondition('field_work_date', 'value', $project_start_month, '>=')
+      ->fieldCondition('field_work_date', 'value', $project_end_month, '<');
+  }
+
+  $result = $query->execute();
 
   if(empty($result['node'])) {
     return;
