@@ -25,10 +25,27 @@ function productivity_time_tracking_issue_table($node = FALSE, $year = FALSE, $m
   drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
   drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
 
+  // Add datepicker lib.
+  drupal_add_js("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js", array('type' => 'external'));
+  drupal_add_css("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.min.css", array('type' => 'external'));
 
   $variables = array();
   $variables['year'] = !empty($year) ? $year : date('Y');
   $variables['month']= !empty($month) ? $month : date('m', strtotime("-1 month"));
+
+
+
+  if ($year == 'all'){
+    $variables['date'] = t('All time');
+  }
+  elseif ($month == 'all'){
+    $variables['date'] = t('Year @year', array('@year' => $year));
+  }
+  else {
+    $variables['date'] = date("F Y", strtotime("$year-$month-01"));
+  }
+
+
   $variables['projects'] = productivity_project_get_all_projects();
   $variables['current_project_id'] = 0;
   $variables['project_title'] = 'Select a project';
@@ -87,6 +104,7 @@ function productivity_time_tracking_issue_table($node = FALSE, $year = FALSE, $m
   foreach ($issues_table as $table_name => $table) {
     $variables['table_titles'][$table_name] = $table['label'];
     $variables['total_per_types'][$table_name] = 0;
+    $variables['total_per_hours_types'][$table_name] = 0;
 
     foreach ($table['issues'] as $index => $issue) {
       $rows[$index]['label'] = l($issue['issue_num'], $project_url . $issue['issue_num'], array('absolute' => TRUE));
@@ -95,6 +113,7 @@ function productivity_time_tracking_issue_table($node = FALSE, $year = FALSE, $m
       $rows[$index]['time'] = $issue['time'];
       $rows[$index]['amount'] = $issue['issue_amount'] . ' ' . $issue['issue_currency'];
       $variables['total_per_types'][$table_name] += $issue['issue_amount'];
+      $variables['total_per_hours_types'][$table_name] += $issue['time'];
       $variables['total_currency_per_types'][$table_name] = $issue['issue_currency'];
       $variables['grand_total'] += $issue['issue_amount'];
     }
