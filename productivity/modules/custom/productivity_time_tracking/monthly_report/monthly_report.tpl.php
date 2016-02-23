@@ -26,7 +26,7 @@
           <div class="col-sm-4">
             <button class="btn btn-primary apply" type="button">Apply</button>
             <button class="btn btn-primary anytime" type="button">Any time</button>
-            <button class="btn btn-primary year" type="button" data-toggle="tooltip" data-placement="right" title="Tooltip on right">All Year</button>
+            <button class="btn btn-primary year" type="button" data-toggle="popover" title="Can't be done" data-content="Please select a year first">All Year</button>
           </div>
         </div>
       </div>

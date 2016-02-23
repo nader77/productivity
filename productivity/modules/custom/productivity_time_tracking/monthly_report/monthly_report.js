@@ -85,6 +85,7 @@
     attach: function (context, settings) {
       set_date_input(settings);
       $('#project_filter').select2();
+      $(".btn.year").popover({delay: { "show": 500, "hide": 100 }});
 
       // Apply filter button handler.
       $('.apply').click(function() {
@@ -98,7 +99,9 @@
       $('.year').click(function() {
         var link = create_new_url(settings['monthly_report']['base_url'], true, true);
         if (!link) {
-
+          // Initializes popovers for an element collection.
+          //$().popover(options);
+          $(".btn.year").popover('show');
         }
         else {
           window.location.href = link;
