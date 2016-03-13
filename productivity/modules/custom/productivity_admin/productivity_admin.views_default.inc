@@ -339,6 +339,16 @@ function productivity_admin_views_default_views() {
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
   );
+  /* Field: Content: Time Estimate */
+  $handler->display->display_options['fields']['field_time_estimate']['id'] = 'field_time_estimate';
+  $handler->display->display_options['fields']['field_time_estimate']['table'] = 'field_data_field_time_estimate';
+  $handler->display->display_options['fields']['field_time_estimate']['field'] = 'field_time_estimate';
+  $handler->display->display_options['fields']['field_time_estimate']['settings'] = array(
+    'thousand_separator' => '',
+    'decimal_separator' => '.',
+    'scale' => '2',
+    'prefix_suffix' => 1,
+  );
   /* Field: Content: Project */
   $handler->display->display_options['fields']['field_project']['id'] = 'field_project';
   $handler->display->display_options['fields']['field_project']['table'] = 'field_data_field_project';
@@ -376,6 +386,7 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['filters']['title']['table'] = 'node';
   $handler->display->display_options['filters']['title']['field'] = 'title';
   $handler->display->display_options['filters']['title']['operator'] = 'contains';
+  $handler->display->display_options['filters']['title']['group'] = 1;
   $handler->display->display_options['filters']['title']['exposed'] = TRUE;
   $handler->display->display_options['filters']['title']['expose']['operator_id'] = 'title_op';
   $handler->display->display_options['filters']['title']['expose']['label'] = 'Title';
@@ -389,6 +400,7 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['filters']['type']['value'] = array(
     'github_issue' => 'github_issue',
   );
+  $handler->display->display_options['filters']['type']['group'] = 1;
   $handler->display->display_options['filters']['type']['expose']['operator_id'] = 'type_op';
   $handler->display->display_options['filters']['type']['expose']['label'] = 'Type';
   $handler->display->display_options['filters']['type']['expose']['operator'] = 'type_op';
@@ -400,6 +412,7 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['filters']['uid']['field'] = 'uid';
   $handler->display->display_options['filters']['uid']['relationship'] = 'uid';
   $handler->display->display_options['filters']['uid']['value'] = '';
+  $handler->display->display_options['filters']['uid']['group'] = 1;
   $handler->display->display_options['filters']['uid']['exposed'] = TRUE;
   $handler->display->display_options['filters']['uid']['expose']['operator_id'] = 'uid_op';
   $handler->display->display_options['filters']['uid']['expose']['label'] = 'Author';
@@ -411,23 +424,31 @@ function productivity_admin_views_default_views() {
   $handler->display->display_options['filters']['status']['table'] = 'node';
   $handler->display->display_options['filters']['status']['field'] = 'status';
   $handler->display->display_options['filters']['status']['value'] = 'All';
+  $handler->display->display_options['filters']['status']['group'] = 1;
   $handler->display->display_options['filters']['status']['exposed'] = TRUE;
   $handler->display->display_options['filters']['status']['expose']['operator_id'] = '';
   $handler->display->display_options['filters']['status']['expose']['label'] = 'Published';
   $handler->display->display_options['filters']['status']['expose']['operator'] = 'status_op';
   $handler->display->display_options['filters']['status']['expose']['identifier'] = 'status';
   $handler->display->display_options['filters']['status']['expose']['remember'] = TRUE;
-  /* Filter criterion: Taxonomy term: Vocabulary */
-  $handler->display->display_options['filters']['vid']['id'] = 'vid';
-  $handler->display->display_options['filters']['vid']['table'] = 'taxonomy_term_data';
-  $handler->display->display_options['filters']['vid']['field'] = 'vid';
-  $handler->display->display_options['filters']['vid']['relationship'] = 'term_node_tid';
-  $handler->display->display_options['filters']['vid']['exposed'] = TRUE;
-  $handler->display->display_options['filters']['vid']['expose']['operator_id'] = 'vid_op';
-  $handler->display->display_options['filters']['vid']['expose']['label'] = 'Vocabulary';
-  $handler->display->display_options['filters']['vid']['expose']['operator'] = 'vid_op';
-  $handler->display->display_options['filters']['vid']['expose']['identifier'] = 'vid';
-  $handler->display->display_options['filters']['vid']['expose']['remember'] = TRUE;
+  /* Filter criterion: Content: Project (field_project) (reference filter) */
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['id'] = 'field_project_target_id_entityreference_filter';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['table'] = 'field_data_field_project';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['field'] = 'field_project_target_id_entityreference_filter';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['group'] = 1;
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['operator_id'] = 'field_project_target_id_entityreference_filter_op';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['label'] = 'Project';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['operator'] = 'field_project_target_id_entityreference_filter_op';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['identifier'] = 'field_project_target_id_entityreference_filter';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+  );
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['reference_display'] = 'entity_ref_list:entityreference_1';
+  $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['reference_arguments'] = 'project';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page_1');
