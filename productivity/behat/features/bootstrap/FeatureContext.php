@@ -471,5 +471,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       throw new \Exception(format_string("Wrong status code, @code", $params));
     }
   }
+
 }
 

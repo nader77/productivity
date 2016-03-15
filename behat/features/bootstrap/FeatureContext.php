@@ -7,7 +7,7 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Behat\Tester\Exception\PendingException;
 
 class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
-
+  protected $totalHours, $addedHours;
   /**
    * @When /^I login with user "([^"]*)"$/
    */
@@ -186,5 +186,37 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iWait() {
     sleep(10);
   }
+
+  /**
+   * @Given /^I add "([^"]*)" hours to "([^"]*)" project$/
+   */
+  public function iAddHoursToProject($arg1, $arg2) {
+    throw new PendingException();
+  }
+
+  /**
+   * @Given /^I get the total hours$/
+   */
+  public function iGetTheTotalHours() {
+    $page = $this->getSession()->getPage();
+    if (!$element = $page->find('xpath', '//div[@class="field-item even"]')) {
+      throw new \Exception('The element was not found in the page.');
+    }
+    $this->totalHours = $element->getText();
+  }
+
+  /**
+   * @Given /^I validate the total hours$/
+   */
+  public function iValidateTheTotalHours()
+  {
+    $page = $this->getSession()->getPage();
+    $element = $page->find('xpath', '//div[@class="field-item even"]');
+
+    if ($element->getText() != ($this->totalHours + 3) ) {
+      throw new Exception('Test failed.');
+    }
+  }
+
 }
 
