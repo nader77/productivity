@@ -7,13 +7,18 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Behat\Tester\Exception\PendingException;
 
 class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
-  protected $totalHours, $addedHours;
+
+  /**
+   *  The total hours of a project.
+   */
+  protected $totalHours;
+
   /**
    * @When /^I login with user "([^"]*)"$/
    */
   public function iLoginWithUser($name) {
     // @todo: Move password to YAML.
-    $password = 'admin';
+    $password = '1234';
     $this->loginUser($name, $password);
   }
 
@@ -30,24 +35,18 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @throws \Exception
    */
   protected function loginUser($name, $password, $check_success = TRUE) {
-    $this->getSession()->visit($this->locatePath('/#/login'));
-    $this->iWaitForCssElement('#login', 'appear');
+    $this->getSession()->visit($this->locatePath('user'));
     $element = $this->getSession()->getPage();
-    $element->fillField('username', $name);
-    $element->fillField('password', $password);
+    $element->fillField('Username', $name);
+    $element->fillField('Password', $password);
     $submit = $element->findButton('Log in');
 
     if (empty($submit)) {
       throw new \Exception(sprintf("No submit button at %s", $this->getSession()->getCurrentUrl()));
     }
-
     // Log in.
     $submit->click();
 
-    if ($check_success) {
-      // Wait for the dashboard's menu to load.
-      $this->iWaitForCssElement('#admin-menu-wrapper', 'appear');
-    }
   }
 
   /**
@@ -187,22 +186,23 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     sleep(10);
   }
 
-  /**
-   * @Given /^I add "([^"]*)" hours to "([^"]*)" project$/
-   */
-  public function iAddHoursToProject($arg1, $arg2) {
-    throw new PendingException();
+  public function getTotalHours() {
+    $this->getSession()->visit($this->locatePath('content/nike-site'));
+    $page = $this->getSession()->getPage();
+
+    if (!$element = $page->find('xpath', '//div[@class="field-item even"]')) {
+      throw new \Exception('The element was not found in the page.');
+    }
+
+    return $element->getText();
+
   }
 
   /**
    * @Given /^I get the total hours$/
    */
   public function iGetTheTotalHours() {
-    $page = $this->getSession()->getPage();
-    if (!$element = $page->find('xpath', '//div[@class="field-item even"]')) {
-      throw new \Exception('The element was not found in the page.');
-    }
-    $this->totalHours = $element->getText();
+    $this->totalHours = $this->getTotalHours();
   }
 
   /**
@@ -210,13 +210,28 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iValidateTheTotalHours()
   {
-    $page = $this->getSession()->getPage();
-    $element = $page->find('xpath', '//div[@class="field-item even"]');
+    $newTotalHours = $this->getTotalHours();
 
-    if ($element->getText() != ($this->totalHours + 3) ) {
+    if ($newTotalHours != ($this->totalHours + 3) ) {
       throw new Exception('Test failed.');
     }
   }
+
+  /**
+   * @Then /^I add a new time tracking entry$/
+   */
+  public function iAddANewTimeTrackingEntry() {
+    $this->getSession()->visit($this->locatePath('node/add/time-tracking'));
+    $element = $this->getSession()->getPage();
+
+    $element->fillField('Title', 'Developing the thing');
+    $element->fillField('Description', 'Yay');
+    $element->selectFieldOption('Project', 'nike Site');
+    $element->fillField('Time Spent', '3');
+    $element->selectFieldOption('Issue type', 'Development');
+    $element->find('css', '#edit-submit')->click();
+  }
+
 
 }
 
