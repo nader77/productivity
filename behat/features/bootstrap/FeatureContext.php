@@ -13,7 +13,17 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   protected $totalHours;
 
+  /**
+   *  The name of the project being tested.
+   */
   protected $projectName;
+
+  /**
+   *  The id of the project being tested.
+   *  Used for recalculating project's hours
+   *  TODO: Remove the hardcoding
+   */
+  protected $projectID = 3;
 
   /**
    * @When /^I login with user "([^"]*)"$/
@@ -21,6 +31,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iLoginWithUser($name) {
     // @todo: Move password to YAML.
     $password = '1234';
+    $password = $name == 'admin' ? 'admin' : '1234';
     $this->loginUser($name, $password);
   }
 
@@ -189,8 +200,11 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   public function getTotalHours($projectName) {
+    // Recalculating the project's total hours
+    $this->getSession()->visit($this->locatePath('/recalculate-project-time/' . $this->projectID));
+
+    // Getting the current project total hours
     $this->getSession()->visit($this->locatePath('content/' . $projectName));
-    print_r($this->locatePath('content/' . $projectName));
     $page = $this->getSession()->getPage();
 
     if (!$element = $page->find('xpath', '//div[@class="field-item even"]')) {
@@ -198,7 +212,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     }
 
     return $element->getText();
-
   }
 
   /**
@@ -210,15 +223,28 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Given /^I validate that total hours have incremented by "([^"]*)"$/
+   * @Given /^I validate that total hours have "([^"]*)" by "([^"]*)"$/
    */
-  public function iValidateTheTotalHours($hours)
-  {
+  public function iValidateTheTotalHours($type, $hours) {
     $newTotalHours = $this->getTotalHours($this->projectName);
-    if ($newTotalHours != ($this->totalHours + $hours) ) {
-      throw new Exception('Test failed.');
+    $expectedSum;
+    switch ($type) {
+      case "incremented":
+        $expectedSum = $this->totalHours + $hours;
+        break;
+
+      case "decremented":
+        $expectedSum = $this->totalHours - $hours;
+        break;
+
+      default:
+        throw new Exception('Wrong arithmetic type provided.');
     }
-  }
+    print("Total Hours: ". $newTotalHours . " Expected Sum: " . $expectedSum );
+    if ($newTotalHours != $expectedSum ) {
+      throw new Exception("The total hours didn't match the expected number.");
+    }
+   }
 
   /**
    * @Then /^I add a new time tracking entry with "([^"]*)" hours$/
@@ -235,6 +261,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $element->find('css', '#edit-submit')->click();
   }
 
+
   function getLatestTrackingEntry() {
     $query = new EntityFieldQuery();
     $result = $query
@@ -243,7 +270,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       ->propertyOrderBy('created', 'DESC')
       ->range(0, 1)
       ->execute();
-    print_r($result);
+
     if (empty($result['node'])) {
       return;
     }
@@ -251,10 +278,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Then /^I add "([^"]*)" hours to the lastest tracking entry$/
+   * @Then /^I add "([^"]*)" hours to the latest tracking entry$/
    */
-  public function iAddHoursToLatestTrackingEntry($hours)
-  {
+  public function iAddHoursToLatestTrackingEntry($hours) {
     $entryID = $this->getLatestTrackingEntry();
     $this->getSession()->visit($this->locatePath('node/' . $entryID .'/edit'));
     $element = $this->getSession()->getPage();
@@ -263,6 +289,15 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $element->find('css', '#edit-submit')->click();
   }
 
+  /**
+   * @Then /^I delete the latest tracking entry$/
+   */
+  public function iDeleteLatestTrackingEntry() {
+    $entryID = $this->getLatestTrackingEntry();
+    $this->getSession()->visit($this->locatePath('node/' . $entryID .'/delete'));
+    $element = $this->getSession()->getPage();
+    $element->find('css', '#edit-submit')->click();
+  }
 
 }
 
