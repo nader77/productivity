@@ -18,12 +18,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   protected $projectName;
 
-  /**
-   *  The id of the project being tested.
-   *  Used for recalculating project's hours
-   *  TODO: Remove the hardcoding
-   */
-  protected $projectID = 3;
 
   /**
    * @When /^I login with user "([^"]*)"$/
@@ -200,10 +194,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   public function getTotalHours($projectName) {
-    // Recalculating the project's total hours
-    $this->getSession()->visit($this->locatePath('/recalculate-project-time/' . $this->projectID));
-
-    // Getting the current project total hours
     $this->getSession()->visit($this->locatePath('content/' . $projectName));
     $page = $this->getSession()->getPage();
 
