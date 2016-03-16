@@ -13,6 +13,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   protected $totalHours;
 
+  protected $projectName;
+
   /**
    * @When /^I login with user "([^"]*)"$/
    */
@@ -186,8 +188,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     sleep(10);
   }
 
-  public function getTotalHours() {
-    $this->getSession()->visit($this->locatePath('content/nike-site'));
+  public function getTotalHours($projectName) {
+    $this->getSession()->visit($this->locatePath('content/' . $projectName));
+    print_r($this->locatePath('content/' . $projectName));
     $page = $this->getSession()->getPage();
 
     if (!$element = $page->find('xpath', '//div[@class="field-item even"]')) {
@@ -199,36 +202,64 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Given /^I get the total hours$/
+   * @Given /^I get the total hours from "([^"]*)" project$/
    */
-  public function iGetTheTotalHours() {
-    $this->totalHours = $this->getTotalHours();
+  public function iGetTheTotalHours($projectName) {
+    $this->projectName = $projectName;
+    $this->totalHours = $this->getTotalHours($projectName);
   }
 
   /**
-   * @Given /^I validate the total hours$/
+   * @Given /^I validate that total hours have incremented by "([^"]*)"$/
    */
-  public function iValidateTheTotalHours()
+  public function iValidateTheTotalHours($hours)
   {
-    $newTotalHours = $this->getTotalHours();
-
-    if ($newTotalHours != ($this->totalHours + 3) ) {
+    $newTotalHours = $this->getTotalHours($this->projectName);
+    if ($newTotalHours != ($this->totalHours + $hours) ) {
       throw new Exception('Test failed.');
     }
   }
 
   /**
-   * @Then /^I add a new time tracking entry$/
+   * @Then /^I add a new time tracking entry with "([^"]*)" hours$/
    */
-  public function iAddANewTimeTrackingEntry() {
+  public function iAddANewTimeTrackingEntry($hours) {
     $this->getSession()->visit($this->locatePath('node/add/time-tracking'));
     $element = $this->getSession()->getPage();
 
     $element->fillField('Title', 'Developing the thing');
     $element->fillField('Description', 'Yay');
     $element->selectFieldOption('Project', 'nike Site');
-    $element->fillField('Time Spent', '3');
+    $element->fillField('Time Spent', $hours);
     $element->selectFieldOption('Issue type', 'Development');
+    $element->find('css', '#edit-submit')->click();
+  }
+
+  function getLatestTrackingEntry() {
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'node')
+      ->propertyCondition('type', 'time_tracking')
+      ->propertyOrderBy('created', 'DESC')
+      ->range(0, 1)
+      ->execute();
+    print_r($result);
+    if (empty($result['node'])) {
+      return;
+    }
+    return key($result['node']);
+  }
+
+  /**
+   * @Then /^I add "([^"]*)" hours to the lastest tracking entry$/
+   */
+  public function iAddHoursToLatestTrackingEntry($hours)
+  {
+    $entryID = $this->getLatestTrackingEntry();
+    $this->getSession()->visit($this->locatePath('node/' . $entryID .'/edit'));
+    $element = $this->getSession()->getPage();
+
+    $element->fillField('Time Spent', $hours);
     $element->find('css', '#edit-submit')->click();
   }
 
