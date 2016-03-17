@@ -413,7 +413,8 @@ function productivity_project_update_project_total_hours($wrapper_time_tracking)
     $total_work_new = productivity_time_tracking_node_total_hours($node);
     $types = $total_work_new['types'];
 
-    if (!isset($node->is_new)) {
+    // Check if node already exist
+    if (!$node->is_new) {
       $node_original = $node->original;
       $total_work_original = productivity_time_tracking_node_total_hours($node_original);
       $types += $total_work_original['types'];
