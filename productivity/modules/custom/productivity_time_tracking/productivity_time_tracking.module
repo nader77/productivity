@@ -514,17 +514,6 @@ function productivity_time_tracking_bulk_update($month, $year, $employee, $proje
 }
 
 /**
- * Implements hook_node_update().
- */
-function productivity_time_tracking_node_update($node) {
-  if ($node->type != 'time_tracking') {
-    return;
-  }
-
-  _productivity_time_tracking_update_issue($node);
-}
-
-/**
  * Implements hook_node_insert().
  */
 function productivity_time_tracking_node_insert($node) {
@@ -532,8 +521,32 @@ function productivity_time_tracking_node_insert($node) {
     return;
   }
 
-  _productivity_time_tracking_update_issue($node);
+  productivity_time_tracking_update_issue($node);
 }
+
+/**
+ * Implements hook_node_update().
+ */
+function productivity_time_tracking_node_update($node) {
+  if ($node->type != 'time_tracking') {
+    return;
+  }
+
+  productivity_time_tracking_update_issue($node);
+}
+
+/**
+ * Implements hook_node_delete().
+ */
+function productivity_time_tracking_node_delete($node) {
+  if ($node->type != 'time_tracking') {
+    return;
+  }
+
+  $wrapper = entity_metadata_wrapper('node', $node);
+  productivity_project_update_project_total_hours($wrapper, true);
+}
+
 
 /**
  * Update the issue node with time tracking data.
@@ -541,7 +554,7 @@ function productivity_time_tracking_node_insert($node) {
  * @param $node
  *   Time tracking node that has been updated or inserted.
  */
-function _productivity_time_tracking_update_issue($node) {
+function productivity_time_tracking_update_issue($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
 
   // Skip updating the issue node if something is wrong.
