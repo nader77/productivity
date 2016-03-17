@@ -275,6 +275,13 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $this->getSession()->visit($this->locatePath('node/' . $entryID .'/edit'));
     $element = $this->getSession()->getPage();
 
+    $timeSpentElm = $element->find('css', '#edit-field-issues-logs-und-0-field-time-spent-und-0-value');
+    $timeSpent = $timeSpentElm->getValue();
+
+    if ( isset($timeSpent) ) {
+      $hours +=$timeSpent;
+    }
+
     $element->fillField('Time Spent', $hours);
     $element->find('css', '#edit-submit')->click();
   }
