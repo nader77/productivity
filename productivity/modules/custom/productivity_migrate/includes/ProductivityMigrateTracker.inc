@@ -41,7 +41,6 @@ class ProductivityMigrateTracker extends ProductivityMigrate {
     $field_names = array(
       'field_description',
       'field_day_type',
-      'field_track_hours',
     );
     $this->addSimpleMappings($field_names);
 
@@ -61,21 +60,17 @@ class ProductivityMigrateTracker extends ProductivityMigrate {
   }
 
   function prepare($entity, $row) {
-    $wrapper = entity_metadata_wrapper('node', $entity);
+    // Save time tracking, in multifield format.
+    if ($row->field_day_type == 'regular') {
+      $entity->field_issues_logs[LANGUAGE_NONE][0]['field_time_spent'][LANGUAGE_NONE][0]['value'] = $row->field_track_hours;
+      $entity->field_issues_logs[LANGUAGE_NONE][0]['field_issue_type'][LANGUAGE_NONE][0]['value'] = 'dev';
+    }
     if ($row->length_unit == 'days' || $row->length_unit == 'day') {
       // Multiply by 8 if days.
       $row->field_track_hours *= 8;
     }
     if ($row->length_unit == "" &&  $row->field_track_hours == '1') {
       $row->field_track_hours = 8;
-    }
-    if (!$wrapper->field_employee->value()) {
-      // Prevent error on save when field is empty.
-      unset($entity->field_employee);
-    }
-    if (!$wrapper->field_project->value()) {
-      // Prevent error on save when field is empty.
-      unset($entity->field_project);
     }
   }
 }
