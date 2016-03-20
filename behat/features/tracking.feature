@@ -18,4 +18,4 @@ Feature: Time tracking
     Given I login with user "admin"
      Then I get the total hours from "nike-site" project
      Then I delete the latest tracking entry
-      And I validate that total hours have "decremented" by "3"
+      And I validate that total hours have "decremented" by "6"
