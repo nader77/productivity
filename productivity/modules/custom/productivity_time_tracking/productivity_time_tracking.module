@@ -551,7 +551,7 @@ function productivity_time_tracking_update_issue($node) {
 
   $old_count = 0;
 
-  if (empty($node->is_new)) {
+  if (isset($node->is_new) && !$node->is_new) {
     $original_wrapper = entity_metadata_wrapper('node', $node->original);
     $old_count = $original_wrapper->field_issues_logs->count();
   }

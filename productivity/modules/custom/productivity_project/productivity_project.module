@@ -397,64 +397,77 @@ function productivity_project_repository_autocomplete_need_invalidate() {
  * @param $wrapper_time_tracking
  *  Time tracking node wrapper.
  *
+ * @param $delete
+ *  Case deleting a time tracking.
+ *
  * @return string $issue_type
  *  The issue type.
  */
+
 function productivity_project_update_project_total_hours($wrapper_time_tracking, $delete = FALSE) {
   $project_wrapper = $wrapper_time_tracking->field_project;
 
   // Add the hours by work type (qa, dev, management..).
   if($wrapper_time_tracking->field_day_type->value() == "regular") {
 
+    // Validates that the node has a project associated with it
     $node_project = $project_wrapper->value();
+    if (!$node_project) {
+      return FALSE;
+    }
 
     // Summarize all total here.
     $node = $wrapper_time_tracking->value();
     $total_work_new = productivity_time_tracking_node_total_hours($node);
     $types = $total_work_new['types'];
 
+    // Only enter if the node isn't new (Updated / Deleted)
+    if ((isset($node->is_new) && !$node->is_new) || $delete) {
+      // If doesn't have an original property, this node is being deleted.
+      $node_original = isset($node->original) ? $node->original : $node;
 
-      // Check if node already exist
-      if (!$node->is_new) {
-        $node_original = $node->original;
-        $total_work_original = productivity_time_tracking_node_total_hours($node_original);
-        $types += $total_work_original['types'];
-      }
+      $total_work_original = productivity_time_tracking_node_total_hours($node_original);
+      $types += $total_work_original['types'];
+    }
 
-      // Save totals on project node.
-      $total_diff = 0;
-      $project_rates = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate : array();
-      // Count new types add in this node save.
-      $new_types_count = 0;
-      // Go over all types, original and new.
-      foreach ($types as $type) {
+    // Save totals on project node.
+    $total_diff = 0;
+    $project_rates = isset($project_wrapper->field_table_rate) ? $project_wrapper->field_table_rate : array();
+    // Count new types add in this node save.
+    $new_types_count = 0;
+    // Go over all types, original and new.
+    foreach ($types as $type) {
 
-          $original_hours = isset($total_work_original['total'][$type]) ? $total_work_original['total'][$type] : 0;
-          $hours = isset($total_work_new['total'][$type]) ? $total_work_new['total'][$type] : 0;
-          $diff = $hours - $original_hours;
+      if (!$delete) {
+        $original_hours = isset($total_work_original['total'][$type]) ? $total_work_original['total'][$type] : 0;
+        $hours = isset($total_work_new['total'][$type]) ? $total_work_new['total'][$type] : 0;
+        $diff = $hours - $original_hours;
 
-        if (!$delete) {
-          // Create rate type on the project if does not exist yet.
-          if (!$rate = productivity_project_check_existing_type($project_rates, $type)) {
-            // Create new row for the issue type at the table.
-            $index = count($project_rates) + $new_types_count;
-            $new_rate_structure = productivity_project_create_new_type($index, $hours, $type);
-            $node_project->field_table_rate['und'] += $new_rate_structure;
-            $new_types_count++;
-          }
-          else {
-            // Save diff to existing type.
-            $node_project->field_table_rate['und'][$rate['key']]['field_hours']['und'][0]['value'] += $diff;
-          }
+        // Create rate type on the project if does not exist yet.
+        if (!$rate = productivity_project_check_existing_type($project_rates, $type)) {
+          // Create new row for the issue type at the table.
+          $index = count($project_rates) + $new_types_count;
+          $new_rate_structure = productivity_project_create_new_type($index, $hours, $type);
+          $node_project->field_table_rate['und'] += $new_rate_structure;
+          $new_types_count++;
         }
 
         else {
-          // Update $total_diff, for delete function
+          // Save diff to existing type.
           $node_project->field_table_rate['und'][$rate['key']]['field_hours']['und'][0]['value'] += $diff;
         }
-
         $total_diff += $diff;
       }
+
+     // Node is being deleted, means it just needs to subtract it's hours from
+     // the project's total hours
+     else {
+        $diff = isset($total_work_original['total'][$type]) ? $total_work_original['total'][$type] : 0;
+        $rate = productivity_project_check_existing_type($project_rates, $type);
+        $node_project->field_table_rate['und'][$rate['key']]['field_hours']['und'][0]['value'] -= $diff;
+        $total_diff -= $diff;
+      }
+    }
 
     $total_original_hours = $project_wrapper->field_hours->value();
     $project_wrapper->field_hours->set($total_original_hours + $total_diff);
