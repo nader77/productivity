@@ -201,7 +201,12 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       throw new \Exception('The element was not found in the page.');
     }
 
-    return $element->getText();
+    $totalHoursText = $element->getText();
+
+    // Removing whitespace in case $totalHoursText >= 1 000
+    $totalHours = intval(str_replace(' ', '', $totalHoursText));
+
+    return $totalHours;
   }
 
   /**
@@ -209,7 +214,9 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iGetTheTotalHours($projectName) {
     $this->projectName = $projectName;
-    $this->totalHours = $this->getTotalHours($projectName);
+    $totalHours = $this->getTotalHours($projectName);
+
+    $this->totalHours = $totalHours;
   }
 
   /**
@@ -225,12 +232,16 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
       case "decremented":
         $expectedSum = $this->totalHours - $hours;
+        print("\nOriginal Hours: " . $this->totalHours);
+        print("\nDecremented Hours: " . $hours);
+        print("\nExpected Sum: " . $expectedSum);
         break;
 
       default:
         throw new Exception('Wrong arithmetic type provided.');
     }
-    print("Total Hours: ". $newTotalHours . " Expected Sum: " . $expectedSum );
+
+    print("\nTotal Hours: ". $newTotalHours . " Expected Sum: " . $expectedSum );
     if ($newTotalHours != $expectedSum ) {
       throw new Exception("The total hours didn't match the expected number.");
     }
