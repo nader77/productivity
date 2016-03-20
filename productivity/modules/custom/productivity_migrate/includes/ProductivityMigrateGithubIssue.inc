@@ -23,7 +23,7 @@ class ProductivityMigrateGithubIssue extends ProductivityMigrate {
     array('field_github_project_id', 'GitHub Project ID'),
     array('field_issue_id', 'Issue ID'),
     array('field_push_date', 'Push Date'),
-    array('field_employee	', 'Employee'),
+    array('field_employee', 'Employee'),
     array('field_project', 'Project'),
     array('field_time_estimate', 'Time Estimate'),
   );

@@ -279,7 +279,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $timeSpent = $timeSpentElm->getValue();
 
     if ( isset($timeSpent) ) {
-      $hours +=$timeSpent;
+      $hours += $timeSpent;
     }
 
     $element->fillField('Time Spent', $hours);
