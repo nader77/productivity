@@ -1,4 +1,4 @@
-Feature: Calendar
+Feature: Calendar in app
   In order to be able to access the calendar
   As an authenticated user
   We need to be able to add and view events in the calendar.

@@ -23,8 +23,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @When /^I login with user "([^"]*)"$/
    */
   public function iLoginWithUser($name) {
-    // @todo: Move password to YAML.
-    $password = '1234';
     $password = $name == 'admin' ? 'admin' : '1234';
     $this->loginUser($name, $password);
   }
