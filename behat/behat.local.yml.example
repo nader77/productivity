@@ -1,7 +1,7 @@
 default:
   extensions:
     Behat\MinkExtension:
-      base_url: "http://localhost:9001"
+      base_url: "http://localhost/productivity/www"
     Drupal\DrupalExtension:
       drupal:
         drupal_root: "/Users/brice/Sites/productivity/www"
