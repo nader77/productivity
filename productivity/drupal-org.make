@@ -43,7 +43,7 @@ projects[entityreference_filter][version] = "1.5"
 projects[entityrelationships][type] = "module"
 projects[entityrelationships][subdir] = "contrib"
 projects[entityrelationships][download][type] = "git"
-projects[restful][download][branch] = "master"
+projects[entityrelationships][download][branch] = "master"
 projects[entityrelationships][download][url] = "https://github.com/Gizra/entityrelationships.git"
 
 projects[gravatar][subdir] = "contrib"
