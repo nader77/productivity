@@ -99,22 +99,8 @@ function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form
   // Hide the title.
   $form['title']['#access'] = FALSE;
 
-
-  // Display only active employees.
-  $uids = array();
   $wrapper = entity_metadata_wrapper('node', $form['#node']);
-
-  // Get all active employees.
-  $query = new EntityFieldQuery();
-  $result = $query
-    ->entityCondition('entity_type', 'user')
-    ->propertyCondition('status', 1)
-    ->fieldCondition('field_employment_status', 'value', 'employed')
-    ->propertyOrderBy('name')
-    ->execute();
-  if (!empty($result['user'])) {
-    $uids = array_keys($result['user']);
-  }
+  $uids = productivity_account_get_employee_uids();
 
   // Make sure the selected employee is in the list, even if they're not active.
   if ($wrapper->field_employee->value()) {
