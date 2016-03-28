@@ -40,11 +40,11 @@ projects[entityreference][patch][] = "https://www.drupal.org/files/issues/migrat
 projects[entityreference_filter][subdir] = "contrib"
 projects[entityreference_filter][version] = "1.5"
 
-projects[entityrelationships][type] = "module"
-projects[entityrelationships][subdir] = "contrib"
-projects[entityrelationships][download][type] = "git"
-projects[entityrelationships][download][branch] = "master"
-projects[entityrelationships][download][url] = "https://github.com/Gizra/entityrelationships.git"
+projects[entitiesdiagram][type] = "module"
+projects[entitiesdiagram][subdir] = "contrib"
+projects[entitiesdiagram][download][type] = "git"
+projects[entitiesdiagram][download][branch] = "master"
+projects[entitiesdiagram][download][url] = "https://github.com/Gizra/entitiesdiagram.git"
 
 projects[gravatar][subdir] = "contrib"
 projects[gravatar][version] = "1.x-dev"
