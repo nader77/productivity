@@ -102,7 +102,7 @@ function productivity_time_tracking_issue_table($node = FALSE, $year = FALSE, $m
   $variables['grand_total'] = 0;
   $header = array('Issue', 'Label', 'Date', 'Time', 'Amount');
   foreach ($issues_table as $table_name => $table) {
-    $variables['table_titles'][$table_name] = _productivity_time_tracking_table_title($table_name, $node, $table['label']);
+    $variables['table_titles'][$table_name] = _productivity_time_tracking_get_table_title($table_name, $node, $table['label']);
     $variables['total_per_types'][$table_name] = 0;
     $variables['total_per_hours_types'][$table_name] = 0;
 
@@ -180,29 +180,24 @@ function productivity_time_tracking_create_issues_table($nodes) {
 /**
  * Check for a project override to the table title.
  * These are set in the project's node field_work_type.
- * Format example: "dev|Junior Development,dev_senior|Senior Development".
+ * Function designed to run once per page load (can be optimized
+ * if all the overrides are needed).
  *
  * @param $table_machine_name
  * @param $node
  * @param string $default_name
  * @return string
  */
-function _productivity_time_tracking_table_title($table_machine_name, $node, $default_name = '') {
-  $name = $default_name;
-
-  $wrapper = entity_metadata_wrapper('node', $node);
-  $overrides_string = $wrapper->field_table_rate->field_work_types_display->value();
+function _productivity_time_tracking_get_table_title($table_machine_name, $node, $default_name = '') {
+  // Find all of the overrides.
   $overrides = array();
-  foreach (explode(',', $overrides_string) as $override_string) {
-    $override = explode('|', $override_string);
-    $overrides[$override[0]] = $override[1];
+  $wrapper = entity_metadata_wrapper('node', $node);
+  foreach($wrapper->field_table_rate as $multifield) {
+    $machine_name = $multifield->field_issue_type->value();
+    $override = $multifield->field_work_type_display->value();
+
+    $overrides[$machine_name] = $override;
   }
 
-  if (!empty($overrides[$table_machine_name])) {
-    // Found the requested string.
-    $name = $overrides[$table_machine_name];
-  }
-
-  // Get the overridden name.
-  return $name;
+  return empty($overrides[$table_machine_name]) ?  $default_name : $overrides[$table_machine_name];
 }

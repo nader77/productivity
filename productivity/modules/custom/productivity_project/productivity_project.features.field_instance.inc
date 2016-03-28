@@ -483,6 +483,41 @@ function productivity_project_field_default_field_instances() {
   );
 
   // Exported field_instance:
+  // 'multifield-field_table_rate-field_work_type_display'.
+  $field_instances['multifield-field_table_rate-field_work_type_display'] = array(
+    'bundle' => 'field_table_rate',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Override to default title.',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 10,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_work_type_display',
+    'label' => 'Work type display',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 5,
+    ),
+  );
+
+  // Exported field_instance:
   // 'multifield-field_table_rate-field_work_types_display'.
   $field_instances['multifield-field_table_rate-field_work_types_display'] = array(
     'bundle' => 'field_table_rate',
@@ -1484,6 +1519,7 @@ If your not sure use the third one.');
   t('Allow work session reference');
   t('Date');
   t('Github repository name');
+  t('Override to default title.');
   t('Overrides work type table titles.
 Format example: "dev|Junior Development,dev_senior|Senior Development"');
   t('Percentage notified');
@@ -1507,6 +1543,7 @@ Whether this project should be allowed as the project reference of a work sessio
   t('Total hours');
   t('Type');
   t('Work type');
+  t('Work type display');
   t('Work types display');
 
   return $field_instances;

@@ -37,6 +37,7 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
         'field_rate',
         'field_rate_type',
         'field_hours',
+        'field_work_type_display'
       );
 
       foreach ($fields as $field_name) {
@@ -46,6 +47,10 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
       // Add days.
       $rows[$key]['days'] = productivity_project_get_total_days($rate->field_hours->value());
       $rows[$key]['recalculate'] = l(t('Recalculate'), 'recalculate-project-time/' . $node->nid . '/' . $rate->field_issue_type->value());
+
+      // Override work type titles.
+      $rows[$key]['field_issue_type'] = empty($rows[$key]['field_work_type_display']) ? $rows[$key]['field_issue_type'] : $rows[$key]['field_work_type_display'];
+      unset($rows[$key]['field_work_type_display']);
     }
   }
 
