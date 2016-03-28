@@ -482,6 +482,42 @@ function productivity_project_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance:
+  // 'multifield-field_table_rate-field_work_types_display'.
+  $field_instances['multifield-field_table_rate-field_work_types_display'] = array(
+    'bundle' => 'field_table_rate',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Overrides work type table titles.
+Format example: "dev|Junior Development,dev_senior|Senior Development"',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 10,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_work_types_display',
+    'label' => 'Work types display',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 600,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 5,
+    ),
+  );
+
   // Exported field_instance: 'node-project-field_account'.
   $field_instances['node-project-field_account'] = array(
     'bundle' => 'project',
@@ -1448,6 +1484,8 @@ If your not sure use the third one.');
   t('Allow work session reference');
   t('Date');
   t('Github repository name');
+  t('Overrides work type table titles.
+Format example: "dev|Junior Development,dev_senior|Senior Development"');
   t('Percentage notified');
   t('Rate');
   t('Rate type');
@@ -1469,6 +1507,7 @@ Whether this project should be allowed as the project reference of a work sessio
   t('Total hours');
   t('Type');
   t('Work type');
+  t('Work types display');
 
   return $field_instances;
 }
