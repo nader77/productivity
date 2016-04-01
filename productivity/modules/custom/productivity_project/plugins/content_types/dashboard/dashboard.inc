@@ -23,6 +23,16 @@ function productivity_project_dashboard_content_type_render($subtype, $conf, $ar
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
   $variables['rendered_nodes'] = array();
 
+  $block = new stdClass();
+  $block->module = 'productivity_project';
+  $block->title = '';
+
+  if (empty($projects)) {
+    // No projects to render.
+    $block->content = t('No projects to view.');
+    return $block;
+  }
+
   foreach($projects as $nid => $title) {
     $node_variables = array();
     $node_variables['title'] = $title;
@@ -52,9 +62,6 @@ function productivity_project_dashboard_content_type_render($subtype, $conf, $ar
   $variables_header['due_amount'] = 0;
 
   $variables['header'] = theme('productivity_project_dashboard_header', $variables_header);
-  $block = new stdClass();
-  $block->module = 'productivity_project';
-  $block->title = '';
   $block->content = theme('productivity_project_dashboard', $variables);
 
   return $block;
