@@ -37,6 +37,9 @@ projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.1"
 projects[entityreference][patch][] = "https://www.drupal.org/files/issues/migrate_multiple_entity_reference-2394725-4.patch"
 
+projects[entityreference_autofill][subdir] = "contrib"
+projects[entityreference_autofill][version] = "1.2"
+
 projects[entityreference_filter][subdir] = "contrib"
 projects[entityreference_filter][version] = "1.5"
 

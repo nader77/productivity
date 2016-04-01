@@ -6,27 +6,3 @@
 
 include_once 'productivity_account.features.inc';
 
-/**
- * Implements hook_node_insert().
- *
- * Add default account rates when a project is added.
- */
-function productivity_account_node_insert($node) {
-  if ($node->bundle != 'project') {
-    return;
-  }
-
-  // Get the account node.
-  $wrapper = entity_metadata_wrapper('node', $node);
-  $wrapper = $wrapper->field_account;
-
-  if (!$wrapper->value()) {
-    // No account node somehow.
-    return;
-  }
-
-
-
-  dpm($wrapper->value());
-
-}

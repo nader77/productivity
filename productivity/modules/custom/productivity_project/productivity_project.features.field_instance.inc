@@ -545,6 +545,15 @@ function productivity_project_field_default_field_instances() {
     'label' => 'Account',
     'required' => 1,
     'settings' => array(
+      'behaviors' => array(
+        'autofill' => array(
+          'fields' => array(
+            'field_table_rate' => 'field_table_rate',
+          ),
+          'overwrite' => 1,
+          'status' => 1,
+        ),
+      ),
       'user_register_form' => FALSE,
     ),
     'widget' => array(
