@@ -20,7 +20,7 @@ angular
     'angular-loading-bar',
     'ui.calendar'
   ])
-  .config(function($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
+  .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, cfpLoadingBarProvider) {
 
     /**
      * Redirect a user to a 403 error page.
@@ -58,6 +58,11 @@ angular
         url: '/login',
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
+      })
+      .state('github', {
+        url: '/auth/github',
+        templateUrl: 'views/github-auth.html',
+        controller: 'GithubAuthCtrl'
       })
       .state('dashboard', {
         title: 'Dashboard',

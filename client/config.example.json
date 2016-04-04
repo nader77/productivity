@@ -2,11 +2,13 @@
   "development": {
     "backend": "http://localhost/productivity/www",
     "debugUiRouter": true,
+    "githubClientId": false,
     "calendar": false,
     "local": true
   },
   "production": {
     "debugUiRouter": false,
+    "githubClientId": false,
     "calendar": false,
     "local": false
   }
