@@ -43,4 +43,5 @@ To toggle between the two options on the front-end you can edit the `config.json
 Setting `githubClientId` to the `Client ID` provided by the application in GitHub will enable the GitHub connection button,
 Setting `githubClientId` to `FALSE` will enable the normal login page.
 
-When choosing the GitHub connect login, You have to provide the application's `Client ID` and `Client secret` to the backend as well which should be done through the `config.sh` (`default.config.sh` on first install) file in the `ROOT` directory in the `post_install` function.
+When choosing the GitHub connect login, You have to provide the application's `Client ID` and `Client secret` to the backend as well which should be done through the `config.sh` (`default.config.sh` on first install) file in the `ROOT` directory in the `post_install` function
+or in the admin interface under `admin/config/system/productivity_settings`.

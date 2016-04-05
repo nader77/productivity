@@ -87,8 +87,7 @@ function post_install {
   chmod 777 www/sites/default/settings.php
 
   # Github integration.
-  echo "\$conf['productivity_github_client_id'] = '<your-client-id>';" >> www/sites/default/settings.php
-  echo "\$conf['productivity_github_client_secret'] = '<your-client-secret>';"  >> www/sites/default/settings.php
-  echo "\$conf['productivity_user_github_dummy'] = '<github-user-access-token>';"  >> www/sites/default/settings.php
+  echo "\$conf['github_public'] = '<your-client-id>';" >> www/sites/default/settings.php
+  echo "\$conf['github_secret'] = '<your-client-secret>';"  >> www/sites/default/settings.php
 }
 

@@ -39,8 +39,8 @@ class ProductivityGithubAuthAuthentication extends \RestfulAccessTokenAuthentica
     $options = array(
       'method' => 'POST',
       'data' => http_build_query(array(
-        'client_id' => variable_get('productivity_github_client_id'),
-        'client_secret' => variable_get('productivity_github_client_secret'),
+        'client_id' => variable_get('github_public'),
+        'client_secret' => variable_get('github_secret'),
         'code' => $request['code'],
       )),
     );
@@ -48,7 +48,7 @@ class ProductivityGithubAuthAuthentication extends \RestfulAccessTokenAuthentica
 
     // Pantheon has a nasty bug that causes http_build_query() to build the
     // query incorrectly.
-    $options['data'] = 'client_id=' . variable_get('productivity_github_client_id') . '&client_secret=' . variable_get('productivity_github_client_secret') . '&code=' . $request['code'];
+    $options['data'] = 'client_id=' . variable_get('github_public') . '&client_secret=' . variable_get('github_secret') . '&code=' . $request['code'];
 
     // Allow mocking the login to Github.
     $url = variable_get('productivity_github_api_login_url', 'https://github.com/login/oauth/access_token');
@@ -65,13 +65,13 @@ class ProductivityGithubAuthAuthentication extends \RestfulAccessTokenAuthentica
 
     $data = productivity_github_http_request('user', $options);
     $data = $data['data'];
-    $email = $data['email'];
+    $github_username = $data['login'];
 
     // Get the email from Github and compare with ours.
     $query = new EntityFieldQuery();
     $result = $query
       ->entityCondition('entity_type', 'user')
-      ->propertyCondition('mail', $email)
+      ->fieldCondition('field_github_username', 'value', $github_username)
       ->range(0, 1)
       ->execute();
 

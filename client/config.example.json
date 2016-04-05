@@ -7,9 +7,10 @@
     "local": true
   },
   "production": {
+    "backend": "http://live-productivity.pantheon.io",
     "debugUiRouter": false,
     "githubClientId": false,
     "calendar": false,
-    "local": false
+    "local": true
   }
 }

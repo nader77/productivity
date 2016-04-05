@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @ngdoc function
  * @name clientApp.controller:GithubAuthCtrl
@@ -20,5 +22,3 @@ angular.module('clientApp')
         $state.go('login');
       });
   });
-
-'use strict';

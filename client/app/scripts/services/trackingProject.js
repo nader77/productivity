@@ -55,8 +55,10 @@ angular.module('clientApp')
     /**
      * Set the cache from the server.
      *
-     * @param data
-     *   The data to cache
+     * @param year
+     *   The year to get the id of the cache.
+     * @param month
+     *   The month to get the id of the cache.
      */
     var getCache = function(year, month) {
       // Cache data.
@@ -72,6 +74,10 @@ angular.module('clientApp')
      *
      * @param data
      *   The data to cache
+     * @param year
+     *   The year to set the id of the cache.
+     * @param month
+     *   The month to set the id of the cache.
      */
     var setCache = function(data, year, month) {
       // Cache data.
