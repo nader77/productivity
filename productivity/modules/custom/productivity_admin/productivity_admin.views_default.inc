@@ -339,6 +339,10 @@ function productivity_admin_views_default_views() {
     'thousand_separator' => ' ',
     'prefix_suffix' => 1,
   );
+  /* Field: Content: Github Project ID */
+  $handler->display->display_options['fields']['field_github_project_id']['id'] = 'field_github_project_id';
+  $handler->display->display_options['fields']['field_github_project_id']['table'] = 'field_data_field_github_project_id';
+  $handler->display->display_options['fields']['field_github_project_id']['field'] = 'field_github_project_id';
   /* Field: Content: Time Estimate */
   $handler->display->display_options['fields']['field_time_estimate']['id'] = 'field_time_estimate';
   $handler->display->display_options['fields']['field_time_estimate']['table'] = 'field_data_field_time_estimate';

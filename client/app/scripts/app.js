@@ -20,7 +20,7 @@ angular
     'angular-loading-bar',
     'ui.calendar'
   ])
-  .config(function($stateProvider, $urlRouterProvider, $httpProvider, cfpLoadingBarProvider) {
+  .config(function($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, cfpLoadingBarProvider) {
 
     /**
      * Redirect a user to a 403 error page.
@@ -58,6 +58,11 @@ angular
         url: '/login',
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
+      })
+      .state('github', {
+        url: '/auth/github',
+        templateUrl: 'views/github-auth.html',
+        controller: 'GithubAuthCtrl'
       })
       .state('dashboard', {
         title: 'Dashboard',
@@ -193,16 +198,16 @@ angular
 
 
       if (!!Config.debugUiRouter) {
-      $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams) {
+      $rootScope.$on('$stateChangeStart',function(event, toState, toParams) {
         $log.log('$stateChangeStart to ' + toState.to + '- fired when the transition begins. toState,toParams : \n', toState, toParams);
       });
 
-      $rootScope.$on('$stateChangeError',function(event, toState, toParams, fromState, fromParams) {
+      $rootScope.$on('$stateChangeError',function() {
         $log.log('$stateChangeError - fired when an error occurs during transition.');
         $log.log(arguments);
       });
 
-      $rootScope.$on('$stateChangeSuccess',function(event, toState, toParams, fromState, fromParams) {
+      $rootScope.$on('$stateChangeSuccess',function(event, toState) {
         $log.log('$stateChangeSuccess to ' + toState.name + '- fired once the state transition is complete.');
       });
 

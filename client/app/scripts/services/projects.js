@@ -39,7 +39,7 @@ angular.module('clientApp')
         method: 'POST',
         url: url,
         data: data
-      }).success(function(response) {
+      }).success(function() {
       });
 
       return deferred.promise;

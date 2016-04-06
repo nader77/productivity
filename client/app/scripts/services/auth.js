@@ -57,4 +57,22 @@ angular.module('clientApp')
     this.authFailed = function() {
       this.logout();
     };
+
+    /**
+     * Sends the oAuth code from GitHub to start a session in the backend.
+     *
+     * @param code
+     *  The oAuth code sent from GitHub.
+     *
+     * @returns {*}
+     *  The backend webservice response.
+     */
+    this.authByGithubCode = function(code) {
+      // Service 'Auth' can't depend on '$http', hence injecting it manually
+      return $injector.get('$http')({
+        method: 'POST',
+        data: {code: code},
+        url: Config.backend + '/auth/github'
+      });
+    };
   });
