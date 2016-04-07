@@ -9,6 +9,16 @@ use Behat\Behat\Tester\Exception\PendingException;
 class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
   /**
+   *  The total hours of a project.
+   */
+  protected $totalHours;
+
+  /**
+   *  The name of the project being tested.
+   */
+  protected $projectName;
+
+  /**
    * @When /^I login with user "([^"]*)"$/
    */
   public function iLoginWithUser($name) {
@@ -36,15 +46,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    */
   public function iLoginWithBadCredentials() {
     $this->loginUser('wrong-foo', 'wrong-bar');
-  }
-
-  /**
-   * @When /^I open the calendar$/
-   */
-  public function iOpenTheCalendar() {
-    $element = $this->getSession()->getPage();
-    $element->pressButton('Show Calendar');
-    $this->iShouldWaitForTheTextTo('Log work', 'appear');
   }
 
   /**
@@ -472,5 +473,117 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     }
   }
 
+  public function getTotalHours($projectName) {
+    $this->getSession()->visit($this->locatePath('content/' . $projectName));
+    $page = $this->getSession()->getPage();
+
+    if (!$element = $page->find('xpath', '//div[@class="field-item even"]')) {
+      throw new \Exception('The element was not found in the page.');
+    }
+
+    $totalHoursText = $element->getText();
+
+    // Removing whitespace in case $totalHoursText >= 1 000
+    $totalHours = intval(str_replace(' ', '', $totalHoursText));
+
+    return $totalHours;
+  }
+
+  /**
+   * @Given /^I get the total hours from "([^"]*)" project$/
+   */
+  public function iGetTheTotalHours($projectName) {
+    $this->projectName = $projectName;
+    $totalHours = $this->getTotalHours($projectName);
+
+    $this->totalHours = $totalHours;
+  }
+
+  /**
+   * @Given /^I validate that total hours have "([^"]*)" by "([^"]*)"$/
+   */
+  public function iValidateTheTotalHours($type, $hours) {
+    $newTotalHours = $this->getTotalHours($this->projectName);
+    switch ($type) {
+      case "incremented":
+        $expectedSum = $this->totalHours + $hours;
+        break;
+
+      case "decremented":
+        $expectedSum = $this->totalHours - $hours;
+        print("\nOriginal Hours: " . $this->totalHours);
+        print("\nDecremented Hours: " . $hours);
+        print("\nExpected Sum: " . $expectedSum);
+        break;
+
+      default:
+        throw new Exception('Wrong arithmetic type provided.');
+    }
+
+    print("\nTotal Hours: ". $newTotalHours . " Expected Sum: " . $expectedSum );
+    if ($newTotalHours != $expectedSum ) {
+      throw new Exception("The total hours didn't match the expected number.");
+    }
+  }
+
+  /**
+   * @Then /^I add a new time tracking entry with "([^"]*)" hours$/
+   */
+  public function iAddANewTimeTrackingEntry($hours) {
+    $this->getSession()->visit($this->locatePath('node/add/time-tracking'));
+    $element = $this->getSession()->getPage();
+
+    $element->fillField('Title', 'Developing the thing');
+    $element->fillField('Description', 'Yay');
+    $element->selectFieldOption('Project', 'nike Site');
+    $element->fillField('Time Spent', $hours);
+    $element->selectFieldOption('Issue type', 'Development');
+    $element->find('css', '#edit-submit')->click();
+  }
+
+
+  function getLatestTrackingEntry() {
+    $query = new EntityFieldQuery();
+    $result = $query
+      ->entityCondition('entity_type', 'node')
+      ->propertyCondition('type', 'time_tracking')
+      ->propertyOrderBy('created', 'DESC')
+      ->range(0, 1)
+      ->execute();
+
+    if (empty($result['node'])) {
+      return;
+    }
+    return key($result['node']);
+  }
+
+  /**
+   * @Then /^I add "([^"]*)" hours to the latest tracking entry$/
+   */
+  public function iAddHoursToLatestTrackingEntry($hours) {
+    $entryID = $this->getLatestTrackingEntry();
+    $this->getSession()->visit($this->locatePath('node/' . $entryID .'/edit'));
+    $element = $this->getSession()->getPage();
+
+    $timeSpentElm = $element->find('css', '#edit-field-issues-logs-und-0-field-time-spent-und-0-value');
+    $timeSpent = $timeSpentElm->getValue();
+
+    if ( isset($timeSpent) ) {
+      $hours += $timeSpent;
+    }
+
+    $element->fillField('Time Spent', $hours);
+    $element->find('css', '#edit-submit')->click();
+  }
+
+  /**
+   * @Then /^I delete the latest tracking entry$/
+   */
+  public function iDeleteLatestTrackingEntry() {
+    $entryID = $this->getLatestTrackingEntry();
+    $this->getSession()->visit($this->locatePath('node/' . $entryID .'/delete'));
+    $element = $this->getSession()->getPage();
+    $element->find('css', '#edit-submit')->click();
+  }
 }
 
