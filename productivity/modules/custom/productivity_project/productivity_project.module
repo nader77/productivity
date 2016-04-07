@@ -160,7 +160,7 @@ function productivity_project_logged_hours_notify($node) {
   $arguments = array(
     '@project_name' => $wrapper->label(),
     '@logged_percentage' => $total_percentage,
-    '@project_scope' => $total_scope['interval'] . ' ' . $total_scope['period'],
+    '@project_scope' => t('@total_scope Hours', array('@total_scope' => $total_scope)),
     '@project_total_hours' => $total_hours,
     '@project_total_days' => productivity_project_get_total_days($total_hours),
     '@work_type' => 'Total Scope',
@@ -179,9 +179,9 @@ function productivity_project_logged_hours_notify($node) {
     $arguments = array(
       '@project_name' => $wrapper->label(),
       '@logged_percentage' => $scope_percentage,
-      '@scope' => $scope['interval'] . ' ' . $scope['period'],
-      '@scope_total_hours' => $hours,
-      '@scope_total_days' => productivity_project_get_total_days($hours),
+      '@project_scope' => t('@scope Hours', array('@scope' => $scope)),
+      '@project_total_hours' => $hours,
+      '@project_total_days' => productivity_project_get_total_days($hours),
       '@work_type' => $rate->field_issue_type->label(),
     );
 
@@ -263,7 +263,7 @@ function productivity_project_notify($wrapper_project, $arguments) {
  * @param $work_type
  *  Get normalized scope for the specific work typ only.
  *
- * @return
+ * @return double
  *  Scope normalized to hours
  */
 function productivity_project_get_total_scope($project_wrapper, $work_type = FALSE) {
@@ -283,8 +283,9 @@ function productivity_project_get_total_scope($project_wrapper, $work_type = FAL
  *
  * @param $rate
  *  The rate wrapper.
- * @return
- *  Totol scope in hours.
+ *
+ * @return double
+ *  Total scope in hours.
  */
 function productivity_project_normalize_scope($rate) {
   $hours_per_day = 1;

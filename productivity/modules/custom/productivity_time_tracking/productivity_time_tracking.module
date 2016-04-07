@@ -279,6 +279,9 @@ function productivity_time_tracking_total_hours($project_nid, $date = array(), $
  *
  * @param $node
  *  The tracking node.
+ *
+ * @return array
+ *  Total hours and the type.
  */
 function productivity_time_tracking_node_total_hours($node) {
   $types = array();
