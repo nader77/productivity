@@ -76,7 +76,7 @@ script:
   # Run behat tests for the client.
   - cd behat
   - ./bin/behat --tags=~@wip
-  cd ..
+  - cd ..
 
   # Run behat tests for the backend.
   - cd productivity/behat
