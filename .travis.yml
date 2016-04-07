@@ -63,10 +63,6 @@ script:
   - sh -e /etc/init.d/xvfb start
   - sleep 3 # give xvfb some time to start
 
-  # start a web server on port 8080, run in the background; wait for initialization
-  - drush @productivity runserver 127.0.0.1:8080 &
-  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
-
   # Wait for Grunt to finish loading.
   - until $(curl --output /dev/null --silent --head --fail http://localhost:9001); do sleep 1; echo '.'; done
 
@@ -77,6 +73,10 @@ script:
   - cd behat
   - ./bin/behat --tags=~@wip
   - cd ..
+
+  # start a web server on port 8080, run in the background; wait for initialization
+  - drush @productivity runserver 127.0.0.1:8080 &
+  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
 
   # Run behat tests for the backend.
   - cd productivity/behat

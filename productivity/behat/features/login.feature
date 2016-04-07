@@ -11,4 +11,4 @@ Feature: Login test
   Scenario: Attempt login.
     Given I login with user "admin"
     When  I visit the homepage
-    Then  I should see the text "My account"
+    Then  I should see the text "Dashboard"

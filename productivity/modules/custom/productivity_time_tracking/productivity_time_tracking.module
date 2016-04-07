@@ -341,6 +341,10 @@ function productivity_time_tracking_node_presave($node) {
   if ($wrapper->field_project->value()) {
     // Add hours to the project's relevant scope.
     productivity_project_update_project_total_hours($wrapper);
+    // Remove the hours in the tracking entity is removed from the app (Unpublished).
+    if ($node->status == 0) {
+      productivity_project_update_project_total_hours($wrapper, TRUE);
+    }
     // Notification for major milestone meeting.
     // TODO: improve by sending an invite to calendar meeting.
     productivity_project_logged_hours_notify($wrapper->field_project->value());
@@ -536,7 +540,7 @@ function productivity_time_tracking_node_delete($node) {
   }
 
   $wrapper = entity_metadata_wrapper('node', $node);
-  productivity_project_update_project_total_hours($wrapper, true);
+  productivity_project_update_project_total_hours($wrapper, TRUE);
 }
 
 
