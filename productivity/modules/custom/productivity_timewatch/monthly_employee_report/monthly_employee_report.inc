@@ -7,30 +7,32 @@
 /**
  * Menu callback; Display monthly employee report.
  */
-function productivity_time_tracking_monthly_employee_report_callback($account = FALSE, $year = FALSE, $month = FALSE) {
-  return productivity_time_tracking_monthly_employee_report($account, $year, $month);
+function productivity_timewatch_monthly_employee_report_callback($account = FALSE, $year = FALSE, $month = FALSE) {
+  return productivity_timewatch_monthly_employee_report($account, $year, $month);
 }
 
 /**
  */
-function productivity_time_tracking_monthly_employee_report($account = FALSE, $year = FALSE, $month = FALSE) {
+function productivity_timewatch_monthly_employee_report($account = FALSE, $year = FALSE, $month = FALSE) {
   global $base_url;
   // Add JavaScript file with the base url of the page.
-  drupal_add_js(drupal_get_path('module', 'productivity_time_tracking') . '/monthly_report/monthly_report.js');
-  drupal_add_css(drupal_get_path('module', 'productivity_time_tracking') . '/monthly_report/monthly_report.css');
-  drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
-  drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
-  drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
+  drupal_add_js(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/monthly_employee_report.js');
+  drupal_add_css(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/monthly_employee_report.css');
+//  drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
+//  drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
+//  drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
+  drupal_add_js(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/lib/select2/select2.min.js');
+  drupal_add_css(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/lib/select2/select2.min.css');
 
   // Add datepicker lib.
-  drupal_add_js("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js", array('type' => 'external'));
-  drupal_add_css("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.min.css", array('type' => 'external'));
+//  drupal_add_js("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js", array('type' => 'external'));
+//  drupal_add_css("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.min.css", array('type' => 'external'));
+  drupal_add_js(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/lib/bootstrap-datepicker/js/bootstrap-datepicker.js');
+  drupal_add_css(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/lib/bootstrap-datepicker/css/bootstrap-datepicker.min.css');
 
   $variables = array();
   $variables['year'] = !empty($year) ? $year : date('Y');
   $variables['month']= !empty($month) ? $month : date('m', strtotime("-1 month"));
-
-
 
   if ($year == 'all'){
     $variables['date'] = t('All time');
@@ -44,11 +46,13 @@ function productivity_time_tracking_monthly_employee_report($account = FALSE, $y
 
 
   $variables['employees'] = user_load_multiple(productivity_account_get_employee_uids());
+  dpm( $variables['employees']);
   $variables['current_uid'] = 0;
   $variables['project_title'] = 'Select a project';
   $variables['account'] = '';
   $variables['no_result'] = FALSE;
   $variables['message'] = '';
+  $variables['table'] = '';
 
   drupal_add_js(array('monthly_report' => array(
     'base_url' => $base_url,
@@ -59,7 +63,7 @@ function productivity_time_tracking_monthly_employee_report($account = FALSE, $y
 
   // No project given.
   if (!$account) {
-    return theme('productivity_time_tracking_monthly_employee_report', $variables);
+    return theme('productivity_timewatch_monthly_employee_report', $variables);
   }
 
   drupal_add_js(array('monthly_employee_report' => array('employee_id' => $account->uid)), 'setting');
@@ -81,7 +85,7 @@ function productivity_time_tracking_monthly_employee_report($account = FALSE, $y
 
   // Get all issues for the project.
   if ($nodes) {
-    $issues_table = productivity_time_tracking_create_issues_table($nodes);
+    $issues_table = productivity_timewatch_create_issues_table($nodes);
   }
   else {
     $variables['no_result'] = TRUE;
@@ -121,9 +125,9 @@ function productivity_time_tracking_monthly_employee_report($account = FALSE, $y
   // Get all the projects for project input
   $variables['current_project_id'] = $node->nid;
 
-  $variables['table'] = theme('productivity_time_tracking_monthly_report_table', $variables);
+  $variables['table'] = theme('productivity_timewatch_monthly_report_table', $variables);
 
-  return theme('productivity_time_tracking_monthly_report', $variables);
+  return theme('productivity_timewatch_monthly_report', $variables);
 }
 
 /**
@@ -136,7 +140,7 @@ function productivity_time_tracking_monthly_employee_report($account = FALSE, $y
  * @return array
  *  Matrix of all the issues, and the URL project
  */
-function productivity_time_tracking_create_issues_table($nodes) {
+function productivity_timewatch_create_issues_table($nodes) {
   $issues_table = array();
   foreach($nodes as $node) {
     $wrapper = entity_metadata_wrapper('node', $node);

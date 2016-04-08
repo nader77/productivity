@@ -8,7 +8,7 @@
       </div>
       <div id="search-filter" class="row">
         <div class="col-sm-12 ">
-          <div class="col-sm-4"><p><?php print t('Project:'); ?> </p></div>
+          <div class="col-sm-4"><p><?php print t('Employee:'); ?> </p></div>
           <div class="col-sm-4"><p><?php print t('Date:'); ?> </p></div>
         </div>
         <div class="col-sm-12">

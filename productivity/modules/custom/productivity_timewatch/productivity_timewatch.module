@@ -7,6 +7,47 @@
 include_once 'productivity_timewatch.features.inc';
 
 
+function productivity_timewatch_menu() {
+  $items['monthly-employee-report'] = array(
+    'title' => 'Monthly employee report',
+    'access arguments' => array('access content'),
+    'page callback' => 'productivity_timewatch_monthly_employee_report_callback',
+    'type' => MENU_CALLBACK,
+    'file' => 'monthly_employee_report/monthly_employee_report.inc'
+  );
+
+  $items['monthly-report/%user/%/%'] = array(
+    'title' => 'Monthly employee report',
+    'access arguments' => array('access content'),
+    'page callback' => 'productivity_timewatch_monthly_employee_report_callback',
+    'page arguments' => array(1, 2, 3),
+    'type' => MENU_CALLBACK,
+    'file' => 'monthly_employee_report/monthly_employee_report.inc'
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function productivity_timewatch_theme() {
+  return array(
+    'productivity_timewatch_monthly_employee_report' => array(
+      'variables' => array(),
+      'path' => drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report',
+      'template' => 'monthly-employee-report',
+    ),
+    'productivity_timewatch_monthly_employee_report_table' => array(
+      'variables' => array(),
+      'path' => drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report',
+      'template' => 'monthly-employee-report-table',
+    ),
+  );
+}
+
+
+
 /**
  * Implements hook_ctools_plugin_directory().
  */
