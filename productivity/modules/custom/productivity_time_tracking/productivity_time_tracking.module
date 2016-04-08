@@ -341,6 +341,10 @@ function productivity_time_tracking_node_presave($node) {
   if ($wrapper->field_project->value()) {
     // Add hours to the project's relevant scope.
     productivity_project_update_project_total_hours($wrapper);
+    // Remove the hours in the tracking entity is removed from the app (Unpublished).
+    if ($node->status == 0) {
+      productivity_project_update_project_total_hours($wrapper, TRUE);
+    }
     // Notification for major milestone meeting.
     // TODO: improve by sending an invite to calendar meeting.
     productivity_project_logged_hours_notify($wrapper->field_project->value());
@@ -487,9 +491,6 @@ function productivity_time_tracking_tokens($type, $tokens, array $data = array()
 /**
  * Bulk update time tracking.
  */
-/**
- * Implements hook_element_info().
- */
 function productivity_time_tracking_bulk_update($month, $year, $employee, $project_nid) {
   $globals = productivity_time_tracking_get_global_days($month, $year);
   $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));
@@ -524,19 +525,21 @@ function productivity_time_tracking_node_update($node) {
     return;
   }
 
-  _productivity_time_tracking_update_issue($node);
+  productivity_time_tracking_update_issue($node);
 }
 
 /**
- * Implements hook_node_insert().
+ * Implements hook_node_delete().
  */
-function productivity_time_tracking_node_insert($node) {
+function productivity_time_tracking_node_delete($node) {
   if ($node->type != 'time_tracking') {
     return;
   }
 
-  _productivity_time_tracking_update_issue($node);
+  $wrapper = entity_metadata_wrapper('node', $node);
+  productivity_project_update_project_total_hours($wrapper, TRUE);
 }
+
 
 /**
  * Update the issue node with time tracking data.
@@ -544,7 +547,7 @@ function productivity_time_tracking_node_insert($node) {
  * @param $node
  *   Time tracking node that has been updated or inserted.
  */
-function _productivity_time_tracking_update_issue($node) {
+function productivity_time_tracking_update_issue($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
 
   // Skip updating the issue node if something is wrong.
@@ -552,7 +555,7 @@ function _productivity_time_tracking_update_issue($node) {
 
   $old_count = 0;
 
-  if (empty($node->is_new)) {
+  if (isset($node->is_new) && !$node->is_new) {
     $original_wrapper = entity_metadata_wrapper('node', $node->original);
     $old_count = $original_wrapper->field_issues_logs->count();
   }
