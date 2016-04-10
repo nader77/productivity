@@ -12,23 +12,40 @@ function productivity_timewatch_monthly_employee_report_callback($account = FALS
 }
 
 /**
+ * Load all resources for the page.
+ * @param $local
  */
-function productivity_timewatch_monthly_employee_report($account = FALSE, $year = FALSE, $month = FALSE) {
-  global $base_url;
+function productivity_timewatch_monthly_employee_load_resources($local = FALSE) {
   // Add JavaScript file with the base url of the page.
   drupal_add_js(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/monthly_employee_report.js');
   drupal_add_css(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/monthly_employee_report.css');
-//  drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
-//  drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
-//  drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
-  drupal_add_js(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/lib/select2/select2.min.js');
-  drupal_add_css(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/lib/select2/select2.min.css');
+  // No CDN.
+  if ($local) {
 
-  // Add datepicker lib.
-//  drupal_add_js("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js", array('type' => 'external'));
-//  drupal_add_css("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.min.css", array('type' => 'external'));
-  drupal_add_js(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/lib/bootstrap-datepicker/js/bootstrap-datepicker.js');
-  drupal_add_css(drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/lib/bootstrap-datepicker/css/bootstrap-datepicker.min.css');
+    // Add Datepicker lib.
+    drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/bootstrap-datepicker/js/bootstrap-datepicker.js');
+    drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/bootstrap-datepicker/css/bootstrap-datepicker.min.css');// Add Datepicker lib.
+    // Add select 2
+    drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/select2/js/select2.js');
+    drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/select2/css/select2.min.css');
+  }
+  else {
+    // Add JavaScript file with the base url of the page.
+    drupal_add_css('https://fonts.googleapis.com/css?family=Abril+Fatface', array('type' => 'external'));
+    drupal_add_css("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/css/select2.min.css", array('type' => 'external'));
+    drupal_add_js("//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1/js/select2.min.js", array('type' => 'external'));
+
+    // Add Datepicker lib.
+    drupal_add_js("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js", array('type' => 'external'));
+    drupal_add_css("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.min.css", array('type' => 'external'));
+  }
+}
+
+/**
+ */
+function productivity_timewatch_monthly_employee_report($account = FALSE, $year = FALSE, $month = FALSE) {
+  global $base_url;
+  productivity_timewatch_monthly_employee_load_resources();
 
   $variables = array();
   $variables['year'] = !empty($year) ? $year : date('Y');
@@ -46,7 +63,6 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
 
 
   $variables['employees'] = user_load_multiple(productivity_account_get_employee_uids());
-  dpm( $variables['employees']);
   $variables['current_uid'] = 0;
   $variables['project_title'] = 'Select a project';
   $variables['account'] = '';
@@ -54,10 +70,11 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   $variables['message'] = '';
   $variables['table'] = '';
 
-  drupal_add_js(array('monthly_report' => array(
-    'base_url' => $base_url,
-    'year' => $variables['year'],
-    'month' => $variables['month'],
+  drupal_add_js(array(
+    'report' => array(
+      'base_url' => $base_url,
+      'year' => $variables['year'],
+      'month' => $variables['month'],
     ),
   ), 'setting');
 
@@ -66,12 +83,15 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
     return theme('productivity_timewatch_monthly_employee_report', $variables);
   }
 
-  drupal_add_js(array('monthly_employee_report' => array('employee_id' => $account->uid)), 'setting');
+  drupal_add_js(array(
+    'report' => array(
+      'uid' => $account->uid
+    ),
+  ), 'setting');
 
   $wrapper = entity_metadata_wrapper('node', $account);
 
-  $variables['project_title'] = $wrapper->label();
-  $variables['account'] = $wrapper->field_account->label();
+  $variables['fullname'] = $wrapper->field_full_name->label();
 
   // TODO: Deal better with project URL.
   $project_url = '';

@@ -100,7 +100,6 @@
         var link = create_new_url(settings['monthly_report']['base_url'], true, true);
         if (!link) {
           // Initializes popovers for an element collection.
-          //$().popover(options);
           $(".btn.year").popover('show');
         }
         else {

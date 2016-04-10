@@ -16,7 +16,7 @@ function productivity_timewatch_menu() {
     'file' => 'monthly_employee_report/monthly_employee_report.inc'
   );
 
-  $items['monthly-report/%user/%/%'] = array(
+  $items['monthly-employee-report/%user/%/%'] = array(
     'title' => 'Monthly employee report',
     'access arguments' => array('access content'),
     'page callback' => 'productivity_timewatch_monthly_employee_report_callback',

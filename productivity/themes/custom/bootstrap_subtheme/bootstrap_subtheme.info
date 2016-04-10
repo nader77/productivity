@@ -23,11 +23,13 @@ regions[page_bottom]    = 'Page bottom'
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Stylesheets
 ;;;;;;;;;;;;;;;;;;;;;
+;stylesheets[all][] = css/bootstrap.css
 
 ;stylesheets[all][] = bootstrap/css/bootstrap.min.css
 stylesheets[all][] = css/style.css
 stylesheets[all][] = css/theme/theme_styles.css
 stylesheets[all][] = css/theme/calendar.css
+
 
 
 ; For information on choosing the desired method, please read the Drupal
@@ -48,6 +50,7 @@ scripts[] = 'js/pace.min.js'
 scripts[] = 'js/jquery.nanoscroller.min.js'
 scripts[] = 'js/jquery.easypiechart.min.js'
 scripts[] = 'js/jquery.countTo.js'
+;scripts[] = 'js/bootstrap.js'
 
 ; scripts[] = 'bootstrap/js/alert.js'
 ; scripts[] = 'bootstrap/js/button.js'
