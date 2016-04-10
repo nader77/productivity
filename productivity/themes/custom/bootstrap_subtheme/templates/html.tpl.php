@@ -58,6 +58,7 @@
 <head>
   <link rel="profile" href="<?php print $grddl_profile; ?>" />
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<!--  <link rel="stylesheet" href="http://localhost/~brice/productivity/www/profiles/productivity/themes/custom/bootstrap_subtheme/js/font-awesome.min.css">-->
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300|Titillium+Web:200,300,400' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" type="text/css" href="<?php print $theme_path;?>/css/nanoscroller.css" />
   <meta charset="utf-8">

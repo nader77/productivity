@@ -83,29 +83,16 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
     return theme('productivity_timewatch_monthly_employee_report', $variables);
   }
 
-  drupal_add_js(array(
-    'report' => array(
-      'uid' => $account->uid
-    ),
-  ), 'setting');
-
-  $wrapper = entity_metadata_wrapper('node', $account);
+  $wrapper = entity_metadata_wrapper('user', $account);
 
   $variables['fullname'] = $wrapper->field_full_name->label();
 
-  // TODO: Deal better with project URL.
-  $project_url = '';
-  if (isset($wrapper->field_github_repository_name)) {
-    $first_repo_name = $wrapper->field_github_repository_name[0]->value();
-    $project_url = "https://github.com/$first_repo_name";
-  }
-
-  $nodes = productivity_github_get_project_github_issues_query($account->uid, $variables['year'], $variables['month']);
-  $issues_table = array();
+  $node_keys = productivity_timewatch_get_user_sessions($account->uid, $variables['year'], $variables['month']);
+  $sessions = array();
 
   // Get all issues for the project.
-  if ($nodes) {
-    $issues_table = productivity_timewatch_create_issues_table($nodes);
+  if ($node_keys) {
+    $sessions = productivity_timewatch_create_issues_table($node_keys);
   }
   else {
     $variables['no_result'] = TRUE;
@@ -118,8 +105,8 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   $variables['tables'] = array();
   $variables['total_types'] = array();
   $variables['grand_total'] = 0;
-  $header = array('Issue', 'Label', 'Date', 'Time', 'Amount');
-  foreach ($issues_table as $table_name => $table) {
+  $header = array('Date', 'Week day', 'Entry', 'Exit', 'Total', 'Project', 'Entry', 'Exit', 'Total', 'Project', 'Actual Total inc Missing');
+  foreach ($sessions as $table_name => $table) {
     $variables['table_titles'][$table_name] = $table['label'];
     $variables['total_per_types'][$table_name] = 0;
     $variables['total_per_hours_types'][$table_name] = 0;
@@ -143,11 +130,11 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   }
 
   // Get all the projects for project input
-  $variables['current_project_id'] = $node->nid;
+  $variables['current_uid'] = $account->uid;
 
   $variables['table'] = theme('productivity_timewatch_monthly_report_table', $variables);
 
-  return theme('productivity_timewatch_monthly_report', $variables);
+  return theme('productivity_timewatch_monthly_employee_report', $variables);
 }
 
 /**
@@ -160,37 +147,27 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
  * @return array
  *  Matrix of all the issues, and the URL project
  */
-function productivity_timewatch_create_issues_table($nodes) {
-  $issues_table = array();
-  foreach($nodes as $node) {
-    $wrapper = entity_metadata_wrapper('node', $node);
-    $date = date('Y/m/d', $wrapper->field_work_date->value());
+function productivity_timewatch_create_issues_table($node_keys) {
+  $sessions = array();
+  foreach($node_keys as $nid) {
+    $wrapper = entity_metadata_wrapper('node', $nid);
+    $start_time = $wrapper->field_session_date->value->value();
+    $end_time = $wrapper->field_session_date->value2->value();
+    $total_time = $end_time - $start_time;
+    $hours = floor($total_time / 3600);
+    $minutes = floor(($total_time % 3600) / 60);
+    $day = date('d', $start_time);
 
-    // Loop through all the issues in that day.
-    foreach($wrapper->field_issues_logs as $issue_log_wrapper) {
-      // Check if there is already a table with that type.
-      $type = $issue_log_wrapper->field_issue_type->value();
-      if(empty($issues_table[$type])) {
-        $issues_table[$type] = array();
-      }
-      // push the issue details to the type table.
-      $rate = productivity_project_get_rate($wrapper->field_project->getIdentifier(), $type);
-      /// The table length of every type.
-      $issue_id = '#';
-      if (isset($issue_log_wrapper->field_github_issue->field_issue_id)) {
-        $issue_id = $issue_log_wrapper->field_github_issue->field_issue_id->value();
-      }
-
-      $issues_table[$type]['label'] = $issue_log_wrapper->field_issue_type->label();
-      $issues_table[$type]['issues'][] = array(
-        'issue_num' => $issue_id,
-        'label' => $issue_log_wrapper->field_issue_label->value(),
-        'date' => $date,
-        'time' => $issue_log_wrapper->field_time_spent->value(),
-        'issue_amount' => $issue_log_wrapper->field_time_spent->value() * $rate['amount'],
-        'issue_currency' => $rate['currency']
-      );
-    }
+    $sessions[$day][] = array(
+      'session_start_date' => date('Y/m/d', $start_time),
+      'session_start_time' => date('H:i', $start_time),
+      'session_end_date' => date('Y/m/d', $end_time),
+      'session_end_time' => date('H:i', $end_time),
+      'project' => $wrapper->field_project->label(),
+      'length' => $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT),
+    );
   }
-  return $issues_table;
+  ksort($sessions);
+  dpm($sessions);
+  return $sessions;
 }

@@ -443,7 +443,7 @@ function productivity_github_get_project_github_issues_query($project_id, $year,
       '@month' => $month
     ));
     $project_end_month = format_string("@year-@month-01", array(
-      '@year' => $year,
+      '@year' => ($month == 12) ? $year+1 : $year,
       '@month' => ($month == 12) ? 1 : ($month + 1),
     ));
   }

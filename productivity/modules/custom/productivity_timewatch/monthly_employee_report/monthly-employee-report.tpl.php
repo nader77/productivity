@@ -15,7 +15,7 @@
           <div class="col-sm-4">
             <select id="uid" class="form-control">
               <?php foreach ($employees as $uid => $account): ?>
-                <option value="<?php print $uid;?>"<?php print ($uid == $current_uid) ? 'selected' : ''; ?>><?php print $account->name; ?></option>
+                <option value="<?php print $uid; ?>"<?php print ($uid == $current_uid) ? 'selected' : ''; ?>><?php print $account->name; ?></option>
               <?php endforeach; ?>
             </select>
           </div>

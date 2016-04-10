@@ -186,3 +186,57 @@ function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form
   }
   $form['field_project'][LANGUAGE_NONE]['#options'] = $options;
 }
+
+/**
+ * Query DB for every user sessions, within month and year.
+ *
+ * @param uid
+ *  The project id number.
+ * @param $year
+ *  The year to filter the issues.
+ * @param $month
+ *  The month to filter the issues.
+ *
+ * @return $node_keys
+ *  All the nodes return from the query.
+ */
+function productivity_timewatch_get_user_sessions($uid, $year, $month) {
+
+  if ($month == 'all') {
+    $project_start_month = format_string("01/01/@year", array('@year' => $year));
+    $project_end_month = format_string("31/12/@year", array('@year' => $year));
+  }
+  else {
+    $project_start_month = format_string("01/@month/@year", array(
+      '@year' => $year,
+      '@month' => $month
+    ));
+    $project_end_month = format_string("01/@month/@year", array(
+      '@year' => ($month == 12) ? $year+1 : $year,
+      '@month' => ($month == 12) ? 1 : ($month + 1),
+    ));
+  }
+
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'work_session')
+    ->fieldCondition('field_employee', 'target_id', $uid);
+
+  // Return all time.
+  if ($year != 'all') {
+    $query
+      ->fieldCondition('field_session_date', 'value', strtotime($project_start_month), '>=')
+      ->fieldCondition('field_session_date', 'value', strtotime($project_end_month), '<');
+  }
+
+  $result = $query->execute();
+
+  if(empty($result['node'])) {
+      return;
+  }
+
+  // TODO: This can timeout on users with a lot of sessions.
+  return array_keys($result['node']);
+}
+
