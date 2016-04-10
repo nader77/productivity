@@ -101,40 +101,65 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
 
   $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
 
-  // Create tables for the template.
-  $variables['tables'] = array();
-  $variables['total_types'] = array();
-  $variables['grand_total'] = 0;
-  $header = array('Date', 'Week day', 'Entry', 'Exit', 'Total', 'Project', 'Entry', 'Exit', 'Total', 'Project', 'Actual Total inc Missing');
-  foreach ($sessions as $table_name => $table) {
-    $variables['table_titles'][$table_name] = $table['label'];
-    $variables['total_per_types'][$table_name] = 0;
-    $variables['total_per_hours_types'][$table_name] = 0;
-
-    foreach ($table['issues'] as $index => $issue) {
-      $rows[$index]['label'] = l($issue['issue_num'], $project_url . $issue['issue_num'], array('absolute' => TRUE));
-      $rows[$index]['gitHub_issue_num'] = $issue['label'];
-      $rows[$index]['date'] = $issue['date'];
-      $rows[$index]['time'] = $issue['time'];
-      $rows[$index]['amount'] = $issue['issue_amount'] . ' ' . $issue['issue_currency'];
-      $variables['total_per_types'][$table_name] += $issue['issue_amount'];
-      $variables['total_per_hours_types'][$table_name] += $issue['time'];
-      $variables['total_currency_per_types'][$table_name] = $issue['issue_currency'];
-      $variables['grand_total'] += $issue['issue_amount'];
+  // Headers.
+  $header = array(
+    'Date',
+    'Week day',
+    'Entry',
+    'Exit',
+    'Total',
+    'Project',
+    'Entry',
+    'Exit',
+    'Total',
+    'Project',
+    'Actual Total inc Missing',
+  );
+  $month_array = productivity_timewatch_build_month_skeleton($month, $year);
+  foreach ($month_array as $day => &$value) {
+    if (isset($sessions[$day])) {
+      foreach ($sessions[$day] as $session) {
+        $month_array[$day] += $session;
+      }
     }
-    $variables['tables'][$table_name] = theme('table', array(
-      'header' => $header,
-      'rows' => $rows
-    ));
-    $rows = array();
   }
+
+  $variables['table'] = theme('table', array(
+    'header' => $header,
+    'rows' => $month_array
+  ));
+
 
   // Get all the projects for project input
   $variables['current_uid'] = $account->uid;
 
-  $variables['table'] = theme('productivity_timewatch_monthly_report_table', $variables);
+//  $variables['table'] = theme('productivity_timewatch_monthly_report_table', $variables);
 
   return theme('productivity_timewatch_monthly_employee_report', $variables);
+}
+
+
+/**
+ * Build monthly array skeleton
+ */
+function productivity_timewatch_build_month_skeleton($month, $year){
+  $array = array();
+  $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));
+  for ($day = 1; $day <= $last_day_this_month; $day++) {
+    // Add leading zeros.
+    $key = str_pad($day, 2, '0', STR_PAD_LEFT);
+    $date_string = format_string("@month/@day/@year", array(
+      '@day' => $day,
+      '@month' => $month,
+      '@year' => $year,
+    ));
+    $date = strtotime($date_string);
+    $array[$key]  = array(
+      'Date' => date('d/m/y', $date),
+      'Week day' => date('l', $date),
+    );
+  }
+  return $array;
 }
 
 /**
@@ -159,12 +184,10 @@ function productivity_timewatch_create_issues_table($node_keys) {
     $day = date('d', $start_time);
 
     $sessions[$day][] = array(
-      'session_start_date' => date('Y/m/d', $start_time),
-      'session_start_time' => date('H:i', $start_time),
-      'session_end_date' => date('Y/m/d', $end_time),
-      'session_end_time' => date('H:i', $end_time),
-      'project' => $wrapper->field_project->label(),
-      'length' => $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT),
+      'Entry_' . $nid => date('H:i', $start_time),
+      'Exit_' . $nid  => date('H:i', $end_time),
+      'Total_' . $nid  => $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT),
+      'Project_' . $nid  => $wrapper->field_project->label(),
     );
   }
   ksort($sessions);
