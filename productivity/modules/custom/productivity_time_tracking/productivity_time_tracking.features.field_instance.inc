@@ -10,6 +10,45 @@
 function productivity_time_tracking_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'node-time_tracking-field_employee'.
+  $field_instances['node-time_tracking-field_employee'] = array(
+    'bundle' => 'time_tracking',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 2,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_employee',
+    'label' => 'Employee',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 7,
+    ),
+  );
+
   // Exported field_instance: 'multifield-field_issues_logs-field_github_issue'.
   $field_instances['multifield-field_issues_logs-field_github_issue'] = array(
     'bundle' => 'field_issues_logs',
@@ -230,45 +269,6 @@ function productivity_time_tracking_field_default_field_instances() {
       ),
       'type' => 'text_textarea',
       'weight' => 8,
-    ),
-  );
-
-  // Exported field_instance: 'node-time_tracking-field_employee'.
-  $field_instances['node-time_tracking-field_employee'] = array(
-    'bundle' => 'time_tracking',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'entityreference',
-        'settings' => array(
-          'link' => FALSE,
-        ),
-        'type' => 'entityreference_label',
-        'weight' => 2,
-      ),
-      'teaser' => array(
-        'label' => 'above',
-        'settings' => array(),
-        'type' => 'hidden',
-        'weight' => 0,
-      ),
-    ),
-    'entity_type' => 'node',
-    'field_name' => 'field_employee',
-    'label' => 'Employee',
-    'required' => 0,
-    'settings' => array(
-      'user_register_form' => FALSE,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
-      'weight' => 7,
     ),
   );
 
