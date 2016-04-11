@@ -5,12 +5,12 @@ core = 7.x
 version = "7.x-1.x-dev"
 core = "7.x"
 
-; Test files
 files[] = productivity_migrate.test
 files[] = includes/ProductivityMigrate.inc
 files[] = includes/ProductivityMigrateAccount.inc
+files[] = includes/ProductivityMigratePayment.inc
 files[] = includes/ProductivityMigrateProject.inc
+files[] = includes/ProductivityMigrateSessionTypes.inc
 files[] = includes/ProductivityMigrateTimewatchUser.inc
 files[] = includes/ProductivityMigrateTracker.inc
 files[] = includes/ProductivityMigrateUser.inc
-files[] = includes/ProductivityMigratePayment.inc

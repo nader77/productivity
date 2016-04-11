@@ -185,6 +185,11 @@ function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form
     $options[$node->nid] = $node->title;
   }
   $form['field_project'][LANGUAGE_NONE]['#options'] = $options;
+
+  // Select the default session type.
+  if (empty($form['field_session_type'][LANGUAGE_NONE]['#default_value'])) {
+    $form['field_session_type'][LANGUAGE_NONE]['#default_value'] = variable_get('productivity_timewatch_default_session_type_tid');
+  }
 }
 
 /**
