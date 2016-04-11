@@ -136,7 +136,7 @@ function productivity_time_tracking_field_default_field_bases() {
         'qa' => 'QA',
         'management' => 'Management',
         'designer' => 'Designer',
-        'non_billable' => 'None billable',
+        'non_billable' => 'Non-billable',
         'support' => 'Support',
         'review' => 'Review',
       ),

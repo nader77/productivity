@@ -10,7 +10,7 @@
 function productivity_salary_field_default_field_instances() {
   $field_instances = array();
 
-  // Exported field_instance: 'node-salary-field_date'
+  // Exported field_instance: 'node-salary-field_date'.
   $field_instances['node-salary-field_date'] = array(
     'bundle' => 'salary',
     'deleted' => 0,
@@ -25,6 +25,7 @@ function productivity_salary_field_default_field_instances() {
           'multiple_from' => '',
           'multiple_number' => '',
           'multiple_to' => '',
+          'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
         'weight' => 3,
@@ -63,7 +64,7 @@ function productivity_salary_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-salary-field_employee'
+  // Exported field_instance: 'node-salary-field_employee'.
   $field_instances['node-salary-field_employee'] = array(
     'bundle' => 'salary',
     'default_value' => NULL,
@@ -102,7 +103,7 @@ function productivity_salary_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-salary-field_salary'
+  // Exported field_instance: 'node-salary-field_salary'.
   $field_instances['node-salary-field_salary'] = array(
     'bundle' => 'salary',
     'default_value' => NULL,
@@ -437,7 +438,7 @@ function productivity_salary_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-salary-field_salary_type'
+  // Exported field_instance: 'node-salary-field_salary_type'.
   $field_instances['node-salary-field_salary_type'] = array(
     'bundle' => 'salary',
     'default_value' => NULL,

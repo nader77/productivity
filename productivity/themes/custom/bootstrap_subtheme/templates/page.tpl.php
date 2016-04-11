@@ -280,39 +280,44 @@
                 <span class="name">Welcome<br><?php if($user->uid) { print $user->name; } ?></span>
               </div>
             </div>
-            Menu
             <div class="collapse navbar-collapse navbar-ex1-collapse" id="sidebar-nav">
               <ul class="nav nav-pills nav-stacked">
-                <li class="active">
+                <li class="<?php print ($path == 'dashboard') ? 'active' : '';?>">
                   <a href="<?php print $base_path;?>">
                     <i class="fa fa-dashboard"></i>
                     <span>Dashboard</span>
                   </a>
                 </li>
-                <li class="">
+                <li class="<?php print ($path == 'payments') ? 'active' : '';?>">
                   <a href="<?php print $base_path;?>payments">
                     <i class="fa fa-money"></i>
                     <span>Payments</span>
                     <span class="label label-danger label-circle pull-right">05</span>
                   </a>
                 </li>
-                <li class="">
-                  <a class="dropdown-toggle" data-target=".submenu.reports" data-toggle="collapse">
+                <li class="<?php print ($path == 'monthly-report') ? 'active' : '';?>">
+                  <a href="<?php print $base_path;?>monthly-report">
                     <i class="fa fa-bar-chart-o"></i>
-                    <span>Reports</span>
-                    <i class="fa fa-chevron-circle-right drop-icon"></i>
+                    <span>Monthly report</span>
                   </a>
-                  <ul class="submenu reports collapse">
-                    <li>
-                      <a href="<?php print $base_path;?>admin/content/project-monthly-report">Monthly report</a>
-                    </li>
-                    <li>
-                      <a href="<?php print $base_path;?>admin/content/projects">Projects</a>
-                    </li>
-                    <li>
-                      <a href="<?php print $base_path;?>admin/content/github">Github</a>
-                    </li>
-                  </ul>
+                </li>
+                <li class="<?php print ($path == 'monthly-employee-report') ? 'active' : ''; ?>">
+                  <a href="<?php print url('monthly-employee-report'); ?>">
+                    <i class="fa fa-list-alt"></i>
+                    <span>Monthly employee report</span>
+                  </a>
+                </li>
+                <li class="<?php print ($path == 'admin/content/projects') ? 'active' : '';?>">
+                  <a href="<?php print $base_path;?>admin/content/projects">
+                    <i class="fa fa-rocket"></i>
+                    <span>Projects</span>
+                  </a>
+                </li>
+                <li class="<?php print ($path == 'admin/content/github') ? 'active' : '';?>">
+                  <a href="<?php print $base_path;?>admin/content/github">
+                    <i class="fa fa-github"></i>
+                    <span>Github</span>
+                  </a>
                 </li>
               </ul>
             </div>

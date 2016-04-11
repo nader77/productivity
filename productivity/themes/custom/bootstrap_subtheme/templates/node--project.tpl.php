@@ -80,55 +80,69 @@
  * @ingroup themeable
  */
 ?>
+
+<h1><?php print $title;?></h1>
 <div class="row">
-  <div class="col-lg-3 col-sm-6 col-xs-12">
+  <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-hand-o-up red-bg"></i>
-      <span class="headline">Total Hours</span>
+      <span class="headline"><?php print t('Total Hours Done') ?></span>
       <span class="value"><?php print render($content['field_hours']);?></span>
     </div>
-    <div class="main-box infographic-box">
-      <i class="fa fa-money yellow-bg"></i>
-      <span class="headline">Total Scope</span>
-      <span class="value"><?php print render($content['field_scope']);?></span>
-    </div>
   </div>
-<!--
-field_scope
-field_account
-field_date
-field_type
-field_rate_type
-field_rate
-field_status
-field_github_repository_name
-field_days
--->
-  <div class="col-lg-3 col-sm-6 col-xs-12">
+  <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-shopping-cart emerald-bg"></i>
-      <span class="headline">Type</span>
+      <span class="headline"><?php print t('Type') ?></span>
       <span class="value"><?php print render($content['field_type']);?></span>
     </div>
   </div>
-  <div class="col-lg-3 col-sm-6 col-xs-12">
-    <div class="main-box infographic-box">
-      <i class="fa fa-money green-bg"></i>
-      <span class="headline">Rate</span>
-      <span class="value"><?php print render($content['field_rate']);?></span>
-    </div>
-  </div>
-  <div class="col-lg-3 col-sm-6 col-xs-12">
+  <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-money yellow-bg"></i>
-      <span class="headline">Days</span>
-      <span class="value"><?php print render($content['field_days']);?></span>
+      <span class="headline"><?php print t('Days') ?></span>
+      <span class="value"><?php print $days;?></span>
     </div>
   </div>
-</div
 
-  <?php print render($content['links']); ?>
-  <?php print render($content);?>
-  <?php if (isset($recalculate_hours_days_link)) : ?>
-    <?php print $recalculate_hours_days_link; ?>
+  <?php if (!empty($developer_chart)): ?>
+    <div class="col-lg-4 col-sm-6 col-xs-12">
+      <div class="main-box infographic-box">
+        <?php print $developer_chart; ?>
+      </div>
+    </div>
   <?php endif; ?>
+
+  <?php if (!empty($hours_chart)): ?>
+    <div class="col-lg-4 col-sm-6 col-xs-12">
+      <div class="main-box infographic-box">
+        <?php print $hours_chart; ?>
+      </div>
+    </div>
+  <?php endif; ?>
+  <div class="col-xs-12">
+    <div class="main-box infographic-box">
+      <?php print $table; ?>
+    </div>
+  </div>
+  <div class="col-xs-12">
+  </div>
+  <div class="col-xs-12">
+    <ul>
+      <li>
+        <?php print $recalculate_hours_days_link; ?>
+      </li>
+      <li>
+        <?php print $monthly_report_link; ?>
+      </li>
+    </ul>
+  </div>
+  <div class="col-lg-12 col-sm-12 col-xs-12">
+    <div class="main-box infographic-box">
+      <?php print $per_issue_table; ?>
+    </div>
+  </div>
+</div>
+
+
+

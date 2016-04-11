@@ -7,6 +7,47 @@
 include_once 'productivity_timewatch.features.inc';
 
 
+function productivity_timewatch_menu() {
+  $items['monthly-employee-report'] = array(
+    'title' => 'Monthly employee report',
+    'access arguments' => array('access content'),
+    'page callback' => 'productivity_timewatch_monthly_employee_report_callback',
+    'type' => MENU_CALLBACK,
+    'file' => 'monthly_employee_report/monthly_employee_report.inc'
+  );
+
+  $items['monthly-employee-report/%user/%/%'] = array(
+    'title' => 'Monthly employee report',
+    'access arguments' => array('access content'),
+    'page callback' => 'productivity_timewatch_monthly_employee_report_callback',
+    'page arguments' => array(1, 2, 3),
+    'type' => MENU_CALLBACK,
+    'file' => 'monthly_employee_report/monthly_employee_report.inc'
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_theme().
+ */
+function productivity_timewatch_theme() {
+  return array(
+    'productivity_timewatch_monthly_employee_report' => array(
+      'variables' => array(),
+      'path' => drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report',
+      'template' => 'monthly-employee-report',
+    ),
+    'productivity_timewatch_monthly_employee_report_table' => array(
+      'variables' => array(),
+      'path' => drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report',
+      'template' => 'monthly-employee-report-table',
+    ),
+  );
+}
+
+
+
 /**
  * Implements hook_ctools_plugin_directory().
  */
@@ -99,22 +140,8 @@ function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form
   // Hide the title.
   $form['title']['#access'] = FALSE;
 
-
-  // Display only active employees.
-  $uids = array();
   $wrapper = entity_metadata_wrapper('node', $form['#node']);
-
-  // Get all active employees.
-  $query = new EntityFieldQuery();
-  $result = $query
-    ->entityCondition('entity_type', 'user')
-    ->propertyCondition('status', 1)
-    ->fieldCondition('field_employment_status', 'value', 'employed')
-    ->propertyOrderBy('name')
-    ->execute();
-  if (!empty($result['user'])) {
-    $uids = array_keys($result['user']);
-  }
+  $uids = productivity_account_get_employee_uids();
 
   // Make sure the selected employee is in the list, even if they're not active.
   if ($wrapper->field_employee->value()) {
@@ -158,4 +185,63 @@ function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form
     $options[$node->nid] = $node->title;
   }
   $form['field_project'][LANGUAGE_NONE]['#options'] = $options;
+
+  // Select the default session type.
+  if (empty($form['field_session_type'][LANGUAGE_NONE]['#default_value'])) {
+    $form['field_session_type'][LANGUAGE_NONE]['#default_value'] = variable_get('productivity_timewatch_default_session_type_tid');
+  }
 }
+
+/**
+ * Query DB for every user sessions, within month and year.
+ *
+ * @param uid
+ *  The project id number.
+ * @param $year
+ *  The year to filter the issues.
+ * @param $month
+ *  The month to filter the issues.
+ *
+ * @return $node_keys
+ *  All the nodes return from the query.
+ */
+function productivity_timewatch_get_user_sessions($uid, $year, $month) {
+
+  if ($month == 'all') {
+    $project_start_month = format_string("01/01/@year", array('@year' => $year));
+    $project_end_month = format_string("31/12/@year", array('@year' => $year));
+  }
+  else {
+    $project_start_month = format_string("01/@month/@year", array(
+      '@year' => $year,
+      '@month' => $month
+    ));
+    $project_end_month = format_string("01/@month/@year", array(
+      '@year' => ($month == 12) ? $year+1 : $year,
+      '@month' => ($month == 12) ? 1 : ($month + 1),
+    ));
+  }
+
+  $query = new EntityFieldQuery();
+  $query
+    ->entityCondition('entity_type', 'node')
+    ->propertyCondition('type', 'work_session')
+    ->fieldCondition('field_employee', 'target_id', $uid);
+
+  // Return all time.
+  if ($year != 'all') {
+    $query
+      ->fieldCondition('field_session_date', 'value', strtotime($project_start_month), '>=')
+      ->fieldCondition('field_session_date', 'value', strtotime($project_end_month), '<');
+  }
+
+  $result = $query->execute();
+
+  if(empty($result['node'])) {
+      return;
+  }
+
+  // TODO: This can timeout on users with a lot of sessions.
+  return array_keys($result['node']);
+}
+

@@ -391,9 +391,10 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     $wrapper = entity_metadata_wrapper('node', $entity);
 
     // Some default values.
-    $wrapper->field_type->set('T&M');
-    $wrapper->field_rate_type->set('hours');
-    $wrapper->field_github_repository_name->set(array('Example/Example'));
+    // TODO: fix using new filed collection
+//    $wrapper->field_type->set('T&M');
+//    $wrapper->field_rate_type->set('hours');
+//    $wrapper->field_github_repository_name->set(array('Example/Example'));
 
     try {
       $wrapper->save();

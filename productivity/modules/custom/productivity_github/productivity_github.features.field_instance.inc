@@ -55,7 +55,7 @@ function productivity_github_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-github_issue-field_actual_hours'
+  // Exported field_instance: 'node-github_issue-field_actual_hours'.
   $field_instances['node-github_issue-field_actual_hours'] = array(
     'bundle' => 'github_issue',
     'default_value' => array(
@@ -105,7 +105,7 @@ function productivity_github_field_default_field_instances() {
     ),
   );
 
-  // Exported field_instance: 'node-github_issue-field_employee'
+  // Exported field_instance: 'node-github_issue-field_employee'.
   $field_instances['node-github_issue-field_employee'] = array(
     'bundle' => 'github_issue',
     'default_value' => NULL,
@@ -298,9 +298,13 @@ function productivity_github_field_default_field_instances() {
       'user_register_form' => FALSE,
     ),
     'widget' => array(
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
       'weight' => 33,
     ),
   );

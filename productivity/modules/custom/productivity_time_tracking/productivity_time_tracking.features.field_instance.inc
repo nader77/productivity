@@ -36,9 +36,13 @@ function productivity_time_tracking_field_default_field_instances() {
     ),
     'widget' => array(
       'active' => 1,
-      'module' => 'options',
-      'settings' => array(),
-      'type' => 'options_select',
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
       'weight' => 0,
     ),
   );
@@ -95,7 +99,7 @@ function productivity_time_tracking_field_default_field_instances() {
     'entity_type' => 'multifield',
     'field_name' => 'field_issue_type',
     'label' => 'Issue type',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'user_register_form' => FALSE,
     ),
@@ -131,7 +135,7 @@ function productivity_time_tracking_field_default_field_instances() {
     'entity_type' => 'multifield',
     'field_name' => 'field_time_spent',
     'label' => 'Time Spent',
-    'required' => 0,
+    'required' => 1,
     'settings' => array(
       'max' => '',
       'min' => 0,

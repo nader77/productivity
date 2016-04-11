@@ -9,4 +9,3 @@ features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
 features[message_type][] = mailgun_incoming_mail
 features[variable][] = field_bundle_settings_message__mailgun_incoming_mail
-mtime = 1434357723

@@ -10,14 +10,13 @@
 function productivity_user_field_default_field_bases() {
   $field_bases = array();
 
-  // Exported field_base: 'field_employment_status'
+  // Exported field_base: 'field_employment_status'.
   $field_bases['field_employment_status'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_employment_status',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -38,21 +37,13 @@ function productivity_user_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_github_username'
-  $field_bases['field_github_username'] = array(
+  // Exported field_base: 'field_full_name'.
+  $field_bases['field_full_name'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_github_username',
-    'foreign keys' => array(
-      'format' => array(
-        'columns' => array(
-          'format' => 'format',
-        ),
-        'table' => 'filter_format',
-      ),
-    ),
+    'field_name' => 'field_full_name',
     'indexes' => array(
       'format' => array(
         0 => 'format',
@@ -67,14 +58,34 @@ function productivity_user_field_default_field_bases() {
     'type' => 'text',
   );
 
-  // Exported field_base: 'field_job_type'
+  // Exported field_base: 'field_github_username'.
+  $field_bases['field_github_username'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_github_username',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
+  // Exported field_base: 'field_job_type'.
   $field_bases['field_job_type'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_job_type',
-    'foreign keys' => array(),
     'indexes' => array(
       'value' => array(
         0 => 'value',
@@ -93,14 +104,13 @@ function productivity_user_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_last_notification'
+  // Exported field_base: 'field_last_notification'.
   $field_bases['field_last_notification'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_last_notification',
-    'foreign keys' => array(),
     'indexes' => array(),
     'locked' => 0,
     'module' => 'date',
@@ -123,14 +133,13 @@ function productivity_user_field_default_field_bases() {
     'type' => 'datetime',
   );
 
-  // Exported field_base: 'field_salaries'
+  // Exported field_base: 'field_salaries'.
   $field_bases['field_salaries'] = array(
     'active' => 1,
     'cardinality' => -1,
     'deleted' => 0,
     'entity_types' => array(),
     'field_name' => 'field_salaries',
-    'foreign keys' => array(),
     'indexes' => array(
       'target_id' => array(
         0 => 'target_id',

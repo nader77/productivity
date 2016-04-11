@@ -270,6 +270,42 @@ function productivity_project_field_default_field_bases() {
     'type' => 'list_text',
   );
 
+  // Exported field_base: 'field_table_rate'.
+  $field_bases['field_table_rate'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_table_rate',
+    'indexes' => array(
+      'field_issue_type_value' => array(
+        0 => 'field_issue_type_value',
+      ),
+      'field_rate_type_value' => array(
+        0 => 'field_rate_type_value',
+      ),
+      'field_scope_interval' => array(
+        0 => 'field_scope_interval',
+      ),
+      'field_scope_period' => array(
+        0 => 'field_scope_period',
+      ),
+      'id' => array(
+        0 => 'id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'multifield',
+    'settings' => array(
+      'entity_translation_sync' => array(
+        0 => 'id',
+      ),
+      'hide_blank_items' => 1,
+    ),
+    'translatable' => 0,
+    'type' => 'multifield',
+  );
+
   // Exported field_base: 'field_team_leads'.
   $field_bases['field_team_leads'] = array(
     'active' => 1,

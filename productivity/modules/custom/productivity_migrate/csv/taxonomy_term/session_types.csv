@@ -1,0 +1,9 @@
+ID,Parent,Weight,Name,Description,Full day
+1,,10,Regular,,
+2,,20,Vacation,,
+3,,30,Sick,,
+4,,40,Holiday,,1
+5,,50,Funday,,1
+6,,60,Miluim,,1
+7,,70,Convention,,
+8,,80,Off,,1

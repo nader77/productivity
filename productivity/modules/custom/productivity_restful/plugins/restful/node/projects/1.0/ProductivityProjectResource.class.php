@@ -7,7 +7,7 @@
 
 class ProductivityProjectResource extends \ProductivityEntityBaseNode {
 
-
+  protected $range = 100;
   /**
    * Overrides \RestfulEntityBaseNode::publicFieldsInfo().
    */
