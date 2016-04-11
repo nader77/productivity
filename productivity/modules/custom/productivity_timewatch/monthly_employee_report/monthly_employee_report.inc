@@ -109,15 +109,13 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
     'Exit',
     'Total',
     'Project',
-    'Entry',
-    'Exit',
-    'Total',
-    'Project',
+    'Source',
     'Actual Total inc Missing',
   );
   $month_array = productivity_timewatch_build_month_skeleton($month, $year);
   foreach ($month_array as $day => &$value) {
     if (isset($sessions[$day])) {
+      
       foreach ($sessions[$day] as $session) {
         $month_array[$day] += $session;
       }
@@ -176,6 +174,7 @@ function productivity_timewatch_create_issues_table($node_keys) {
   $sessions = array();
   foreach($node_keys as $nid) {
     $wrapper = entity_metadata_wrapper('node', $nid);
+    $node_account  =$wrapper->uid->value();
     $start_time = $wrapper->field_session_date->value->value();
     $end_time = $wrapper->field_session_date->value2->value();
     $total_time = $end_time - $start_time;
@@ -184,10 +183,12 @@ function productivity_timewatch_create_issues_table($node_keys) {
     $day = date('d', $start_time);
 
     $sessions[$day][] = array(
-      'Entry_' . $nid => date('H:i', $start_time),
-      'Exit_' . $nid  => date('H:i', $end_time),
-      'Total_' . $nid  => $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT),
-      'Project_' . $nid  => $wrapper->field_project->label(),
+      'Entry' => date('H:i', $start_time),
+      'Exit' => date('H:i', $end_time),
+      'Total' => $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT),
+      'Project' => $wrapper->field_project->label(),
+      // The source of the data, using time watch or from home (manual).
+      'Source' => in_array('timewatch', $node_account->roles) ? 'timewatch' : 'manual',
     );
   }
   ksort($sessions);
