@@ -18,12 +18,6 @@ abstract class ProductivityMigrate extends Migration {
     'taxonomy_term',
   );
 
-  /**
-   * @var array
-   *  CSV columns to add after the default columns.
-   */
-  protected $extraCsvColumns = array();
-
 
   /**
    * Class constructor.
@@ -56,15 +50,13 @@ abstract class ProductivityMigrate extends Migration {
         $csv_columns = array(
           array('id', 'ID'),
           array('parent', 'Parent'),
-          array('weight', 'Weight'),
           array('name', 'Name'),
           array('description', 'Description'),
         );
         $this->addFieldMapping('parent_name', 'parent');
-        $this->addFieldMapping('weight', 'weight');
         $this->addFieldMapping('name', 'name');
         $this->addFieldMapping('description', 'description');
-        $this->csvColumns = array_merge($csv_columns, $this->extraCsvColumns);
+        $this->csvColumns = $csv_columns;
         break;
     }
 
