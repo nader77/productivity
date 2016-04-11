@@ -40,10 +40,12 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
     $query->innerJoin('field_data_field_work_date', 'wd', "dt.entity_type = 'node' AND wd.entity_id = n.nid");
     $query->innerJoin('field_data_field_employee', 'e', "dt.entity_type = 'node' AND e.entity_id = n.nid");
     $query
+      ->fields('n', array('nid', 'created','changed'))
+      ->fields('dt', array('field_day_type_value'))
       ->condition('n.type', 'time_tracking')
       ->condition('dt.field_day_type_value', 'regular', '!=')
       ->condition('n.status', 1)
-      ->orderBy('date');
+      ->orderBy('n.created');
 
     $this->source = new MigrateSourceSQL($query);
 
@@ -55,7 +57,7 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
    */
   public function prepareRow($row) {
 
-//    debug($row);
+    debug($row);
 
   }
 
