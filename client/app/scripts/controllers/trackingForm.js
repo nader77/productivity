@@ -40,8 +40,8 @@ angular.module('clientApp')
     for (var i = 1; i <= endDay; i++) {
       $scope.days.push(i);
     }
-    var monthNames = [ "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December" ];
+    var monthNames = [ 'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December' ];
 
 
     // Set the allowed values for issue type.
@@ -388,7 +388,7 @@ angular.module('clientApp')
     $scope.changeProject = function() {
       $scope.data.issues = [];
       $scope.getPRs();
-    }
+    };
 
     /**
      * Fetch project's github PRs for current date.

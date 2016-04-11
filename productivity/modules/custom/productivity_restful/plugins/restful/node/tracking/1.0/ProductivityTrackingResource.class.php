@@ -97,12 +97,12 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
     foreach ($value as $issue) {
       // We cannot use `wrapper` on the sub-fields of a multi-field.
       $issues[] = array(
-        'issue' => is_array($issue->field_github_issue[LANGUAGE_NONE]) ? $issue->field_github_issue[LANGUAGE_NONE][0]['target_id'] : 0,
-        'label' => is_array($issue->field_issue_label[LANGUAGE_NONE]) ? $issue->field_issue_label[LANGUAGE_NONE][0]['value'] : '',
-        'type' => is_array($issue->field_issue_type[LANGUAGE_NONE]) ? $issue->field_issue_type[LANGUAGE_NONE][0]['value'] : '',
+        'issue' => isset($issue->field_github_issue[LANGUAGE_NONE][0]) ? $issue->field_github_issue[LANGUAGE_NONE][0]['target_id'] : 0,
+        'label' => isset($issue->field_issue_label[LANGUAGE_NONE][0]) ? $issue->field_issue_label[LANGUAGE_NONE][0]['value'] : '',
+        'type' => isset($issue->field_issue_type[LANGUAGE_NONE][0]) ? $issue->field_issue_type[LANGUAGE_NONE][0]['value'] : '',
         // Need to convert the value to a decimal number to be accepted by the
         // HTML5 input field.
-        'time' => is_array($issue->field_time_spent[LANGUAGE_NONE]) ? (float) number_format($issue->field_time_spent[LANGUAGE_NONE][0]['value'], 2) : 0,
+        'time' => isset($issue->field_time_spent[LANGUAGE_NONE][0]) ? (float) number_format($issue->field_time_spent[LANGUAGE_NONE][0]['value'], 2) : 0,
       );
     }
 

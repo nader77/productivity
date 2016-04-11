@@ -81,3 +81,13 @@ MYSQL_DB_NAME="productivity"
 
 # Post reset script.
 # function post_reset {}
+
+# Post install script.
+function post_install {
+  chmod 777 www/sites/default/settings.php
+
+  # Github integration.
+  echo "\$conf['github_public'] = '<your-client-id>';" >> www/sites/default/settings.php
+  echo "\$conf['github_secret'] = '<your-client-secret>';"  >> www/sites/default/settings.php
+}
+

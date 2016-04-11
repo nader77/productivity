@@ -73,7 +73,7 @@ class ProductivityMigrateUser extends Migration {
   }
 
   function prepare($entity, $row) {
-    if (!empty($row->password)) {
+    if (!empty($row->pass)) {
       $entity->status = TRUE;
     }
 
