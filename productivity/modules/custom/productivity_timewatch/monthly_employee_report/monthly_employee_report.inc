@@ -110,18 +110,57 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
     'Total',
     'Project',
     'Source',
-    'Actual Total inc Missing',
+    'Retro',
+    'All day Total',
   );
+
+  // Get the skelaton of the full month.
   $month_array = productivity_timewatch_build_month_skeleton($month, $year);
-  foreach ($month_array as $day => &$value) {
+  foreach ($month_array as $day => $value) {
     if (isset($sessions[$day])) {
-      
-      foreach ($sessions[$day] as $session) {
-        $month_array[$day] += $session;
+      $day_key = $day;
+      $total_hours = 0;
+      $total_minutes = 0;
+      foreach ($sessions[$day] as $key => $session) {
+        $hours = floor($session['total'] / 3600);
+        $minutes = floor(($session['total'] % 3600) / 60);
+        $session['total'] = $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
+
+        if ($key > 0) {
+          // If more than one entrance in a day, display total only in last line.
+          $month_array[$day_key]['Actual Total inc Missing'] = '';
+          $day_key = $day . '_' . $key;
+          $month_array[$day_key] = array(
+              'Date' => '',
+              'Week day' => '',
+          );
+          $session['total'] = $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
+          $total_hours += $hours;
+          $total_minutes += $minutes;
+        }
+        else {
+          // Init total fo all entrance in that day.
+          $total_hours = $hours;
+          $total_minutes = $minutes;
+        }
+        $month_array[$day_key] += $session;
+        $month_array[$day_key]['all day total'] = $total_hours . ':' . str_pad($total_minutes, 2, '0', STR_PAD_LEFT);;
       }
     }
+    else {
+      $month_array[$day] += array(
+        'entry' => '',
+        'exit' => '',
+        'total' => '',
+        'project' => '',
+        'source' => '',
+        'retro' => 'no',
+        'all day total' => '',
+      );
+    }
   }
-
+  // Sort by day.
+  ksort($month_array);
   $variables['table'] = theme('table', array(
     'header' => $header,
     'rows' => $month_array
@@ -130,8 +169,6 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
 
   // Get all the projects for project input
   $variables['current_uid'] = $account->uid;
-
-//  $variables['table'] = theme('productivity_timewatch_monthly_report_table', $variables);
 
   return theme('productivity_timewatch_monthly_employee_report', $variables);
 }
@@ -174,24 +211,21 @@ function productivity_timewatch_create_issues_table($node_keys) {
   $sessions = array();
   foreach($node_keys as $nid) {
     $wrapper = entity_metadata_wrapper('node', $nid);
-    $node_account  =$wrapper->uid->value();
+    $node_account  =$wrapper->author->value();
     $start_time = $wrapper->field_session_date->value->value();
     $end_time = $wrapper->field_session_date->value2->value();
     $total_time = $end_time - $start_time;
-    $hours = floor($total_time / 3600);
-    $minutes = floor(($total_time % 3600) / 60);
     $day = date('d', $start_time);
 
     $sessions[$day][] = array(
-      'Entry' => date('H:i', $start_time),
-      'Exit' => date('H:i', $end_time),
-      'Total' => $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT),
-      'Project' => $wrapper->field_project->label(),
+      'entry' => date('H:i', $start_time),
+      'exit' => date('H:i', $end_time),
+      'total' => $total_time,
+      'project' => ($wrapper->field_session_type->label() == 'Regular') ? $wrapper->field_project->label() : $wrapper->field_session_type->label(),
       // The source of the data, using time watch or from home (manual).
-      'Source' => in_array('timewatch', $node_account->roles) ? 'timewatch' : 'manual',
+      'source' => in_array('timewatch', $node_account->roles) ? 'timewatch' : 'manual',
+      'retro' => 'no',
     );
   }
-  ksort($sessions);
-  dpm($sessions);
   return $sessions;
 }
