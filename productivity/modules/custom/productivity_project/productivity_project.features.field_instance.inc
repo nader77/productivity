@@ -483,8 +483,8 @@ function productivity_project_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'multifield-field_table_rate-field_work_type_display'.
-  $field_instances['multifield-field_table_rate-field_work_type_display'] = array(
+  // 'multifield-field_table_rate-field_issue_type_label'.
+  $field_instances['multifield-field_table_rate-field_issue_type_label'] = array(
     'bundle' => 'field_table_rate',
     'default_value' => NULL,
     'deleted' => 0,
@@ -499,7 +499,7 @@ function productivity_project_field_default_field_instances() {
       ),
     ),
     'entity_type' => 'multifield',
-    'field_name' => 'field_work_type_display',
+    'field_name' => 'field_issue_type_label',
     'label' => 'Work type display',
     'required' => 0,
     'settings' => array(

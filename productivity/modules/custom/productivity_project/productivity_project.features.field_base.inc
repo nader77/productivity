@@ -290,8 +290,8 @@ function productivity_project_field_default_field_bases() {
       'field_scope_period' => array(
         0 => 'field_scope_period',
       ),
-      'field_work_type_display_format' => array(
-        0 => 'field_work_type_display_format',
+      'field_issue_type_label_format' => array(
+        0 => 'field_issue_type_label_format',
       ),
       'id' => array(
         0 => 'id',
@@ -367,13 +367,13 @@ function productivity_project_field_default_field_bases() {
     'type' => 'list_text',
   );
 
-  // Exported field_base: 'field_work_type_display'.
-  $field_bases['field_work_type_display'] = array(
+  // Exported field_base: 'field_issue_type_label'.
+  $field_bases['field_issue_type_label'] = array(
     'active' => 1,
     'cardinality' => 1,
     'deleted' => 0,
     'entity_types' => array(),
-    'field_name' => 'field_work_type_display',
+    'field_name' => 'field_issue_type_label',
     'indexes' => array(
       'format' => array(
         0 => 'format',

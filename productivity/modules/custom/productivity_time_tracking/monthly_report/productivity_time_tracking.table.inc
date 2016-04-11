@@ -194,7 +194,7 @@ function _productivity_time_tracking_get_table_title($table_machine_name, $node,
   $wrapper = entity_metadata_wrapper('node', $node);
   foreach($wrapper->field_table_rate as $multifield) {
     $machine_name = $multifield->field_issue_type->value();
-    $override = $multifield->field_work_type_display->value();
+    $override = $multifield->field_issue_type_label->value();
 
     $overrides[$machine_name] = $override;
   }
