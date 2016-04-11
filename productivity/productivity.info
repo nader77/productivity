@@ -32,6 +32,7 @@ dependencies[] = entity
 dependencies[] = entity_token
 dependencies[] = entitiesdiagram
 dependencies[] = entityreference
+dependencies[] = entityreference_autofill
 dependencies[] = gravatar
 dependencies[] = jquery_update
 dependencies[] = features
