@@ -17,7 +17,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * Login a user to the site.
+   * Login a user to the application.
    *
    * @param $name
    *   The user name.
@@ -52,7 +52,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @When /^I login with bad credentials$/
    */
   public function iLoginWithBadCredentials() {
-    return $this->loginUser('wrong-foo', 'wrong-bar', FALSE);
+    $this->loginUser('wrong-foo', 'wrong-bar', FALSE);
   }
 
   /**
