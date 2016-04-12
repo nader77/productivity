@@ -109,7 +109,7 @@ function productivity_timewatch_node_presave($node) {
   $wrapper = entity_metadata_wrapper('node', $node);
   $date = $wrapper->field_session_date->value();
   // Delete the end date in case it's identical to the start date.
-  if ($date['value'] == $date['value2']) {
+  if (!empty($date['value2']) && $date['value'] == $date['value2']) {
     $wrapper->field_session_date->value2->set(NULL);
   }
 

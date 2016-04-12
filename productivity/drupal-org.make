@@ -37,6 +37,9 @@ projects[entityreference][subdir] = "contrib"
 projects[entityreference][version] = "1.1"
 projects[entityreference][patch][] = "https://www.drupal.org/files/issues/migrate_multiple_entity_reference-2394725-4.patch"
 
+projects[entityreference_autofill][subdir] = "contrib"
+projects[entityreference_autofill][version] = "1.2"
+
 projects[entityreference_filter][subdir] = "contrib"
 projects[entityreference_filter][version] = "1.5"
 
@@ -112,6 +115,7 @@ projects[restful][download][type] = "git"
 projects[restful][download][url] = "https://github.com/RESTful-Drupal/restful.git"
 projects[restful][download][branch] = "7.x-1.x"
 projects[restful][subdir] = "contrib"
+projects[restful][patch][] = "https://patch-diff.githubusercontent.com/raw/RESTful-Drupal/restful/pull/889.patch"
 
 projects[smtp][subdir] = "contrib"
 projects[smtp][version] = "1.3"

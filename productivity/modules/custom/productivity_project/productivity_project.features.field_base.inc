@@ -290,6 +290,9 @@ function productivity_project_field_default_field_bases() {
       'field_scope_period' => array(
         0 => 'field_scope_period',
       ),
+      'field_issue_type_label_format' => array(
+        0 => 'field_issue_type_label_format',
+      ),
       'id' => array(
         0 => 'id',
       ),
@@ -362,6 +365,27 @@ function productivity_project_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'list_text',
+  );
+
+  // Exported field_base: 'field_issue_type_label'.
+  $field_bases['field_issue_type_label'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_issue_type_label',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
   );
 
   return $field_bases;

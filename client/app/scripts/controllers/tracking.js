@@ -8,7 +8,7 @@
  * Controller of the clientApp
  */
 angular.module('clientApp')
-  .controller('TrackingCtrl', function ($scope, tracking, $stateParams, $log) {
+  .controller('TrackingCtrl', function ($scope, tracking, $stateParams) {
 
     // Initialize values.
     $scope.tracking = tracking;
@@ -23,7 +23,7 @@ angular.module('clientApp')
     var getColor = d3.scale.category20c();
     var scaleLinear = d3.scale.linear().range([0, width]);
 
-    var xAxis = d3.svg.axis().scale(scaleLinear).orient("top");
+    var xAxis = d3.svg.axis().scale(scaleLinear).orient('top');
     var svg = d3.select('.tracking-data');
 
     scaleLinear.domain([startDay, endDay]);
@@ -32,9 +32,9 @@ angular.module('clientApp')
       .range([0, width]);
 
     // Set header (month days).
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + 0 + ")")
+    svg.append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + 0 + ')')
       .call(xAxis);
 
     // Prepare data by employee.
@@ -42,25 +42,25 @@ angular.module('clientApp')
 
     var j = 0;
     angular.forEach(employee, function(data, employeeName) {
-      var g = svg.append("g").attr("class","journal");
+      var g = svg.append('g').attr('class', 'journal');
 
       // Add the circle size.
-      var circles = g.selectAll("circle")
+      var circles = g.selectAll('circle')
         .data(data)
         .enter()
-        .append("circle");
+        .append('circle');
 
-      var text = g.selectAll("text")
+      var text = g.selectAll('text')
         .data(data)
         .enter()
-        .append("text");
+        .append('text');
 
-      var div = g.selectAll("button")
+      var div = g.selectAll('button')
         .data(data)
         .enter()
-        .append("text")
-        .on("mouseover", mouseover1)
-        .on("mouseout", mouseout);
+        .append('text')
+        .on('mouseover', mouseover1)
+        .on('mouseout', mouseout);
 
       // Set size of circle max and min 2-9.
       var rScale = d3.scale.linear()
@@ -71,63 +71,51 @@ angular.module('clientApp')
 
       // Add the circle using the value of hours as Radius.
       circles
-        .attr("cx", function(d) {
+        .attr('cx', function(d) {
           return xScale(d[0]);
         })
-        .attr("cy", j*20+20)
-        .attr("r", function(d) {
+        .attr('cy', j*20+20)
+        .attr('r', function(d) {
           return rScale(d[1]);
         })
-        .attr("class",function(d) {
+        .attr('class',function(d) {
           return d[3];
         })
-        .attr("data-toggle","tooltip")
-        .attr("data-placement","top")
-        .attr("title",function(d) {
+        .attr('data-toggle', 'tooltip')
+        .attr('data-placement', 'top')
+        .attr('title', function(d) {
           return d[2];
         });
-//        .style("fill", function(d) {
-//          return getColorByType(j, d);
-//        });
 
       div
-        .attr("y", j*20+25)
-        .attr("x",function(d) { return xScale(d[0])-5; })
-        .attr("data-toggle","tooltip")
-        .attr("data-placement","top")
-        .style("display","none")
+        .attr('y', j*20+25)
+        .attr('x', function(d) { return xScale(d[0])-5; })
+        .attr('data-toggle', 'tooltip')
+        .attr('data-placement', 'top')
+        .style('display', 'none')
         .text(function(d){ return d[2]; })
-        .attr("title",function(d) {
+        .attr('title', function(d) {
           return d[2];
         });
 
       // Add number of hours string
       text
-        .attr("y", j*20+25)
-        .attr("x",function(d) { return xScale(d[0])-5; })
-        .attr("class","value")
+        .attr('y', j*20+25)
+        .attr('x', function(d) { return xScale(d[0])-5; })
+        .attr('class', 'value')
         .text(function(d){ return d[1]; })
-        .style("fill", function() { return getColor(j); })
-        .style("display","none");
-
-      // Trying to add
-//      text
-//        .attr("y", j*20+25)
-//        .attr("x",function(d) { return xScale(d[0])-5; })
-//        .attr("class","project")
-//        .text(function(d){ return d[2]; })
-//        .style("fill", function() { return getColor(j); })
-//        .style("display","none");
+        .style('fill', function() { return getColor(j); })
+        .style('display', 'none');
 
       // Add name of employee
-      g.append("text")
-        .attr("y", j*20+25)
-        .attr("x",width+20)
-        .attr("class","label")
+      g.append('text')
+        .attr('y', j*20+25)
+        .attr('x', width+20)
+        .attr('class', 'label')
         .text(employeeName)
-        .style("fill", function() { return getColor(j); })
-        .on("mouseover", mouseover)
-        .on("mouseout", mouseout);
+        .style('fill', function() { return getColor(j); })
+        .on('mouseover', mouseover)
+        .on('mouseout', mouseout);
 
       // Interator.
       j++;
@@ -139,20 +127,20 @@ angular.module('clientApp')
 
     function mouseover(p) {
       var g = d3.select(this).node().parentNode;
-      d3.select(g).selectAll("circle").style("display","none");
-      d3.select(g).selectAll("text.value").style("display","block");
+      d3.select(g).selectAll('circle').style('display', 'none');
+      d3.select(g).selectAll('text.value').style('display', 'block');
     }
 
     function mouseover1(p) {
       var g = d3.select(this).node().parentNode;
-      d3.select(g).select("text").style("display","none");
-      d3.select(g).select("text.value").style("display","block");
+      d3.select(g).select('text').style('display', 'none');
+      d3.select(g).select('text.value').style('display', 'block');
     }
 
     function mouseout(p) {
       var g = d3.select(this).node().parentNode;
-      d3.select(g).selectAll("circle").style("display","block");
-      d3.select(g).selectAll("text.value").style("display","none");
+      d3.select(g).selectAll('circle').style('display', 'block');
+      d3.select(g).selectAll('text.value').style('display', 'none');
     }
 
     /**
@@ -192,13 +180,13 @@ angular.module('clientApp')
     }
 
     $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
+      $('[data-toggle="tooltip"]').tooltip();
+    });
 
     /**
      * Set the selected Company.
      *
-     * @param int id
+     * @param id
      *   The company ID.
      */
     var setSelectedCompany = function(id) {

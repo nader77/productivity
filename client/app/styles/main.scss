@@ -36,6 +36,15 @@ body {
       @include border-radius(0);
     }
 
+    .btn-github {
+      color: white;
+      background: $color4_light;
+      padding-left: 0;
+      transition: .4s ease-in-out all;
+      width: 320px;
+      margin: 0 auto 20px;
+    }
+
     .tracking-table-page {
 
       h2 {
@@ -52,7 +61,6 @@ body {
         }
 
       }
-
 
       .track-item-table {
         font-size: 16px;
