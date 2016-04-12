@@ -37,3 +37,12 @@
     </div>
   </div>
 </div>
+
+<div class="row">
+  <div class="col-sm-8">
+  <?php print $table_summary; ?>
+  </div>
+  <div class="col-sm-4">
+    <?php print t('legend for report, ....'); ?>
+  </div>
+</div>
