@@ -16,6 +16,7 @@ angular.module('clientApp')
     $scope.month = today.getMonth()+1;
     $scope.year = today.getFullYear();
     $scope.employee = account.label;
+    $scope.employeeIsAdmin = account.roles.indexOf('administrator') >= 0;
 
     /**
      * Logout current user.

@@ -24,6 +24,13 @@ class ProductivityMeResource extends \RestfulEntityBaseUser {
 
     unset($public_fields['self']);
 
+    $public_fields['roles'] = array(
+      'property' => 'roles',
+      'process_callbacks' => array(
+        array($this, 'getRolesNames'),
+      ),
+    );
+
 
     if (field_info_field('og_user_node')) {
       $public_fields['tracking'] = array(
@@ -60,5 +67,23 @@ class ProductivityMeResource extends \RestfulEntityBaseUser {
   protected function accessGithubAccessToken($op, $public_field_name, \EntityMetadataWrapper $property_wrapper, \EntityMetadataWrapper $wrapper) {
     $request = $this->getRequest();
     return !empty($request['github_access_token']) ? \RestfulInterface::ACCESS_ALLOW : \RestfulInterface::ACCESS_DENY;
+  }
+
+  /**
+   * Get the names of user's roles.
+   *
+   * @param $values
+   *  The roles IDs.
+   *
+   * @return array
+   *  The roles names.
+   */
+  protected function getRolesNames($values) {
+    $roles_name = array();
+    foreach ($values as $role_id) {
+      $roles_name[] = user_role_load($role_id)->name;
+    }
+
+    return $roles_name;
   }
 }
