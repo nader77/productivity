@@ -208,15 +208,15 @@ function productivity_timewatch_form_work_session_node_form_alter(&$form, &$form
 function productivity_timewatch_get_user_sessions($uid, $year, $month) {
 
   if ($month == 'all') {
-    $project_start_month = format_string("01/01/@year", array('@year' => $year));
-    $project_end_month = format_string("31/12/@year", array('@year' => $year));
+    $project_start_month = format_string("01-01-@year", array('@year' => $year));
+    $project_end_month = format_string("31-12-@year", array('@year' => $year));
   }
   else {
-    $project_start_month = format_string("01/@month/@year", array(
+    $project_start_month = format_string("01-@month-@year", array(
       '@year' => $year,
       '@month' => $month
     ));
-    $project_end_month = format_string("01/@month/@year", array(
+    $project_end_month = format_string("01-@month-@year", array(
       '@year' => ($month == 12) ? $year+1 : $year,
       '@month' => ($month == 12) ? 1 : ($month + 1),
     ));
