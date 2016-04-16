@@ -3,7 +3,6 @@ description = "Module to migrate Productivity demo content."
 package = Productivity - Demo
 core = 7.x
 version = "7.x-1.x-dev"
-core = "7.x"
 
 files[] = productivity_migrate.test
 files[] = includes/ProductivityMigrate.inc
@@ -13,4 +12,5 @@ files[] = includes/ProductivityMigrateProject.inc
 files[] = includes/ProductivityMigrateSessionTypes.inc
 files[] = includes/ProductivityMigrateTimewatchUser.inc
 files[] = includes/ProductivityMigrateTracker.inc
+files[] = includes/ProductivityMigrateTrackingsToWorkSessions.inc
 files[] = includes/ProductivityMigrateUser.inc

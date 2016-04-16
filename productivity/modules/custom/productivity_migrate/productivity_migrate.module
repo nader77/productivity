@@ -21,6 +21,8 @@ function productivity_migrate_migrate_api() {
     'ProductivityMigrateSessionTypes',
     'ProductivityMigrateTimewatchUser',
     'ProductivityMigrateTracker',
+    'ProductivityMigrateTrackingsToWorkSessions',
+    'ProductivityMigratePayment',
     'ProductivityMigrateUser',
   );
 

@@ -269,7 +269,7 @@ function productivity_timewatch_create_issues_table($node_keys, &$projects) {
       $projects[$pid]['total']['minutes'] += $today['total']['minutes'];
     }
   }
-  return $sessions;
+    return $sessions;
 }
 
 /**

@@ -116,7 +116,8 @@ function productivity_timewatch_node_presave($node) {
   // Set title.
   $employee = $wrapper->field_employee->label();
   $day = date('d/m/y', $date['value']);
-  $node->title = format_string('@date - @user', array('@date' => $day, '@user' => $employee));
+  $type = $wrapper->field_session_type->label();
+  $node->title = format_string('@date - @user - @type', array('@date' => $day, '@user' => $employee, '@type' => $type));
 }
 
 /**
