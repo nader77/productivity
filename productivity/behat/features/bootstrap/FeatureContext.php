@@ -337,17 +337,18 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
       $wrapper->field_description->set("foo");
       $wrapper->field_work_date->set(time());
-      $wrapper->field_employee->set(1);
+      $wrapper->field_employee->set($account->uid);
       $wrapper->field_day_type->set('regular');
-      $wrapper->field_track_hours->set(0);
-      $wrapper->field_issues_logs->set(array(
-        0 => array(
-          'field_github_issue' => array(LANGUAGE_NONE => array(0 => array('target_id' => $issue_ref))),
-          'field_issue_label'  => array(LANGUAGE_NONE => array(0 => array('value' => 'Example label'))),
-          'field_time_spent'   => array(LANGUAGE_NONE => array(0 => array('value' => 1))),
-          'field_issue_type'   => array(LANGUAGE_NONE => array(0 => array('value' => 'dev'))),
-        ),
-      ));
+
+      $field_issues = array(
+        array(
+          'field_github_issue' => array(LANGUAGE_NONE => array(array('target_id' => $issue_ref))),
+          'field_issue_label' => array(LANGUAGE_NONE => array(array('value' => 'Example label'))),
+          'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => 'dev'))),
+          'field_time_spent' => array(LANGUAGE_NONE => array(array('value' => 1))),
+        )
+      );
+      $wrapper->field_issues_logs->set($field_issues);
     }
 
     try {
@@ -473,6 +474,13 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     }
   }
 
+  /**
+   * TODO: Add docs.
+   *
+   * @param $projectName
+   * @return int
+   * @throws \Exception
+   */
   public function getTotalHours($projectName) {
     $this->getSession()->visit($this->locatePath('content/' . $projectName));
     $page = $this->getSession()->getPage();
@@ -542,6 +550,11 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
 
+  /**
+   * TODO: Add docs.
+   *
+   * @return mixed|void
+   */
   function getLatestTrackingEntry() {
     $query = new EntityFieldQuery();
     $result = $query
@@ -552,7 +565,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
       ->execute();
 
     if (empty($result['node'])) {
-      return;
+      return FALSE;
     }
     return key($result['node']);
   }
@@ -561,8 +574,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then /^I add "([^"]*)" hours to the latest tracking entry$/
    */
   public function iAddHoursToLatestTrackingEntry($hours) {
-    $entryID = $this->getLatestTrackingEntry();
-    $this->getSession()->visit($this->locatePath('node/' . $entryID .'/edit'));
+    $entry_id = $this->getLatestTrackingEntry();
+    $this->getSession()->visit($this->locatePath('node/' . $entry_id .'/edit'));
     $element = $this->getSession()->getPage();
 
     $timeSpentElm = $element->find('css', '#edit-field-issues-logs-und-0-field-time-spent-und-0-value');
