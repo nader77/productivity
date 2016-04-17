@@ -111,12 +111,12 @@ function productivity_admin_views_default_views() {
     'timestamp' => 'title',
     'changed' => 'changed',
     'field_employee' => 'field_employee',
-    'field_github_repository_name' => 'field_github_repository_name',
     'field_issue_id' => 'field_issue_id',
+    'field_github_project_id' => 'field_github_project_id',
+    'field_time_estimate' => 'field_time_estimate',
     'field_project' => 'field_project',
     'field_pr_status' => 'field_pr_status',
     'field_work_date' => 'field_work_date',
-    'field_github_username' => 'field_github_username',
     'delete_node' => 'edit_node',
     'edit_node' => 'edit_node',
   );
@@ -153,15 +153,22 @@ function productivity_admin_views_default_views() {
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_github_repository_name' => array(
+    'field_issue_id' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
       'empty_column' => 0,
     ),
-    'field_issue_id' => array(
+    'field_github_project_id' => array(
       'sortable' => 1,
+      'default_sort_order' => 'asc',
+      'align' => '',
+      'separator' => '',
+      'empty_column' => 0,
+    ),
+    'field_time_estimate' => array(
+      'sortable' => 0,
       'default_sort_order' => 'asc',
       'align' => '',
       'separator' => '',
@@ -182,13 +189,6 @@ function productivity_admin_views_default_views() {
       'empty_column' => 0,
     ),
     'field_work_date' => array(
-      'sortable' => 1,
-      'default_sort_order' => 'asc',
-      'align' => '',
-      'separator' => '',
-      'empty_column' => 0,
-    ),
-    'field_github_username' => array(
       'sortable' => 1,
       'default_sort_order' => 'asc',
       'align' => '',
@@ -453,6 +453,22 @@ function productivity_admin_views_default_views() {
   );
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['reference_display'] = 'entity_ref_list:entityreference_1';
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['reference_arguments'] = 'project';
+  /* Filter criterion: Content: Github Project ID (field_github_project_id) */
+  $handler->display->display_options['filters']['field_github_project_id_value']['id'] = 'field_github_project_id_value';
+  $handler->display->display_options['filters']['field_github_project_id_value']['table'] = 'field_data_field_github_project_id';
+  $handler->display->display_options['filters']['field_github_project_id_value']['field'] = 'field_github_project_id_value';
+  $handler->display->display_options['filters']['field_github_project_id_value']['operator'] = 'contains';
+  $handler->display->display_options['filters']['field_github_project_id_value']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_github_project_id_value']['expose']['operator_id'] = 'field_github_project_id_value_op';
+  $handler->display->display_options['filters']['field_github_project_id_value']['expose']['label'] = 'Github Project ID';
+  $handler->display->display_options['filters']['field_github_project_id_value']['expose']['operator'] = 'field_github_project_id_value_op';
+  $handler->display->display_options['filters']['field_github_project_id_value']['expose']['identifier'] = 'field_github_project_id_value';
+  $handler->display->display_options['filters']['field_github_project_id_value']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+  );
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page_1');

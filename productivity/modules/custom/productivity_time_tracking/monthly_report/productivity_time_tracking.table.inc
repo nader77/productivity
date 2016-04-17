@@ -102,7 +102,7 @@ function productivity_time_tracking_issue_table($node = FALSE, $year = FALSE, $m
   $variables['grand_total'] = 0;
   $header = array('Issue', 'Label', 'Date', 'Time', 'Amount');
   foreach ($issues_table as $table_name => $table) {
-    $variables['table_titles'][$table_name] = $table['label'];
+    $variables['table_titles'][$table_name] = _productivity_time_tracking_get_table_title($table_name, $node, $table['label']);
     $variables['total_per_types'][$table_name] = 0;
     $variables['total_per_hours_types'][$table_name] = 0;
 
@@ -175,4 +175,29 @@ function productivity_time_tracking_create_issues_table($nodes) {
     }
   }
   return $issues_table;
+}
+
+/**
+ * Check for a project override to the table title.
+ * These are set in the project's node field_work_type.
+ * Function designed to run once per page load (can be optimized
+ * if all the overrides are needed).
+ *
+ * @param $table_machine_name
+ * @param $node
+ * @param string $default_name
+ * @return string
+ */
+function _productivity_time_tracking_get_table_title($table_machine_name, $node, $default_name = '') {
+  // Find all of the overrides.
+  $overrides = array();
+  $wrapper = entity_metadata_wrapper('node', $node);
+  foreach($wrapper->field_table_rate as $multifield) {
+    $machine_name = $multifield->field_issue_type->value();
+    $override = $multifield->field_issue_type_label->value();
+
+    $overrides[$machine_name] = $override;
+  }
+
+  return empty($overrides[$table_machine_name]) ?  $default_name : $overrides[$table_machine_name];
 }

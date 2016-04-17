@@ -491,9 +491,6 @@ function productivity_time_tracking_tokens($type, $tokens, array $data = array()
 /**
  * Bulk update time tracking.
  */
-/**
- * Implements hook_element_info().
- */
 function productivity_time_tracking_bulk_update($month, $year, $employee, $project_nid) {
   $globals = productivity_time_tracking_get_global_days($month, $year);
   $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));

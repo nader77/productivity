@@ -133,6 +133,7 @@ function productivity_time_tracking_field_default_field_bases() {
     'settings' => array(
       'allowed_values' => array(
         'dev' => 'Development',
+        'dev_senior' => 'Development (Senior)',
         'qa' => 'QA',
         'management' => 'Management',
         'designer' => 'Designer',

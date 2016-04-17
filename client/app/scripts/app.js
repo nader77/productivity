@@ -106,11 +106,20 @@ angular
         controller: 'TrackingTableCtrl',
         onEnter: page403,
         resolve: {
-          tracking: function($stateParams, Tracking) {
-              return Tracking.get($stateParams.year, $stateParams.month);
+          security: function(account, $state) {
+            if(account.roles.indexOf('administrator') < 0) {
+              $state.go('dashboard.tracking-form');
+            }
           },
-          trackingProject: function($stateParams, TrackingProject) {
+          tracking: function($stateParams, Tracking, account) {
+            if(account.roles.indexOf('administrator') >= 0) {
+              return Tracking.get($stateParams.year, $stateParams.month);
+            }
+          },
+          trackingProject: function($stateParams, TrackingProject, account) {
+            if(account.roles.indexOf('administrator') >= 0) {
               return TrackingProject.get($stateParams.year, $stateParams.month);
+            }
           }
         }
       })
