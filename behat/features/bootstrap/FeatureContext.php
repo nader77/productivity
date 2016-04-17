@@ -44,7 +44,7 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     if ($check_success) {
       // Wait for the dashboard's menu to load.
-      $this->iWaitForCssElement('#admin-menu-wrapper', 'appear');
+      $this->iWaitForCssElement('.tracking-form-page', 'appear');
     }
   }
 
