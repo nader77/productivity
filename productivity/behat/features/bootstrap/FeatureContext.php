@@ -11,12 +11,12 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   /**
    *  The total hours of a project.
    */
-  protected $totalHours;
+  protected $total_hours;
 
   /**
    *  The name of the project being tested.
    */
-  protected $projectName;
+  protected $project_name;
 
   /**
    * @When /^I login with user "([^"]*)"$/
@@ -278,20 +278,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * @Given I add one hour tracking for :issue_name in :project_name
-   */
-  public function iAddHourTrackingForIn($issue_name, $project_name) {
-    $this->iCreateNodeOfType('tracking for ' . $issue_name, 'time_tracking', $project_name, $issue_name);
-  }
-
-  /**
-   * @Given I add one hour tracking for the pull request for :issue_name in :project_name
-   */
-  public function iAddHourTrackingForThePullRequestForIn($issue_name, $project_name) {
-    $this->iAddHourTrackingForIn($issue_name, $project_name);
-  }
-
-  /**
    * @When I create :title node of type :type
    */
   public function iCreateNodeOfType($title, $type, $project_name = NULL, $issue_name = NULL, $check_saving = FALSE) {
@@ -325,30 +311,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
           $wrapper->field_github_content_type->set('pull_request');
         }
       }
-    }
-
-    if ($type == 'time_tracking') {
-      // Set relevant fields.
-      if ($project_node_id = $this->getNodeIdByTitleBundleAndRef('project', $project_name)) {
-        $wrapper->field_project->set($project_node_id);
-      }
-
-      $issue_ref = $this->getNodeIdByTitleBundleAndRef('github_issue', $issue_name, $project_node_id);
-
-      $wrapper->field_description->set("foo");
-      $wrapper->field_work_date->set(time());
-      $wrapper->field_employee->set($account->uid);
-      $wrapper->field_day_type->set('regular');
-
-      $field_issues = array(
-        array(
-          'field_github_issue' => array(LANGUAGE_NONE => array(array('target_id' => $issue_ref))),
-          'field_issue_label' => array(LANGUAGE_NONE => array(array('value' => 'Example label'))),
-          'field_issue_type' => array(LANGUAGE_NONE => array(array('value' => 'dev'))),
-          'field_time_spent' => array(LANGUAGE_NONE => array(array('value' => 1))),
-        )
-      );
-      $wrapper->field_issues_logs->set($field_issues);
     }
 
     try {
@@ -462,85 +424,95 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   }
 
   /**
-   * TODO: Add docs.
+   * Get total hours in a project.
    *
-   * @param $projectName
+   * @param $project_name
+   *  The name of the project.
+   *
    * @return int
+   *  The total hours in the project.
    * @throws \Exception
    */
-  public function getTotalHours($projectName) {
-    $this->getSession()->visit($this->locatePath('content/' . $projectName));
+  public function getTotalHours($project_name) {
+    $this->getSession()->visit($this->locatePath('content/' . $project_name));
     $page = $this->getSession()->getPage();
 
     if (!$element = $page->find('xpath', '//div[@class="field-item even"]')) {
       throw new \Exception('The element was not found in the page.');
     }
 
-    $totalHoursText = $element->getText();
+    $total_hours_text = $element->getText();
 
-    // Removing whitespace in case $totalHoursText >= 1 000
-    $totalHours = intval(str_replace(' ', '', $totalHoursText));
+    // Removing whitespace in case $total_hoursText >= 1 000
+    $total_hours = intval(str_replace(' ', '', $total_hours_text));
 
-    return $totalHours;
+    return $total_hours;
   }
 
   /**
    * @Given /^I get the total hours from "([^"]*)" project$/
    */
-  public function iGetTheTotalHours($projectName) {
-    $this->projectName = $projectName;
-    $totalHours = $this->getTotalHours($projectName);
+  public function iGetTheTotalHours($project_name) {
+    $this->project_name = $project_name;
+    $total_hours = $this->getTotalHours($project_name);
 
-    $this->totalHours = $totalHours;
+    $this->total_hours = $total_hours;
   }
 
   /**
    * @Given /^I validate that total hours have "([^"]*)" by "([^"]*)"$/
    */
   public function iValidateTheTotalHours($type, $hours) {
-    $newTotalHours = $this->getTotalHours($this->projectName);
+    $new_total_hours = $this->getTotalHours($this->project_name);
     switch ($type) {
       case "incremented":
-        $expectedSum = $this->totalHours + $hours;
+        $expected_sum = $this->total_hours + $hours;
         break;
 
       case "decremented":
-        $expectedSum = $this->totalHours - $hours;
-        print("\nOriginal Hours: " . $this->totalHours);
+        $expected_sum = $this->total_hours - $hours;
+        print("\nOriginal Hours: " . $this->total_hours);
         print("\nDecremented Hours: " . $hours);
-        print("\nExpected Sum: " . $expectedSum);
+        print("\nExpected Sum: " . $expected_sum);
         break;
 
       default:
         throw new Exception('Wrong arithmetic type provided.');
     }
 
-    print("\nTotal Hours: ". $newTotalHours . " Expected Sum: " . $expectedSum );
-    if ($newTotalHours != $expectedSum ) {
+    print("\nTotal Hours: ". $new_total_hours . " Expected Sum: " . $expected_sum );
+    if ($new_total_hours != $expected_sum ) {
       throw new Exception("The total hours didn't match the expected number.");
     }
   }
 
   /**
-   * @Then /^I add a new time tracking entry with "([^"]*)" hours$/
+   * @Then /^I add a new time tracking to the issue "([^"]*)" with "([^"]*)" hours to "([^"]*)" project$/
    */
-  public function iAddANewTimeTrackingEntry($hours) {
+  public function iAddANewTimeTrackingEntry($issue, $hours, $project) {
     $this->getSession()->visit($this->locatePath('node/add/time-tracking'));
     $element = $this->getSession()->getPage();
 
-    $element->fillField('Title', 'Developing the thing');
-    $element->fillField('Description', 'Yay');
-    $element->selectFieldOption('Project', 'nike Site');
+    $element->fillField('Title', 'Not relevant');
+    $element->selectFieldOption('Project', $project);
+    $element->selectFieldOption('Employee', $this->user->name);
+    $element->fillField('edit-field-description-und-0-value', 'Example description');
+    $this->fillInDrupalAutocomplete('GitHub issue', $issue, $issue);
+
     $element->fillField('Time Spent', $hours);
     $element->selectFieldOption('Issue type', 'Development');
     $element->find('css', '#edit-submit')->click();
+
+    // This must be called to save the entity one more time to take effect on
+    // the project report.
+    $this->iAddHoursToLatestTrackingEntry(0);
   }
 
-
   /**
-   * TODO: Add docs.
+   * Get latest time-tracking entity.
    *
    * @return mixed|void
+   *  The latest time-tracking node ID | FALSE.
    */
   function getLatestTrackingEntry() {
     $query = new EntityFieldQuery();
@@ -561,15 +533,15 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then /^I add "([^"]*)" hours to the latest tracking entry$/
    */
   public function iAddHoursToLatestTrackingEntry($hours) {
-    $entry_id = $this->getLatestTrackingEntry();
-    $this->getSession()->visit($this->locatePath('node/' . $entry_id .'/edit'));
+    $entity_id = $this->getLatestTrackingEntry();
+    $this->getSession()->visit($this->locatePath("node/$entity_id/edit"));
     $element = $this->getSession()->getPage();
 
-    $timeSpentElm = $element->find('css', '#edit-field-issues-logs-und-0-field-time-spent-und-0-value');
-    $timeSpent = $timeSpentElm->getValue();
+    $time_spent_el = $element->find('css', '#edit-field-issues-logs-und-0-field-time-spent-und-0-value');
+    $time_spent = $time_spent_el->getValue();
 
-    if ( isset($timeSpent) ) {
-      $hours += $timeSpent;
+    if ( isset($time_spent) ) {
+      $hours += $time_spent;
     }
 
     $element->fillField('Time Spent', $hours);
@@ -580,10 +552,52 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @Then /^I delete the latest tracking entry$/
    */
   public function iDeleteLatestTrackingEntry() {
-    $entryID = $this->getLatestTrackingEntry();
-    $this->getSession()->visit($this->locatePath('node/' . $entryID .'/delete'));
+    $entity_id = $this->getLatestTrackingEntry();
+    $this->getSession()->visit($this->locatePath("node/$entity_id/delete"));
     $element = $this->getSession()->getPage();
     $element->find('css', '#edit-submit')->click();
+  }
+
+  /**
+   * Select a value from entity-reference auto-complete field.
+   *
+   * @param $autocomplete
+   *  The name of the auto-complete field.
+   * @param $text
+   *  The text to add to the field.
+   * @param $popup
+   *  The text of the pop-up
+   *
+   * @throws \ExpectationException
+   */
+  protected function fillInDrupalAutocomplete($autocomplete, $text, $popup) {
+    $el = $this->getSession()->getPage()->findField($autocomplete);
+    $el->focus();
+
+    // Set the autocomplete text then put a space at the end which triggers
+    // the JS to go do the autocomplete stuff.
+    $el->setValue($text);
+    $el->keyUp(' ');
+
+    // Sadly this grace of 1 second is needed here.
+    sleep(1);
+
+    // Drupal autocompletes have an id of autocomplete which is bad news
+    // if there are two on the page.
+    $autocomplete = $this->getSession()->getPage()->findById('autocomplete');
+
+    if (empty($autocomplete)) {
+      throw new ExpectationException(t('Could not find the autocomplete popup box'), $this->getSession());
+    }
+
+    $popup_element = $autocomplete->find('xpath', "//div[text() = '{$popup}']");
+
+    if (empty($popup_element)) {
+      throw new ExpectationException(t('Could not find autocomplete popup text @popup', array(
+        '@popup' => $popup)), $this->getSession());
+    }
+
+    $popup_element->click();
   }
 }
 
