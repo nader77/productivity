@@ -1,5 +1,5 @@
 Feature: Time tracking
-  When add or editing or deleting tracking, I should see
+  when add or editing or deleting tracking, I should see
   the total tracking on the project page is updated accordingly
 
   @api
