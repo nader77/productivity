@@ -5,20 +5,20 @@ Feature: Time tracking
   @api
   Scenario: Adding a new tracking entry
     Given I login with user "admin"
-     Then I get the total hours from "nike-site" project
-     Then I add a new time tracking entry with "3" hours
-      And I validate that total hours have "incremented" by "3"
+    When  I get the total hours from "nike-site" project
+    And   I add a new time tracking entry with "3" hours
+    Then  I validate that total hours have "incremented" by "3"
 
   @api
   Scenario: Editing an existing tracking entry
     Given I login with user "admin"
-     Then I get the total hours from "nike-site" project
-     Then I add "3" hours to the latest tracking entry
-      And I validate that total hours have "incremented" by "3"
+    When  I get the total hours from "nike-site" project
+    And   I add "3" hours to the latest tracking entry
+    Then  I validate that total hours have "incremented" by "3"
 
   @api
   Scenario: Deleting an tracking entry
     Given I login with user "admin"
-     Then I get the total hours from "nike-site" project
-     Then I delete the latest tracking entry
-      And I validate that total hours have "decremented" by "6"
+    When  I get the total hours from "nike-site" project
+    And   I delete the latest tracking entry
+    Then  I validate that total hours have "decremented" by "6"

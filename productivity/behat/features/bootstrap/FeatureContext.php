@@ -302,8 +302,8 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     );
 
     $entity = entity_create('node', $values);
-    $entity->title = $title;
     $wrapper = entity_metadata_wrapper('node', $entity);
+    $wrapper->title->set($title);
 
     if ($type == 'project') {
       $wrapper->field_scope->set(array(
@@ -353,19 +353,6 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     try {
       $wrapper->save();
-
-      if ($type == 'time_tracking') {
-        // Save again using the node form. Won't work otherwise.
-        $this->getSession()->visit($this->locatePath('node/' . $wrapper->getIdentifier() . '/edit'));
-        $element = $this->getSession()->getPage();
-        $submit = $element->find('css', 'input#edit-submit');
-
-        if (empty($submit)) {
-          throw new \Exception(sprintf("No submit button at %s", $this->getSession()->getCurrentUrl()));
-        }
-
-        $submit->click();
-      }
 
       return TRUE;
     }
