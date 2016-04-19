@@ -13,7 +13,7 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
     $this->addFieldMapping('field_project', 'field_project_target_id');
 
     $this->addFieldMapping('field_session_date', 'date');
-    $this->addFieldMapping('field_session_date:to', 'date');
+    $this->addFieldMapping('field_session_date:to', 'enddate');
     $this->addFieldMapping('field_session_date:timezone')
       ->defaultValue('Asia/Jerusalem');
 
@@ -33,6 +33,7 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
     // Fetch all time tracking nodes with type different than 'regular'.
     $query = db_select('node', 'n');
     $query->innerJoin('field_data_field_day_type', 'dt', "dt.entity_type = 'node' AND dt.entity_id = n.nid");
+    $query->leftJoin('field_data_field_vacation_type', 'vt', "vt.entity_type = 'node' AND vt.entity_id = n.nid");
     $query->innerJoin('field_data_field_work_date', 'wd', "wd.entity_type = 'node' AND wd.entity_id = n.nid");
     $query->innerJoin('field_data_field_employee', 'e', "e.entity_type = 'node' AND e.entity_id = n.nid");
 
@@ -42,6 +43,7 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
     $query
       ->fields('n',  array('nid', 'created','changed'))
       ->fields('dt', array('field_day_type_value'))
+      ->fields('vt', array('field_vacation_type_value'))
       ->fields('e',  array('field_employee_target_id'))
       ->fields('p',  array('field_project_target_id'))
       ->fields('wd', array('field_work_date_value'))
@@ -55,11 +57,28 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
   }
 
   /**
-   *
+   * Convert string to taxonomy.
    */
   public function prepareRow($row) {
+    // Convert to 9:00am on same day.
+    $re = "/(....-..-..) .*/";
+    $str = $row->field_work_date_value;
+    // Create formated dates for all options.
+    $subst = "$1 09:00:00";
+    $end_subst = "$1 18:00:00";
+    $end_subst_half = "$1 12:30:00";
+    $date = preg_replace($re, $subst, $str, 1);
+    $end_date = preg_replace($re, $end_subst, $str, 1);
+    $end_subst_half = preg_replace($re, $end_subst_half, $str, 1);
 
-    $row->date = $row->field_work_date_value;
+    $row->date = $date;
+    if ($row->field_vacation_type_value == 'halfday') {
+      $row->enddate = $end_subst_half;
+    }
+    else {
+      // Set end time to 18:00.
+      $row->enddate = $end_date;
+    }
     // Convert type to taxonomy term name.
     $type_term = taxonomy_get_term_by_name($row->field_day_type_value, 'session_types');
     $type_term = reset($type_term);
