@@ -21,6 +21,7 @@ function productivity_migrate_migrate_api() {
     'ProductivityMigrateTimewatchUser',
     'ProductivityMigrateTracker',
     'ProductivityMigratePayment',
+    'ProductivityMigrateGithubIssue',
   );
 
   $migrations = array();

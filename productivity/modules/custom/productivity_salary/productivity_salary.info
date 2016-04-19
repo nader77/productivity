@@ -12,7 +12,6 @@ dependencies[] = productivity_project
 dependencies[] = strongarm
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
-features[field_base][] = field_employee
 features[field_base][] = field_salary
 features[field_base][] = field_salary_type
 features[field_instance][] = node-salary-field_date

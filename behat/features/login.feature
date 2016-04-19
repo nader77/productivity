@@ -1,4 +1,4 @@
-Feature: Login
+Feature: Login to app
   In order to be able to access content
   As an anonymous user
   We need to be able to login to the site and be authenticated

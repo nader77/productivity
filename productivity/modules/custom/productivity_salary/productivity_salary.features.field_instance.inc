@@ -28,7 +28,7 @@ function productivity_salary_field_default_field_instances() {
           'show_remaining_days' => FALSE,
         ),
         'type' => 'date_default',
-        'weight' => 3,
+        'weight' => 4,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -56,11 +56,12 @@ function productivity_salary_field_default_field_instances() {
         'input_format' => 'd/m/Y - H:i:s',
         'input_format_custom' => '',
         'label_position' => 'above',
+        'no_fieldset' => 0,
         'text_parts' => array(),
         'year_range' => '-3:+3',
       ),
       'type' => 'date_popup',
-      'weight' => 36,
+      'weight' => 6,
     ),
   );
 
@@ -78,7 +79,7 @@ function productivity_salary_field_default_field_instances() {
           'link' => FALSE,
         ),
         'type' => 'entityreference_label',
-        'weight' => 0,
+        'weight' => 3,
       ),
       'teaser' => array(
         'label' => 'above',
@@ -92,6 +93,11 @@ function productivity_salary_field_default_field_instances() {
     'label' => 'Employee',
     'required' => 1,
     'settings' => array(
+      'behaviors' => array(
+        'autofill' => array(
+          'status' => 0,
+        ),
+      ),
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -99,7 +105,7 @@ function productivity_salary_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_select',
-      'weight' => 32,
+      'weight' => 2,
     ),
   );
 
@@ -434,7 +440,7 @@ function productivity_salary_field_default_field_instances() {
         'decimals_display_mode' => 'field',
       ),
       'type' => 'money_widget',
-      'weight' => 33,
+      'weight' => 3,
     ),
   );
 
@@ -471,7 +477,7 @@ function productivity_salary_field_default_field_instances() {
       'module' => 'options',
       'settings' => array(),
       'type' => 'options_buttons',
-      'weight' => 34,
+      'weight' => 4,
     ),
   );
 

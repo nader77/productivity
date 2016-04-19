@@ -19,10 +19,10 @@ Feature: Per-issue Table
     Then  I should see in the "Example Issue" line 0 "Overtime"
     And   I should see in the "Total" line 0 "Overtime"
 
-  @api
+  @javascript
   Scenario: Check tracking table after tracking for issue was added.
     Given I login with user "admin"
-    And   I add one hour tracking for "Example Issue" in "Example Project"
+    When  I add a new time tracking to the issue "Example Issue" with "1" hours to "Example Project" project
     And   I visit per issue table for "Example Project"
     Then  I should see in the "Example Issue" line 1 "Overtime"
     And   I should see in the "Total" line 1 "Overtime"
@@ -41,9 +41,9 @@ Feature: Per-issue Table
     And   I visit per issue table for "Example Project"
     Then  I should see in the "Example Issue 2" line 0 "Overtime"
 
-  @api
+  @javascript
   Scenario: Check tracking table after tracking for the pull request was added.
     Given I login with user "admin"
-    And   I add one hour tracking for the pull request for "Example pull request forExample Issue 2" in "Example Project"
+    When  I add a new time tracking to the issue "Example Issue 2" with "1" hours to "Example Project" project
     And   I visit per issue table for "Example Project"
     Then  I should see in the "Example Issue 2" line 1 "Overtime"

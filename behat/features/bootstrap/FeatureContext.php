@@ -12,13 +12,12 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
    * @When /^I login with user "([^"]*)"$/
    */
   public function iLoginWithUser($name) {
-    // @todo: Move password to YAML.
-    $password = 'admin';
+    $password = $name == 'admin' ? 'admin' : '1234';
     $this->loginUser($name, $password);
   }
 
   /**
-   * Login a user to the site.
+   * Login a user to the application.
    *
    * @param $name
    *   The user name.
@@ -40,13 +39,12 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
     if (empty($submit)) {
       throw new \Exception(sprintf("No submit button at %s", $this->getSession()->getCurrentUrl()));
     }
-
     // Log in.
     $submit->click();
 
     if ($check_success) {
       // Wait for the dashboard's menu to load.
-      $this->iWaitForCssElement('#admin-menu-wrapper', 'appear');
+      $this->iWaitForCssElement('.tracking-form-page', 'appear');
     }
   }
 
