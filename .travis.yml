@@ -43,12 +43,18 @@ before_script:
   - grunt serve > ~/grunt.log 2>&1 &
   - cd ..
 
-  # Install Behat
+  # Install Behat for client
   - cd behat
-  - cp aliases.drushrc.php ~/.drush/
   - cp behat.local.yml.travis behat.local.yml
   - composer install --prefer-source
   - cd ..
+
+  # Install Behat for backend
+  - cd productivity/behat
+  - cp aliases.drushrc.php ~/.drush/
+  - cp behat.local.yml.travis behat.local.yml
+  - composer install --prefer-source
+  - cd ../..
 
 script:
   # Create display.
@@ -56,9 +62,10 @@ script:
   - sh -e /etc/init.d/xvfb start
   - sleep 3 # give xvfb some time to start
 
+
   # start a web server on port 8080, run in the background; wait for initialization
   - drush @productivity runserver 127.0.0.1:8080 &
-  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do true; done
+  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; sleep 1; curl -I http://127.0.0.1:8080 ; do true; done
 
   # Wait for Grunt to finish loading.
   - until $(curl --output /dev/null --silent --head --fail http://localhost:9001); do sleep 1; echo '.'; done
@@ -66,9 +73,15 @@ script:
   # Run phantomJs.
   - phantomjs --webdriver=4444 > ~/phantomjs.log 2>&1 &
 
-  # Run behat tests.
+  # Run behat tests for the client.
   - cd behat
   - ./bin/behat --tags=~@wip
+  - cd ..
+
+  # Run behat tests for the backend.
+  - cd productivity/behat
+  - ./bin/behat --tags=~@wip
+  - cd ../..
 
   # Print logs
   - cat ~/grunt.log
