@@ -323,6 +323,7 @@ function productivity_timewatch_create_summary_table($projects) {
   foreach($projects as &$project) {
     $project['actual'] = number_format(100 / $total * $project['total_minutes'], 2) . '%';
     $project['teken'] .= '%';
+    $project['total_minutes'] = productivity_timewatch_format_total($project['total_minutes'], TRUE);
   }
   // TODO: Add potential time.
   $summary = $projects;
@@ -347,9 +348,11 @@ function productivity_timewatch_create_summary_table($projects) {
 function productivity_timewatch_format_total($minutes, $dec = FALSE) {
   $hours = floor($minutes / 60);
   $minutes = floor($minutes % 60);
-  $return = $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
-  if ($dec) {
-    $return .= ' (' . number_format($hours + ($minutes / 60), 2) . ')';
+  if (!$dec) {
+    $return = $hours . ':' . str_pad($minutes, 2, '0', STR_PAD_LEFT);
+  }
+  else {
+    $return = number_format($hours + ($minutes / 60), 2);
   }
   return $return;
 }
