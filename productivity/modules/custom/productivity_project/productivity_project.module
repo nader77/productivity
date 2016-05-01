@@ -36,9 +36,97 @@ function productivity_project_menu() {
     'access callback' => TRUE,
   );
 
+  $items['node/%node/acceptance'] = array(
+    'title' => t('Acceptance Test'),
+    'page callback' => 'productivity_project_page_acceptance',
+    'page arguments' => array(1),
+    'access callback' => 'node_access',
+    'access arguments' => array('update', 1),
+    'weight' => 0,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
+  $items['node/%node/acceptance/post'] = array(
+    'page callback' => 'productivity_project_page_acceptance_post',
+    'page arguments' => array(1),
+    'access callback' => 'node_access',
+    'access arguments' => array('update', 1),
+    'weight' => 0,
+  );
+
   return $items;
 }
+function productivity_project_page_acceptance_post($node) {
+  $saved_data = array();
+  foreach ($_POST as $key => $data){
+    $keys = explode('-', $key);
+    $saved_data[$keys[0]][$keys[1]] = $data;
+  }
+  variable_set('project_acceptance_' . $node->nid, $saved_data);
+  drupal_json_output('TRUE');
+}
 
+function productivity_project_page_acceptance($node) {
+  $nid = $node->nid;
+  drupal_add_js(array('submitAcceptanceURL' => base_path() . "node/$nid/acceptance/post"), 'setting');
+  $variables = array();
+  $data = array(
+    'status' => 0,
+    'uid' => 0,
+  );
+  $default = array(
+    'AutomaticTest' => $data + array('display_name' => 'Automatic Test'),
+    'ManualTest' => $data + array('display_name' => 'Manual Test'),
+    'ReleaseProtocol' => $data + array('display_name' => 'Release Protocol'),
+    'Servers' => $data + array('display_name' => 'Servers'),
+    'Payments' => $data + array('display_name' => 'Payments'),
+    'HandoverMeeting' => $data + array('display_name' => 'Handover Meeting'),
+  );
+  $status =array(
+    'TPD',
+    'Done',
+  );
+  $variables['rows']  = '';
+  $project_data = variable_get('project_acceptance_' . $node->nid, $default);
+  $users = productivity_account_get_employees_list();
+  foreach ($project_data as $key => $row) {
+    $select_user = theme('select', array(
+      'element' => array(
+        '#options' => $users,
+        '#value' => $row['uid'],
+        '#id' => $key . '-uid',
+      ))
+    );
+    $select_status = theme('select',
+      array(
+        'element' => array(
+          '#options' => $status,
+          '#value' => $row['status'],
+          '#id' => $key . '-status',
+        ),
+      )
+    );
+    $title = $row['display_name'];
+    $variables['rows'] .= "<tr><td id='{$key}-display_name' value='$title' class='form-data'>$title</td><td>$select_status</td><td>$select_user</td></tr>";
+  }
+  return theme('acceptance_test', $variables);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function productivity_project_theme() {
+  return array(
+    'acceptance_test' => array(
+      'variables' => array(
+        'project_title' => NULL,
+      ),
+      'path' => drupal_get_path('module', 'productivity_project'),
+      'template' => 'acceptance_test',
+    ),
+  );
+}
 /**
  * Implements hook_node_presave().
  */
