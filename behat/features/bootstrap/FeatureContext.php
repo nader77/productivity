@@ -184,5 +184,86 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
   public function iWait() {
     sleep(10);
   }
+
+public function toURL($url) {
+    $this->getSession()->visit($this->locatePath($url));
+}
+
+  /**
+   * @When I login the user :arg1
+   */
+  public function iLoginTheUser($arg1)
+  {
+
+      $this->toURL('/user');
+      $page = $this->getSession()->getPage();
+
+      $el = $page->find('css','#edit-name');
+      $el->setValue($arg1);
+
+      $el = $page->find('css','#edit-pass');
+      $el->setValue($arg1);
+
+      $el = $page->find('css','#edit-submit');
+      $el->click();
+  }
+    /**
+     * @Then I should check the url for :arg1
+     */
+    public function iShouldCheckTheUrlFor($arg1)
+    {
+        $url = $this->getSession()->getCurrentUrl();
+        if ( strpos($url, '/users/admin') !== false ) {
+            return;
+        }
+        else {
+            throw new \Exception('URL missmatch');
+        }
+
+    }
+
+
+
+
+    /**
+     * @When I navigate to the payments page
+     */
+    public function iNavigateToThePaymentsPage()
+    {
+        $this->toURL('/payments');
+    }
+
+    /**
+     * @When I click on the :arg1 payment
+     */
+    public function iClickOnThePayment($arg1)
+    {
+        $page = $this->getSession()->getPage();
+        $page->clickLink($arg1);
+    }
+
+    /**
+     * @Then I should check for missing data in :arg1 :arg2 :arg3
+     */
+    public function iShouldCheckForMissingDataIn2($arg1, $arg2, $arg3)
+    {
+        $page = $this->getSession()->getPage();
+        $project = $page->find('xpath', '//div[@class="field field-name-field-project field-type-entityreference field-label-above"]//div[@class="field-items"]//div[text()="' . $arg1 . '"]');
+        $date = $page->find('xpath', '//span[text()="' . $arg3 . '"]');
+        $amount = $page->find('xpath', '//div[text()="' . $arg2 . '"]');
+        if ( $project && $date && $amount) {
+            return;
+        }
+        else {
+            throw new \Exception('Found unexpected data');
+        }
+    }
+
+
+
+
+
+
+
 }
 
