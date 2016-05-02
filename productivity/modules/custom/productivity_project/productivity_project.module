@@ -71,25 +71,36 @@ function productivity_project_page_acceptance($node) {
   $nid = $node->nid;
   drupal_add_js(array('submitAcceptanceURL' => base_path() . "node/$nid/acceptance/post"), 'setting');
   $variables = array();
+
+  // Data labels.
+  $default_names = array(
+   'AutomaticTest' => array('display_name' => 'Automatic Test'),
+   'ManualTest' => array('display_name' => 'Manual Test'),
+   'ReleaseProtocol' => array('display_name' => 'Release Protocol'),
+   'Servers' => array('display_name' => 'Servers'),
+   'Payments' => array('display_name' => 'Payments'),
+   'HandoverMeeting' => array('display_name' => 'Handover Meeting'),
+  );
+  // Default arrays.
   $data = array(
     'status' => 0,
     'uid' => 0,
   );
-  $default = array(
-    'AutomaticTest' => $data + array('display_name' => 'Automatic Test'),
-    'ManualTest' => $data + array('display_name' => 'Manual Test'),
-    'ReleaseProtocol' => $data + array('display_name' => 'Release Protocol'),
-    'Servers' => $data + array('display_name' => 'Servers'),
-    'Payments' => $data + array('display_name' => 'Payments'),
-    'HandoverMeeting' => $data + array('display_name' => 'Handover Meeting'),
-  );
+  $default = array();
+  foreach ($default_names as $key => $value) {
+    $default[$key] = $data;
+  }
+  // Statuses.
   $status =array(
     'TPD',
     'Done',
   );
+
   $variables['rows']  = '';
   $project_data = variable_get('project_acceptance_' . $node->nid, $default);
+  $project_data = array_merge_recursive($project_data, $default_names);
   $users = productivity_account_get_employees_list();
+  // Build for inside table.
   foreach ($project_data as $key => $row) {
     $select_user = theme('select', array(
       'element' => array(
@@ -108,7 +119,7 @@ function productivity_project_page_acceptance($node) {
       )
     );
     $title = $row['display_name'];
-    $variables['rows'] .= "<tr><td id='{$key}-display_name' value='$title' class='form-data'>$title</td><td>$select_status</td><td>$select_user</td></tr>";
+    $variables['rows'] .= "<tr><td>$title</td><td>$select_status</td><td>$select_user</td></tr>";
   }
   return theme('acceptance_test', $variables);
 }

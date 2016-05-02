@@ -25,8 +25,8 @@
 <script>
   jQuery("#acceptance select").change(function(event){
     var data = {};
-    jQuery("#acceptance .form-data, #acceptance select").each(function() {
-      data[jQuery(this).attr('id')] = jQuery(this).attr('value');
+    jQuery("#acceptance select").each(function() {
+      data[jQuery(this).attr('id')] = jQuery(this).val();
     });
     jQuery('#submit_result').text('Saving...').show();
     jQuery.ajax({
