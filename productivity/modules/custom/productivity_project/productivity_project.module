@@ -36,9 +36,120 @@ function productivity_project_menu() {
     'access callback' => TRUE,
   );
 
+  $items['node/%node/acceptance'] = array(
+    'title' => t('Acceptance Test'),
+    'page callback' => 'productivity_project_page_acceptance',
+    'page arguments' => array(1),
+    'access callback' => 'node_access',
+    'access arguments' => array('update', 1),
+    'weight' => 0,
+    'type' => MENU_LOCAL_TASK,
+    'context' => MENU_CONTEXT_PAGE | MENU_CONTEXT_INLINE,
+  );
+
+  $items['node/%node/acceptance/post'] = array(
+    'page callback' => 'productivity_project_page_acceptance_post',
+    'page arguments' => array(1),
+    'access callback' => 'node_access',
+    'access arguments' => array('update', 1),
+    'weight' => 0,
+  );
+
   return $items;
 }
+function productivity_project_page_acceptance_post($node) {
+  $saved_data = array();
+  foreach ($_POST as $key => $data){
+    $keys = explode('-', $key);
+    $saved_data[$keys[0]][$keys[1]] = $data;
+  }
+  $all_done = TRUE;
+  foreach ($saved_data as $key => $data) {
+    if($data['status'] == '0') {
+      $all_done = FALSE;
+    }
+  }
+  // Save date if all done.
+  if ($all_done) {
+    variable_set('project_acceptance_date' . $node->nid, time());
+  }
+  variable_set('project_acceptance_' . $node->nid, $saved_data);
+  drupal_json_output('TRUE');
+}
 
+function productivity_project_page_acceptance($node) {
+  $nid = $node->nid;
+  drupal_add_js(array('submitAcceptanceURL' => base_path() . "node/$nid/acceptance/post"), 'setting');
+  $variables = array();
+
+  // Data labels.
+  $default_names = array(
+   'AutomaticTest' => array('display_name' => 'Automatic Test'),
+   'ManualTest' => array('display_name' => 'Manual Test'),
+   'ReleaseProtocol' => array('display_name' => 'Release Protocol'),
+   'Servers' => array('display_name' => 'Servers'),
+   'Payments' => array('display_name' => 'Payments'),
+   'HandoverMeeting' => array('display_name' => 'Handover Meeting'),
+  );
+  // Default arrays.
+  $data = array(
+    'status' => 0,
+    'uid' => 0,
+  );
+  $default = array();
+  foreach ($default_names as $key => $value) {
+    $default[$key] = $data;
+  }
+  // Statuses.
+  $status =array(
+    'TPD',
+    'Done',
+  );
+
+  $variables['rows']  = '';
+  $variables['date']  = variable_get('project_acceptance_date' . $node->nid, FALSE);
+  $variables['date']  =  $variables['date'] ?  date('Y-M-d',  $variables['date']) : "";
+  $project_data = variable_get('project_acceptance_' . $node->nid, $default);
+  $project_data = array_merge_recursive($project_data, $default_names);
+  $users = productivity_account_get_employees_list();
+  // Build for inside table.
+  foreach ($project_data as $key => $row) {
+    $select_user = theme('select', array(
+      'element' => array(
+        '#options' => $users,
+        '#value' => $row['uid'],
+        '#id' => $key . '-uid',
+      ))
+    );
+    $select_status = theme('select',
+      array(
+        'element' => array(
+          '#options' => $status,
+          '#value' => $row['status'],
+          '#id' => $key . '-status',
+        ),
+      )
+    );
+    $title = $row['display_name'];
+    $variables['rows'] .= "<tr><td>$title</td><td>$select_status</td><td>$select_user</td></tr>";
+  }
+  return theme('acceptance_test', $variables);
+}
+
+/**
+ * Implements hook_theme().
+ */
+function productivity_project_theme() {
+  return array(
+    'acceptance_test' => array(
+      'variables' => array(
+        'project_title' => NULL,
+      ),
+      'path' => drupal_get_path('module', 'productivity_project'),
+      'template' => 'acceptance_test',
+    ),
+  );
+}
 /**
  * Implements hook_node_presave().
  */
