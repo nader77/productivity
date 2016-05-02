@@ -105,10 +105,9 @@ function productivity_project_page_acceptance($node) {
   $variables['rows']  = '';
   $project_data = variable_get('project_acceptance_' . $node->nid, $default);
   $project_data = array_merge_recursive($project_data, $default_names);
-  $date =  isset($project_data['date']) ?  date('r',  $project_data['date']) : "";
+  $variables['date'] =  isset($project_data['date']) ?  date('F d, Y',  $project_data['date']) : "";
   drupal_add_js(array(
     'submitAcceptanceURL' => base_path() . "node/$nid/acceptance/post",
-    'utcDate' => $date,
   ), 'setting');
 
   $users = productivity_account_get_employees_list();
@@ -150,6 +149,7 @@ function productivity_project_theme() {
     ),
   );
 }
+
 /**
  * Implements hook_node_presave().
  */
@@ -515,7 +515,6 @@ function productivity_project_repository_autocomplete_need_invalidate() {
  * @return string $issue_type
  *  The issue type.
  */
-
 function productivity_project_update_project_total_hours($wrapper_time_tracking, $delete = FALSE) {
   $project_wrapper = $wrapper_time_tracking->field_project;
 
