@@ -63,6 +63,16 @@ function productivity_project_page_acceptance_post($node) {
     $keys = explode('-', $key);
     $saved_data[$keys[0]][$keys[1]] = $data;
   }
+  $all_done = TRUE;
+  foreach ($saved_data as $key => $data) {
+    if($data['status'] == '0') {
+      $all_done = FALSE;
+    }
+  }
+  // Save date if all done.
+  if ($all_done) {
+    variable_set('project_acceptance_date' . $node->nid, time());
+  }
   variable_set('project_acceptance_' . $node->nid, $saved_data);
   drupal_json_output('TRUE');
 }
@@ -97,6 +107,8 @@ function productivity_project_page_acceptance($node) {
   );
 
   $variables['rows']  = '';
+  $variables['date']  = variable_get('project_acceptance_date' . $node->nid, FALSE);
+  $variables['date']  =  $variables['date'] ?  date('Y-M-d',  $variables['date']) : "";
   $project_data = variable_get('project_acceptance_' . $node->nid, $default);
   $project_data = array_merge_recursive($project_data, $default_names);
   $users = productivity_account_get_employees_list();

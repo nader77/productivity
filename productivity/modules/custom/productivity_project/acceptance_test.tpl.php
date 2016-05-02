@@ -1,3 +1,5 @@
+<h2>Date of handover: <?php print $date; ?></h2>
+
 <form id="acceptance" class="form-horizontal">
   <fieldset>
     <table class="table table-bordered table-striped table-hover table-condensed table-responsive">
