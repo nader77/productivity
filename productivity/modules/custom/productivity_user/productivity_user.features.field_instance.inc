@@ -10,6 +10,112 @@
 function productivity_user_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'profile2-stakeholder-field_full_name'.
+  $field_instances['profile2-stakeholder-field_full_name'] = array(
+    'bundle' => 'stakeholder',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 1,
+      ),
+    ),
+    'entity_type' => 'profile2',
+    'field_name' => 'field_full_name',
+    'label' => 'Full Name',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance: 'profile2-stakeholder-field_phone'.
+  $field_instances['profile2-stakeholder-field_phone'] = array(
+    'bundle' => 'stakeholder',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'profile2',
+    'field_name' => 'field_phone',
+    'label' => 'Phone',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'profile2-stakeholder-field_role'.
+  $field_instances['profile2-stakeholder-field_role'] = array(
+    'bundle' => 'stakeholder',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 4,
+      ),
+    ),
+    'entity_type' => 'profile2',
+    'field_name' => 'field_role',
+    'label' => 'Role',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'autofill' => array(
+          'status' => 0,
+        ),
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 5,
+    ),
+  );
+
   // Exported field_instance: 'user-user-field_date'.
   $field_instances['user-user-field_date'] = array(
     'bundle' => 'user',
@@ -89,6 +195,40 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-field_github_access_token'.
+  $field_instances['user-user-field_github_access_token'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 1,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_github_access_token',
+    'label' => 'Github access token',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => 1,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 8,
+    ),
+  );
+
   // Exported field_instance: 'user-user-field_github_username'.
   $field_instances['user-user-field_github_username'] = array(
     'bundle' => 'user',
@@ -120,40 +260,6 @@ function productivity_user_field_default_field_instances() {
       ),
       'type' => 'text_textfield',
       'weight' => 11,
-    ),
-  );
-
-  // Exported field_instance: 'user-user-field_github_access_token'
-  $field_instances['user-user-field_github_access_token'] = array(
-    'bundle' => 'user',
-    'default_value' => NULL,
-    'deleted' => 0,
-    'description' => '',
-    'display' => array(
-      'default' => array(
-        'label' => 'above',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 1,
-      ),
-    ),
-    'entity_type' => 'user',
-    'field_name' => 'field_github_access_token',
-    'label' => 'Github access token',
-    'required' => 1,
-    'settings' => array(
-      'text_processing' => 0,
-      'user_register_form' => 1,
-    ),
-    'widget' => array(
-      'active' => 1,
-      'module' => 'text',
-      'settings' => array(
-        'size' => 60,
-      ),
-      'type' => 'text_textfield',
-      'weight' => 8,
     ),
   );
 
@@ -241,10 +347,13 @@ function productivity_user_field_default_field_instances() {
   t('Date');
   t('Date of start and end of employment.');
   t('Employment status');
-  t('Github username');
+  t('Full Name');
   t('Github access token');
+  t('Github username');
   t('Job type');
   t('Last notification');
+  t('Phone');
+  t('Role');
 
   return $field_instances;
 }

@@ -158,6 +158,79 @@ function productivity_project_field_default_field_bases() {
     'type' => 'number_decimal',
   );
 
+  // Exported field_base: 'field_internal_team'.
+  $field_bases['field_internal_team'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_internal_team',
+    'indexes' => array(
+      'field_employee_target_id' => array(
+        0 => 'field_employee_target_id',
+      ),
+      'field_job_type_value' => array(
+        0 => 'field_job_type_value',
+      ),
+      'id' => array(
+        0 => 'id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'multifield',
+    'settings' => array(
+      'entity_translation_sync' => array(
+        0 => 'id',
+      ),
+      'hide_blank_items' => 1,
+    ),
+    'translatable' => 0,
+    'type' => 'multifield',
+  );
+
+  // Exported field_base: 'field_issue_type_label'.
+  $field_bases['field_issue_type_label'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_issue_type_label',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
+  // Exported field_base: 'field_milestone'.
+  $field_bases['field_milestone'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_milestone',
+    'indexes' => array(
+      'format' => array(
+        0 => 'format',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'text',
+    'settings' => array(
+      'max_length' => 255,
+      'profile2_private' => FALSE,
+    ),
+    'translatable' => 0,
+    'type' => 'text',
+  );
+
   // Exported field_base: 'field_percentage_notification'.
   $field_bases['field_percentage_notification'] = array(
     'active' => 1,
@@ -244,6 +317,41 @@ function productivity_project_field_default_field_bases() {
     'type' => 'interval',
   );
 
+  // Exported field_base: 'field_stakeholder'.
+  $field_bases['field_stakeholder'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_stakeholder',
+    'indexes' => array(
+      'target_id' => array(
+        0 => 'target_id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'entityreference',
+    'settings' => array(
+      'handler' => 'views',
+      'handler_settings' => array(
+        'behaviors' => array(
+          'views-select-list' => array(
+            'status' => 0,
+          ),
+        ),
+        'view' => array(
+          'args' => array(),
+          'display_name' => 'entityreference_1',
+          'view_name' => 'user_by_profile',
+        ),
+      ),
+      'profile2_private' => FALSE,
+      'target_type' => 'user',
+    ),
+    'translatable' => 0,
+    'type' => 'entityreference',
+  );
+
   // Exported field_base: 'field_status'.
   $field_bases['field_status'] = array(
     'active' => 1,
@@ -278,6 +386,9 @@ function productivity_project_field_default_field_bases() {
     'entity_types' => array(),
     'field_name' => 'field_table_rate',
     'indexes' => array(
+      'field_issue_type_label_format' => array(
+        0 => 'field_issue_type_label_format',
+      ),
       'field_issue_type_value' => array(
         0 => 'field_issue_type_value',
       ),
@@ -289,9 +400,6 @@ function productivity_project_field_default_field_bases() {
       ),
       'field_scope_period' => array(
         0 => 'field_scope_period',
-      ),
-      'field_issue_type_label_format' => array(
-        0 => 'field_issue_type_label_format',
       ),
       'id' => array(
         0 => 'id',
@@ -342,6 +450,39 @@ function productivity_project_field_default_field_bases() {
     'type' => 'entityreference',
   );
 
+  // Exported field_base: 'field_timetable_milestones'.
+  $field_bases['field_timetable_milestones'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_timetable_milestones',
+    'indexes' => array(
+      'field_milestone_format' => array(
+        0 => 'field_milestone_format',
+      ),
+      'field_scope_interval' => array(
+        0 => 'field_scope_interval',
+      ),
+      'field_scope_period' => array(
+        0 => 'field_scope_period',
+      ),
+      'id' => array(
+        0 => 'id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'multifield',
+    'settings' => array(
+      'entity_translation_sync' => array(
+        0 => 'id',
+      ),
+      'hide_blank_items' => 1,
+    ),
+    'translatable' => 0,
+    'type' => 'multifield',
+  );
+
   // Exported field_base: 'field_type'.
   $field_bases['field_type'] = array(
     'active' => 1,
@@ -365,27 +506,6 @@ function productivity_project_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'list_text',
-  );
-
-  // Exported field_base: 'field_issue_type_label'.
-  $field_bases['field_issue_type_label'] = array(
-    'active' => 1,
-    'cardinality' => 1,
-    'deleted' => 0,
-    'entity_types' => array(),
-    'field_name' => 'field_issue_type_label',
-    'indexes' => array(
-      'format' => array(
-        0 => 'format',
-      ),
-    ),
-    'locked' => 0,
-    'module' => 'text',
-    'settings' => array(
-      'max_length' => 255,
-    ),
-    'translatable' => 0,
-    'type' => 'text',
   );
 
   return $field_bases;

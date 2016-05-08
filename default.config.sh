@@ -19,7 +19,7 @@ PROFILE_TITLE="Productivity"
 
 
 # Modify the URL below to match your local domain the site will be accessible on.
-BASE_DOMAIN_URL="http://localhost/productivity.io/www"
+BASE_DOMAIN_URL="http://localhost/productivity/www"
 
 
 # Modify the login details below to be the desired
@@ -31,8 +31,8 @@ ADMIN_EMAIL="admin@example.com"
 
 # Modify the MySQL settings below so they will match your own.
 MYSQL_USERNAME="root"
-MYSQL_PASSWORD="root"
-MYSQL_HOSTNAME="localhost"
+MYSQL_PASSWORD=""
+MYSQL_HOSTNAME="127.0.0.1"
 MYSQL_DB_NAME="productivity"
 
 
