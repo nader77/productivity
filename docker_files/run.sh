@@ -78,8 +78,8 @@ php composer.phar update
 cp behat.local.docker.yml behat.local.yml
 cd ../..
 
-# Install client
-echo -e "\n [RUN] Install Behat for front end."
+# Install client and Behat for client
+echo -e "\n [RUN] Install client and Behat for client."
 cd client
 npm cache clean
 npm install
@@ -87,6 +87,7 @@ bower install --allow-root
 cp config.docker.json config.json
 cd ../behat
 cp behat.local.docker.yml behat.local.yml
+composer install --prefer-source
 cd ..
 
 # Start up Selenium server
@@ -99,17 +100,8 @@ cd client
 grunt serve > ~/grunt.log 2>&1 &
 
 echo -e "\n [WAIT] Servers needs some time to start...\n"
-sleep 1
-echo -e "\n .....5"
-sleep 1
-echo -e "\n ....4"
-sleep 1
-echo -e "\n ...3"
-sleep 1
-echo -e "\n ..2"
-sleep 1
-echo -e "\n .1"
-sleep 1
+# Wait for Grunt to finish loading.
+until $(curl --output /dev/null --silent --head --fail http://127.0.0.1:9001/); do sleep 1; echo '.'; done
 echo -e "\nOkay."
 
 # Output server logs:
