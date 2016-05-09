@@ -19,7 +19,7 @@ PROFILE_TITLE="Productivity"
 
 
 # Modify the URL below to match your local domain the site will be accessible on.
-BASE_DOMAIN_URL="http://localhost/productivity/www"
+BASE_DOMAIN_URL="http://localhost/productivity/www/"
 
 
 # Modify the login details below to be the desired

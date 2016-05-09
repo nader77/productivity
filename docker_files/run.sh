@@ -56,37 +56,78 @@ apt-get -y install iceweasel
 # Install Selenium.
 echo -e "\n [RUN] Installing Selenium."
 # Create folder to place selenium in
-echo "\n Creating folder to place selenium in ...\n"
+echo -e "\n [RUN] Creating folder to place selenium in.\n"
 mkdir ~/selenium
 cd ~/selenium
 
 # Get Selenium and install headless Java runtime
-echo "\n Installing Selenium and headless Java runtime ...\n"
+echo -e "\n [RUN] Installing Selenium and headless Java runtime.\n"
 wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.0.jar
 cd /var/www/html/productivity/productivity
 apt-get install openjdk-7-jre-headless -y
 
-#Configure selenium
-cp docker_files/config.json /opt/selenium/config.json
-
 # Install headless GUI for browser.'Xvfb is a display server that performs graphical operations in memory'
-echo "\n Installing XVFB (headless GUI for Firefox) ...\n"
+echo -e "\n [RUN] Installing XVFB (headless GUI for Firefox).\n"
 apt-get install xvfb -y
 
 # Install Behat for backend.
-echo -e "\n [RUN] Install Behat for backend."
+echo -e "\n [RUN] Install Behat for back end."
 cd /var/www/html/productivity/productivity/behat
 curl -sS https://getcomposer.org/installer | php
 php composer.phar update
-cp behat.local.yml.example behat.local.yml
+cp behat.local.docker.yml behat.local.yml
 cd ../..
+
+# Install client
+echo -e "\n [RUN] Install Behat for front end."
+cd client
+npm cache clean
+npm install
+bower install --allow-root
+cp config.docker.json config.json
+cd ../behat
+cp behat.local.docker.yml behat.local.yml
+cd ..
 
 # Start up Selenium server
-echo "\n Starting up Selenium server ...\n"
-DISPLAY=:1 xvfb-run java -jar ~/selenium/selenium-server-standalone-2.53.0.jar > /dev/null 2>&1 &
+echo -e "\n [RUN] Starting up Selenium server.\n"
+DISPLAY=:1 xvfb-run java -jar ~/selenium/selenium-server-standalone-2.53.0.jar > ~/sel.log 2>&1 &
+
+#Start Grunt server.
+echo -e "\n [RUN] Starting Grunt server.\n"
+cd client
+grunt serve > ~/grunt.log 2>&1 &
+
+echo -e "\n [WAIT] Servers needs some time to start...\n"
+sleep 1
+echo -e "\n .....5"
+sleep 1
+echo -e "\n ....4"
+sleep 1
+echo -e "\n ...3"
+sleep 1
+echo -e "\n ..2"
+sleep 1
+echo -e "\n .1"
+sleep 1
+echo -e "\nOkay."
+cd ..
+
+# Output server logs:
+echo -e "\n [RUN] Look at my Grunt log: \n"
+cat ~/grunt.log
+echo -e "\n [RUN] Look at my Selenium log: \n"
+cat ~/sel.log
+
+# Run Behat tests for the client.
+echo -e "\n [RUN] Start client tests.\n"
+cd behat
+bin/behat --tags=~@wip
+cd ..
 
 # Run Behat tests for the backend.
-echo -e "\n [RUN] Start behat tests.\n"
+echo -e "\n [RUN] Start back end tests.\n"
 cd productivity/behat
-./bin/behat --tags=~@wip
+bin/behat --tags=~@wip
 cd ../..
+

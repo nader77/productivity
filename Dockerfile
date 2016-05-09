@@ -9,4 +9,4 @@ USER root
 RUN chmod +x /var/www/html/productivity/docker_files/run.sh
 ENTRYPOINT ["/var/www/html/productivity/docker_files/run.sh"]
 
-EXPOSE 22 80 3306 4444 8080 9001
+EXPOSE 80 3306 4444 9001
