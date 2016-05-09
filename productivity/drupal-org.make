@@ -67,6 +67,9 @@ projects[file_entity][version] = "2.x-dev"
 projects[interval][subdir] = "contrib"
 projects[interval][version] = "1.0"
 
+projects[inline_entity_form][subdir] = "contrib"
+projects[inline_entity_form][version] = "1.8"
+
 projects[jquery_update][subdir] = "contrib"
 projects[jquery_update][version] = "2.7"
 
@@ -103,9 +106,14 @@ projects[money][version] = "1.x-dev"
 projects[multifield][subdir] = "contrib"
 projects[multifield][version] = "1.x-dev"
 projects[multifield][patch][] = "https://www.drupal.org/files/issues/2041531-23-entity-api-support.patch"
+# Fix feature integration.
+projects[multifield][patch][] = "https://www.drupal.org/files/issues/multifield-features-integration-fix-api-2102265-32.patch"
 
 projects[panels][subdir] = "contrib"
 projects[panels][version] = "3.5"
+
+projects[profile2][subdir] = "contrib"
+projects[profile2][version] = "1.3"
 
 projects[pathauto][subdir] = "contrib"
 projects[pathauto][version] = "1.3"

@@ -59,66 +59,68 @@ function productivity_project_menu() {
 }
 function productivity_project_page_acceptance_post($node) {
   $saved_data = array();
-  foreach ($_POST['data'] as $key => $data){
+  foreach ($_POST as $key => $data) {
     $keys = explode('-', $key);
-    $saved_data['data'][$keys[0]][$keys[1]] = $data;
+    $saved_data[$keys[0]][$keys[1]] = $data;
   }
-  $saved_data['date'] = strtotime($_POST['date']);
+  $all_done = TRUE;
+  foreach ($saved_data as $key => $data) {
+    if ($data['status'] == '0') {
+      $all_done = FALSE;
+    }
+  }
+  // Save date if all done.
+  if ($all_done) {
+    variable_set('project_acceptance_date' . $node->nid, time());
+  }
   variable_set('project_acceptance_' . $node->nid, $saved_data);
   drupal_json_output('TRUE');
 }
 
 function productivity_project_page_acceptance($node) {
-  drupal_add_js("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js", array('type' => 'external'));
-  drupal_add_css("https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.min.css", array('type' => 'external'));
-
-
   $nid = $node->nid;
+  drupal_add_js(array('submitAcceptanceURL' => base_path() . "node/$nid/acceptance/post"), 'setting');
   $variables = array();
 
   // Data labels.
   $default_names = array(
-    'data' => array(
-       'AutomaticTest' => array('display_name' => 'Automatic Test'),
-       'ManualTest' => array('display_name' => 'Manual Test'),
-       'ReleaseProtocol' => array('display_name' => 'Release Protocol'),
-       'Servers' => array('display_name' => 'Servers'),
-       'Payments' => array('display_name' => 'Payments'),
-       'HandoverMeeting' => array('display_name' => 'Handover Meeting'),
-    ),
+    'AutomaticTest' => array('display_name' => 'Automatic Test'),
+    'ManualTest' => array('display_name' => 'Manual Test'),
+    'ReleaseProtocol' => array('display_name' => 'Release Protocol'),
+    'Servers' => array('display_name' => 'Servers'),
+    'Payments' => array('display_name' => 'Payments'),
+    'HandoverMeeting' => array('display_name' => 'Handover Meeting'),
   );
   // Default arrays.
   $data = array(
     'status' => 0,
     'uid' => 0,
   );
-  $default = array('data' => array());
-  foreach ($default_names['data'] as $key => $value) {
-    $default['data'][$key] = $data;
+  $default = array();
+  foreach ($default_names as $key => $value) {
+    $default[$key] = $data;
   }
   // Statuses.
-  $status =array(
+  $status = array(
     'TPD',
     'Done',
   );
 
-  $variables['rows']  = '';
+  $variables['rows'] = '';
+  $variables['date'] = variable_get('project_acceptance_date' . $node->nid, FALSE);
+  $variables['date'] = $variables['date'] ? date('Y-M-d', $variables['date']) : "";
   $project_data = variable_get('project_acceptance_' . $node->nid, $default);
   $project_data = array_merge_recursive($project_data, $default_names);
-  $variables['date'] =  isset($project_data['date']) ?  date('F d, Y',  $project_data['date']) : "";
-  drupal_add_js(array(
-    'submitAcceptanceURL' => base_path() . "node/$nid/acceptance/post",
-  ), 'setting');
-
   $users = productivity_account_get_employees_list();
   // Build for inside table.
-  foreach ($project_data['data'] as $key => $row) {
+  foreach ($project_data as $key => $row) {
     $select_user = theme('select', array(
-      'element' => array(
-        '#options' => $users,
-        '#value' => $row['uid'],
-        '#id' => $key . '-uid',
-      ))
+        'element' => array(
+          '#options' => $users,
+          '#value' => $row['uid'],
+          '#id' => $key . '-uid',
+        )
+      )
     );
     $select_status = theme('select',
       array(
@@ -195,7 +197,7 @@ function productivity_project_recalculate_access($node) {
  *  Recalculate only for one specific work type.
  */
 function productivity_project_recalculate_hours($node, $type = FALSE) {
-  $wrapper  = entity_metadata_wrapper('node', $node);
+  $wrapper = entity_metadata_wrapper('node', $node);
 
   if (!$type) {
     $total = productivity_time_tracking_total_hours($wrapper->getIdentifier());
@@ -222,7 +224,7 @@ function productivity_project_recalculate_hours($node, $type = FALSE) {
 function productivity_project_form_project_node_form_alter(&$form, &$form_state) {
   // Disable auto generated fields
   $form['field_hours']['#disabled'] = TRUE;
-  foreach($form['field_table_rate']['und'] as &$field_hours){
+  foreach ($form['field_table_rate']['und'] as &$field_hours) {
     if (isset($field_hours['#field_name'])) {
       $field_hours['field_hours']['#disabled'] = TRUE;
     }
@@ -279,7 +281,7 @@ function productivity_project_logged_hours_notify($node) {
   productivity_project_notify($wrapper, $arguments);
 
   // Check scope for each type
-  foreach($wrapper->field_table_rate as $rate) {
+  foreach ($wrapper->field_table_rate as $rate) {
     $hours = $rate->field_hours->value();
     $scope = productivity_project_normalize_scope($rate);
     $scope_percentage = 0;
@@ -340,7 +342,7 @@ function productivity_project_notify($wrapper_project, $arguments) {
 
     // Send the message to the owners.
     $options = array(
-      'mail' =>  variable_get('productivity_time_tracking_managers_email', 'info@gizra.com'),
+      'mail' => variable_get('productivity_time_tracking_managers_email', 'info@gizra.com'),
     );
     message_notify_send_message($message, $options);
 
@@ -379,7 +381,7 @@ function productivity_project_notify($wrapper_project, $arguments) {
  */
 function productivity_project_get_total_scope($project_wrapper, $work_type = FALSE) {
   $total = 0;
-  foreach($project_wrapper->field_table_rate as $rate) {
+  foreach ($project_wrapper->field_table_rate as $rate) {
     if ($work_type && $rate->field_issue_type->value() != $work_type) {
       continue;
     }
@@ -441,9 +443,12 @@ function _productivity_project_build_repo_list() {
   $address = 'https://api.github.com/orgs/gizra/repos';
   $results = array();
 
-  list($public, $secret) = array(variable_get('github_public'), variable_get('github_secret'));
+  list($public, $secret) = array(
+    variable_get('github_public'),
+    variable_get('github_secret')
+  );
   if ($public && $secret) {
-    $query = '?client_id=' . $public . '&client_secret='. $secret . '&page=';
+    $query = '?client_id=' . $public . '&client_secret=' . $secret . '&page=';
   }
   else {
     $query = '?page=';
@@ -457,7 +462,7 @@ function _productivity_project_build_repo_list() {
     $output = drupal_json_decode($data->data);
 
     if ($data->code != 200) {
-      $params['@error'] =  implode(' ', $output);
+      $params['@error'] = implode(' ', $output);
       $message = t('There was a problem requesting the repositories: @error', $params);
       drupal_set_message($message, 'error');
       watchdog('productivity_project', $message);
@@ -519,7 +524,7 @@ function productivity_project_update_project_total_hours($wrapper_time_tracking,
   $project_wrapper = $wrapper_time_tracking->field_project;
 
   // Add the hours by work type (qa, dev, management..).
-  if($wrapper_time_tracking->field_day_type->value() == "regular") {
+  if ($wrapper_time_tracking->field_day_type->value() == "regular") {
 
     // Validates that the node has a project associated with it
     $node_project = $project_wrapper->value();
@@ -570,9 +575,9 @@ function productivity_project_update_project_total_hours($wrapper_time_tracking,
         $total_diff += $diff;
       }
 
-     // Node is being deleted, means it just needs to subtract it's hours from
-     // the project's total hours
-     else {
+      // Node is being deleted, means it just needs to subtract it's hours from
+      // the project's total hours
+      else {
         $diff = isset($total_work_original['total'][$type]) ? $total_work_original['total'][$type] : 0;
         $rate = productivity_project_check_existing_type($project_rates, $type);
         $node_project->field_table_rate['und'][$rate['key']]['field_hours']['und'][0]['value'] -= $diff;
@@ -594,7 +599,7 @@ function productivity_project_update_project_total_hours($wrapper_time_tracking,
 function productivity_project_recalcualte_rate_total_hours($project_id, $rate_type = FALSE) {
   $wrapper = entity_metadata_wrapper('node', $project_id);
   $total = 0;
-  foreach($wrapper->field_table_rate as $rate) {
+  foreach ($wrapper->field_table_rate as $rate) {
     // Handle only one type.
     $type = $rate->field_issue_type->value();
     if ($rate_type && $type != $rate_type) {
@@ -607,11 +612,10 @@ function productivity_project_recalcualte_rate_total_hours($project_id, $rate_ty
     $query->fields('il')
       ->condition('p.field_project_target_id', $project_id)
       ->condition('il.bundle', 'time_tracking')
-      ->condition('il.field_issues_logs_field_issue_type_value', $type)
-    ;
+      ->condition('il.field_issues_logs_field_issue_type_value', $type);
     $result = $query->execute();
 
-    while($record = $result->fetchAssoc()) {
+    while ($record = $result->fetchAssoc()) {
       $total += $record['field_issues_logs_field_time_spent_value'];
     }
   }
@@ -672,7 +676,7 @@ function productivity_project_create_new_type($index, $hours, $type) {
  *  The rate wrapper, or flase if not found.
  */
 function productivity_project_check_existing_type($rates_wrapper, $issue_type) {
-  foreach($rates_wrapper as $key => $rate) {
+  foreach ($rates_wrapper as $key => $rate) {
     if ($issue_type == $rate->field_issue_type->value()) {
       return array(
         'entity' => $rate,
@@ -687,7 +691,7 @@ function productivity_project_check_existing_type($rates_wrapper, $issue_type) {
  * Get the total days, for a project.
  */
 function productivity_project_get_total_days($hours) {
-  return  number_format($hours /  variable_get('productivity_time_tracking_hours_count_as_day', 8), 2);
+  return number_format($hours / variable_get('productivity_time_tracking_hours_count_as_day', 8), 2);
 }
 
 /**
@@ -700,14 +704,14 @@ function productivity_project_get_all_projects($limit = 0) {
     ->condition('n.type', 'project')
     ->orderBy('changed', 'DESC');
 
-    if ($limit) {
-      $query->range(0, $limit);
-    }
+  if ($limit) {
+    $query->range(0, $limit);
+  }
 
-    $result = $query->execute()
-      ->fetchAllKeyed(); // returns an indexed array
+  $result = $query->execute()
+    ->fetchAllKeyed(); // returns an indexed array
 
-  if(empty($result)) {
+  if (empty($result)) {
     return;
   }
   return $result;
@@ -730,7 +734,10 @@ function productivity_project_get_rate($project_nid, $work_type) {
     ->condition('bundle', 'project')
     ->condition('entity_id', $project_nid)
     ->condition('field_table_rate_field_issue_type_value', $work_type)
-    ->fields('table_rate', array('field_table_rate_field_rate_amount', 'field_table_rate_field_rate_currency'))
+    ->fields('table_rate', array(
+      'field_table_rate_field_rate_amount',
+      'field_table_rate_field_rate_currency'
+    ))
     ->execute()
     ->fetchAssoc();
 
@@ -766,7 +773,6 @@ function productivity_project_get_developer_chart($node = NULL) {
 
   $result = $query->execute()->fetchAll();
 
-
   if (empty($result)) {
     return array();
   }
@@ -774,7 +780,7 @@ function productivity_project_get_developer_chart($node = NULL) {
   $developers = array();
   $developer_hours = array();
 
-  foreach($result as $developer_data) {
+  foreach ($result as $developer_data) {
     $wrapper = entity_metadata_wrapper('user', $developer_data->uid);
     $developers[] = $wrapper->label();
     $developer_hours[] = floatval($developer_data->expression);
@@ -800,4 +806,40 @@ function productivity_project_get_developer_chart($node = NULL) {
   $chart_container['chart'] = $chart;
 
   return $chart_container;
+}
+
+/**
+ * Calculate the total project budget.
+ */
+function productivity_project_get_total_budget($wrapper) {
+  $budget = 0;
+  foreach ($wrapper->field_table_rate as $rate) {
+    if (empty($rate->field_rate->value())) {
+      continue;
+    }
+    $current_rate = $rate->field_rate->amount->value();
+    $interval = $rate->field_scope->interval->value();
+    $period = $rate->field_rate_type->value();
+    // If the budget is per day or per hour, $ is multiplied by the period. Global budgets are not multiplied.
+    $budget += ($period == 'hours' || $period == 'days') ? $current_rate * $interval : $current_rate;
+    // Assuming all rates are in the same currency.
+    $currency = $rate->field_rate->currency->value();
+  }
+
+  if (!$budget) {
+    return '0';
+  }
+  return number_format($budget) . ' ' . strtoupper($currency);
+}
+
+/**
+ * Renders the project total work scope.
+ */
+function productivity_project_get_scope($wrapper) {
+  $scope = 0;
+  foreach ($wrapper->field_table_rate as $rate) {
+    $scope += $rate->field_scope->interval->value();
+  }
+  $period = $rate->field_scope->period->value();
+  return interval_format_interval(array('period' => $period, 'interval' => $scope));
 }
