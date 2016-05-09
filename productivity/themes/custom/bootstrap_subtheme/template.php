@@ -53,9 +53,18 @@ function bootstrap_subtheme_preprocess_node__project__full(&$variables) {
   $field = field_view_field('node', $node, 'field_date', $display);
   $variables['project_date_start'] = render($field);
 
-  $variables['milestones'] = _bootstrap_subtheme_create_milestones_table($wrapper);
+  $fields = array(
+    'field_milestone',
+    'field_date',
+    'field_scope'
+  );
+  $variables['milestones'] = _bootstrap_subtheme_rendered_field_array($wrapper, $fields);
 
-  $variables['the_team'] = _bootstrap_subtheme_team_members_markup($wrapper);
+  $fields = array(
+    'field_employee',
+    'field_job_type'
+  );
+  $variables['the_team'] = _bootstrap_subtheme_rendered_field_array($wrapper, $fields);
 
   $variables['stakeholders'] = _bootstrap_subtheme_stakeholder_markup($wrapper);
 
@@ -97,41 +106,16 @@ function _bootstrap_subtheme_stakeholder_markup($wrapper) {
 }
 
 /**
- * Create the team member table markup.
+ * Create rendered table from field array.
  */
-function _bootstrap_subtheme_team_members_markup($wrapper) {
-  $header = array();
+function _bootstrap_subtheme_rendered_field_array($wrapper, $fields) {
   $header = array_fill(0, 2, NULL);
-  $fields = array(
-    'field_employee',
-    'field_job_type'
-  );
   $rows = array();
   foreach ($wrapper->field_internal_team as $key => $member) {
     _bootstrap_subtheme_render($rows, $key, $member->value(), 'multifield', $fields);
   }
 
   return theme('table', ['header' => $header, 'rows' => $rows]);
-}
-
-/**
- * Create a rendered Milestones table.
- */
-function _bootstrap_subtheme_create_milestones_table($wrapper) {
-  $header = array();
-  $header = array_fill(0, 3, NULL);
-  $fields = array(
-    'field_milestone',
-    'field_date',
-    'field_scope'
-  );
-  $rows = array();
-  foreach ($wrapper->field_timetable_milestones as $key => $milestone) {
-    _bootstrap_subtheme_render($rows, $key, $milestone->value(), 'multifield', $fields);
-  }
-
-  return theme('table', ['header' => $header, 'rows' => $rows]);
-
 }
 
 /**

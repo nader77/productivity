@@ -1,0 +1,78 @@
+id,title,project,amount,currency,expected date,sent request,actual date,Proforma Invoice
+1,First payment,Moments map,25000,USD,01.01.2015,,24.12.2014,
+2,Second payment,Moments map,17400,USD,01.06.2015,,01.06.2015,
+3,Third payment,Moments map,20000,USD,14.06.2015,,12/7/2015,
+4,First payment,Huji - registration,50000,ILS,01.03.2014,,15.08.2014,
+5,Second payment,Huji - registration,41000,ILS,01.02.2014,,01.03.2015,
+6,Third payment,Huji - registration,20500,ILS,14.07.2015,8.9.2015,16.11.2015,90178
+7,First payment,HUJI OS - hebrew,50000,ILS,01.07.2014,,15.08.2014,
+8,Second payment,HUJI OS - hebrew,50000,ILS,01.02.2015,,01.12.2015,90120
+9,Third payment,HUJI OS - hebrew,13000,ILS,14.07.2015,8.9.2015,,90177
+10,Additional design,HUJI OS - hebrew,12960,ILS,01.04.2015,,15.05.2015,
+11,additional 20 hours,HUJI OS - hebrew,5400,ILS,01.06.2015,,09.06.2015,
+12,First payment,HUJI OS - Research,9000,ILS,01.06.2014,,01.07.2014,
+13,Second payment,HUJI OS - Research,7500,ILS,01.10.2014,,25.11.2014,
+14,Third payment,HUJI OS - Research,8400,ILS,16.11.2014,,27.01.2015,
+15,First payment,YOYO CDX,17490,ILS,01.05.2015,,10.05.2015,
+16,Second payment,YOYO CDX,26235,ILS,01.05.2015,,1.9.2015,
+17,Third payment,YOYO CDX,26235,ILS,01.06.2015,1.8.2015,,90162
+18,Fourth payment,YOYO CDX,29490,ILS,01.07.2015,8.9.2015,,90179
+19,First payment,C4D Package 1,61500,EUR,01.05.2015,,30.06.2015,
+20,Second payment,C4D Package 1,15375,EUR,,,,
+21,First payment,C4D Package 2,15600,EUR,30.05.2015,,01.05.2015,
+22,Second payment,C4D Package 2,3900,EUR,,,,
+23,First payment,C4D Package 3,15862.5,EUR,25.04.2015,,06.05.2015,
+24,Second payment,C4D Package 3,1762.5,EUR,01.07.2015,,,
+25,First payment,C4D Package 4,15200,EUR,04.05.2015,,26.05.2015,
+26,Second payment,C4D Package 4,12160,EUR,18.05.2015,,,
+27,Third payment,C4D Package 4,3040,EUR,01.07.2015,,,
+28,First payment,C4D Package 5,11925,EUR,17.05.2015,,30.06.2015,
+29,Second payment,C4D Package 5,9540,EUR,31.05.2015,,,
+30,Third payment,C4D Package 5,2385,EUR,01.08.2015,,,
+31,First payment,C4D Package 6,6975,EUR,15.06.2015,,,
+32,Second payment,C4D Package 6,5580,EUR,01.07.2015,,,
+33,Third payment,C4D Package 6,1395,EUR,15.09.2015,,,
+34,First payment,melingo,13500,ILS,30.09.2015,6.9.2015,28.10.2015,90175
+35,Second payment,melingo,13500,ILS,30.10.2015,6.10.15,3.11.2015,90185
+36,Third payment,melingo,13500,ILS,30.11.2015,29.10.15,,90189
+37,First payment,Icenter,10000,USD,19.07.2015,26.07.2015,07.08.2015,
+38,Second payment,Icenter,15000,USD,15.8.2015,18.08.2015,11.9.2015,90173
+39,Third payment,Icenter,20000,USD,15.09.2015,20.09.2015,16/10,90182
+40,10k payment - 5k for 3rd 5k for 4th,Icenter,10000,USD,15.09.2016,20.09.2016,29/10,90182 - 90187
+41,Forth Payment,Icenter,20000,USD,1.11.2015,1.11.2015,29.10.2015,90182
+42,Fifth payment,Icenter,32250,USD,30.01.2016,01.01.2016,20000 paid on 24 JAN 2016,90206
+43,additional hours,Icenter,19149,USD,01.01.2016,01.12.2015,,90197
+44,First payment,JPO,15000,ILS,1.7.2015,,15.7.2015,
+45,Second payment,JPO,20000,ILS,15.08.2015,,1.9.2015,
+46,Third payment,JPO,20000,ILS,15.9.2015,,,90180
+47,Forth Payment,JPO,10000,ILS,15.10.2015,,,90204
+48,Diff from 4th payment - due to mistake.,JPO,7117,ILS,1.3.2016,,,
+49,additional 30 hours,HUJI OS - hebrew,8100,ILS,,,,90183
+50,Last payment,Shenkar,40290,ILS,1.12.2015,12.05.2015,,90152
+51,20H,Strauss Maim,5000,ILS,,25.8.2015,,90174
+52,50H,CBN,3750,USD,1.10.2015,5.8.2015,,90169
+53,WP1,ISERD,4675,EUR,,,,90207
+54,WP2,ISERD,8712.5,EUR,,,,90207
+55,WP3,ISERD,3697.5,EUR,,,,90207
+56,WP4,ISERD,1190,EUR,,,,90207
+57,WP5,ISERD,2592.5,EUR,,,,90207
+58,Monthly fee Apr 30th,ISERD,608,EUR,,,,90207
+59,Monthly fee may 30th,ISERD,608,EUR,,,,90207
+60,Monthly fee jun 30th,ISERD,608,EUR,,,,90207
+61,Monthly fee jul 30th,ISERD,608,EUR,,,,90207
+62,Monthly fee aug 30th,ISERD,608,EUR,,,,90207
+63,Monthly fee sep 30th,ISERD,608,EUR,,,,90207
+64,Monthly fee oct 30th,ISERD,608,EUR,,,,90207
+65,Monthly fee nov 30th,ISERD,608,EUR,,,,90207
+66,Monthly fee dec 30th,ISERD,608,EUR,,,,90207
+67,Webdrop,circuit,20000,ils,1.10.2015,,15.10.2015,
+68,Circuitauction OCT15,circuit,41600,ils,5.11.2015,,10.11.2015,90190
+69,Circuitauction NOV15,circuit,47160,ils,05.01.2016,05.12.2015,,90199
+70,Circuitauction NOV16,circuit,47160,ils,,,,
+71,WP6,ISERD,3060,EUR,,,,
+72,WP7,ISERD,,,,,,
+73,IMJ Dev001-010,IMJ,,,,,,
+74,IMJ Dev011-020,IMJ,,,,,,
+75,IMJ the rest,IMJ,,,,,,
+76,Opsys,Opsys,,,,,,
+77,UNFPA PO #3,UNFPA PO #3,10000,usd,01.03.2016,21.02.2016,,
