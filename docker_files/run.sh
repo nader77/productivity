@@ -111,7 +111,6 @@ sleep 1
 echo -e "\n .1"
 sleep 1
 echo -e "\nOkay."
-cd ..
 
 # Output server logs:
 echo -e "\n [RUN] Look at my Grunt log: \n"
@@ -119,15 +118,17 @@ cat ~/grunt.log
 echo -e "\n [RUN] Look at my Selenium log: \n"
 cat ~/sel.log
 
+cd /var/www/html/productivity
+
 # Run Behat tests for the client.
 echo -e "\n [RUN] Start client tests.\n"
 cd behat
-bin/behat --tags=~@wip
+./bin/behat --tags=~@wip
 cd ..
 
 # Run Behat tests for the backend.
 echo -e "\n [RUN] Start back end tests.\n"
 cd productivity/behat
-bin/behat --tags=~@wip
+./bin/behat --tags=~@wip
 cd ../..
 
