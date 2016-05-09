@@ -36,8 +36,13 @@ function productivity_timewatch_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_employee',
     'label' => 'Employee',
-    'required' => 1,
+    'required' => 0,
     'settings' => array(
+      'behaviors' => array(
+        'autofill' => array(
+          'status' => 0,
+        ),
+      ),
       'user_register_form' => FALSE,
     ),
     'widget' => array(
@@ -180,6 +185,46 @@ function productivity_timewatch_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'node-work_session-field_special_day_name'.
+  $field_instances['node-work_session-field_special_day_name'] = array(
+    'bundle' => 'work_session',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'For Holiday, Convention or other no regular day,',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 4,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_special_day_name',
+    'label' => 'Special day name',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 37,
+    ),
+  );
+
   // Exported field_instance: 'taxonomy_term-session_types-field_full_day'.
   $field_instances['taxonomy_term-session_types-field_full_day'] = array(
     'bundle' => 'session_types',
@@ -254,11 +299,13 @@ function productivity_timewatch_field_default_field_instances() {
   // Translatables
   // Included for use with string extractors like potx.
   t('Employee');
+  t('For Holiday, Convention or other no regular day,');
   t('Full day ');
   t('Pincode');
   t('Project');
   t('Session date');
   t('Session type');
+  t('Special day name');
   t('When type is set as "Full day", don\'t ask for start and end time.');
 
   return $field_instances;

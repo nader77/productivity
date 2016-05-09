@@ -95,10 +95,10 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
 
   // TODO: Separate this into sub module for Madaam (Chief Sientist Bureau).
   // Summarize Madaan project total.
-  $projects =  array();
+  $summary =  array();
   if ($node_keys) {
     // Get all issues for the project.
-    $sessions = productivity_timewatch_create_sessions_table($node_keys, $projects);
+    $sessions = productivity_timewatch_create_sessions_table($node_keys, $summary);
   }
   // No working day return early.
   else {
@@ -116,14 +116,21 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
     t('Entry'),
     t('Exit'),
     t('Total'),
-    t('Project'),
+    t('Project/ Type'),
     t('Source'),
     t('Retro'),
     t('All day Total'),
   );
 
   // Get the skeleton of the full month.
-  $month_array = productivity_timewatch_build_month_skeleton($month, $year);
+  $summary['potential'] = array(
+    'name' => t('Potential'),
+    'type' => 'sum',
+    'retro_count' => '',
+    'total_minutes' => 0,
+    'actual' => '100%',
+  );
+  $month_array = productivity_timewatch_build_month_skeleton($month, $year, $summary['potential']['total_minutes']);
   $array_table = array();
 
   // Build month table with data.
@@ -182,7 +189,7 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
     'rows' => $array_table
   ));
 
-  $variables['table_summary'] = productivity_timewatch_create_summary_table($projects);
+  $variables['table_summary'] = productivity_timewatch_create_summary_table($summary);
   // Get all the projects for project input
   $variables['current_uid'] = $account->uid;
 
@@ -192,7 +199,9 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
 /**
  * Build monthly array skeleton
  */
-function productivity_timewatch_build_month_skeleton($month, $year){
+function productivity_timewatch_build_month_skeleton($month, $year, &$potentials){
+  $globals = productivity_timewatch_get_global_days($year, $month);
+  dpm($globals);
   $array = array();
   $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));
   for ($day = 1; $day <= $last_day_this_month; $day++) {
@@ -205,11 +214,18 @@ function productivity_timewatch_build_month_skeleton($month, $year){
       '@year' => $year,
     ));
     $date = strtotime($date_string);
+    $week_day =  date('l', $date);
+    $type = isset($globals[$day_key]) ? $globals[$day_key] : '';
     $array[$key]  = array(
       'day' => $day_key,
       'Date' => date('d/m/y', $date),
-      'Week day' => date('l', $date),
+      'Week day' => $week_day,
+      'type' => $type,
     );
+    // Count potentials hours, no WE and no Holiday days.
+    if (!in_array($week_day, array('Friday', 'Saturday')) || $type) {
+      $potentials += 9 * 60;
+    }
   }
   return $array;
 }
@@ -227,7 +243,11 @@ function productivity_timewatch_build_month_skeleton($month, $year){
 function productivity_timewatch_create_sessions_table($node_keys, &$summary) {
   $sessions = array();
   $summary['total'] = array(
+    'name' => t('Total time'),
+    'type' => 'sum',
+    'retro_count' => '',
     'total_minutes' => 0,
+    'actual' => '100%',
   );
 
   foreach($node_keys as $nid) {
@@ -242,13 +262,14 @@ function productivity_timewatch_create_sessions_table($node_keys, &$summary) {
 
     $day = date('d', $start_time);
 
-    // Day type (global/Miluim/Regular) or project name (madaan).
+    // Day type (Global/Miluim/Regular) or project name (Madaan).
     $retro = FALSE;
     $type = '';
     $day_name = $pid = $wrapper->field_session_type->label();
     if ($pid == NULL) {
       $day_name = $pid = 'Regular';
     }
+
     // Madaan day.
     if ($wrapper->field_project->value() != NULL) {
       $day_name = $wrapper->field_project->label();
@@ -303,14 +324,13 @@ function productivity_timewatch_create_sessions_table($node_keys, &$summary) {
     }
     $summary['total']['total_minutes'] += $total_minutes;
   }
-  dpm($summary);
   return $sessions;
 }
 
 /**
  * Create summary table displayed in footer.
  */
-function productivity_timewatch_create_summary_table($summary_raw) {
+function productivity_timewatch_create_summary_table($summaries) {
   // Headers.
   $header = array(
     t('Project/ Type'),
@@ -319,26 +339,17 @@ function productivity_timewatch_create_summary_table($summary_raw) {
     t('Total Hours'),
     t('Actual % Employment'),
   );
-  $total = $summary_raw['total']['total_minutes'];
-  unset($summary_raw['total']);
+  $total = $summaries['total']['total_minutes'];
   // Calc actual %
-  foreach($summary_raw as &$project) {
-    $project['actual'] = number_format(100 / $total * $project['total_minutes'], 2) . '%';
-    $project['total_minutes'] = productivity_timewatch_format_total($project['total_minutes'], TRUE);
+  foreach($summaries as &$summary) {
+    $summary['actual'] = number_format(100 / $total * $summary['total_minutes'], 2) . '%';
+    $summary['total_minutes'] = productivity_timewatch_format_total($summary['total_minutes'], TRUE);
   }
-  // TODO: Add potential time.
-  $summary = $summary_raw;
-  $summary[] = array(
-    'project' => t('Total time'),
-    'type' => '',
-    'retro' => '',
-    'total' => productivity_timewatch_format_total($total, TRUE),
-    'percent' => '100%',
-  );
+  dpm($summaries);
 
   return theme('table', array(
     'header' => $header,
-    'rows' => $summary,
+    'rows' => $summaries,
   ));
 }
 
