@@ -599,5 +599,30 @@ class FeatureContext extends DrupalContext implements SnippetAcceptingContext {
 
     $popup_element->click();
   }
+
+  /**
+   * @Given I visit the :project_name
+   */
+  public function iVisitThe($project_name) {
+    $page = $this->getSession()->getPage();
+    $linkToProject = $page->findLink($project_name);
+
+    if (empty($linkToProject)) {
+      throw new Exception(format_string("Couldn't find the @project_name link", array('project_name' => $project_name)));
+    }
+
+    $linkToProject->click();
+  }
+
+  /**
+   * @When I validate if the type of :project_name project is :type
+   */
+  public function iValidateIfTheTypeOfProjectIs($project_name, $type) {
+      $page = $this->getSession()->getPage();
+      if (!$element = $page->find('xpath', "//td[contains(.,'{$project_name}')]/following-sibling::td[contains(.,'{$type}') and contains(@class, 'views-field-field-type')]")) {
+          throw new \Exception(format_string("The type isn't @type", array('type' => $type)));
+      }
+  }
+
 }
 

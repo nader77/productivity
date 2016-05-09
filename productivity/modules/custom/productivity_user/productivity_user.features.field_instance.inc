@@ -93,6 +93,112 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'profile2-stakeholder-field_full_name'.
+  $field_instances['profile2-stakeholder-field_full_name'] = array(
+    'bundle' => 'stakeholder',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 1,
+      ),
+    ),
+    'entity_type' => 'profile2',
+    'field_name' => 'field_full_name',
+    'label' => 'Full Name',
+    'required' => 1,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 2,
+    ),
+  );
+
+  // Exported field_instance: 'profile2-stakeholder-field_phone'.
+  $field_instances['profile2-stakeholder-field_phone'] = array(
+    'bundle' => 'stakeholder',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'profile2',
+    'field_name' => 'field_phone',
+    'label' => 'Phone',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'profile2-stakeholder-field_role'.
+  $field_instances['profile2-stakeholder-field_role'] = array(
+    'bundle' => 'stakeholder',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 4,
+      ),
+    ),
+    'entity_type' => 'profile2',
+    'field_name' => 'field_role',
+    'label' => 'Role',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'autofill' => array(
+          'status' => 0,
+        ),
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 5,
+    ),
+  );
+
   // Exported field_instance: 'user-user-field_date'.
   $field_instances['user-user-field_date'] = array(
     'bundle' => 'user',
@@ -385,19 +491,56 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-field_salaries'.
+  $field_instances['user-user-field_salaries'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 2,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_salaries',
+    'label' => 'Salaries',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 10,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Date');
   t('Date of start and end of employment.');
   t('Employment status');
+  t('Full Name');
   t('Full name');
   t('Github access token');
   t('Github username');
   t('Job type');
   t('Last notification');
   t('Percent time');
+  t('Phone');
   t('Project');
   t('Project Madaan');
+  t('Role');
+  t('Salaries');
   t('The % of time for the project.');
   t('The project for madaan.');
 

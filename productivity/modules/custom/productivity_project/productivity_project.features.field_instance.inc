@@ -10,6 +10,75 @@
 function productivity_project_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance: 'multifield-field_internal_team-field_employee'.
+  $field_instances['multifield-field_internal_team-field_employee'] = array(
+    'bundle' => 'field_internal_team',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 2,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_employee',
+    'label' => 'Employee',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'autofill' => array(
+          'status' => 0,
+        ),
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 4,
+    ),
+  );
+
+  // Exported field_instance: 'multifield-field_internal_team-field_job_type'.
+  $field_instances['multifield-field_internal_team-field_job_type'] = array(
+    'bundle' => 'field_internal_team',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'list',
+        'settings' => array(),
+        'type' => 'list_default',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_job_type',
+    'label' => 'Job type',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 6,
+    ),
+  );
+
   // Exported field_instance: 'multifield-field_table_rate-field_hours'.
   $field_instances['multifield-field_table_rate-field_hours'] = array(
     'bundle' => 'field_table_rate',
@@ -77,6 +146,41 @@ function productivity_project_field_default_field_instances() {
       'settings' => array(),
       'type' => 'options_select',
       'weight' => 0,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'multifield-field_table_rate-field_issue_type_label'.
+  $field_instances['multifield-field_table_rate-field_issue_type_label'] = array(
+    'bundle' => 'field_table_rate',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'Override to default title.',
+    'display' => array(
+      'default' => array(
+        'label' => 'hidden',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 10,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_issue_type_label',
+    'label' => 'Work type display',
+    'required' => 0,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 5,
     ),
   );
 
@@ -483,24 +587,74 @@ function productivity_project_field_default_field_instances() {
   );
 
   // Exported field_instance:
-  // 'multifield-field_table_rate-field_issue_type_label'.
-  $field_instances['multifield-field_table_rate-field_issue_type_label'] = array(
-    'bundle' => 'field_table_rate',
-    'default_value' => NULL,
+  // 'multifield-field_timetable_milestones-field_date'.
+  $field_instances['multifield-field_timetable_milestones-field_date'] = array(
+    'bundle' => 'field_timetable_milestones',
     'deleted' => 0,
-    'description' => 'Override to default title.',
+    'description' => '',
     'display' => array(
       'default' => array(
-        'label' => 'hidden',
-        'module' => 'text',
-        'settings' => array(),
-        'type' => 'text_default',
-        'weight' => 10,
+        'label' => 'above',
+        'module' => 'date',
+        'settings' => array(
+          'format_type' => 'long',
+          'fromto' => 'both',
+          'multiple_from' => '',
+          'multiple_number' => '',
+          'multiple_to' => '',
+          'show_remaining_days' => FALSE,
+        ),
+        'type' => 'date_default',
+        'weight' => 4,
       ),
     ),
     'entity_type' => 'multifield',
-    'field_name' => 'field_issue_type_label',
-    'label' => 'Work type display',
+    'field_name' => 'field_date',
+    'label' => 'Date',
+    'required' => 0,
+    'settings' => array(
+      'default_value' => 'now',
+      'default_value2' => 'same',
+      'default_value_code' => '',
+      'default_value_code2' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'date',
+      'settings' => array(
+        'increment' => 15,
+        'input_format' => 'd/m/Y - H:i:s',
+        'input_format_custom' => '',
+        'label_position' => 'above',
+        'no_fieldset' => 0,
+        'text_parts' => array(),
+        'year_range' => '-3:+3',
+      ),
+      'type' => 'date_popup',
+      'weight' => 1,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'multifield-field_timetable_milestones-field_milestone'.
+  $field_instances['multifield-field_timetable_milestones-field_milestone'] = array(
+    'bundle' => 'field_timetable_milestones',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 5,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_milestone',
+    'label' => 'Milestone',
     'required' => 0,
     'settings' => array(
       'text_processing' => 0,
@@ -513,7 +667,50 @@ function productivity_project_field_default_field_instances() {
         'size' => 60,
       ),
       'type' => 'text_textfield',
-      'weight' => 5,
+      'weight' => 0,
+    ),
+  );
+
+  // Exported field_instance:
+  // 'multifield-field_timetable_milestones-field_scope'.
+  $field_instances['multifield-field_timetable_milestones-field_scope'] = array(
+    'bundle' => 'field_timetable_milestones',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'interval',
+        'settings' => array(),
+        'type' => 'interval_default',
+        'weight' => 3,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_scope',
+    'label' => 'Scope',
+    'required' => 0,
+    'settings' => array(
+      'allowed_periods' => array(
+        'day' => 'day',
+        'fortnight' => 0,
+        'hour' => 'hour',
+        'minute' => 0,
+        'month' => 0,
+        'quarter' => 0,
+        'second' => 0,
+        'week' => 0,
+        'year' => 0,
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'interval',
+      'settings' => array(),
+      'type' => 'interval_default',
+      'weight' => 2,
     ),
   );
 
@@ -802,6 +999,45 @@ If your not sure use the third one.',
     ),
   );
 
+  // Exported field_instance: 'node-project-field_internal_team'.
+  $field_instances['node-project-field_internal_team'] = array(
+    'bundle' => 'project',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'multifield',
+        'settings' => array(
+          'view_mode' => 'default',
+        ),
+        'type' => 'multifield_default',
+        'weight' => 18,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_internal_team',
+    'label' => 'Internal team',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'multifield',
+      'settings' => array(),
+      'type' => 'multifield_default',
+      'weight' => 13,
+    ),
+  );
+
   // Exported field_instance: 'node-project-field_percentage_notification'.
   $field_instances['node-project-field_percentage_notification'] = array(
     'bundle' => 'project',
@@ -848,7 +1084,7 @@ If your not sure use the third one.',
       'module' => 'number',
       'settings' => array(),
       'type' => 'number',
-      'weight' => 12,
+      'weight' => 11,
     ),
   );
 
@@ -1276,6 +1512,54 @@ global - fix amount.',
     ),
   );
 
+  // Exported field_instance: 'node-project-field_stakeholder'.
+  $field_instances['node-project-field_stakeholder'] = array(
+    'bundle' => 'project',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 20,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_stakeholder',
+    'label' => 'Stakeholder',
+    'required' => 0,
+    'settings' => array(
+      'behaviors' => array(
+        'autofill' => array(
+          'status' => 0,
+        ),
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => 14,
+    ),
+  );
+
   // Exported field_instance: 'node-project-field_status'.
   $field_instances['node-project-field_status'] = array(
     'bundle' => 'project',
@@ -1443,6 +1727,45 @@ global - fix amount.',
     ),
   );
 
+  // Exported field_instance: 'node-project-field_timetable_milestones'.
+  $field_instances['node-project-field_timetable_milestones'] = array(
+    'bundle' => 'project',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'multifield',
+        'settings' => array(
+          'view_mode' => 'default',
+        ),
+        'type' => 'multifield_default',
+        'weight' => 17,
+      ),
+      'teaser' => array(
+        'label' => 'above',
+        'settings' => array(),
+        'type' => 'hidden',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'node',
+    'field_name' => 'field_timetable_milestones',
+    'label' => 'Timetable / Milestones',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'multifield',
+      'settings' => array(),
+      'type' => 'multifield_default',
+      'weight' => 12,
+    ),
+  );
+
   // Exported field_instance: 'node-project-field_type'.
   $field_instances['node-project-field_type'] = array(
     'bundle' => 'project',
@@ -1491,7 +1814,11 @@ If your not sure use the third one.');
   t('Account');
   t('Allow work session reference');
   t('Date');
+  t('Employee');
   t('Github repository name');
+  t('Internal team');
+  t('Job type');
+  t('Milestone');
   t('Override to default title.');
   t('Percentage notified');
   t('Rate');
@@ -1504,12 +1831,14 @@ month - monthly retainer.
 global - fix amount.');
   t('Refer to the unit of the budget amount. hours - per hour price. days - per day price. month - monthly retainer. global - fix amount.');
   t('Scope');
+  t('Stakeholder');
   t('Start and end date of project, in case of retainer or hourly without end date, just add a start date.
 Setting an end date, will make project invisible in some forms after the end date.');
   t('Status');
   t('Team leads');
   t('This means it\'s a Madaan project.
 Whether this project should be allowed as the project reference of a work session.');
+  t('Timetable / Milestones');
   t('Total days');
   t('Total hours');
   t('Type');

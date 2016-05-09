@@ -81,30 +81,50 @@
  */
 ?>
 
-<h1><?php print $title;?></h1>
+<h1><?php print $title; ?></h1>
 <div class="row">
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
-      <i class="fa fa-hand-o-up red-bg"></i>
+      <i class="fa fa-hand-o-up emerald-bg"></i>
       <span class="headline"><?php print t('Total Hours Done') ?></span>
-      <span class="value"><?php print render($content['field_hours']);?></span>
+      <span class="value"><?php print render($content['field_hours']); ?></span>
     </div>
   </div>
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
-      <i class="fa fa-shopping-cart emerald-bg"></i>
+      <i class="fa fa-shopping-cart red-bg"></i>
       <span class="headline"><?php print t('Type') ?></span>
-      <span class="value"><?php print render($content['field_type']);?></span>
+      <span class="value"><?php print render($content['field_type']); ?></span>
+    </div>
+  </div>
+  <div class="col-lg-4 col-sm-6 col-xs-12">
+    <div class="main-box infographic-box">
+      <i class="fa fa-calendar yellow-bg"></i>
+      <span class="headline"><?php print t('Schedule') ?></span>
+      <span class="smallValue"><?php print $project_date_start; ?></span>
+    </div>
+  </div>
+  <div class="col-lg-4 col-sm-6 col-xs-12">
+    <div class="main-box infographic-box">
+      <i class="fa fa-clock-o emerald-bg"></i>
+      <span class="headline"><?php print t('Work scope') ?></span>
+      <span class="value"><?php print $project_scope; ?></span>
+    </div>
+  </div>
+  <div class="col-lg-4 col-sm-6 col-xs-12">
+    <div class="main-box infographic-box">
+      <i class="fa fa-money red-bg"></i>
+      <span class="headline"><?php print t('Project budget') ?></span>
+      <span class="value"><?php print $total_budget; ?></span>
     </div>
   </div>
   <div class="col-lg-4 col-sm-6 col-xs-12">
     <div class="main-box infographic-box">
       <i class="fa fa-money yellow-bg"></i>
       <span class="headline"><?php print t('Days') ?></span>
-      <span class="value"><?php print $days;?></span>
+      <span class="value"><?php print $days; ?></span>
     </div>
   </div>
-
   <?php if (!empty($developer_chart)): ?>
     <div class="col-lg-4 col-sm-6 col-xs-12">
       <div class="main-box infographic-box">
@@ -112,7 +132,6 @@
       </div>
     </div>
   <?php endif; ?>
-
   <?php if (!empty($hours_chart)): ?>
     <div class="col-lg-4 col-sm-6 col-xs-12">
       <div class="main-box infographic-box">
@@ -123,6 +142,24 @@
   <div class="col-xs-12">
     <div class="main-box infographic-box">
       <?php print $table; ?>
+    </div>
+  </div>
+  <div class="col-xs-12">
+    <div class="main-box infographic-box">
+      <h2>Milestones</h2>
+      <?php print $milestones; ?>
+    </div>
+  </div>
+  <div class="col-xs-6">
+    <div class="main-box infographic-box">
+      <h2>Team members</h2>
+      <?php print $the_team; ?>
+    </div>
+  </div>
+  <div class="col-xs-6">
+    <div class="main-box infographic-box">
+      <h2>Stakeholders</h2>
+      <?php print $stakeholders; ?>
     </div>
   </div>
   <div class="col-xs-12">
@@ -143,6 +180,3 @@
     </div>
   </div>
 </div>
-
-
-

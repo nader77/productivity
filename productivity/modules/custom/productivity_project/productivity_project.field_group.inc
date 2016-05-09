@@ -21,12 +21,12 @@ function productivity_project_field_group_info() {
   $field_group->parent_name = '';
   $field_group->data = array(
     'label' => 'Deprecated',
-    'weight' => '13',
+    'weight' => '15',
     'children' => array(
-      0 => 'field_rate',
-      1 => 'field_rate_type',
-      2 => 'field_scope',
-      3 => 'field_days',
+      0 => 'field_days',
+      1 => 'field_rate',
+      2 => 'field_rate_type',
+      3 => 'field_scope',
     ),
     'format_type' => 'fieldset',
     'format_settings' => array(

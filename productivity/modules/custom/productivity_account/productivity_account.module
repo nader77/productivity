@@ -25,3 +25,13 @@ function productivity_account_get_employee_uids() {
 
   return array_keys($result['user']);
 }
+
+/**
+ * Get all employee list.
+ */
+function productivity_account_get_employees_list() {
+  $query = db_select('users', 'u');
+  $query->fields('u', array('uid', 'name'));
+  $result = $query->execute()->fetchAllKeyed();
+  return $result;
+}
