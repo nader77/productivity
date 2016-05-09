@@ -24,7 +24,7 @@ function productivity_timewatch_monthly_employee_load_resources($local = FALSE) 
 
     // Add Datepicker lib.
     drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/bootstrap-datepicker/js/bootstrap-datepicker.js');
-    drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/bootstrap-datepicker/css/bootstrap-datepicker.min.css');// Add Datepicker lib.
+    drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/bootstrap-datepicker/css/bootstrap-datepicker.min.css');
     // Add select 2
     drupal_add_js(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/select2/js/select2.js');
     drupal_add_css(drupal_get_path('theme', 'bootstrap_subtheme') . '/js/select2/css/select2.min.css');
@@ -98,7 +98,7 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   $projects =  array();
   if ($node_keys) {
     // Get all issues for the project.
-    $sessions = productivity_timewatch_create_issues_table($node_keys, $projects, $wrapper);
+    $sessions = productivity_timewatch_create_sessions_table($node_keys, $projects, $wrapper);
   }
   // No working day return early.
   else {
@@ -215,35 +215,20 @@ function productivity_timewatch_build_month_skeleton($month, $year){
 }
 
 /**
- * Create a matrix of all the issues from GitHub nodes,
+ * Create a matrix of all the sessions nodes,
  * And the url project.
  *
  * @param $nodes
  *  All the nodes return from the query.
  *
  * @return array
- *  Matrix of all the issues, and the URL project
+ *  Matrix of all the sessions, and the URL project
  */
-function productivity_timewatch_create_issues_table($node_keys, &$projects, $user_wrapper) {
+function productivity_timewatch_create_sessions_table($node_keys, &$projects, $user_wrapper) {
   $sessions = array();
   $projects['total'] = array(
     'total_minutes' => 0,
   );
-
-
-  // Get Teken for Madaan.
-  foreach ($user_wrapper->field_project_madaan as $multifield) {
-    $pid = $multifield->field_project->getIdentifier();
-
-    $projects[$pid] = array(
-      'name' => $multifield->field_project->label(),
-      'type' => t('MOP Madaan'),
-      'retro_count' => 0,
-      'total_minutes' => 0,
-      'teken' => $multifield->field_percent_time->value(),
-      'actual' => 0,
-    );
-  }
 
   foreach($node_keys as $nid) {
     $wrapper = entity_metadata_wrapper('node', $nid);
@@ -265,14 +250,22 @@ function productivity_timewatch_create_issues_table($node_keys, &$projects, $use
       $day_name = $wrapper->field_session_type->label();
     }
 
-    $today = $sessions[$day][] = array(
+    // Retro.
+    $retro = FALSE;
+    $one_day = 24*60*60;
+    if ($wrapper->changed->value() > $end_time + $one_day) {
+      $retro = TRUE;
+    }
+
+
+    $sessions[$day][] = array(
       'entry' => l(date('H:i', $start_time), 'node/' . $nid),
       'exit' => date('H:i', $end_time),
       'total' => $total_minutes,
       'project' => $day_name,
       // The source of the data, using time watch or from home (manual).
       'source' => in_array('timewatch', $node_account->roles) ? 'timewatch' : 'manual',
-      'retro' => 'yes',
+      'retro' => $retro ? t('yes') : t('no'),
     );
 
     if ($wrapper->field_project->value() != NULL) {
@@ -281,26 +274,44 @@ function productivity_timewatch_create_issues_table($node_keys, &$projects, $use
     else {
       $pid = $wrapper->field_session_type->label();
       if ($pid == NULL) {
-        $pid = 'Regular';
+        $day_name = $pid = 'Regular';
+        $type = '';
+      }
+      else {
+        $type = t('MOP Madaan');
       }
     }
 
     if (!isset($projects[$pid])) {
       $projects[$pid] = array(
-        'name' => $pid,
-        'type' => '',
-        'retro_count' => 0,
+        'name' => $day_name,
+        'type' => $type,
+        'retro_count' => '',
         'total_minutes' => 0,
-        'teken' => 0,
         'actual' => 0,
       );
     }
 
+
     // Add current total.
-    $projects[$pid]['retro_count'] = ($today['retro'] == 'yes') ? $projects[$pid]['retro_count']+1 : $projects[$pid]['retro_count'];
-    $projects[$pid]['total_minutes'] += $total_minutes;
+    if ($retro) {
+      if (!isset($projects["{$pid}_retro"])) {
+        $projects["{$pid}_retro"] = array(
+          'name' => $day_name,
+          'type' => $type,
+          'retro_count' => 'Y',
+          'total_minutes' => 0,
+          'actual' => 0,
+        );
+      }
+      $projects["{$pid}_retro"]['total_minutes'] += $total_minutes;
+    }
+    else {
+      $projects[$pid]['total_minutes'] += $total_minutes;
+    }
     $projects['total']['total_minutes'] += $total_minutes;
   }
+  dpm($projects);
   return $sessions;
 }
 
@@ -314,7 +325,6 @@ function productivity_timewatch_create_summary_table($projects) {
     t('Type'),
     t('Retro'),
     t('Total Hours'),
-    t('Teken Employment'),
     t('Actual % Employment'),
   );
   $total = $projects['total']['total_minutes'];
@@ -322,7 +332,7 @@ function productivity_timewatch_create_summary_table($projects) {
   // Calc actual %
   foreach($projects as &$project) {
     $project['actual'] = number_format(100 / $total * $project['total_minutes'], 2) . '%';
-    $project['teken'] .= '%';
+//    $project['teken'] .= '%';
     $project['total_minutes'] = productivity_timewatch_format_total($project['total_minutes'], TRUE);
   }
   // TODO: Add potential time.
@@ -332,7 +342,7 @@ function productivity_timewatch_create_summary_table($projects) {
     'type' => '',
     'retro' => '',
     'total' => productivity_timewatch_format_total($total, TRUE),
-    'teken' => '',
+//    'teken' => '',
     'percent' => '100%',
   );
 

@@ -39,10 +39,11 @@
 </div>
 
 <div class="row">
-  <div class="col-sm-8">
+  <h3>Summary</h3>
+  <div class="col-sm-12">
     <?php print $table_summary; ?>
   </div>
-  <div class="col-sm-4">
-    <?php print t('legend for report, ....'); ?>
-  </div>
+<!--  <div class="col-sm-4">-->
+<!--    --><?php //print t('legend for report, ....'); ?>
+<!--  </div>-->
 </div>
