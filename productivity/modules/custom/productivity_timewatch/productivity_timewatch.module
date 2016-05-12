@@ -310,7 +310,10 @@ function productivity_timewatch_get_global_days($year, $month) {
   foreach ($nodes as $node) {
     $day =  date('d', $node->field_session_date['und'][0]['value']);
     $day_key = str_pad($day, 2, '0', STR_PAD_LEFT);
-    $bydate_result[$day_key] = $node->field_special_day_name['und'][0]['value'];
+    $bydate_result[$day_key]['label'] = $node->field_special_day_name['und'][0]['value'];
+    $bydate_result[$day_key]['start'] = $node->field_session_date['und'][0]['value'];
+    $bydate_result[$day_key]['end'] = $node->field_session_date['und'][0]['value2'];
+    $bydate_result[$day_key]['nid'] = $node->nid;
   }
   return $bydate_result;
 }

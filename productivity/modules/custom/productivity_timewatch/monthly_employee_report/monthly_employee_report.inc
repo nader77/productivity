@@ -125,7 +125,7 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   // Get the skeleton of the full month.
   $summary['potential'] = array(
     'name' => t('Potential'),
-    'type' => 'sum',
+    'type' => '',
     'retro_count' => '',
     'total_minutes' => 0,
     'actual' => '100%',
@@ -201,7 +201,6 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
  */
 function productivity_timewatch_build_month_skeleton($month, $year, &$potentials){
   $globals = productivity_timewatch_get_global_days($year, $month);
-  dpm($globals);
   $array = array();
   $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));
   for ($day = 1; $day <= $last_day_this_month; $day++) {
@@ -215,16 +214,30 @@ function productivity_timewatch_build_month_skeleton($month, $year, &$potentials
     ));
     $date = strtotime($date_string);
     $week_day =  date('l', $date);
-    $type = isset($globals[$day_key]) ? $globals[$day_key] : '';
+    // Special day, holiday or funday.
+    $special_day_name = isset($globals[$day_key]) ? $globals[$day_key]['label'] : FALSE;
     $array[$key]  = array(
       'day' => $day_key,
       'Date' => date('d/m/y', $date),
       'Week day' => $week_day,
-      'type' => $type,
     );
     // Count potentials hours, no WE and no Holiday days.
-    if (!in_array($week_day, array('Friday', 'Saturday')) || $type) {
+    if (!in_array($week_day, array('Friday', 'Saturday')) && !$special_day_name) {
       $potentials += 9 * 60;
+    }
+    // Holidays.
+    if ($special_day_name) {
+      $special_day_length = ($globals[$day_key]['end'] - $globals[$day_key]['start']);
+      $special_day_length_diff =  (9 * 60 * 60) - $special_day_length;
+      // Deal with half day holidays.
+      if ($special_day_length_diff > 0) {
+        $potentials += ($special_day_length_diff / 60);
+      }
+      $array[$key]['Week day'] = t('@week_day - !link (@day_length Hours)', array(
+        '@week_day' => $week_day,
+        '!link' => l($special_day_name, 'node/' . $globals[$day_key]['nid']),
+        '@day_length' => productivity_timewatch_format_total($special_day_length / 60),
+      ));
     }
   }
   return $array;
@@ -244,7 +257,7 @@ function productivity_timewatch_create_sessions_table($node_keys, &$summary) {
   $sessions = array();
   $summary['total'] = array(
     'name' => t('Total time'),
-    'type' => 'sum',
+    'type' => '',
     'retro_count' => '',
     'total_minutes' => 0,
     'actual' => '100%',
@@ -339,13 +352,16 @@ function productivity_timewatch_create_summary_table($summaries) {
     t('Total Hours'),
     t('Actual % Employment'),
   );
-  $total = $summaries['total']['total_minutes'];
+  $total = $summaries['potential']['total_minutes'];
   // Calc actual %
   foreach($summaries as &$summary) {
     $summary['actual'] = number_format(100 / $total * $summary['total_minutes'], 2) . '%';
     $summary['total_minutes'] = productivity_timewatch_format_total($summary['total_minutes'], TRUE);
   }
-  dpm($summaries);
+  // Move the Total to last.
+  $total = $summaries['total'];
+  unset($summaries['total']);
+  $summaries['total'] = $total;
 
   return theme('table', array(
     'header' => $header,
