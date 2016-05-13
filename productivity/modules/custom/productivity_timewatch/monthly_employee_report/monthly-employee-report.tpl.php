@@ -25,7 +25,6 @@
           </div>
           <div class="col-sm-4">
             <button class="btn btn-primary apply" type="button">Apply</button>
-            <button class="btn btn-primary anytime" type="button">Any time</button>
             <button class="btn btn-primary year" type="button" data-toggle="popover" title="Can't be done" data-content="Please select a year first">All Year</button>
           </div>
         </div>
@@ -33,17 +32,8 @@
       <div class="row">
         <div class="col-sm-12"><?php print $message; ?></div>
       </div>
-     <?php print $table; ?>
     </div>
   </div>
 </div>
+<?php print $report ; ?>
 
-<div class="row">
-  <h3>Summary</h3>
-  <div class="col-sm-12">
-    <?php print $table_summary; ?>
-  </div>
-<!--  <div class="col-sm-4">-->
-<!--    --><?php //print t('legend for report, ....'); ?>
-<!--  </div>-->
-</div>

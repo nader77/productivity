@@ -10,6 +10,14 @@
 function productivity_timewatch_monthly_employee_report_callback($account = FALSE, $year = FALSE, $month = FALSE) {
   return productivity_timewatch_monthly_employee_report($account, $year, $month);
 }
+/**
+ * Menu callback; Display monthly employee report.
+ */
+function productivity_timewatch_monthly_employee_report_multiple_callback() {
+  
+  
+  return productivity_timewatch_monthly_employee_report();
+}
 
 /**
  * Load all resources for the page.
@@ -50,20 +58,9 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   productivity_timewatch_monthly_employee_load_resources();
 
   $variables = array();
-  $variables['year'] = !empty($year) ? $year : date('Y');
-  $variables['month']= !empty($month) ? $month : date('m', strtotime("-1 month"));
-
-  if ($year == 'all'){
-    $variables['date'] = t('All time');
-  }
-  elseif ($month == 'all'){
-    $variables['date'] = t('Year @year', array('@year' => $year));
-  }
-  else {
-    $variables['date'] = date("F Y", strtotime("$year-$month-01"));
-  }
 
   // Initialize variables.
+  $variables['date'] = date("F Y", strtotime("$year-$month-01"));
   $variables['employees'] = user_load_multiple(productivity_account_get_employee_uids());
   $variables['current_uid'] = 0;
   $variables['project_title'] = 'Select a project';
@@ -76,39 +73,49 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   drupal_add_js(array(
     'report' => array(
       'base_url' => $base_url,
-      'year' => $variables['year'],
-      'month' => $variables['month'],
+      'year' => !empty($year) ? $year : date('Y'),
+      'month' => !empty($month) ? $month : date('m', strtotime("-1 month")),
     ),
   ), 'setting');
 
   // No project given, return early.
   if (!$account) {
+    $variables['fullname']  = '';
+    $variables['report'] = '';
     return theme('productivity_timewatch_monthly_employee_report', $variables);
   }
 
   $wrapper = entity_metadata_wrapper('user', $account);
   $variables['fullname'] = $wrapper->field_full_name->label();
 
-  // Get all nodes for the current month.
-  $node_keys = productivity_timewatch_get_user_sessions($account->uid, $variables['year'], $variables['month']);
-  $sessions = array();
 
-  // TODO: Separate this into sub module for Madaam (Chief Sientist Bureau).
-  // Summarize Madaan project total.
-  $summary =  array();
-  if ($node_keys) {
-    // Get all issues for the project.
-    $sessions = productivity_timewatch_create_sessions_table($node_keys, $summary);
-  }
   // No working day return early.
-  else {
+  if (!$variables['report'] = productivity_timewatch_build_report($account, $year, $month)) {
     $variables['no_result'] = TRUE;
     $variables['message'] = t('No work done this month.');
   }
 
-  // Theme path.
-  $variables['theme_path'] = base_path() . drupal_get_path('theme', 'bootstrap_subtheme');
+  $variables['current_uid'] = $account->uid;
 
+
+  return theme('productivity_timewatch_monthly_employee_report', $variables);
+}
+
+/**
+ * Build table report with summary.
+ */
+function productivity_timewatch_build_report($account, $year, $month){
+  // Get all nodes for the current month.
+  $node_keys = productivity_timewatch_get_user_sessions($account->uid, $year, $month);
+
+  // No working day return early.
+  if (!$node_keys) {
+    return FALSE;
+  }
+
+  $summary =  array();
+  // Get all sessions for the project.
+  $sessions = productivity_timewatch_create_sessions_table($node_keys, $summary);
   // Main table headers.
   $header = array(
     t('Date'),
@@ -148,8 +155,8 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
           $day_key = $day . '_' . $key;
           $array_table[$day_key] = $value;
           $array_table[$day_key] = array(
-              'Date' => '',
-              'Week day' => t('Re-entry'),
+            'Date' => '',
+            'Week day' => t('Re-entry'),
           );
           $day_total_minutes += $session['total'];
           // Change format to display (from array).
@@ -184,16 +191,18 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
 
   // Sort by day.
   ksort($array_table);
-  $variables['table'] = theme('table', array(
+  $variables_report = array();
+  $variables_report['year'] = $year;
+  $variables_report['month']= $month;
+  $variables_report['username']= $account->name;
+  $variables_report['table'] = theme('table', array(
     'header' => $header,
     'rows' => $array_table
   ));
 
-  $variables['table_summary'] = productivity_timewatch_create_summary_table($summary);
+  $variables_report['table_summary'] = productivity_timewatch_create_summary_table($summary);
   // Get all the projects for project input
-  $variables['current_uid'] = $account->uid;
-
-  return theme('productivity_timewatch_monthly_employee_report', $variables);
+  return theme('productivity_timewatch_monthly_employee_report_table', $variables_report);
 }
 
 /**
