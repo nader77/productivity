@@ -15,7 +15,6 @@ function productivity_timewatch_monthly_employee_report_callback($account = FALS
  */
 function productivity_timewatch_monthly_employee_report_multiple_callback() {
   
-  
   return productivity_timewatch_monthly_employee_report();
 }
 
