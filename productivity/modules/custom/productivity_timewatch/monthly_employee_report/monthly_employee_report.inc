@@ -10,8 +10,9 @@
 function productivity_timewatch_monthly_employee_report_callback($account = FALSE, $year = FALSE, $month = FALSE) {
   return productivity_timewatch_monthly_employee_report($account, $year, $month);
 }
+
 /**
- * Menu callback; Display monthly employee report.
+ * Menu callback; Display monthly employee report PDF.
  */
 function productivity_timewatch_monthly_employee_report_pdf_callback($account, $year, $month) {
 
@@ -80,11 +81,15 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   $variables['month'] = !empty($month) ? $month : date('m', strtotime("-1 month"));
 
   // Add to JS settings current Month/Year.
+
   drupal_add_js(array(
     'report' => array(
       'base_url' => $base_url,
+      'pdf_url_start' => url('monthly-employee-report/pdf'),
+      'pdf_url_end' => "/$year/$month",
       'year' => $variables['year'],
       'month' => $variables['month'],
+      'employees' => $variables['employees'],
     ),
   ), 'setting');
 
@@ -106,6 +111,7 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   }
 
   $variables['current_uid'] = $account->uid;
+  $variables['pdf_url'] = url('monthly-employee-report/pdf') . "/{$account->uid}/$year/$month";
 
 
   return theme('productivity_timewatch_monthly_employee_report', $variables);
@@ -371,16 +377,31 @@ function productivity_timewatch_create_summary_table($summaries) {
     t('Total Hours'),
     t('Actual % Employment'),
   );
+  // Undeclared days, this are hours not marked as anything.
+  $summaries['unkown'] = array(
+    'name' => t('Unkown'),
+    'type' => t('To fix update missing days'),
+    'retro_count' => '',
+    'total_minutes' => $summaries['potential']['total_minutes'] - $summaries['total']['total_minutes'],
+    'actual' => '100%',
+  );
   $total = $summaries['potential']['total_minutes'];
   // Calc actual %
   foreach($summaries as &$summary) {
     $summary['actual'] = number_format(100 / $total * $summary['total_minutes'], 2) . '%';
     $summary['total_minutes'] = productivity_timewatch_format_total($summary['total_minutes'], TRUE);
   }
+
   // Move the Total to last.
   $total = $summaries['total'];
   unset($summaries['total']);
   $summaries['total'] = $total;
+
+  // Move the potential to last.
+  $potential = $summaries['potential'];
+  unset($summaries['potential']);
+  $summaries['potential'] = $potential;
+
 
   return theme('table', array(
     'header' => $header,

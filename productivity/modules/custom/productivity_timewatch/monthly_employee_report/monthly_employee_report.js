@@ -91,19 +91,15 @@
       $('.apply').click(function() {
         window.location.href = create_new_url(settings['report']['base_url'], false, false);
       });
-
-      $('.anytime').click(function() {
-        window.location.href = create_new_url(settings['report']['base_url'], true, false);
-      });
-
-      $('.year').click(function() {
-        var link = create_new_url(settings['report']['base_url'], true, true);
-        if (!link) {
-          // Initializes popovers for an element collection.
-          $(".btn.year").popover('show');
-        }
-        else {
-          window.location.href = link;
+      // Get all pdfs, request a file for each.
+      $('.allpdf').click(function() {
+        var obj = settings['report']['employees'];
+        for (var prop in obj) {
+          if (obj.hasOwnProperty(prop)) {
+            var uid = obj[prop].uid;
+            var url = settings['report']['pdf_url_start'] + '/' + uid + settings['report']['pdf_url_end'];
+            window.open(url, '_blank');
+          }
         }
       });
 
@@ -111,7 +107,7 @@
         format: "MM, yyyy",
         minViewMode: 1,
         autoclose: true,
-        startDate: "2/2015",
+        startDate: "1/2015",
         startView: 1,
         todayBtn: "linked",
         keyboardNavigation: false,
