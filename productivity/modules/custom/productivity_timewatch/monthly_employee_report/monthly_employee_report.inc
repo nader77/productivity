@@ -13,9 +13,19 @@ function productivity_timewatch_monthly_employee_report_callback($account = FALS
 /**
  * Menu callback; Display monthly employee report.
  */
-function productivity_timewatch_monthly_employee_report_multiple_callback() {
-  
-  return productivity_timewatch_monthly_employee_report();
+function productivity_timewatch_monthly_employee_report_pdf_callback($account, $year, $month) {
+
+  $html = productivity_timewatch_build_report($account, $year, $month);
+  if (!$html) {
+    return "No Data for this user.";
+  }
+  // Composer's auto-loading functionality
+  require libraries_get_path('dompdf') . "/vendor/autoload.php";
+  // Generate PDF.
+  $dompdf = new Dompdf\DOMPDF();  //if you use namespaces you may use new \DOMPDF()
+  $dompdf->loadHtml($html);
+  $dompdf->render();
+  $dompdf->stream($account->name . "-$year-$month", array("Attachment"=>1));
 }
 
 /**
@@ -55,7 +65,6 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   global $base_url;
   // Load External resources.
   productivity_timewatch_monthly_employee_load_resources();
-
   $variables = array();
 
   // Initialize variables.
@@ -67,13 +76,15 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   $variables['no_result'] = FALSE;
   $variables['message'] = '';
   $variables['table'] = '';
+  $variables['year'] = !empty($year) ? $year : date('Y');
+  $variables['month'] = !empty($month) ? $month : date('m', strtotime("-1 month"));
 
   // Add to JS settings current Month/Year.
   drupal_add_js(array(
     'report' => array(
       'base_url' => $base_url,
-      'year' => !empty($year) ? $year : date('Y'),
-      'month' => !empty($month) ? $month : date('m', strtotime("-1 month")),
+      'year' => $variables['year'],
+      'month' => $variables['month'],
     ),
   ), 'setting');
 

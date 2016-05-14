@@ -25,10 +25,11 @@ function productivity_timewatch_menu() {
     'file' => 'monthly_employee_report/monthly_employee_report.inc'
   );
 
-  $items['monthly-employee-report/batch'] = array(
+  $items['monthly-employee-report/pdf/%user/%/%'] = array(
     'title' => 'Monthly employee report - multiple',
     'access arguments' => array('access content'),
-    'page callback' => 'productivity_timewatch_monthly_employee_report_multiple_callback',
+    'page callback' => 'productivity_timewatch_monthly_employee_report_pdf_callback',
+    'page arguments' => array(2, 3, 4),
     'type' => MENU_CALLBACK,
     'file' => 'monthly_employee_report/monthly_employee_report.inc'
   );

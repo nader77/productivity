@@ -162,7 +162,7 @@ projects[migrate_extras][version] = "2.5"
 ; Libraries
 libraries[dompdf][type] = "libraries"
 libraries[dompdf][download][type] = "get"
-libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/archive/v0.6.1.zip"
+libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/releases/download/v0.7.0/dompdf_0-7-0.zip"
 
 ; Themes
 projects[bootstrap][subdir] = "contrib"
