@@ -6,3 +6,12 @@
     <?php print $table_summary; ?>
   </div>
 </div>
+<h3>Signature</h3>
+<div class="row">
+  <div class="col-sm-6">
+    Brice Lenfant (MOP manager):
+  </div>
+  <div class="col-sm-6">
+    <?php print $username; ?>:
+  </div>
+</div>
