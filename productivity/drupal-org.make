@@ -105,9 +105,9 @@ projects[money][version] = "1.x-dev"
 
 projects[multifield][subdir] = "contrib"
 projects[multifield][version] = "1.x-dev"
+projects[multifield][patch][] = "https://www.drupal.org/files/issues/multifield-features-integration-fix-api-2102265-32.patch"
 projects[multifield][patch][] = "https://www.drupal.org/files/issues/2041531-23-entity-api-support.patch"
 # Fix feature integration.
-projects[multifield][patch][] = "https://www.drupal.org/files/issues/multifield-features-integration-fix-api-2102265-32.patch"
 
 projects[panels][subdir] = "contrib"
 projects[panels][version] = "3.5"

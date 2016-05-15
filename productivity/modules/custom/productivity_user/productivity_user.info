@@ -51,6 +51,7 @@ features[field_instance][] = user-user-field_salaries
 features[message_type][] = catch_test_mail
 features[multifield][] = field_project_madaan
 features[profile2_type][] = main
+features[profile2_type][] = stakeholder
 features[taxonomy][] = stakeholders_roles
 features[variable][] = field_bundle_settings_message__catch_test_mail
 features[views_view][] = user_by_profile
