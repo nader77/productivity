@@ -7,7 +7,7 @@
     "local": true
   },
   "production": {
-    "backend": "http://live-productivity.pantheon.io",
+    "backend": "http://productivity-server.gizra.com",
     "debugUiRouter": false,
     "githubClientId": false,
     "calendar": false,
