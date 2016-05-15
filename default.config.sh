@@ -89,5 +89,9 @@ function post_install {
   # Github integration.
   echo "\$conf['github_public'] = '<your-client-id>';" >> www/sites/default/settings.php
   echo "\$conf['github_secret'] = '<your-client-secret>';"  >> www/sites/default/settings.php
+
+   # install Dompdf
+  cd /~brice/productivity/www/profiles/productivity/libraries/dompdf
+  composer install --no-interaction --prefer-source
 }
 

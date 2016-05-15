@@ -98,5 +98,5 @@ function productivity_project_update_7001() {
  * Enable libraries module.
  */
 function productivity_project_update_7002() {
-  module_enable(array('libraries'));
+  module_enable(array('libraries', 'profile2'));
 }
