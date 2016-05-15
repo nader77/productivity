@@ -9,4 +9,4 @@ before_script:
   - docker build -t productivity .
 
 script:
-  - docker run -it -p 8080:80 productivity
+  - docker run -it -p 8080:80 --name prod-con productivity
