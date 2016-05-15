@@ -1,17 +1,23 @@
-<h3 class="noprint"><?php print t('@year - @month - @username', array('@year' => $year, '@month' => $month, '@username' => $username)); ?></h3>
-<?php print $table; ?>
-<div class="row" style="page-break-before: always;">
-  <h3>Summary</h3>
-  <div class="col-sm-12">
-    <?php print $table_summary; ?>
+<div class="report-container">
+  <div id="header" class="show-only-on-print">
+    <span id="gizra-logo">gizra</span>
+    <span id="project-title"><?php print t('Work Report for: @username - @date', array('@username' => $fullname, '@date' => $date)); ?></span>
   </div>
-</div>
-<h3>Signatures</h3>
-<div class="row">
-  <div class="col-sm-6">
-    Brice Lenfant (MOP manager):
+
+  <?php print $table; ?>
+  <div class="row" style="page-break-before: always;">
+    <h3>Summary</h3>
+    <div class="col-sm-12">
+      <?php print $table_summary; ?>
+    </div>
   </div>
-  <div class="col-sm-6">
-    <?php print $username; ?>:
+  <h3>Signatures</h3>
+  <div class="row">
+    <div class="col-sm-6">
+      Brice Lenfant (MOP manager):
+    </div>
+    <div class="col-sm-6">
+      <?php print $fullname; ?>:
+    </div>
   </div>
 </div>

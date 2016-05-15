@@ -1,4 +1,4 @@
-.main-box-body {
+.main-box-body, .report-container {
   h1 {
     display: none;
   }
@@ -19,6 +19,7 @@
     float: right;
     font-size: 4.5em;
   }
+
   #project-title {
     display: inline;
     padding: 0;
@@ -57,7 +58,7 @@
     margin-bottom: 10px;
     margin-left: 10px;
   }
-  #search-filter, #page-header, #nav-col, #footer-copyright, .noprint, .sticky-header {
+  #search-filter, .page-header, #nav-col, #footer-copyright, .noprint, .sticky-header{
     display: none;
   }
   a[href]:after {

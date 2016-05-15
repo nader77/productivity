@@ -1,11 +1,6 @@
 <div class="row">
   <div class="main-box clearfix project-box emerald-box col-sm-12">
     <div class="main-box-body clearfix">
-      <p class="show-only-on-print"><?php print $date; ?></p>
-      <div id="header" class="col-sm-12">
-        <h1 id="project-title"><?php print t('Work Report'); ?><small><?php print $fullname; ?></small></h1>
-        <h2 id="gizra-logo">gizra</h2>
-      </div>
       <div id="search-filter" class="row">
         <div class="col-sm-12 ">
           <div class="col-sm-4"><p><?php print t('Employee:'); ?> </p></div>

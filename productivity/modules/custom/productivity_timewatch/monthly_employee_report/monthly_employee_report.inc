@@ -24,18 +24,17 @@ function productivity_timewatch_monthly_employee_report_pdf_callback($account, $
   }
   // Composer's auto-loading functionality
   require libraries_get_path('dompdf') . "/autoload.inc.php";
-  require libraries_get_path('css-to-inline') . "/vendor/tijsverkoyen/css-to-inline-styles/src/CssToInlineStyles.php";
+  require libraries_get_path('css-to-inline') . "/vendor/autoload.php";
 
+  // Set inline CSS.
+  $css1 = drupal_get_path('theme', 'bootstrap_subtheme') . '/bootstrap/css/bootstrap.css';
+  $css2 = drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/monthly_employee_report_pdf.css';
+  $css = file_get_contents($css1);
+  $css .= file_get_contents($css2);
+  $cssToInlineStyles = new CssToInlineStyles($html, $css);
 
+  $html = $cssToInlineStyles->convert();
 
-  $css = drupal_get_path('module', 'productivity_timewatch') . '/monthly_employee_report/monthly_employee_report_pdf.css';
-  dpm(url($css, array('absolute' => TRUE)));
-  // create instance
-  $cssToInlineStyles = new CssToInlineStyles();
-
-  $css = file_get_contents($css);
-  $html = $cssToInlineStyles->convert($html, $css);
-  
   // Generate PDF.
   $dompdf = new Dompdf\Dompdf();
   $dompdf->setBasePath(url($css, array('absolute' => TRUE)));
@@ -92,7 +91,6 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   $variables = array();
 
   // Initialize variables.
-  $variables['date'] = date("F Y", strtotime("$year-$month-01"));
   $variables['employees'] = user_load_multiple(productivity_account_get_employee_uids());
   $variables['current_uid'] = 0;
   $variables['project_title'] = 'Select a project';
@@ -119,14 +117,9 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
 
   // No project given, return early.
   if (!$account) {
-    $variables['fullname']  = '';
     $variables['report'] = '';
     return theme('productivity_timewatch_monthly_employee_report', $variables);
   }
-
-  $wrapper = entity_metadata_wrapper('user', $account);
-  $variables['fullname'] = $wrapper->field_full_name->label();
-
 
   // No working day return early.
   if (!$variables['report'] = productivity_timewatch_build_report($account, $year, $month)) {
@@ -168,7 +161,9 @@ function productivity_timewatch_build_report($account, $year, $month){
   $variables_report = array();
   $variables_report['year'] = $year;
   $variables_report['month']= $month;
-  $variables_report['username']= $account->name;
+  $wrapper = entity_metadata_wrapper('user', $account);
+  $variables_report['fullname'] = $wrapper->field_full_name->label() ? $wrapper->field_full_name->label() : $account->name;
+  $variables_report['date'] = date("F Y", strtotime("$year-$month-01"));
 
   // Main table headers.
   $header = array(

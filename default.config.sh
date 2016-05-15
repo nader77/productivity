@@ -93,5 +93,10 @@ function post_install {
    # install Dompdf
   cd /~brice/productivity/www/profiles/productivity/libraries/dompdf
   composer install --no-interaction --prefer-source
+
+  cd /~brice/productivity/www/profiles/productivity/libraries
+  mkdir css-to-inline
+  cd css-to-inline
+  composer require tijsverkoyen/css-to-inline-styles
 }
 
