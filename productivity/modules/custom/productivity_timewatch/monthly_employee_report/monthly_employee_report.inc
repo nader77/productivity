@@ -79,6 +79,7 @@ function productivity_timewatch_monthly_employee_report($account = FALSE, $year 
   $variables['table'] = '';
   $variables['year'] = !empty($year) ? $year : date('Y');
   $variables['month'] = !empty($month) ? $month : date('m', strtotime("-1 month"));
+  $variables['pdf_url'] = FALSE;
 
   // Add to JS settings current Month/Year.
 

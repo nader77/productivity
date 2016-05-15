@@ -25,8 +25,10 @@
           </div>
           <div class="col-sm-4">
             <button class="btn btn-primary apply" type="button">Apply</button>
+            <?php if($pdf_url) : ?>
+              <a href="<?php print $pdf_url; ?>" class="btn btn-primary" type="button">PDF</a>
+            <?php endif; ?>
             <button class="btn btn-primary allpdf" type="button">Get all PDFs</button>
-            <a href="<?php print $pdf_url; ?>" class="btn btn-primary" type="button">PDF</a>
           </div>
         </div>
       </div>
