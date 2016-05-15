@@ -21,7 +21,7 @@ function productivity_timewatch_monthly_employee_report_pdf_callback($account, $
     return "No Data for this user.";
   }
   // Composer's auto-loading functionality
-  require libraries_get_path('dompdf') . "/vendor/autoload.php";
+  require libraries_get_path('dompdf') . "/autoload.inc.php";
   // Generate PDF.
   $dompdf = new Dompdf\DOMPDF();  //if you use namespaces you may use new \DOMPDF()
   $dompdf->loadHtml($html);
