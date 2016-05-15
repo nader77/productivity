@@ -122,5 +122,3 @@ cd ..
 echo -e "\n [RUN] Start back end tests.\n"
 cd productivity/behat
 ./bin/behat --tags=~@wip
-cd ../..
-
