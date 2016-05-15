@@ -12,13 +12,6 @@
   .show-only-on-print {
     display: none;
   }
-  #gizra-logo {
-    visibility: hidden;
-    font-family: Abril Fatface;
-    margin: -40px -10px 0 0;
-    float: right;
-    font-size: 4.5em;
-  }
 
   #project-title {
     display: inline;
@@ -67,10 +60,7 @@
   .show-only-on-print {
     display: block !important;
   }
-  #gizra-logo {
-    visibility: visible !important;
-    color: #e27058 !important;
-  }
+  
   #header {
     position: relative;
   }

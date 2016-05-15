@@ -7,12 +7,6 @@
   margin: 20px 0; }
 .main-box-body .show-only-on-print, .report-container .show-only-on-print {
   display: none; }
-.main-box-body #gizra-logo, .report-container #gizra-logo {
-  visibility: hidden;
-  font-family: Abril Fatface;
-  margin: -40px -10px 0 0;
-  float: right;
-  font-size: 4.5em; }
 .main-box-body #project-title, .report-container #project-title {
   display: inline;
   padding: 0; }
@@ -50,10 +44,6 @@
 
   .show-only-on-print {
     display: block !important; }
-
-  #gizra-logo {
-    visibility: visible !important;
-    color: #e27058 !important; }
 
   #header {
     position: relative; }

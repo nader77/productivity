@@ -1,6 +1,5 @@
 <div class="report-container">
   <div id="header" class="show-only-on-print">
-    <span id="gizra-logo">gizra</span>
     <span id="project-title"><?php print t('Work Report for: @username - @date', array('@username' => $fullname, '@date' => $date)); ?></span>
   </div>
 
