@@ -1,6 +1,5 @@
-h1 {
-    display: none;
-}
+.main-box-body h1 {
+  display: none; }
 .main-box-body #project-title, .main-box-body h2.table-header {
   margin: 1%; }
 .main-box-body #header {
@@ -46,7 +45,7 @@ table.table-hover td:nth-child(2) {
     margin-right: 10px;
     margin-bottom: 10px;
     margin-left: 10px; }
-  #search-filter, #page-header, #nav-col, #footer-copyright {
+  #search-filter, #page-header, #nav-col, #footer-copyright, .sticky-header {
     display: none; }
 
   a[href]:after {

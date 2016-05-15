@@ -11,6 +11,7 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
 
     $this->addFieldMapping('field_employee', 'field_employee_target_id');
     $this->addFieldMapping('field_project', 'field_project_target_id');
+    $this->addFieldMapping('field_special_day_name', 'field_description_value');
 
     $this->addFieldMapping('field_session_date', 'date');
     $this->addFieldMapping('field_session_date:to', 'enddate');
@@ -32,10 +33,11 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
 
     // Fetch all time tracking nodes with type different than 'regular'.
     $query = db_select('node', 'n');
-    $query->innerJoin('field_data_field_day_type', 'dt', "dt.entity_type = 'node' AND dt.entity_id = n.nid");
+    $query->leftJoin('field_data_field_day_type', 'dt', "dt.entity_type = 'node' AND dt.entity_id = n.nid");
     $query->leftJoin('field_data_field_vacation_type', 'vt', "vt.entity_type = 'node' AND vt.entity_id = n.nid");
-    $query->innerJoin('field_data_field_work_date', 'wd', "wd.entity_type = 'node' AND wd.entity_id = n.nid");
-    $query->innerJoin('field_data_field_employee', 'e', "e.entity_type = 'node' AND e.entity_id = n.nid");
+    $query->leftJoin('field_data_field_work_date', 'wd', "wd.entity_type = 'node' AND wd.entity_id = n.nid");
+    $query->leftJoin('field_data_field_employee', 'e', "e.entity_type = 'node' AND e.entity_id = n.nid");
+    $query->leftJoin('field_data_field_description', 'd', "d.entity_type = 'node' AND d.entity_id = n.nid");
 
     // Left join since some node will not have a project ID.
     $query->leftJoin('field_data_field_project', 'p', "p.entity_type = 'node' AND p.entity_id = n.nid");
@@ -47,6 +49,7 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
       ->fields('e',  array('field_employee_target_id'))
       ->fields('p',  array('field_project_target_id'))
       ->fields('wd', array('field_work_date_value'))
+      ->fields('d', array('field_description_value'))
       ->condition('dt.field_day_type_value', 'regular', '!=')
       ->condition('n.type', 'time_tracking')
       ->condition('n.status', 1)
@@ -56,6 +59,9 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
     $this->destination = new MigrateDestinationNode('work_session');
   }
 
+  public function prepare($row, $entity) {
+    $row->stop = 0;
+  }
   /**
    * Convert string to taxonomy.
    */

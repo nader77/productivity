@@ -317,9 +317,11 @@ function productivity_timewatch_get_global_days($year, $month) {
   $nodes =  node_load_multiple((array_keys($result['node'])));
   $bydate_result = array();
   foreach ($nodes as $node) {
+    $wrapper = entity_metadata_wrapper('node', $node);
     $day =  date('d', $node->field_session_date['und'][0]['value']);
     $day_key = str_pad($day, 2, '0', STR_PAD_LEFT);
-    $bydate_result[$day_key]['label'] = $node->field_special_day_name['und'][0]['value'];
+    $bydate_result[$day_key]['type'] = $wrapper->field_session_type->label();
+    $bydate_result[$day_key]['label'] = $wrapper->field_special_day_name->value();
     $bydate_result[$day_key]['start'] = $node->field_session_date['und'][0]['value'];
     $bydate_result[$day_key]['end'] = $node->field_session_date['und'][0]['value2'];
     $bydate_result[$day_key]['nid'] = $node->nid;

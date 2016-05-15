@@ -25,7 +25,7 @@ regions[page_bottom]    = 'Page bottom'
 ;;;;;;;;;;;;;;;;;;;;;
 ;stylesheets[all][] = css/bootstrap.css
 
-;stylesheets[all][] = bootstrap/css/bootstrap.min.css
+stylesheets[all][] = bootstrap/css/bootstrap.min.css
 stylesheets[all][] = css/style.css
 stylesheets[all][] = css/theme/theme_styles.css
 stylesheets[all][] = css/theme/calendar.css
@@ -44,13 +44,12 @@ stylesheets[all][] = css/theme/calendar.css
 ; ;; Scripts
 ; ;;;;;;;;;;;;;;;;;;;;;
 ;
-;scripts[] = 'bootstrap/js/bootstrap.min.js'
+scripts[] = 'bootstrap/js/bootstrap.min.js'
 scripts[] = 'js/scripts.js'
 scripts[] = 'js/pace.min.js'
 scripts[] = 'js/jquery.nanoscroller.min.js'
 scripts[] = 'js/jquery.easypiechart.min.js'
 scripts[] = 'js/jquery.countTo.js'
-;scripts[] = 'js/bootstrap.js'
 
 ; scripts[] = 'bootstrap/js/alert.js'
 ; scripts[] = 'bootstrap/js/button.js'
