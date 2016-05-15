@@ -23,7 +23,7 @@ function productivity_timewatch_monthly_employee_report_pdf_callback($account, $
   // Composer's auto-loading functionality
   require libraries_get_path('dompdf') . "/autoload.inc.php";
   // Generate PDF.
-  $dompdf = new Dompdf\DOMPDF();  //if you use namespaces you may use new \DOMPDF()
+  $dompdf = new Dompdf\Dompdf();  //if you use namespaces you may use new \DOMPDF()
   $dompdf->loadHtml($html);
   $dompdf->render();
   $dompdf->stream($account->name . "-$year-$month", array("Attachment"=>1));
@@ -282,7 +282,7 @@ function productivity_timewatch_build_month_skeleton($month, $year, &$potentials
 function productivity_timewatch_create_sessions_table($node_keys, &$summary) {
   $sessions = array();
   $summary['total'] = array(
-    'name' => t('Total time'),
+    'name' => t('Total'),
     'type' => '',
     'retro_count' => '',
     'total_minutes' => 0,
@@ -379,9 +379,9 @@ function productivity_timewatch_create_summary_table($summaries) {
     t('Actual % Employment'),
   );
   // Undeclared days, this are hours not marked as anything.
-  $summaries['unkown'] = array(
-    'name' => t('Unkown'),
-    'type' => t('To fix update missing days'),
+  $summaries['time off'] = array(
+    'name' => t('Time off'),
+    'type' => '',
     'retro_count' => '',
     'total_minutes' => $summaries['potential']['total_minutes'] - $summaries['total']['total_minutes'],
     'actual' => '100%',
