@@ -105,9 +105,9 @@ projects[money][version] = "1.x-dev"
 
 projects[multifield][subdir] = "contrib"
 projects[multifield][version] = "1.x-dev"
+projects[multifield][patch][] = "https://www.drupal.org/files/issues/multifield-features-integration-fix-api-2102265-32.patch"
 projects[multifield][patch][] = "https://www.drupal.org/files/issues/2041531-23-entity-api-support.patch"
 # Fix feature integration.
-projects[multifield][patch][] = "https://www.drupal.org/files/issues/multifield-features-integration-fix-api-2102265-32.patch"
 
 projects[panels][subdir] = "contrib"
 projects[panels][version] = "3.5"
@@ -162,7 +162,7 @@ projects[migrate_extras][version] = "2.5"
 ; Libraries
 libraries[dompdf][type] = "libraries"
 libraries[dompdf][download][type] = "get"
-libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/archive/v0.6.1.zip"
+libraries[dompdf][download][url] = "https://github.com/dompdf/dompdf/releases/download/v0.7.0/dompdf_0-7-0.zip"
 
 ; Themes
 projects[bootstrap][subdir] = "contrib"

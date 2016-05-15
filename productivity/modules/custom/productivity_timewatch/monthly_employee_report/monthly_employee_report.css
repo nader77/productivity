@@ -1,0 +1,57 @@
+.main-box-body h1, .report-container h1 {
+  display: none; }
+.main-box-body #project-title, .main-box-body h2.table-header, .report-container #project-title, .report-container h2.table-header {
+  margin: 1%; }
+.main-box-body #header, .report-container #header {
+  position: relative;
+  margin: 20px 0; }
+.main-box-body .show-only-on-print, .report-container .show-only-on-print {
+  display: none; }
+.main-box-body #project-title, .report-container #project-title {
+  display: inline;
+  padding: 0; }
+.main-box-body #search-filter, .report-container #search-filter {
+  margin: 25px 0; }
+.main-box-body span.select2-selection--single, .report-container span.select2-selection--single {
+  border-radius: 3px;
+  background-clip: padding-box;
+  border-color: #e7ebee;
+  color: #555;
+  box-shadow: none;
+  font-size: 13px;
+  padding: 3px 12px;
+  height: 34px; }
+  .main-box-body span.select2-selection--single .select2-selection__arrow, .report-container span.select2-selection--single .select2-selection__arrow {
+    margin-top: 3px; }
+
+@media print {
+  .table {
+    font-size: 9pt; }
+    .table > tbody > tr > td {
+      padding: 2px !important; }
+
+  @page {
+    size: auto;
+    margin-top: -20px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    margin-left: 10px; }
+  #search-filter, .page-header, #nav-col, #footer-copyright, .noprint, .sticky-header {
+    display: none; }
+
+  a[href]:after {
+    content: none !important; }
+
+  .show-only-on-print {
+    display: block !important; }
+
+  #header {
+    position: relative; }
+
+  .table-striped > tbody > tr:nth-child(odd) > td, .table-striped > tbody > tr:nth-child(odd) > th {
+    background-color: #f9f9f9 !important; }
+
+  .well {
+    border: none !important; } }
+
+/*# sourceMappingURL=monthly_employee_report.css.map */

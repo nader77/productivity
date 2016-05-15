@@ -15,12 +15,15 @@ define('PRODUCTIVITY_MIGRATION_GROUP', 'productivity');
  */
 function productivity_migrate_migrate_api() {
   $classes = array(
-    'ProductivityMigrateProject',
     'ProductivityMigrateAccount',
-    'ProductivityMigrateUser',
+    'ProductivityMigratePayment',
+    'ProductivityMigrateProject',
+    'ProductivityMigrateSessionTypes',
     'ProductivityMigrateTimewatchUser',
     'ProductivityMigrateTracker',
+    'ProductivityMigrateTrackingsToWorkSessions',
     'ProductivityMigratePayment',
+    'ProductivityMigrateUser',
     'ProductivityMigrateGithubIssue',
   );
 
@@ -28,15 +31,15 @@ function productivity_migrate_migrate_api() {
   foreach ($classes as $class_name) {
     $migrations[$class_name] = array(
       'class_name' => $class_name,
-      'group_name' => PRODUCTIVITY_MIGRATION_GROUP,
+      'group_name' => 'productivity',
     );
   }
 
   $api = array(
-    'api'        => 2,
-    'groups'     => array(
-      PRODUCTIVITY_MIGRATION_GROUP => array(
-        'title' => t('Content'),
+    'api' => 2,
+    'groups' => array(
+      'productivity' => array(
+        'title' => t('Productivity'),
       ),
     ),
     'migrations' => $migrations,

@@ -156,6 +156,21 @@ function productivity_user_field_default_field_bases() {
     'type' => 'datetime',
   );
 
+  // Exported field_base: 'field_percent_time'.
+  $field_bases['field_percent_time'] = array(
+    'active' => 1,
+    'cardinality' => 1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_percent_time',
+    'indexes' => array(),
+    'locked' => 0,
+    'module' => 'number',
+    'settings' => array(),
+    'translatable' => 0,
+    'type' => 'number_integer',
+  );
+
   // Exported field_base: 'field_phone'.
   $field_bases['field_phone'] = array(
     'active' => 1,
@@ -176,6 +191,33 @@ function productivity_user_field_default_field_bases() {
     ),
     'translatable' => 0,
     'type' => 'text',
+  );
+
+  // Exported field_base: 'field_project_madaan'.
+  $field_bases['field_project_madaan'] = array(
+    'active' => 1,
+    'cardinality' => -1,
+    'deleted' => 0,
+    'entity_types' => array(),
+    'field_name' => 'field_project_madaan',
+    'indexes' => array(
+      'field_project_target_id' => array(
+        0 => 'field_project_target_id',
+      ),
+      'id' => array(
+        0 => 'id',
+      ),
+    ),
+    'locked' => 0,
+    'module' => 'multifield',
+    'settings' => array(
+      'entity_translation_sync' => array(
+        0 => 'id',
+      ),
+      'hide_blank_items' => 1,
+    ),
+    'translatable' => 0,
+    'type' => 'multifield',
   );
 
   // Exported field_base: 'field_role'.

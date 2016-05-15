@@ -301,6 +301,12 @@
                     <span>Monthly report</span>
                   </a>
                 </li>
+                <li class="<?php print ($path == 'monthly-employee-report') ? 'active' : ''; ?>">
+                  <a href="<?php print url('monthly-employee-report'); ?>">
+                    <i class="fa fa-list-alt"></i>
+                    <span>Monthly employee report</span>
+                  </a>
+                </li>
                 <li class="<?php print ($path == 'admin/content/projects') ? 'active' : '';?>">
                   <a href="<?php print $base_path;?>admin/content/projects">
                     <i class="fa fa-rocket"></i>

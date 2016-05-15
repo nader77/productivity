@@ -28,7 +28,7 @@
    *  New URL string.
    */
   function create_new_url(base_url, all, year) {
-    var project_id = $('#project_filter').val();
+    var uid = $('#uid').val();
     var val = $(".monthPicker").val();
     var res = val.split(",");
 
@@ -37,16 +37,16 @@
       if (res[1].trim() == 'all') {
         return false;
       }
-      return base_url + "/monthly-report/" + project_id + "/" + res[1].trim() + "/all";
+      return base_url + "/monthly-employee-report/" + uid + "/" + res[1].trim() + "/all";
     }
 
     // All time link.
     if (all) {
-      return base_url + "/monthly-report/" + project_id + "/all/all";
+      return base_url + "/monthly-employee-report/" + uid + "/all/all";
     }
 
     // Specific month link
-    return base_url + "/monthly-report/" + project_id + "/" + res[1].trim() + "/" + get_month_num(res[0].trim());
+    return base_url + "/monthly-employee-report/" + uid + "/" + res[1].trim() + "/" + get_month_num(res[0].trim());
   }
 
   /**
@@ -77,33 +77,29 @@
    */
   function set_date_input(settings) {
     // get the current month and year.
-    var input_date = get_month_name(settings['monthly_report']['month']) + ', ' +  settings['monthly_report']['year'];
+    var input_date = get_month_name(settings['report']['month']) + ', ' +  settings['report']['year'];
     $('.monthPicker').attr('value', input_date);
   }
 
   Drupal.behaviors.monthlyReports = {
     attach: function (context, settings) {
       set_date_input(settings);
-      $('#project_filter').select2();
+      $('#uid').select2();
       $(".btn.year").popover({delay: { "show": 500, "hide": 100 }});
 
       // Apply filter button handler.
       $('.apply').click(function() {
-        window.location.href = create_new_url(settings['monthly_report']['base_url'], false, false);
+        window.location.href = create_new_url(settings['report']['base_url'], false, false);
       });
-
-      $('.anytime').click(function() {
-        window.location.href = create_new_url(settings['monthly_report']['base_url'], true, false);
-      });
-
-      $('.year').click(function() {
-        var link = create_new_url(settings['monthly_report']['base_url'], true, true);
-        if (!link) {
-          // Initializes popovers for an element collection.
-          $(".btn.year").popover('show');
-        }
-        else {
-          window.location.href = link;
+      // Get all pdfs, request a file for each.
+      $('.allpdf').click(function() {
+        var obj = settings['report']['employees'];
+        for (var prop in obj) {
+          if (obj.hasOwnProperty(prop)) {
+            var uid = obj[prop].uid;
+            var url = settings['report']['pdf_url_start'] + '/' + uid + settings['report']['pdf_url_end'];
+            window.open(url, '_blank');
+          }
         }
       });
 
@@ -111,7 +107,7 @@
         format: "MM, yyyy",
         minViewMode: 1,
         autoclose: true,
-        startDate: "2/2016",
+        startDate: "1/2015",
         startView: 1,
         todayBtn: "linked",
         keyboardNavigation: false,

@@ -10,6 +10,89 @@
 function productivity_user_field_default_field_instances() {
   $field_instances = array();
 
+  // Exported field_instance:
+  // 'multifield-field_project_madaan-field_percent_time'.
+  $field_instances['multifield-field_project_madaan-field_percent_time'] = array(
+    'bundle' => 'field_project_madaan',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'The % of time for the project.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'number',
+        'settings' => array(
+          'decimal_separator' => '.',
+          'prefix_suffix' => TRUE,
+          'scale' => 0,
+          'thousand_separator' => '',
+        ),
+        'type' => 'number_integer',
+        'weight' => 1,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_percent_time',
+    'label' => 'Percent time',
+    'required' => 0,
+    'settings' => array(
+      'max' => 100,
+      'min' => 0,
+      'prefix' => '',
+      'suffix' => '',
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'number',
+      'settings' => array(),
+      'type' => 'number',
+      'weight' => 3,
+    ),
+  );
+
+  // Exported field_instance: 'multifield-field_project_madaan-field_project'.
+  $field_instances['multifield-field_project_madaan-field_project'] = array(
+    'bundle' => 'field_project_madaan',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => 'The project for madaan.',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 0,
+      ),
+    ),
+    'entity_type' => 'multifield',
+    'field_name' => 'field_project',
+    'label' => 'Project',
+    'required' => 1,
+    'settings' => array(
+      'behaviors' => array(
+        'autofill' => array(
+          'status' => 0,
+        ),
+      ),
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'entityreference',
+      'settings' => array(
+        'match_operator' => 'CONTAINS',
+        'path' => '',
+        'size' => 60,
+      ),
+      'type' => 'entityreference_autocomplete',
+      'weight' => 2,
+    ),
+  );
+
   // Exported field_instance: 'profile2-stakeholder-field_full_name'.
   $field_instances['profile2-stakeholder-field_full_name'] = array(
     'bundle' => 'stakeholder',
@@ -195,6 +278,39 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-field_full_name'.
+  $field_instances['user-user-field_full_name'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'text',
+        'settings' => array(),
+        'type' => 'text_default',
+        'weight' => 6,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_full_name',
+    'label' => 'Full name',
+    'required' => FALSE,
+    'settings' => array(
+      'text_processing' => 0,
+      'user_register_form' => FALSE,
+    ),
+    'widget' => array(
+      'module' => 'text',
+      'settings' => array(
+        'size' => 60,
+      ),
+      'type' => 'text_textfield',
+      'weight' => 14,
+    ),
+  );
+
   // Exported field_instance: 'user-user-field_github_access_token'.
   $field_instances['user-user-field_github_access_token'] = array(
     'bundle' => 'user',
@@ -342,18 +458,91 @@ function productivity_user_field_default_field_instances() {
     ),
   );
 
+  // Exported field_instance: 'user-user-field_project_madaan'.
+  $field_instances['user-user-field_project_madaan'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'multifield',
+        'settings' => array(
+          'view_mode' => 'default',
+        ),
+        'type' => 'multifield_default',
+        'weight' => 7,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_project_madaan',
+    'label' => 'Project Madaan',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 0,
+      'module' => 'multifield',
+      'settings' => array(),
+      'type' => 'multifield_default',
+      'weight' => 15,
+    ),
+  );
+
+  // Exported field_instance: 'user-user-field_salaries'.
+  $field_instances['user-user-field_salaries'] = array(
+    'bundle' => 'user',
+    'default_value' => NULL,
+    'deleted' => 0,
+    'description' => '',
+    'display' => array(
+      'default' => array(
+        'label' => 'above',
+        'module' => 'entityreference',
+        'settings' => array(
+          'link' => FALSE,
+        ),
+        'type' => 'entityreference_label',
+        'weight' => 2,
+      ),
+    ),
+    'entity_type' => 'user',
+    'field_name' => 'field_salaries',
+    'label' => 'Salaries',
+    'required' => 0,
+    'settings' => array(
+      'user_register_form' => 0,
+    ),
+    'widget' => array(
+      'active' => 1,
+      'module' => 'options',
+      'settings' => array(),
+      'type' => 'options_select',
+      'weight' => 10,
+    ),
+  );
+
   // Translatables
   // Included for use with string extractors like potx.
   t('Date');
   t('Date of start and end of employment.');
   t('Employment status');
   t('Full Name');
+  t('Full name');
   t('Github access token');
   t('Github username');
   t('Job type');
   t('Last notification');
+  t('Percent time');
   t('Phone');
+  t('Project');
+  t('Project Madaan');
   t('Role');
+  t('Salaries');
+  t('The % of time for the project.');
+  t('The project for madaan.');
 
   return $field_instances;
 }

@@ -23,11 +23,13 @@ regions[page_bottom]    = 'Page bottom'
 ;;;;;;;;;;;;;;;;;;;;;
 ;; Stylesheets
 ;;;;;;;;;;;;;;;;;;;;;
+;stylesheets[all][] = css/bootstrap.css
 
-;stylesheets[all][] = bootstrap/css/bootstrap.min.css
+stylesheets[all][] = bootstrap/css/bootstrap.min.css
 stylesheets[all][] = css/style.css
 stylesheets[all][] = css/theme/theme_styles.css
 stylesheets[all][] = css/theme/calendar.css
+
 
 
 ; For information on choosing the desired method, please read the Drupal
@@ -42,7 +44,7 @@ stylesheets[all][] = css/theme/calendar.css
 ; ;; Scripts
 ; ;;;;;;;;;;;;;;;;;;;;;
 ;
-;scripts[] = 'bootstrap/js/bootstrap.min.js'
+scripts[] = 'bootstrap/js/bootstrap.min.js'
 scripts[] = 'js/scripts.js'
 scripts[] = 'js/pace.min.js'
 scripts[] = 'js/jquery.nanoscroller.min.js'

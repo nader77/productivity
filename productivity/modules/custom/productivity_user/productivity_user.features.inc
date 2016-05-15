@@ -8,6 +8,9 @@
  * Implements hook_ctools_plugin_api().
  */
 function productivity_user_ctools_plugin_api($module = NULL, $api = NULL) {
+  if ($module == "multifield" && $api == "multifield") {
+    return array("version" => "1");
+  }
   if ($module == "strongarm" && $api == "strongarm") {
     return array("version" => "1");
   }
@@ -55,20 +58,20 @@ function productivity_user_default_message_type() {
 function productivity_user_default_profile2_type() {
   $items = array();
   $items['main'] = entity_import('profile2_type', '{
-    "userCategory" : true,
-    "userView" : true,
+    "userCategory" : false,
+    "userView" : false,
     "type" : "main",
-    "label" : "Employee",
+    "label" : "Main profile",
     "weight" : "0",
-    "data" : { "registration" : 1 }
+    "data" : { "registration" : true, "use_page" : true }
   }');
   $items['stakeholder'] = entity_import('profile2_type', '{
-    "userCategory" : true,
-    "userView" : true,
+    "userCategory" : false,
+    "userView" : false,
     "type" : "stakeholder",
-    "label" : "Stakeholder",
+    "label" : "stakeholder",
     "weight" : "0",
-    "data" : { "registration" : 0 }
+    "data" : { "registration" : 0, "use_page" : 1 }
   }');
   return $items;
 }
