@@ -48,6 +48,11 @@ echo -e "\n [RUN] Installation profile."
 cp default.config.sh config.sh
 ./install -dy
 
+#install DOMPDF
+echo -e "\n [RUN] Install DOMPDF"
+cd /var/www/html/productivity/productivity/libraries/dompdf
+composer install --no-interaction --prefer-source
+
 # Install Firefox (iceweasel)
 echo -e "\n [RUN] Installing Firefox."
 apt-get update
