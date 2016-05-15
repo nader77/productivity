@@ -114,7 +114,7 @@ cd /var/www/html/productivity
 
 # Run Behat tests for the client.
 echo -e "\n [RUN] Start client tests.\n"
-cd behat/bin/behat --tags=~@wip && ../productivity/behat/bin/behat --tags=~@wip
+behat/bin/behat --tags=~@wip && ../productivity/behat/bin/behat --tags=~@wip
 # cd behat
 # ./bin/behat --tags=~@wip
 # cd ..
