@@ -29,6 +29,7 @@ stylesheets[all][] = bootstrap/css/bootstrap.min.css
 stylesheets[all][] = css/style.css
 stylesheets[all][] = css/theme/theme_styles.css
 stylesheets[all][] = css/theme/calendar.css
+stylesheets[all][] = fonts/font-awesome.min.css
 
 
 
@@ -74,13 +75,13 @@ scripts[] = 'js/jquery.countTo.js'
 ; Method 2 uses BootstrapCDN, the only thing you might need to provide here
 ; is overrides to Bootstrap theme settings. Copy them here from the base theme
 ; to override.
-settings[bootstrap_cdn_provider] = 'jsdelivr'
-settings[bootstrap_cdn_custom_css] = '//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.css'
-settings[bootstrap_cdn_custom_css_min] = '//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css'
-settings[bootstrap_cdn_custom_js] = '//cdn.jsdelivr.net/bootstrap/3.2.0/js/bootstrap.js'
-settings[bootstrap_cdn_custom_js_min] = '//cdn.jsdelivr.net/bootstrap/3.2.0/js/bootstrap.min.js'
-settings[bootstrap_cdn_jsdelivr_version] = '3.2.0'
-settings[bootstrap_cdn_jsdelivr_theme] = 'bootstrap'
+;settings[bootstrap_cdn_provider] = 'jsdelivr'
+;settings[bootstrap_cdn_custom_css] = '//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.css'
+;settings[bootstrap_cdn_custom_css_min] = '//cdn.jsdelivr.net/bootstrap/3.2.0/css/bootstrap.min.css'
+;settings[bootstrap_cdn_custom_js] = '//cdn.jsdelivr.net/bootstrap/3.2.0/js/bootstrap.js'
+;settings[bootstrap_cdn_custom_js_min] = '//cdn.jsdelivr.net/bootstrap/3.2.0/js/bootstrap.min.js'
+;settings[bootstrap_cdn_jsdelivr_version] = '3.2.0'
+;settings[bootstrap_cdn_jsdelivr_theme] = 'bootstrap'
 
 ; ;-------------------------
 ; ; Let panel know about all the layouts.

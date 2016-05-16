@@ -207,6 +207,7 @@ function productivity_timewatch_build_month_skeleton($month, $year, &$potentials
     $week_day =  date('l', $date);
     // Special day, holiday or funday.
     $special_day_name = isset($globals[$day_key]) ? $globals[$day_key]['label'] : FALSE;
+
     $array[$key]  = array(
       '01.Date' => date('d/m/y', $date),
       '02.Week day' => $week_day,
@@ -239,7 +240,8 @@ function productivity_timewatch_build_month_skeleton($month, $year, &$potentials
         '!link' => l($special_day_name, 'node/' . $globals[$day_key]['nid']),
         '@day_length' => productivity_timewatch_format_total($special_day_length / 60),
       ));
-//      $array[$key]['06.project'] = $globals[$day_key]['type'];
+      // Remove the FALSE, to print the day.
+      $array[$key]['03.entry'] = '-';
     }
   }
   return $array;
@@ -268,6 +270,10 @@ function productivity_timewatch_create_sessions_table($node_keys, &$summary, $mo
     $node_account  =$wrapper->author->value();
     $start_time = $wrapper->field_session_date->value->value();
     $end_time = $wrapper->field_session_date->value2->value();
+    // No end time.
+    if (!$end_time) {
+      $end_time = $start_time;
+    }
 
     $total_time = $end_time - $start_time;
     $total_minutes = floor($total_time / 60);
@@ -326,6 +332,10 @@ function productivity_timewatch_create_sessions_table($node_keys, &$summary, $mo
       $previous_day_key = $day . '_' . ($key-1);
       $month_array[$day_key]['01.Date'] =  $month_array[$previous_day_key]['01.Date'];
       $month_array[$day_key]['02.Week day'] =  t('Re-entry');
+      // Case holiday or global day.
+      if (!isset($daily_sum[$previous_day_key])) {
+        $daily_sum[$previous_day_key] = 0;
+      }
       $month_array[$day_key]['09.all day total'] = productivity_timewatch_format_total($total_minutes + $daily_sum[$previous_day_key]);
       $month_array[$previous_day_key]['09.all day total'] =  '';
       $daily_sum[$day_key] += $total_minutes;
@@ -377,12 +387,22 @@ function productivity_timewatch_create_summary_table($summaries) {
     t('Total'),
     t('%'),
   );
+
+  $time_off = $summaries['potential']['total_minutes'] - $summaries['total']['total_minutes'];
+  // Extra time.
+  $label =t('Time off');
+  if ($time_off < 0) {
+    $label = t('Extra time');
+    $time_off *= -1;
+  }
   // Undeclared days, this are hours not marked as anything.
   $summaries['time off'] = array(
-    'name' => t('Time off'),
-    'total_minutes' => $summaries['potential']['total_minutes'] - $summaries['total']['total_minutes'],
+    'name' => $label,
+    'total_minutes' => $time_off,
     'actual' => '100%',
   );
+
+
   $total = $summaries['potential']['total_minutes'];
   // Calc actual %
   foreach($summaries as &$summary) {
