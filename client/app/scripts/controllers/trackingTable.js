@@ -16,6 +16,26 @@ angular.module('clientApp')
     }
     $scope.trackingProject = trackingProject;
     $scope.employeeRows = tracking;
+    
+    // Calculate the total sum per employee for all projects.
+    angular.forEach($scope.employeeRows, function (employeeRow, employeeName){
+
+      // Initialize a totalSum var.
+      var totalSum = 0;
+
+      // Check if employeeRow.sum is object to know that is not empty
+      // (if empty the property will be an empty array and not an object).
+      if (angular.isObject(employeeRow.sum)) {
+
+        angular.forEach(employeeRow.sum, function(projectSum){
+            totalSum += projectSum;
+        });
+
+        // Set totalSum property to the employeeRows.
+        $scope.employeeRows[employeeName]['totalSum'] = totalSum;
+      }
+    });
+
     $scope.year = $stateParams.year;
     $scope.month = $stateParams.month;
 

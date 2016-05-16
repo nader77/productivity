@@ -22,12 +22,13 @@
             <th>#</th>
             <th ng-repeat="item in days">{{ item }}</th>
             <th>Sum</th>
+            <th>Total Sum</th>
           </tr>
         </thead>
         <tbody>
-          <tr ng-repeat="(name, value) in employeeRows" class="track-item">
+          <tr ng-repeat="(name, employeeRow) in employeeRows" class="track-item">
             <th scope="row"> {{ name }}</th>
-            <td ng-repeat="(key, tracks) in value" ng-if="key != 'sum'">
+            <td ng-repeat="(key, tracks) in employeeRow" ng-if="key != 'sum' && key != 'totalSum'">
               <ul class="list-unstyled">
                 <li ng-repeat="track in tracks">
                   <a ui-sref="dashboard.tracking-form({username: track.employee, year: year, month: month, day: track.day, id: track.id})"
@@ -41,7 +42,7 @@
             </td>
             <td>
               <ul class="list-inline">
-                <li ng-repeat="(project, sum) in value.sum">
+                <li ng-repeat="(project, sum) in employeeRow.sum">
                   <a href="#"
                      class="summary"
                      popover-trigger="mouseenter"
@@ -51,6 +52,7 @@
                 </li>
               </ul>
             </td>
+            <td>{{ employeeRow.totalSum }}</td>
           </tr>
         </tbody>
       </table>
