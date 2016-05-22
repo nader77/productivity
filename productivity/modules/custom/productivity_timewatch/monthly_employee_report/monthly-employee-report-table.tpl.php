@@ -12,10 +12,10 @@
   </div>
   <h3>Signatures</h3>
   <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-6 mop-manager">
       Brice Lenfant (MOP manager):
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-6 employee-signature">
       <?php print $fullname; ?>:
     </div>
   </div>
