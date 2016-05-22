@@ -154,22 +154,25 @@ function productivity_timewatch_build_report($account, $year, $month){
     'actual' => '100%',
   );
 
-  $endday = FALSE;
+  // Default to last day of the month
+  $endday =  date('t', strtotime('1.' . $month . '.' . $year));
 
   // Case employee has stoped working, and we are on the month he stoped.
   if ($account->field_date['und'][0]['value'] != $account->field_date['und'][0]['value2']
     && "$month-$year" == date('n-Y', strtotime($account->field_date['und'][0]['value2']))) {
     $endday = date('j', strtotime($account->field_date['und'][0]['value2']));
+    $summary['potential']['name'] = t('Potential (For partial month)');
   }
   // Case we are in the middle of current month, or if employee is leaving in
   // the cuurent month but todays date id before that.
   if ("$month-$year" == date('n-Y') && (!$endday || $endday > date('j'))) {
     $endday = date('j');
+    $summary['potential']['name'] = t('Potential (until today)');
   }
 
   $month_array = productivity_timewatch_build_month_skeleton($month, $year, $summary['potential']['total_minutes'], $endday);
   // Get all sessions for the project.
-  $month_array = productivity_timewatch_create_sessions_table($node_keys, $summary, $month_array);
+  $month_array = productivity_timewatch_create_sessions_table($node_keys, $summary, $month_array, $endday);
 
   $variables_report = array();
   $variables_report['year'] = $year;
@@ -207,12 +210,10 @@ function productivity_timewatch_build_report($account, $year, $month){
  *   end of the month of if we are in is the middle of the current month.
  *
  */
-function productivity_timewatch_build_month_skeleton($month, $year, &$potentials, $endday = FALSE){
+function productivity_timewatch_build_month_skeleton($month, $year, &$potentials, $last_day_this_month){
   $globals = productivity_timewatch_get_global_days($year, $month);
   $array = array();
 
-
-  $last_day_this_month = $endday ? $endday : date('t', strtotime('1.' . $month . '.' . $year));
   // Loop into the days of the month.
   for ($day = 1; $day <= $last_day_this_month; $day++) {
     // Add leading zeros.
@@ -274,10 +275,13 @@ function productivity_timewatch_build_month_skeleton($month, $year, &$potentials
  * @param $nodes
  *  All the nodes return from the query.
  *
+ * @param $endday - the last day of the skeleton, if an employee left before the
+ *   end of the month of if we are in is the middle of the current month.
+ *
  * @return array
  *  Matrix of all the sessions, and the URL project
  */
-function productivity_timewatch_create_sessions_table($node_keys, &$summary, $month_array) {
+function productivity_timewatch_create_sessions_table($node_keys, &$summary, $month_array, $endday) {
 //  $sessions = array();
   $summary['total'] = array(
     'name' => t('Total'),
@@ -285,9 +289,9 @@ function productivity_timewatch_create_sessions_table($node_keys, &$summary, $mo
     'actual' => '100%',
   );
   $daily_sum = array();
-  foreach($node_keys as $nid) {
+  foreach ($node_keys as $nid) {
     $wrapper = entity_metadata_wrapper('node', $nid);
-    $node_account  =$wrapper->author->value();
+    $node_account = $wrapper->author->value();
     $start_time = $wrapper->field_session_date->value->value();
     $end_time = $wrapper->field_session_date->value2->value();
     // No end time.
@@ -313,84 +317,97 @@ function productivity_timewatch_create_sessions_table($node_keys, &$summary, $mo
       $madaan = TRUE;
 
       // Retro.
-      $one_day = 24*60*60;
+      $one_day = 24 * 60 * 60;
       if ($wrapper->changed->value() > $end_time + $one_day && !variable_get('productivity_bypass_retro', TRUE)) {
         $retro = TRUE;
       }
     }
 
-    // Get the proper key to support multiple entrance per day, first occurrtance 01_1, second 01_2 ...
+    // Get the proper key to support multiple entrance per day, first occurrence 01_1, second 01_2 ...
     $key = 0;
-    $day = date('d', $start_time) ;
-    while(TRUE) {
-      $day_key = $day . '_' . $key;
-      if (isset($month_array[$day_key]) && !$month_array[$day_key]['03.entry']) {
-        break;
-      }
-      if (!isset($month_array[$day_key])) {
-        $month_array[$day_key] = array();
-        break;
-      }
-      $key++;
-    }
+    $day = date('d', $start_time);
 
-    $month_array[$day_key] = array(
-      '03.entry' => l(date('H:i', $start_time), 'node/' . $nid),
-      '04.exit' => date('H:i', $end_time),
-      '05.total' => productivity_timewatch_format_total($total_minutes),
-      '06.project' => $day_name,
-      // The source of the data, using time watch or from home (manual).
-      '07.source' => in_array('timewatch', $node_account->roles) ? 'timewatch' : 'manual',
-      '08.retro' => $retro ? t('yes') : t('no'),
-      '09.all day total' => productivity_timewatch_format_total($total_minutes),
-    ) + $month_array[$day_key];
+    // Stop at $endday limit.
+    if ($endday >= $day) {
 
-    $daily_sum[$day_key] = $total_minutes;
-    // Multiple entrance in same day, summarize total day on last day.
-    if ($key > 0) {
-      // If more than one entrance in a day, display total only in last line.
-      $previous_day_key = $day . '_' . ($key-1);
-      $month_array[$day_key]['01.Date'] =  $month_array[$previous_day_key]['01.Date'];
-      $month_array[$day_key]['02.Week day'] =  t('Re-entry');
-      // Case holiday or global day.
-      if (!isset($daily_sum[$previous_day_key])) {
-        $daily_sum[$previous_day_key] = 0;
+      // Create multiple day instances.
+      while (TRUE) {
+        $day_key = $day . '_' . $key;
+        if (isset($month_array[$day_key]) && !$month_array[$day_key]['03.entry']) {
+          break;
+        }
+        if (!isset($month_array[$day_key])) {
+          $month_array[$day_key] = array();
+          break;
+        }
+        $key++;
       }
-      $month_array[$day_key]['09.all day total'] = productivity_timewatch_format_total($total_minutes + $daily_sum[$previous_day_key]);
-      $month_array[$previous_day_key]['09.all day total'] =  '';
-      $daily_sum[$day_key] += $total_minutes;
-    }
-    // Sort by key.
-    ksort($month_array[$day_key]);
 
-    // Create stub for summary.
-    if (!isset($summary[$pid])) {
-      $summary[$pid] = array(
-        'name' => $day_name,
-        'total_minutes' => 0,
-        'actual' => 0,
-      );
-      // Set name for MOP project.
-      if ($madaan) {
-        $summary[$pid]['name'] .= t(' MOP Madaan');
+
+      $month_array[$day_key] = array(
+          '03.entry' => l(date('H:i', $start_time), 'node/' . $nid),
+          '04.exit' => date('H:i', $end_time),
+          '05.total' => productivity_timewatch_format_total($total_minutes),
+          '06.project' => $day_name,
+          // The source of the data, using time watch or from home (manual).
+          '07.source' => in_array('timewatch', $node_account->roles) ? 'timewatch' : 'manual',
+          '08.retro' => $retro ? t('yes') : t('no'),
+          '09.all day total' => productivity_timewatch_format_total($total_minutes),
+        ) + $month_array[$day_key];
+
+      $daily_sum[$day_key] = $total_minutes;
+      // Multiple entrance in same day, summarize total day on last day.
+      if ($key > 0) {
+        // If more than one entrance in a day, display total only in last line.
+        $previous_day_key = $day . '_' . ($key - 1);
+        $month_array[$day_key]['01.Date'] = $month_array[$previous_day_key]['01.Date'];
+        // If previous day was half day holiday.
+        if ($month_array[$previous_day_key]['03.entry'] != '-') {
+          $month_array[$day_key]['02.Week day'] = t('Re-entry');
+        }
+        else {
+          $month_array[$day_key]['02.Week day'] = $month_array[$previous_day_key]['02.Week day'];
+        }
+        // Case holiday or global day.
+        if (!isset($daily_sum[$previous_day_key])) {
+          $daily_sum[$previous_day_key] = 0;
+        }
+        $month_array[$day_key]['09.all day total'] = productivity_timewatch_format_total($total_minutes + $daily_sum[$previous_day_key]);
+        $month_array[$previous_day_key]['09.all day total'] = '';
+        $daily_sum[$day_key] += $total_minutes;
       }
-    }
+      // Sort by key.
+      ksort($month_array[$day_key]);
 
-    // Add current total.
-    if ($retro) {
-      if (!isset($summary["{$pid}_retro"])) {
-        $summary["{$pid}_retro"] = array(
-          'name' => $day_name . t(' MOP Madaan - Retro updates'),
+      // Create stub for summary.
+      if (!isset($summary[$pid])) {
+        $summary[$pid] = array(
+          'name' => $day_name,
           'total_minutes' => 0,
           'actual' => 0,
         );
+        // Set name for MOP project.
+        if ($madaan) {
+          $summary[$pid]['name'] .= t(' MOP Madaan');
+        }
       }
-      $summary["{$pid}_retro"]['total_minutes'] += $total_minutes;
+
+      // Add current total.
+      if ($retro) {
+        if (!isset($summary["{$pid}_retro"])) {
+          $summary["{$pid}_retro"] = array(
+            'name' => $day_name . t(' MOP Madaan - Retro updates'),
+            'total_minutes' => 0,
+            'actual' => 0,
+          );
+        }
+        $summary["{$pid}_retro"]['total_minutes'] += $total_minutes;
+      }
+      else {
+        $summary[$pid]['total_minutes'] += $total_minutes;
+      }
+      $summary['total']['total_minutes'] += $total_minutes;
     }
-    else {
-      $summary[$pid]['total_minutes'] += $total_minutes;
-    }
-    $summary['total']['total_minutes'] += $total_minutes;
   }
   // Sort by day.
   ksort($month_array);
@@ -412,7 +429,7 @@ function productivity_timewatch_create_summary_table($summaries) {
   // Extra time.
   $label =t('Time off');
   if ($time_off < 0) {
-    $label = t('Extra time');
+    $label = t('Extra time (Included in Regular time)');
     $time_off *= -1;
   }
   // Undeclared days, this are hours not marked as anything.
