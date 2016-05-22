@@ -89,7 +89,7 @@ function productivity_payment_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
-  /* Field: Content: Project */
+  /* Field: Field: Project */
   $handler->display->display_options['fields']['field_project']['id'] = 'field_project';
   $handler->display->display_options['fields']['field_project']['table'] = 'field_data_field_project';
   $handler->display->display_options['fields']['field_project']['field'] = 'field_project';

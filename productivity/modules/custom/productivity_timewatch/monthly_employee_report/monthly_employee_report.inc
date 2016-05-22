@@ -154,7 +154,20 @@ function productivity_timewatch_build_report($account, $year, $month){
     'actual' => '100%',
   );
 
-  $month_array = productivity_timewatch_build_month_skeleton($month, $year, $summary['potential']['total_minutes']);
+  $endday = FALSE;
+
+  // Case employee has stoped working, and we are on the month he stoped.
+  if ($account->field_date['und'][0]['value'] != $account->field_date['und'][0]['value2']
+    && "$month-$year" == date('n-Y', strtotime($account->field_date['und'][0]['value2']))) {
+    $endday = date('j', strtotime($account->field_date['und'][0]['value2']));
+  }
+  // Case we are in the middle of current month, or if employee is leaving in
+  // the cuurent month but todays date id before that.
+  if ("$month-$year" == date('n-Y') && (!$endday || $endday > date('j'))) {
+    $endday = date('j');
+  }
+
+  $month_array = productivity_timewatch_build_month_skeleton($month, $year, $summary['potential']['total_minutes'], $endday);
   // Get all sessions for the project.
   $month_array = productivity_timewatch_create_sessions_table($node_keys, $summary, $month_array);
 
@@ -189,11 +202,18 @@ function productivity_timewatch_build_report($account, $year, $month){
 
 /**
  * Build monthly array skeleton
+ *
+ * @param $endday - the last day of the skeleton, if an employee left before the
+ *   end of the month of if we are in is the middle of the current month.
+ *
  */
-function productivity_timewatch_build_month_skeleton($month, $year, &$potentials){
+function productivity_timewatch_build_month_skeleton($month, $year, &$potentials, $endday = FALSE){
   $globals = productivity_timewatch_get_global_days($year, $month);
   $array = array();
-  $last_day_this_month  = date('t', strtotime('1.' . $month . '.' . $year));
+
+
+  $last_day_this_month = $endday ? $endday : date('t', strtotime('1.' . $month . '.' . $year));
+  // Loop into the days of the month.
   for ($day = 1; $day <= $last_day_this_month; $day++) {
     // Add leading zeros.
     $day_key = str_pad($day, 2, '0', STR_PAD_LEFT);
@@ -294,7 +314,7 @@ function productivity_timewatch_create_sessions_table($node_keys, &$summary, $mo
 
       // Retro.
       $one_day = 24*60*60;
-      if ($wrapper->changed->value() > $end_time + $one_day) {
+      if ($wrapper->changed->value() > $end_time + $one_day && !variable_get('productivity_bypass_retro', TRUE)) {
         $retro = TRUE;
       }
     }
