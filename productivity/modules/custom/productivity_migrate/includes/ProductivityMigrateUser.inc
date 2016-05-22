@@ -18,7 +18,7 @@ class ProductivityMigrateUser extends Migration {
   public $csvColumns = array(
     array('name', 'name'),
     array('mail', 'mail'),
-    array('status', 'status'),//(employed/fired/resigned/future)
+    array('status', 'status'),//(employed/laidoff/resigned/future)
     array('date_start', 'date_start'),
     array('date_end', 'date_end'),
     array('pass', 'pass'),

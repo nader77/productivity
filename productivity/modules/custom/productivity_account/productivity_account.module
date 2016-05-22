@@ -15,7 +15,6 @@ function productivity_account_get_employee_uids() {
   $result = $query
     ->entityCondition('entity_type', 'user')
     ->propertyCondition('status', 1)
-    ->fieldCondition('field_employment_status', 'value', 'employed')
     ->propertyOrderBy('name')
     ->execute();
 
