@@ -38,6 +38,10 @@
 
 @media print {
 
+  .report-container {
+    margin: 0 10px;
+  }
+
   .table {
     font-size: 9pt;
     &>tbody > tr > td {

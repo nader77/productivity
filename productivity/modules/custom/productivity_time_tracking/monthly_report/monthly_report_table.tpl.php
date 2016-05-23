@@ -1,6 +1,11 @@
 <!-- BEGIN Tables -->
 <?php if (!$no_result): ?>
+  <?php $first = TRUE;?>
   <?php foreach ($tables as $index => $table): ?>
+      <?php if (!$first): ?>
+      <div style="page-break-before: always;"></div>
+    <?php endif; ?>
+    <?php print $first = FALSE;?>
     <h2
       class="table-header"><?php print strtoupper($table_titles[$index]); ?></h2>
     <?php print $table; ?>
