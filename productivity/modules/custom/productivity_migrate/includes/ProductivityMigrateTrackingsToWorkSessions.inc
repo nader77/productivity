@@ -72,7 +72,7 @@ class ProductivityMigrateTrackingsToWorkSessions extends Migration {
     // Create formated dates for all options.
     $subst = "$1 09:00:00";
     $end_subst = "$1 18:00:00";
-    $end_subst_half = "$1 12:30:00";
+    $end_subst_half = "$1 13:30:00";
     $date = preg_replace($re, $subst, $str, 1);
     $end_date = preg_replace($re, $end_subst, $str, 1);
     $end_subst_half = preg_replace($re, $end_subst_half, $str, 1);
