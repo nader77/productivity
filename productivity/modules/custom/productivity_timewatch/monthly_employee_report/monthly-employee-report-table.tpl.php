@@ -10,6 +10,14 @@
       <?php print $table_summary; ?>
     </div>
   </div>
+  <?php if (!empty($table_summary_madaan)): ?>
+    <div class="row">
+      <h3>Madaan</h3>
+      <div class="col-sm-12">
+        <?php print $table_summary_madaan; ?>
+      </div>
+    </div>
+  <?php endif; ?>
   <h3>Signatures</h3>
   <div class="row">
     <div class="col-sm-6 mop-manager">
