@@ -58,16 +58,16 @@ function productivity_user_default_message_type() {
 function productivity_user_default_profile2_type() {
   $items = array();
   $items['main'] = entity_import('profile2_type', '{
-    "userCategory" : false,
-    "userView" : false,
+    "userCategory" : true,
+    "userView" : true,
     "type" : "main",
     "label" : "Main profile",
     "weight" : "0",
     "data" : { "registration" : true, "use_page" : true }
   }');
   $items['stakeholder'] = entity_import('profile2_type', '{
-    "userCategory" : false,
-    "userView" : false,
+    "userCategory" : true,
+    "userView" : true,
     "type" : "stakeholder",
     "label" : "stakeholder",
     "weight" : "0",

@@ -436,7 +436,7 @@ function productivity_timewatch_create_summary_maddan_table($summaries_madaan, $
   }
   // Headers.
   $header = array(
-    t('Project/ Type'),
+    t('Project'),
     t('Total'),
     t('%'),
   );
@@ -467,7 +467,7 @@ function productivity_timewatch_create_summary_maddan_table($summaries_madaan, $
 function productivity_timewatch_create_summary_table($summaries) {
   // Headers.
   $header = array(
-    t('Project/ Type'),
+    t('Type'),
     t('Total'),
     t('%'),
   );

@@ -1570,6 +1570,21 @@ function productivity_admin_views_default_views() {
   );
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['reference_display'] = 'entity_ref_list:entityreference_1';
   $handler->display->display_options['filters']['field_project_target_id_entityreference_filter']['reference_arguments'] = 'project';
+  /* Filter criterion: Content: Issues logs (field_issues_logs:field_github_issue_target_id) */
+  $handler->display->display_options['filters']['field_issues_logs_field_github_issue_target_id']['id'] = 'field_issues_logs_field_github_issue_target_id';
+  $handler->display->display_options['filters']['field_issues_logs_field_github_issue_target_id']['table'] = 'field_data_field_issues_logs';
+  $handler->display->display_options['filters']['field_issues_logs_field_github_issue_target_id']['field'] = 'field_issues_logs_field_github_issue_target_id';
+  $handler->display->display_options['filters']['field_issues_logs_field_github_issue_target_id']['exposed'] = TRUE;
+  $handler->display->display_options['filters']['field_issues_logs_field_github_issue_target_id']['expose']['operator_id'] = 'field_issues_logs_field_github_issue_target_id_op';
+  $handler->display->display_options['filters']['field_issues_logs_field_github_issue_target_id']['expose']['label'] = 'Issues logs (field_issues_logs:field_github_issue_target_id)';
+  $handler->display->display_options['filters']['field_issues_logs_field_github_issue_target_id']['expose']['operator'] = 'field_issues_logs_field_github_issue_target_id_op';
+  $handler->display->display_options['filters']['field_issues_logs_field_github_issue_target_id']['expose']['identifier'] = 'field_issues_logs_field_github_issue_target_id';
+  $handler->display->display_options['filters']['field_issues_logs_field_github_issue_target_id']['expose']['remember_roles'] = array(
+    2 => '2',
+    1 => 0,
+    3 => 0,
+    4 => 0,
+  );
   $handler->display->display_options['path'] = 'admin/content/tracking';
   $handler->display->display_options['menu']['type'] = 'tab';
   $handler->display->display_options['menu']['title'] = 'Tracking';

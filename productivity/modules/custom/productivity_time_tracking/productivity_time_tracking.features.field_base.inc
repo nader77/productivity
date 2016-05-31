@@ -55,7 +55,9 @@ function productivity_time_tracking_field_default_field_bases() {
     ),
     'locked' => 0,
     'module' => 'text',
-    'settings' => array(),
+    'settings' => array(
+      'profile2_private' => FALSE,
+    ),
     'translatable' => 0,
     'type' => 'text_long',
   );
@@ -87,7 +89,6 @@ function productivity_time_tracking_field_default_field_bases() {
         ),
         'target_bundles' => array(),
       ),
-      'profile2_private' => FALSE,
       'target_type' => 'user',
     ),
     'translatable' => 0,

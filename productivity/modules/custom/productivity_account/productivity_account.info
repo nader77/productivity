@@ -9,7 +9,6 @@ dependencies[] = productivity_project
 dependencies[] = strongarm
 features[ctools][] = strongarm:strongarm:1
 features[features_api][] = api:2
-features[field_instance][] = node-account-field_table_rate
 features[node][] = account
 features[variable][] = field_bundle_settings_node__account
 features[variable][] = menu_options_account

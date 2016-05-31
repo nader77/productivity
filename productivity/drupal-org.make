@@ -129,7 +129,7 @@ projects[smtp][subdir] = "contrib"
 projects[smtp][version] = "1.3"
 
 projects[strongarm][subdir] = "contrib"
-projects[strongarm][version] = "2.0"
+projects[strongarm][version] = "2.x-dev"
 
 projects[token][subdir] = "contrib"
 projects[token][version] = "1.6"
