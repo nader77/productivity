@@ -123,7 +123,6 @@ projects[restful][download][type] = "git"
 projects[restful][download][url] = "https://github.com/RESTful-Drupal/restful.git"
 projects[restful][download][branch] = "7.x-1.x"
 projects[restful][subdir] = "contrib"
-projects[restful][patch][] = "https://patch-diff.githubusercontent.com/raw/RESTful-Drupal/restful/pull/889.patch"
 
 projects[smtp][subdir] = "contrib"
 projects[smtp][version] = "1.3"
