@@ -560,25 +560,11 @@ function productivity_time_tracking_update_issue($node) {
   // Skip updating the issue node if something is wrong.
   $skip_issue_update = FALSE;
 
-  $old_count = 0;
-
-  if (isset($node->is_new) && !$node->is_new) {
-    $original_wrapper = entity_metadata_wrapper('node', $node->original);
-    $old_count = $original_wrapper->field_issues_logs->count();
-  }
-
   foreach($wrapper->field_issues_logs as $key => $field_wrapper) {
     if ($field_wrapper->__isset('field_github_issue')) {
       // Re-calculate how many hours were worked on the issue that the time
       // tracking is referencing, or the issue that's referenced by the pull
       // request the node is referencing.
-
-      $old_track_time = 0;
-      // This is an update to the tracking, update data correctly.
-      if ($key + 1 < $old_count ) {
-        // Order of the multifield shouldn't change.
-        $old_track_time = $original_wrapper->field_issues_logs->get($key)->field_time_spent->value();
-      }
 
       // Note that this could be either a pull request or an issue.
       if ($field_wrapper->__isset('field_github_issue')) {
@@ -588,7 +574,9 @@ function productivity_time_tracking_update_issue($node) {
 
           if ($github_issue_wrapper->__isset('field_issue_reference')) {
             // Pointing at a pull request - get the issue wrapper.
-            $github_issue_wrapper = $github_issue_wrapper->field_issue_reference;
+            // TODO: handle the case where a pull request is references to
+            // multiple issues.
+            $github_issue_wrapper = $github_issue_wrapper->field_issue_reference[0];
           }
           else {
             // This pull request does not have an issue. Can't calculate total

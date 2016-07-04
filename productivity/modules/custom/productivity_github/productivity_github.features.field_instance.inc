@@ -293,11 +293,17 @@ function productivity_github_field_default_field_instances() {
     'entity_type' => 'node',
     'field_name' => 'field_issue_reference',
     'label' => 'Issue reference',
-    'required' => FALSE,
+    'required' => 0,
     'settings' => array(
+      'behaviors' => array(
+        'autofill' => array(
+          'status' => 0,
+        ),
+      ),
       'user_register_form' => FALSE,
     ),
     'widget' => array(
+      'active' => 1,
       'module' => 'entityreference',
       'settings' => array(
         'match_operator' => 'CONTAINS',
