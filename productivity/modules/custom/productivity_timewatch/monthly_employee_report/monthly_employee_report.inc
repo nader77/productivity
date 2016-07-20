@@ -164,7 +164,7 @@ function productivity_timewatch_build_report($account, $year, $month){
     $summary['5.potential']['name'] = t('Potential (For partial month)');
   }
   // Case we are in the middle of current month, or if employee is leaving in
-  // the cuurent month but todays date id before that.
+  // the current month but todays date id before that.
   if ("$month-$year" == date('n-Y') && (!$endday || $endday > date('j'))) {
     $endday = date('j');
     $summary['5.potential']['name'] = t('Potential (until today)');
@@ -344,7 +344,6 @@ function productivity_timewatch_create_sessions_table($node_keys, &$summary, &$m
         $key++;
       }
 
-
       $month_array[$day_key] = array(
           '03.entry' => l(date('H:i', $start_time), 'node/' . $nid),
           '04.exit' => date('H:i', $end_time),
@@ -373,25 +372,27 @@ function productivity_timewatch_create_sessions_table($node_keys, &$summary, &$m
         if (!isset($daily_sum[$previous_day_key])) {
           $daily_sum[$previous_day_key] = 0;
         }
+
+        // Summarize full day with all re-entry.
         $month_array[$day_key]['09.all day total'] = productivity_timewatch_format_total($total_minutes + $daily_sum[$previous_day_key]);
         $month_array[$previous_day_key]['09.all day total'] = '';
-        $daily_sum[$day_key] += $total_minutes;
+        $daily_sum[$day_key] =  $daily_sum[$previous_day_key] + $total_minutes;
       }
       // Sort by key.
       ksort($month_array[$day_key]);
 
       // Create stub for summary.
       if (!$madaan_project) {
-        $day_key = "1.$day_name";
+        $day_key_summary = "1.$day_name";
 
-        if (!isset($summary[$day_key])) {
-          $summary[$day_key] = array(
+        if (!isset($summary[$day_key_summary])) {
+          $summary[$day_key_summary] = array(
             'name' => $day_name,
             'total_minutes' => 0,
             'actual' => 0,
           );
         }
-        $summary[$day_key]['total_minutes'] += $total_minutes;
+        $summary[$day_key_summary]['total_minutes'] += $total_minutes;
       }
       // Madaan project summary.
       else {
