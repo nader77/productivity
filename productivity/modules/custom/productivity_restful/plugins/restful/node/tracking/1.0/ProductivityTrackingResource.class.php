@@ -243,7 +243,11 @@ class ProductivityTrackingResource extends \ProductivityEntityBaseNode {
         throw new \RestfulBadRequestException('Invalid length given.');
       }
 
-      $wrapper->field_project->set($request['projectID']);
+      // Project is not mandatory.
+      if ($request['projectID']) {
+        $wrapper->field_project->set($request['projectID']);
+      }
+
       $wrapper->field_track_hours->set($request['length']);
 
       $field_issues = array();
