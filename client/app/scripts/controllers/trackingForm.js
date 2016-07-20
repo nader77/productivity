@@ -64,6 +64,9 @@ angular.module('clientApp')
       id: 'review',
       label: 'Review'
     }, {
+      id: 'training',
+      label: 'Training'
+    }, {
       id: 'support',
       label: 'Support'
     }];
