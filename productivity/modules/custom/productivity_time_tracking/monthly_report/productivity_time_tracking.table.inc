@@ -107,8 +107,8 @@ function productivity_time_tracking_issue_table($node = FALSE, $year = FALSE, $m
     $variables['total_per_hours_types'][$table_name] = 0;
 
     foreach ($table['issues'] as $index => $issue) {
-      $rows[$index]['label'] = l($issue['issue_num'], $project_url . $issue['issue_num'], array('absolute' => TRUE));
-      $rows[$index]['gitHub_issue_num'] = $issue['label'];
+      $rows[$index]['label'] = $issue['issue_num'] == '#' ? 'N/A' : l($issue['issue_num'], $project_url . '/' . $issue['issue_num'], array('absolute' => TRUE));
+      $rows[$index]['gitHub_issue_num'] = l($issue['label'], 'node/' . $issue['nid'] . '/edit', array('attributes' => array('target' => '_blank')));
       $rows[$index]['date'] = $issue['date'];
       $rows[$index]['time'] = $issue['time'];
       $rows[$index]['amount'] = $issue['issue_amount'] . ' ' . $issue['issue_currency'];
@@ -165,6 +165,7 @@ function productivity_time_tracking_create_issues_table($nodes) {
 
       $issues_table[$type]['label'] = $issue_log_wrapper->field_issue_type->label();
       $issues_table[$type]['issues'][] = array(
+        'nid' =>  $node->nid,
         'issue_num' => $issue_id,
         'label' => $issue_log_wrapper->field_issue_label->value(),
         'date' => $date,
