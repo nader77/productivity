@@ -75,13 +75,6 @@ function productivity_time_tracking_issue_table($node = FALSE, $year = FALSE, $m
   $variables['project_title'] = $wrapper->label();
   $variables['account'] = $wrapper->field_account->label();
 
-  // TODO: Deal better with project URL.
-  $project_url = '';
-  if (isset($wrapper->field_github_repository_name)) {
-    $first_repo_name = $wrapper->field_github_repository_name[0]->value();
-    $project_url = "https://github.com/$first_repo_name";
-  }
-
   $nodes = productivity_github_get_project_github_issues_query($node->nid, $variables['year'], $variables['month']);
   $issues_table = array();
 
@@ -107,7 +100,10 @@ function productivity_time_tracking_issue_table($node = FALSE, $year = FALSE, $m
     $variables['total_per_hours_types'][$table_name] = 0;
 
     foreach ($table['issues'] as $index => $issue) {
-      $rows[$index]['label'] = $issue['issue_num'] == '#' ? 'N/A' : l($issue['issue_num'], $project_url . '/' . $issue['issue_num'], array('absolute' => TRUE));
+      $rows[$index]['label'] = $issue['issue_num'] == '#' ? 'N/A' : l($issue['issue_num'], $issue['gh_url'], array(
+        'absolute' => TRUE,
+        'attributes' => array('target' => '_blank'),
+      ));
       $rows[$index]['gitHub_issue_num'] = l($issue['label'], 'node/' . $issue['nid'] . '/edit', array('attributes' => array('target' => '_blank')));
       $rows[$index]['date'] = $issue['date'];
       $rows[$index]['time'] = $issue['time'];
@@ -159,14 +155,17 @@ function productivity_time_tracking_create_issues_table($nodes) {
       $rate = productivity_project_get_rate($wrapper->field_project->getIdentifier(), $type);
       /// The table length of every type.
       $issue_id = '#';
+      $gh_id = '';
       if (isset($issue_log_wrapper->field_github_issue->field_issue_id)) {
         $issue_id = $issue_log_wrapper->field_github_issue->field_issue_id->value();
+        $gh_id = $issue_log_wrapper->field_github_issue->field_github_project_id->value();
       }
 
       $issues_table[$type]['label'] = $issue_log_wrapper->field_issue_type->label();
       $issues_table[$type]['issues'][] = array(
         'nid' =>  $node->nid,
         'issue_num' => $issue_id,
+        'gh_url' => 'https://github.com/' . $gh_id . '/issues/' . $issue_id,
         'label' => $issue_log_wrapper->field_issue_label->value(),
         'date' => $date,
         'time' => $issue_log_wrapper->field_time_spent->value(),
