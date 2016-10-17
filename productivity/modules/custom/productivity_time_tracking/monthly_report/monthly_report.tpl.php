@@ -24,6 +24,14 @@
               <span class="add-on"><i class="icon-th"></i></span>
           </div>
           <div class="col-sm-4">
+            <form>
+            <div class="checkbox-nice">
+              <input type="checkbox" id="estimation-based">
+              <label for="estimation-based">
+                Based on estimation of issue
+              </label>
+            </form>
+            </div>
             <button class="btn btn-primary apply" type="button">Apply</button>
             <button class="btn btn-primary anytime" type="button">Any time</button>
             <button class="btn btn-primary year" type="button" data-toggle="popover" title="Can't be done" data-content="Please select a year first">All Year</button>

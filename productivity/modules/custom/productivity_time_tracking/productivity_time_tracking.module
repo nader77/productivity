@@ -18,11 +18,11 @@ function productivity_time_tracking_menu() {
     'file' => 'monthly_report/productivity_time_tracking.table.inc'
   );
 
-  $items['monthly-report/%node/%/%'] = array(
+  $items['monthly-report/%node/%/%/%'] = array(
     'title' => 'Issue tracking table',
     'access arguments' => array('access content'),
     'page callback' => 'productivity_time_tracking_issue_table_callback',
-    'page arguments' => array(1, 2, 3),
+    'page arguments' => array(1, 2, 3, 4),
     'type' => MENU_CALLBACK,
     'file' => 'monthly_report/productivity_time_tracking.table.inc'
   );
@@ -575,7 +575,7 @@ function productivity_time_tracking_update_issue($node) {
 
       $old_track_time = 0;
       // This is an update to the tracking, update data correctly.
-      if ($key + 1 < $old_count ) {
+      if ($key + 1 < $old_count) {
         // Order of the multifield shouldn't change.
         $old_track_time = $original_wrapper->field_issues_logs->get($key)->field_time_spent->value();
       }
