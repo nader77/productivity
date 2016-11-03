@@ -20,8 +20,8 @@
             </select>
           </div>
           <div class="col-sm-4">
-              <input type="text" id="month" name="month" class="monthPicker form-control" />
-              <span class="add-on"><i class="icon-th"></i></span>
+            <input type="text" id="month" name="month" class="monthPicker form-control" />
+            <span class="add-on"><i class="icon-th"></i></span>
           </div>
           <div class="col-sm-4">
             <form>
