@@ -100,7 +100,7 @@ function productivity_timewatch_user_presave(&$edit, $account, $category) {
   // Check if this pincode is already used by another user.
   $uid = productivity_timewatch_get_uid_by_pincode($pincode);
   if ($uid && $uid != $account->uid) {
-    throw new \Exception('Please choose a different pincode.');
+    throw new \Exception('Please choose a different pincode, user id  ' . $uid . ' is already using it.');
   }
 }
 
