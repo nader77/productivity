@@ -24,6 +24,10 @@ class ProductivityMeResource extends \RestfulEntityBaseUser {
 
     unset($public_fields['self']);
 
+    $public_fields['github_username'] = array(
+      'property' => 'field_github_username',
+    );
+
     $public_fields['roles'] = array(
       'property' => 'roles',
       'process_callbacks' => array(

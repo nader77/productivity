@@ -4,5 +4,6 @@ module User.Model exposing (..)
 type alias User =
     { id : Int
     , name : String
-    , avatarUrl : String
+    , mail : String
+    , githubName : String
     }

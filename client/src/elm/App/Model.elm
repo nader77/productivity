@@ -1,7 +1,7 @@
-module App.Model exposing (emptyModel, Flags, Msg(..), Model, Page(..))
+module App.Model exposing (initialModel, Flags, Msg(..), Model, Page(..))
 
 import Config.Model
-import Pages.Login.Model exposing (emptyModel, Model)
+import Pages.Login.Model exposing (initialModel, Model)
 import RemoteData exposing (RemoteData(..), WebData)
 import User.Model exposing (..)
 
@@ -34,11 +34,11 @@ type alias Flags =
     }
 
 
-emptyModel : Model
-emptyModel =
+initialModel : Model
+initialModel =
     { accessToken = ""
     , activePage = Login
     , config = NotAsked
-    , pageLogin = Pages.Login.Model.emptyModel
+    , pageLogin = Pages.Login.Model.initialModel
     , user = NotAsked
     }

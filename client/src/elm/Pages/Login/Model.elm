@@ -19,8 +19,19 @@ type UserMessage
     | Error String
 
 
+type Status
+    = Init
+    | Fetching
+    | Fetched
+    | HttpError Http.Error
+
+
 type alias Model =
-    { loginForm : LoginForm
+    { accessToken : AccessToken
+    , hasAccessTokenInStorage : Bool
+    , loginForm : LoginForm
+    , status : Status
+    , userMessage : UserMessage
     }
 
 
@@ -32,7 +43,14 @@ type Msg
     | TryLogin
 
 
-emptyModel : Model
-emptyModel =
-    { loginForm = LoginForm "demo" "1234"
+initialModel : Model
+initialModel =
+    { accessToken =
+        ""
+        -- We start by assuming there's already an access token it the localStorage.
+        -- While this property is set to True, the login form will not appear.
+    , hasAccessTokenInStorage = True
+    , loginForm = LoginForm "admin" "admin"
+    , status = Init
+    , userMessage = None
     }

@@ -96,7 +96,7 @@ viewAvatar user =
                 ]
                 [ img
                     [ class "ui avatar image"
-                    , src user_.avatarUrl
+                    , src <| "https://avatars.githubusercontent.com/" ++ user_.githubName
                     ]
                     []
                 ]
@@ -135,7 +135,7 @@ viewFooter =
                 [ text "Gizra" ]
             , span [] [ text " // " ]
             , a
-                [ href "https://github.com/Gizra/elm-spa-example"
+                [ href "https://github.com/Gizra/productivity"
                 , target "_blank"
                 ]
                 [ text "Github" ]

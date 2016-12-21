@@ -7,5 +7,6 @@ type alias BackendUrl =
 
 type alias Model =
     { backendUrl : BackendUrl
+    , githubClientId : String
     , name : String
     }

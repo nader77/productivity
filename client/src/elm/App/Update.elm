@@ -27,7 +27,7 @@ init flags =
                 Nothing ->
                     ( Failure "No config found", Cmd.none )
     in
-        { emptyModel | accessToken = flags.accessToken, config = config } ! [ cmds ]
+        { initialModel | accessToken = flags.accessToken, config = config } ! [ cmds ]
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -43,7 +43,7 @@ update msg model =
     in
         case msg of
             Logout ->
-                ( { emptyModel | accessToken = "", config = model.config }
+                ( { initialModel | accessToken = "", config = model.config }
                 , accessTokenPort ""
                 )
 

@@ -12,17 +12,18 @@ import User.Model exposing (..)
 view : WebData User -> Html a
 view user =
     let
-        ( name, avatar ) =
+        ( name, mail, avatar ) =
             case user of
                 Success val ->
-                    ( val.name, img [ src val.avatarUrl ] [] )
+                    ( val.name, val.mail, img [ src <| "https://avatars.githubusercontent.com/" ++ val.githubName ] [] )
 
                 _ ->
-                    ( "", div [] [] )
+                    ( "", "", div [] [] )
     in
         div [ class "ui centered card" ]
             [ div [ class "image" ] [ avatar ]
             , div [ class "content" ]
                 [ div [ class "header" ] [ text <| "Welcome " ++ name ]
+                , div [ class "body" ] [ text <| mail ]
                 ]
             ]
