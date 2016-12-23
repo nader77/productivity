@@ -49,12 +49,14 @@ Thumbs.db
 ##################
 productivity/modules/contrib
 productivity/modules/development
+productivity/modules/panels
 productivity/1
 productivity/themes/contrib
 productivity/libraries
 
 # Temporary "build" files
 www
+css-to-inline
 
 # Local Configuration
 config.sh
