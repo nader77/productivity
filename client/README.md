@@ -1,8 +1,6 @@
-[![Build Status](https://travis-ci.org/Gizra/elm-spa-example.svg?branch=master)](https://travis-ci.org/Gizra/elm-spa-example)
+[![Build Status](https://travis-ci.org/Gizra/productivity.svg?branch=master)](https://travis-ci.org/Gizra/productivity)
 
-> elm v0.18 single page application (SPA) example
-
-Read about this app in the post [Faithful Elm and the Amazing Router](http://www.gizra.com/content/faithful-elm-amazing-router/)
+> elm v0.18 single page productivity application.
 
 ## Installation
 
@@ -15,6 +13,7 @@ Make sure the following are installed:
 
 ## Usage
 
+1. Make sure `src/Config.elm` local settings matches your machine.
 1. Serve locally, and watch file changes: `gulp`
 1. Prepare file for publishing (e.g. minify, and rev file names): `gulp publish`
 1. Deploy to GitHub's pages (`gh-pages` branch of your repository): `gulp deploy`

@@ -32,6 +32,20 @@ view user model =
                 , ( "error", isError )
                 ]
 
+        isFetchStatus =
+            model.status == Pages.Login.Model.Fetching || model.status == Pages.Login.Model.Fetched
+
+        githubUrl =
+            "https://github.com/login/oauth/authorize?client_id=3edf9fa129f2fb4d0fb9&scope=user:email"
+
+        githubLogin =
+            div [ class "ui black button" ]
+                [ a [ href githubUrl ]
+                    [ i [ class "github icon" ] []
+                    , span [] [ text "Login with GitHub" ]
+                    ]
+                ]
+
         error =
             case user of
                 Failure err ->
@@ -45,7 +59,12 @@ view user model =
             , action "javascript:void(0);"
             , class "ui stacked segment"
             ]
-            [ div [ inputClasses ]
+            [ h2 [] [ text "Please login" ]
+              -- UserName
+            , githubLogin
+            , div [ style [ ( "margin-bottom", "20px" ), ( "margin-top", "20px" ) ] ]
+                [ text "OR" ]
+            , div [ inputClasses ]
                 [ input
                     [ type_ "text"
                     , placeholder "Name"
